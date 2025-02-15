@@ -1,0 +1,768 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="/" rel="alternate"></link><link href="/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>/</id><updated>2022-01-24T00:27:00+00:00</updated><entry><title>Configuring Traefik with Redis</title><link href="/configuring-traefik-with-redis.html" rel="alternate"></link><published>2022-01-24T00:27:00+00:00</published><updated>2022-01-24T00:27:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2022-01-24:/configuring-traefik-with-redis.html</id><summary type="html">&lt;p&gt;Short tutorial on using traefik as a reverse proxy configured with redis&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over a weekend I had a quick play around with the
+config provider to traefik, experimenting with reverse
+proxies. I'm fairly familiar with the &lt;code&gt;redis-cli&lt;/code&gt;
+and it's fairly easy to build a redis client in any language
+so getting off the grounds is a 10min job at most.&lt;/p&gt;
+&lt;p&gt;I've always got redis container running locally, so I'm
+sticking with that, to get this running I do:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;--name&lt;span class="w"&gt; &lt;/span&gt;some-redis&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;6379&lt;/span&gt;:6379&lt;span class="w"&gt; &lt;/span&gt;-d&lt;span class="w"&gt; &lt;/span&gt;redis
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Since I am running traefik on docker-compose and I'll need
+it to connect to redis, I have to create a network and redis
+should be connected to this network:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker&lt;span class="w"&gt; &lt;/span&gt;network&lt;span class="w"&gt; &lt;/span&gt;create&lt;span class="w"&gt; &lt;/span&gt;mynet
+docker&lt;span class="w"&gt; &lt;/span&gt;network&lt;span class="w"&gt; &lt;/span&gt;connect&lt;span class="w"&gt; &lt;/span&gt;mynet&lt;span class="w"&gt; &lt;/span&gt;some-redis
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The next step is the compose file for traefik:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="c1"&gt;# docker-compose.yml&lt;/span&gt;
+&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;#39;3&amp;#39;&lt;/span&gt;
+
+&lt;span class="nt"&gt;networks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;maunet&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;external&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;true&lt;/span&gt;
+
+&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+
+&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="nt"&gt;reverse-proxy&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;image&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;traefik:v2.5&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;command&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;--api.insecure=true&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;--providers.redis&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;--providers.redis.endpoints=some-redis:6379&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;ports&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="c1"&gt;# HTTP&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;80:80&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="c1"&gt;# Web UI&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;&amp;quot;8080:8080&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nt"&gt;networks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;      &lt;/span&gt;&lt;span class="p p-Indicator"&gt;-&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l l-Scalar l-Scalar-Plain"&gt;maunet&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And up:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;docker-compose&lt;span class="w"&gt; &lt;/span&gt;up&lt;span class="w"&gt; &lt;/span&gt;-d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The traefik frontend should be accessible at
+&lt;a href="http://127.0.0.1:8080"&gt;127.0.0.1:8080&lt;/a&gt;.&lt;/p&gt;
+&lt;h2&gt;Configuration&lt;/h2&gt;
+&lt;p&gt;A few of the traefik concepts didn't make sense at first,
+but it didn't take long to understand what they're talking
+about.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;I have another container running a simple rest server,
+   it's serving on port 3000 which is exposed at port 53782
+   this container is called &lt;code&gt;'some-server'&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A hurdle that took me a while to figure out was to also
+   connect this container to the network we have
+   traefik and redis running on:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;docker&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;network&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;connect&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;mynet&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;some&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="nv"&gt;server&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;I need to tell traefik a service (server) exists:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;set&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;traefik&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;http&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;services&lt;/span&gt;&lt;span class="o"&gt;/&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;service&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;/&lt;/span&gt;&lt;span class="n"&gt;loadbalancer&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;servers&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;url&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;http://some-server:3000&amp;quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Now assign this service to a router:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;set traefik/http/routers/newroute/service some-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Lastly give the router a rule: (Note those are backticks
+  around the forward slash.)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;set traefik/http/routers/newroute/rule &amp;quot;Path(`/`)&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now hitting &lt;a href="http://127.0.0.1:80"&gt;127.0.0.1:80&lt;/a&gt; will forward the
+request to your server. You can also do all the other
+interesting things that traefik provides like loadbalancing
+and stripping path prefixes.&lt;/p&gt;
+&lt;h3&gt;References&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;https://doc.traefik.io/traefik/routing/providers/kv/&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Reverse-Proxy"></category><category term="docker"></category><category term="traefik"></category><category term="redis"></category></entry><entry><title>Python Deque</title><link href="/python-deque.html" rel="alternate"></link><published>2020-08-31T14:30:00+01:00</published><updated>2020-08-31T14:30:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2020-08-31:/python-deque.html</id><summary type="html">&lt;p&gt;Exploring python deque and lists&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is now my third article on lists. As someone that uses the
+built-in python list on a fairly regular basis, I might have
+built up a false sense of security. I'm pretty
+familiar with these listy-boys. However, recently I found out
+that I was not thinking about them correctly. Readers might smack
+themselves if they're familiar with data-structures but
+don't know how lists are implemented internally.
+The built-in lists are &lt;em&gt;dynamic arrays&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;How else could they optimise a sweet &lt;code&gt;O(1)&lt;/code&gt; lookup time
+on indexing: &lt;code&gt;mylist[4]&lt;/code&gt;. Especially when analysts are
+trying to avoid the built-in iterator and cursing their code
+with: &lt;code&gt;for i in len(mylist): mylist[i]&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Another trait an established data-structurer
+with be familiar with when it comes to dynamic arrays
+is that the &lt;code&gt;append&lt;/code&gt; and &lt;code&gt;pop&lt;/code&gt; methods are an amortised
+&lt;code&gt;O(1)&lt;/code&gt;. Amortised; because occasionally you have to suffer
+a cost of realloc(ating) memory across larger arrays.&lt;/p&gt;
+&lt;p&gt;Where the list starts to suffer is from &lt;code&gt;pop&lt;/code&gt;ing and
+&lt;code&gt;insert&lt;/code&gt;ing at arbitrary positions.&lt;/p&gt;
+&lt;h2&gt;Linked-List&lt;/h2&gt;
+&lt;p&gt;The data-structurer will have had the linked-list
+slammed into their head often enough that it will
+pain them to hear about it again. So theory aside,
+I'll give you that sweet &lt;code&gt;O(1)&lt;/code&gt; &lt;code&gt;append&lt;/code&gt; and last item &lt;code&gt;pop&lt;/code&gt;
+that you expect from a performant &lt;code&gt;Stack&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Python &lt;code&gt;deque&lt;/code&gt; provides a comparatively larger
+performance hit on initialisation to &lt;code&gt;list&lt;/code&gt; and
+has poor &lt;code&gt;O(n)&lt;/code&gt; performance when you want any arbitrary
+item somewhere in the middle. It does, however, have
+&lt;code&gt;O(1)&lt;/code&gt;; &lt;code&gt;popleft&lt;/code&gt;, &lt;code&gt;pop&lt;/code&gt;, &lt;code&gt;append&lt;/code&gt; and &lt;code&gt;appendleft&lt;/code&gt;. Due
+to being a doubly-linked list (or double-ended queue to
+get the abbreviation &lt;code&gt;deque&lt;/code&gt;)&lt;/p&gt;
+&lt;h2&gt;Deque in the wild&lt;/h2&gt;
+&lt;p&gt;I saw a nice little quote from an enginneer on Quora:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;In 8 years of getting paid to write computer programs,
+this post is the only time I’ve typed ‘deque.’&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;There are &lt;em&gt;many&lt;/em&gt; places &lt;code&gt;deque&lt;/code&gt; is used in the stdlib, most
+commonly whenever someone needs a &lt;code&gt;queue&lt;/code&gt; or &lt;code&gt;stack&lt;/code&gt; such as
+constructing a traceback, parsing python's sytax tree and
+keeping track of context scope.&lt;/p&gt;
+&lt;p&gt;My little run-in with &lt;code&gt;deque&lt;/code&gt; was using it instead of a
+recursive function to avoid python's&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;maximum&lt;span class="w"&gt; &lt;/span&gt;recursion&lt;span class="w"&gt; &lt;/span&gt;depth&lt;span class="w"&gt; &lt;/span&gt;exceeded
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This limit happens to be set to &lt;code&gt;10^4&lt;/code&gt;. The solution was
+to add child nodes to a &lt;code&gt;deque&lt;/code&gt; and when you were done with
+analysing the current node, &lt;code&gt;popleft&lt;/code&gt; the next node.&lt;/p&gt;
+&lt;h2&gt;Python Queue&lt;/h2&gt;
+&lt;p&gt;You might be tempted to ask, well if &lt;code&gt;deque&lt;/code&gt; is for queues.
+What on earth is &lt;code&gt;from queue import Queue&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;These queues are different (although, still using &lt;code&gt;deque&lt;/code&gt; under
+the hood). They are optimised for communication across threads,
+which need to involve locking mechanisms and support methods like
+&lt;code&gt;put_nowait()&lt;/code&gt; and &lt;code&gt;join()&lt;/code&gt;. These are not intended to be used
+as a collective data-structure, hence the lack of support for
+the &lt;code&gt;in&lt;/code&gt; operator.&lt;/p&gt;
+&lt;h2&gt;More information&lt;/h2&gt;
+&lt;p&gt;There is some neat documentation in the cpython repo which
+contains more data-structures and other alternatives to
+the standard built-in &lt;code&gt;list&lt;/code&gt;. &lt;a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists"&gt;Tools for working with
+lists&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;References&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://docs.python.org/3.8/faq/design.html#how-are-lists-implemented-in-cpython"&gt;&lt;strong&gt;How are lists implemented:&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;https://stackoverflow.com/a/15121933/3407256&lt;/li&gt;
+&lt;li&gt;https://stackoverflow.com/a/23487658/3407256&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Python"></category><category term="code"></category><category term="programming"></category><category term="python"></category><category term="data-structures"></category></entry><entry><title>Module not found Heroku</title><link href="/module-not-found-heroku.html" rel="alternate"></link><published>2020-04-16T00:03:00+01:00</published><updated>2020-04-16T00:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2020-04-16:/module-not-found-heroku.html</id><summary type="html">&lt;p&gt;Debugging python application in heroku containers.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are some bugs and problems that give a thrill once they're
+solved. The best bugs are the ones that teach you something,
+the worst bugs are the ones that indicate that you've not
+improved your spelling and the difference between an &lt;code&gt;l&lt;/code&gt; and a &lt;code&gt;1&lt;/code&gt;
+is large.&lt;/p&gt;
+&lt;p&gt;Figuring out why I was facing the following traceback in heroku
+provided a time consuming learning experience, but probably one
+that I won't forget.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;heroku&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;State&lt;span class="w"&gt; &lt;/span&gt;changed&lt;span class="w"&gt; &lt;/span&gt;from&lt;span class="w"&gt; &lt;/span&gt;crashed&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;starting
+heroku&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;State&lt;span class="w"&gt; &lt;/span&gt;changed&lt;span class="w"&gt; &lt;/span&gt;from&lt;span class="w"&gt; &lt;/span&gt;starting&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;crashed
+heroku&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;State&lt;span class="w"&gt; &lt;/span&gt;changed&lt;span class="w"&gt; &lt;/span&gt;from&lt;span class="w"&gt; &lt;/span&gt;crashed&lt;span class="w"&gt; &lt;/span&gt;to&lt;span class="w"&gt; &lt;/span&gt;starting
+app&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;Traceback&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;most&lt;span class="w"&gt; &lt;/span&gt;recent&lt;span class="w"&gt; &lt;/span&gt;call&lt;span class="w"&gt; &lt;/span&gt;last&lt;span class="o"&gt;)&lt;/span&gt;:
+app&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;File&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;/home/app/server/bin/server&amp;quot;&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;line&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;,&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;in&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;lt;module&amp;gt;
+app&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;from&lt;span class="w"&gt; &lt;/span&gt;api.server&lt;span class="w"&gt; &lt;/span&gt;import&lt;span class="w"&gt; &lt;/span&gt;deploy
+app&lt;span class="o"&gt;[&lt;/span&gt;web.1&lt;span class="o"&gt;]&lt;/span&gt;:&lt;span class="w"&gt; &lt;/span&gt;ModuleNotFoundError:&lt;span class="w"&gt; &lt;/span&gt;No&lt;span class="w"&gt; &lt;/span&gt;module&lt;span class="w"&gt; &lt;/span&gt;named&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;api&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Why can't the module be found 🤔!&lt;/p&gt;
+&lt;p&gt;Worst of all, the dockerfile builds locally, and when I run it.
+It's executing &lt;code&gt;/home/app/server/bin/server&lt;/code&gt; and ready to
+receive traffic...&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;python:3.8.2&lt;/span&gt;
+
+&lt;span class="k"&gt;ENV&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;USER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;appuser&lt;/span&gt;
+&lt;span class="k"&gt;ENV&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;HOME&lt;span class="w"&gt; &lt;/span&gt;/home/&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;USER&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;RUN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/server
+&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;${HOME}/server&lt;/span&gt;
+
+&lt;span class="k"&gt;ENV&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;PATH&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/server/bin:&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;/.local/bin:&lt;span class="nv"&gt;$PATH&lt;/span&gt;
+
+&lt;span class="k"&gt;USER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;appuser&lt;/span&gt;
+
+&lt;span class="k"&gt;CMD&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;server&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I won't go into how long I spent on thinking it had something
+to do with permission. Looking back, it's quite clear that a
+permission has nothing to do with it, since the logs would say
+so.&lt;/p&gt;
+&lt;h2&gt;Take a step back&lt;/h2&gt;
+&lt;p&gt;The difference between the image on heroku and the image
+running locally. What probably made me assume it was a
+permission error was the quote from their docs:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;containers are not run with root privileges in Heroku&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;So there was some &lt;strong&gt;funky&lt;/strong&gt; business they're doing to the
+user I provided.&lt;/p&gt;
+&lt;h2&gt;Get closer to the problem&lt;/h2&gt;
+&lt;p&gt;Finding out that I could get inside the heroku container
+certainly helped me figure out the problem:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;heroku&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;bash
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I could now recreate the Module not found error. I tried using
+&lt;code&gt;pipenv&lt;/code&gt; to install the module that was missing, however that
+didn't work either. hmm.. Where are these modules installed??&lt;/p&gt;
+&lt;p&gt;Show me the site-packages:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;python&lt;span class="w"&gt; &lt;/span&gt;-m&lt;span class="w"&gt; &lt;/span&gt;site
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Heroku&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python38.zip&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8/lib-dynload&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/home/appuser/server/.local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/home/appuser/server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;USER_BASE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/home/appuser/server/.local&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;USER_SITE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/home/appuser/server/.local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ENABLE_USER_SITE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Local Docker Container&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;sys&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;path&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/home/appuser/server&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python38.zip&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8/lib-dynload&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/home/hints/.local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="s1"&gt;&amp;#39;/usr/local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="n"&gt;USER_BASE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/home/appuser/.local&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;USER_SITE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;/home/appuser/.local/lib/python3.8/site-packages&amp;#39;&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;exists&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;ENABLE_USER_SITE&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Right so they are not referencing the same site-packages.
+Are the site packages even installed in the heroku container?!?&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$&lt;span class="w"&gt; &lt;/span&gt;ls&lt;span class="w"&gt; &lt;/span&gt;/home/appuser/.local/lib/python3.8/site-packages
+Flask-1.1.2.dist-info&lt;span class="w"&gt;               &lt;/span&gt;mccabe-0.6.1.dist-info
+Flask_Alembic-2.0.1.dist-info&lt;span class="w"&gt;       &lt;/span&gt;mccabe.py
+Flask_Cors-3.0.8.dist-info&lt;span class="w"&gt;          &lt;/span&gt;more_itertools
+Flask_JWT_Extended-3.24.1.dist-info&lt;span class="w"&gt; &lt;/span&gt;more_itertools-8.2.0.dist-info
+Flask_SQLAlchemy-2.4.1.dist-info&lt;span class="w"&gt;    &lt;/span&gt;oauthlib
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;🎉 so they aren't missing...&lt;/p&gt;
+&lt;h3&gt;Locally&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;
+/home/hints
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Heroku&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;$HOME&lt;/span&gt;
+/home/hints/server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ah.. So &lt;code&gt;$HOME&lt;/code&gt; has something to do with it.&lt;/p&gt;
+&lt;p&gt;Well I have &lt;code&gt;$HOME=/home/appuser&lt;/code&gt; and &lt;code&gt;WORKDIR=/home/appuser/server&lt;/code&gt;
+perhaps heroku is setting the work directory to the home
+directory. 🤷‍♂️&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;ENV&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;USER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;hints&lt;/span&gt;
+&lt;span class="k"&gt;ENV&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;HOME&lt;span class="w"&gt; &lt;/span&gt;/home/&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;USER&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;RUN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;mkdir&lt;span class="w"&gt; &lt;/span&gt;-p&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;HOME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;
+&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;${HOME}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And sure enough fixing my deployment.&lt;/p&gt;</content><category term="Python"></category><category term="web"></category><category term="python"></category><category term="heroku"></category></entry><entry><title>Chain of Responsibility</title><link href="/chain-of-responsibility.html" rel="alternate"></link><published>2018-12-06T00:40:00+00:00</published><updated>2018-12-06T00:40:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-12-06:/chain-of-responsibility.html</id><summary type="html">&lt;p&gt;Implement a chain of responsibility design pattern.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Easily one of my favourite patterns from the gang of four is the &lt;em&gt;chain of
+responsibility&lt;/em&gt; pattern. It aims to avoid coupling the object that sends a
+request to the handlers of the request. This is especially useful if the
+structure to our handlers follows a sense of hierarchy.&lt;/p&gt;
+&lt;p&gt;I've had very few opportunities to implement design patterns, but gaming
+has really helped me to envision a context where several designs can be
+applied as handy solutions to managing complexity.&lt;/p&gt;
+&lt;p&gt;So we will apply the chain of responsibility to a situation where we have
+gathered four of the most powerful wizards in a room, each of whom will test
+their power by casting a spell.&lt;/p&gt;
+&lt;p&gt;For this example we have our wizards as the objects which send requests.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Wizard&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Create a wizard.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;intelligence&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="c1"&gt;#: Identify the wizard by name&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;
+        &lt;span class="c1"&gt;#: Intelligence as a proxy of a wizard&amp;#39;s power.&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;intelligence&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;intelligence&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;cast_spell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;spell&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Spell&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Have the wizard cast a spell.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="sa"&gt;f&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; casts &lt;/span&gt;&lt;span class="si"&gt;{&lt;/span&gt;&lt;span class="n"&gt;spell&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; spell.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;spell&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cast&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We will make each behaviour of the spell, which is determined by the power of
+the wizard casting it, as an object handling a request. If the wizard does not
+meet the handler's requirements it passes the request on, to it's successor.
+This is where we have applied a sense of hierarchy to the handler.&lt;/p&gt;
+&lt;p&gt;To begin we have an Abstract Handler:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;abc&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;ABC&lt;/span&gt;
+&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;abc&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;abstractmethod&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;AbstractHandler&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;ABC&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;successor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="kc"&gt;None&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_successor&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;successor&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;reaction&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="ow"&gt;not&lt;/span&gt; &lt;span class="n"&gt;reaction&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;_successor&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;create&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="nd"&gt;@abstractmethod&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;spell&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;raise&lt;/span&gt; &lt;span class="ne"&gt;NotImplementedError&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Must provide implementation in subclass.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can define our handler hierarchy:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;LowPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AbstractHandler&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;intelligence&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Spell backfires.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;MediumPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AbstractHandler&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;intelligence&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;20&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Small fire ball is cast.&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;HighPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AbstractHandler&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;intelligence&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt; &lt;span class="mi"&gt;30&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;A fire ball blazes across the room&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+
+
+&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;GodlikePowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;AbstractHandler&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;_handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;A Massive column of fire burns through the room!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="kc"&gt;True&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally a single object to identify the spell chain.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Spell&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;str&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="c1"&gt;#: Identifying the spell by a name&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;name&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;name&lt;/span&gt;
+        &lt;span class="c1"&gt;#: How the spell behaves at differing levels of user&amp;#39;s power&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;chain&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;LowPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+            &lt;span class="n"&gt;MediumPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+                &lt;span class="n"&gt;HighPowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+                    &lt;span class="n"&gt;GodlikePowerFireSpell&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+                &lt;span class="p"&gt;)&lt;/span&gt;
+            &lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;cast&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;chain&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;handle&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;creature&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To test their skill, we have a spell which casts a "Fire Ball".
+We have the following wizards present:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="vm"&gt;__name__&lt;/span&gt; &lt;span class="o"&gt;==&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;__main__&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;fire_spell&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Spell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Fire Ball&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;merlin&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Wizard&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Merlin&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;8&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;albus&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Wizard&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Albus&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;18&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;howl&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Wizard&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Howl&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;28&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="n"&gt;gandalf&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Wizard&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Gandalf&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="mi"&gt;38&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;They are all gathered in a room, and take turns casting the same spell.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;room&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;merlin&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;albus&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;howl&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;gandalf&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;wizard&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;room&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="n"&gt;wizard&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;cast_spell&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;fire_spell&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To which we should see the spell behave according to their intelligence:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;(&lt;/span&gt;myenv&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;pc-name&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="w"&gt; &lt;/span&gt;$&lt;span class="w"&gt; &lt;/span&gt;python&lt;span class="w"&gt; &lt;/span&gt;script.py
+Merlin&lt;span class="w"&gt; &lt;/span&gt;casts&lt;span class="w"&gt; &lt;/span&gt;Fire&lt;span class="w"&gt; &lt;/span&gt;Ball&lt;span class="w"&gt; &lt;/span&gt;spell.
+Spell&lt;span class="w"&gt; &lt;/span&gt;backfires.
+
+Albus&lt;span class="w"&gt; &lt;/span&gt;casts&lt;span class="w"&gt; &lt;/span&gt;Fire&lt;span class="w"&gt; &lt;/span&gt;Ball&lt;span class="w"&gt; &lt;/span&gt;spell.
+Small&lt;span class="w"&gt; &lt;/span&gt;fire&lt;span class="w"&gt; &lt;/span&gt;ball&lt;span class="w"&gt; &lt;/span&gt;is&lt;span class="w"&gt; &lt;/span&gt;cast.
+
+Howl&lt;span class="w"&gt; &lt;/span&gt;casts&lt;span class="w"&gt; &lt;/span&gt;Fire&lt;span class="w"&gt; &lt;/span&gt;Ball&lt;span class="w"&gt; &lt;/span&gt;spell.
+A&lt;span class="w"&gt; &lt;/span&gt;fire&lt;span class="w"&gt; &lt;/span&gt;ball&lt;span class="w"&gt; &lt;/span&gt;blazes&lt;span class="w"&gt; &lt;/span&gt;across&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;room
+
+Gandalf&lt;span class="w"&gt; &lt;/span&gt;casts&lt;span class="w"&gt; &lt;/span&gt;Fire&lt;span class="w"&gt; &lt;/span&gt;Ball&lt;span class="w"&gt; &lt;/span&gt;spell.
+A&lt;span class="w"&gt; &lt;/span&gt;Massive&lt;span class="w"&gt; &lt;/span&gt;column&lt;span class="w"&gt; &lt;/span&gt;of&lt;span class="w"&gt; &lt;/span&gt;fire&lt;span class="w"&gt; &lt;/span&gt;burns&lt;span class="w"&gt; &lt;/span&gt;through&lt;span class="w"&gt; &lt;/span&gt;the&lt;span class="w"&gt; &lt;/span&gt;room!
+
+&lt;span class="o"&gt;(&lt;/span&gt;myenv&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;pc-name&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="w"&gt; &lt;/span&gt;$
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py"&gt;Implementation can be found here&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="code"></category><category term="wizard"></category><category term="DesignPatterns"></category><category term="go4"></category></entry><entry><title>Iterator Design Pattern</title><link href="/iterator-design-pattern.html" rel="alternate"></link><published>2018-10-11T18:37:00+01:00</published><updated>2018-10-11T18:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-11:/iterator-design-pattern.html</id><summary type="html">&lt;p&gt;Talk about my favourite design pattern&lt;/p&gt;</summary><content type="html">&lt;p&gt;Before I started reading &lt;a href="https://en.wikipedia.org/wiki/Design_Patterns"&gt;the gang of
+4&lt;/a&gt;
+["Go4"],
+I was convinced I would not need an
+&lt;a href="https://en.wikipedia.org/wiki/Iterator_pattern"&gt;iterator&lt;/a&gt;.
+After all, in python, they are already implemented:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;a&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;b&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;c&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;i&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="nb"&gt;print&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the frame of &lt;em&gt;python lists&lt;/em&gt; as aggregate objects, the
+intent of an iterator is satisfied.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2&gt;Displaying notes&lt;/h2&gt;
+&lt;p&gt;Here I explain, how the iterator became my favourite design
+pattern.&lt;/p&gt;
+&lt;p&gt;I have written about &lt;a href="/foolscap-list-ordering.html"&gt;representation
+of lists before&lt;/a&gt;,
+and I don't think this will be my last time. When
+implementing the drop-downs in
+&lt;a href="https://github.com/foxyblue/foolscap"&gt;foolscap&lt;/a&gt;
+to allow a user to see sections contained in their note,
+I ran into an issue of complexity where I had blocks
+of conditionals dictating what should be displayed
+to a user. I wanted the user to have an indication
+that a note contains sections, and for them to be
+able to toggle a drop-down to see each section.
+Similar to:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;+&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;circleci&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;
+&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;docker&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Where my &lt;code&gt;"circleci"&lt;/code&gt; note would contain sections
+and the &lt;code&gt;"docker"&lt;/code&gt; note does not. Then expanding:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="w"&gt; &lt;/span&gt;&amp;lt;-&amp;gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;circleci&lt;span class="w"&gt;  &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;
+&lt;span class="w"&gt;  &lt;/span&gt;└─&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;-workflow&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;
+&lt;span class="w"&gt;     &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;docker&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="p"&gt;|&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This is where I realised the abstraction power of an
+iterator, And I could hide the collapsed sections
+behind an &lt;code&gt;"if"&lt;/code&gt; conditional in an iterator.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Menu&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;items&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;visible&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Yield the next appropriate item for display.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+            &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+            &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="nb"&gt;hasattr&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s1"&gt;&amp;#39;expand&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;and&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;expand&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;sub_item&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sub_items&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+                    &lt;span class="k"&gt;yield&lt;/span&gt; &lt;span class="n"&gt;sub_item&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Supporting further traversal policies in my &lt;code&gt;Menu&lt;/code&gt;
+class is straightforward, and
+drawing becomes absurdly simplified:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;draw&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;menu&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;Draw all viewable menu items.&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;item&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;menu&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;visible&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+        &lt;span class="n"&gt;draw_item&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;item&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After this I thought of a more complex &lt;strong&gt;aggregate&lt;/strong&gt;
+structure that I could traverse, &lt;a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/tree_iterator.py"&gt;like a tree depth
+first&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Realising the abstraction strength of the
+iterator, one finds its definition of intent far
+more compelling.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.&lt;/p&gt;
+&lt;/blockquote&gt;</content><category term="Python, Design Patterns"></category><category term="code"></category><category term="patterns"></category><category term="design"></category></entry><entry><title>Random VM Name</title><link href="/random-vm-name.html" rel="alternate"></link><published>2018-10-10T19:19:00+01:00</published><updated>2018-10-10T19:19:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-10:/random-vm-name.html</id><summary type="html">&lt;p&gt;Generate a name for virtual machines&lt;/p&gt;</summary><content type="html">&lt;p&gt;Something I found to be cute about the docker
+engine is it's feature to create a random name for
+your containers, when one is not specified.&lt;/p&gt;
+&lt;p&gt;I've had some good ones e.g:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;objective_galileo
+distracted_euclid
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Occasionally I'd be spinning up the odd VM and
+have to provide some generic name like
+&lt;code&gt;dev-sebastien&lt;/code&gt;. So instead I thought my own
+arbitrary name generation could save some time
+here.&lt;/p&gt;
+&lt;h2&gt;Random names&lt;/h2&gt;
+&lt;p&gt;The idea was to combine &lt;code&gt;&amp;lt;adjective&amp;gt;-&amp;lt;pokemon&amp;gt;&lt;/code&gt;
+and use this as the VM parameter.&lt;/p&gt;
+&lt;p&gt;Thus defining the following in &lt;code&gt;.create_name.sh&lt;/code&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;function&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;gen_name&lt;span class="o"&gt;()&lt;/span&gt;
+&lt;span class="o"&gt;{&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;pokemon&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;pidgey&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;pikachu&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;cubone&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;adjectives&lt;/span&gt;&lt;span class="o"&gt;=(&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;hungry&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;adorable&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;jittery&amp;quot;&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;select_pokemon&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;pokemon&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;$RANDOM&lt;/span&gt;&lt;span class="p"&gt; % {#pokemon[@]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nv"&gt;select_desc&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;adjectives&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nv"&gt;$RANDOM&lt;/span&gt;&lt;span class="p"&gt; % {#adjectives[@]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;}&lt;/span&gt;
+
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;local&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nv"&gt;result&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;sebastien-&lt;span class="nv"&gt;$select_desc&lt;/span&gt;-&lt;span class="nv"&gt;$select_pokemon&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="nb"&gt;echo&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="nv"&gt;$result&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Call this in your &lt;code&gt;.bash_aliases&lt;/code&gt; file.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;source&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;.create_name.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And every time you run &lt;code&gt;gen_name&lt;/code&gt; in your command
+line, you'll get a new "vm" name.&lt;/p&gt;
+&lt;p&gt;I've coupled this with:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;create_instance&lt;span class="o"&gt;(){&lt;/span&gt;
+&lt;span class="w"&gt;    &lt;/span&gt;gcloud&lt;span class="w"&gt; &lt;/span&gt;compute&lt;span class="w"&gt; &lt;/span&gt;instances&lt;span class="w"&gt; &lt;/span&gt;create&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;gen_name&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here are some of the names of my machines:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sebastien-livid-quagsire
+sebastien-lonely-metapod
+sebastien-gentle-rattata
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Bash"></category><category term="vm"></category><category term="gcp"></category></entry><entry><title>Foolscap List Ordering</title><link href="/foolscap-list-ordering.html" rel="alternate"></link><published>2018-10-09T22:37:00+01:00</published><updated>2018-10-09T22:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-09:/foolscap-list-ordering.html</id><summary type="html">&lt;p&gt;The ordering rules of Foolscap&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://github.com/foxyblue/foolscap"&gt;Foolscap&lt;/a&gt;
+was my answer to losing all my notes and
+forgetting the exact file I saved it.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Was it on Desktop or next to the project?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Thus I decided to write an application that took
+care of the saving and finding of my notes.&lt;/p&gt;
+&lt;h2&gt;Unordered Lists&lt;/h2&gt;
+&lt;p&gt;One thing I have taken for granted is the ordering
+of my files in any file system. I only realised
+how important it was after unordered dictionaries
+in python allocated my notes random positions on
+the list.&lt;/p&gt;
+&lt;p&gt;The random ordering meant if I have note "M" in
+mind, it could appear anywhere on the list. So my
+eyes would track down &lt;code&gt;n&lt;/code&gt; positions in the list to
+find "M". An &lt;code&gt;O(n)&lt;/code&gt; operation for my eyes.&lt;/p&gt;
+&lt;p&gt;After growing tired (a whole day of &lt;code&gt;O(n)&lt;/code&gt; eye
+operations), I wrote the rule to provide me the
+list in alphabetical order. This was great my
+brain automatically switched to doing a binary
+search for note "M". &lt;code&gt;O(log n)&lt;/code&gt;&lt;/p&gt;
+&lt;h2&gt;Ordered Lists&lt;/h2&gt;
+&lt;p&gt;Now that finding note "M" was optimised for my
+eyes, my finger had to press the down key until
+my cursor was on the note of choice. This wasn't
+good enough, I was referring to note "M" several
+times a day and the other notes I'd reference once
+a month were adding computation time to my finger.&lt;/p&gt;
+&lt;p&gt;This is where I introduced two of the most
+powerful rules of Foolscap. Since I tracked the
+number of views, and time it was last viewed or
+modified I could implement the following ordering:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;LastView&lt;/span&gt;&lt;span class="sr"&gt;/Modified/&lt;/span&gt;&lt;span class="n"&gt;RecentlyCreated&lt;/span&gt;
+&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;MostViewed&lt;/span&gt;
+&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="n"&gt;ndMostViewed&lt;/span&gt;
+&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="n"&gt;rdMostViewed&lt;/span&gt;
+&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;
+&lt;span class="mi"&gt;6&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Z&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This was neat!&lt;/p&gt;
+&lt;p&gt;I had significantly cut down the amount of time it
+took for me to get to the notes I was using most
+frequently.&lt;/p&gt;
+&lt;h2&gt;Search Lists&lt;/h2&gt;
+&lt;p&gt;Searching needed a slightly different ordering
+since applying the rules above to your search
+results will likely be meaningless. The
+meaningless will come from your inability to
+predict what will appear in the list to begin
+with.&lt;/p&gt;
+&lt;p&gt;Python has a neat method for it's strings.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;note_title&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;startswith&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;text&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Which I used as the initial search feature. A
+search by the prefix of my note title. To me this
+made sense since my notes are titled by their
+subject matter, e.g. &lt;code&gt;"linux", "elastic"&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The iteration to this search functionality was to
+include the conditional:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;text&amp;quot;&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;note_title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I still wanted to provide the user with the result
+of the initial prefix search as the first result
+in the list.&lt;/p&gt;
+&lt;p&gt;This is when I fathomed this solution:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;search&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;title&lt;/span&gt; &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;notes&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;items&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+          &lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="n"&gt;query&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="c1"&gt;# Sort by the position the query appears in the title&lt;/span&gt;
+&lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;sorted&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;search&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;key&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;lambda&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;title&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;index&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;query&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Pretty
+&lt;a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74"&gt;neat!&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="interface"></category><category term="workflow"></category></entry><entry><title>Procedural Villages</title><link href="/procedural-villages.html" rel="alternate"></link><published>2018-10-09T21:48:00+01:00</published><updated>2018-10-09T21:48:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-09:/procedural-villages.html</id><summary type="html">&lt;p&gt;Show procedurally generated villages.&lt;/p&gt;</summary><content type="html">&lt;p&gt;My inspiration for any tool or project has always
+been the thought that it could be done better, either
+that or I'd feel like I would benefit a lot from a
+missing feature.&lt;/p&gt;
+&lt;p&gt;In my first embarked I attempted to create a
+dungeon crawler, full of all the creatures
+and characters I thought were missing from
+traditional games.&lt;/p&gt;
+&lt;p&gt;It was through brute-force of the &lt;a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod"&gt;Roguebasin
+tutorial&lt;/a&gt;
+where I learnt how to code.&lt;/p&gt;
+&lt;p&gt;I must have created the same game 4 or 5 times
+before I decided to scrap the libtcod library and
+create a game without an interface.&lt;/p&gt;
+&lt;p&gt;Armed with &lt;code&gt;stdout&lt;/code&gt; and turn-based printing, I
+implemented feature after feature. One of the
+features I was quite proud of was the randomly
+generated villages I'd spawn my player into.&lt;/p&gt;
+&lt;h2&gt;Objects&lt;/h2&gt;
+&lt;p&gt;I was aiming for something simple, just populate
+the map with houses that the player can interact
+with, for this I deconstructed a &lt;code&gt;house&lt;/code&gt; into a
+rectangle.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Rect&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="fm"&gt;__init__&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;y1&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;h&lt;/span&gt;
+        &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;y2&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="n"&gt;v&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;center&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="n"&gt;center_x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x1&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;x2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="n"&gt;center_y&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;y1&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;y2&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;center_x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;center_y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;internal&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][ ][ ][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][X][X][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][X][X][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][X][X][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][ ][ ][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class="o"&gt;...&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;edges&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][X][X][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][X][X][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class="o"&gt;...&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+
+    &lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;sides&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="bp"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;span class="w"&gt;        &lt;/span&gt;&lt;span class="sd"&gt;&amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][X][X][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [X][ ][ ][X]&lt;/span&gt;
+&lt;span class="sd"&gt;        [ ][X][X][ ]&lt;/span&gt;
+&lt;span class="sd"&gt;        &amp;quot;&amp;quot;&amp;quot;&lt;/span&gt;
+        &lt;span class="o"&gt;...&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nb"&gt;bool&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The poorly defined object above could now provide
+boolean confirmation to a co-ordinates existence
+in appropriate sections of a rectangle.&lt;/p&gt;
+&lt;p&gt;From the above &lt;code&gt;Rect&lt;/code&gt; class I can place a door on
+a &lt;code&gt;Rect.sides()&lt;/code&gt; and I can fill the area
+defined by &lt;code&gt;Rect.internal()&lt;/code&gt; with items.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Empty space: | . |
+Wall:        | # |
+Monster:     | m |
+Door:        | + |
+
+| . | . | . | . | . | . |
+| . | # | # | + | # | . |
+| . | # | m | . | # | . |
+| . | # | . | . | # | . |
+| . | # | . | . | # | . |
+| . | # | # | # | # | . |
+| . | . | . | . | . | . |
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Throwing in some size variations and randomising
+the house position on the map, (making sure there
+are no houses intersecting each other). Allowed
+me to generate maps that looked like these:&lt;/p&gt;
+&lt;h3&gt;Example 1&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
+| . | # | u | . | . | @ | # | . | # | . | m | # | . | . | . |
+| . | + | . | . | . | . | # | . | # | . | . | + | . | . | . |
+| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | &amp;gt; | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | # | # | + | # | # | # | . | . | . | . | . | . | . | . |
+| . | # | . | . | r | . | # | . | . | . | . | . | . | . | . |
+| . | # | . | . | . | . | # | . | . | . | . | . | . | . | . |
+| . | # | # | # | # | # | # | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Example 2&lt;/h3&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | # | # | + | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | m | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | # | # | # | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | # | # | # | # |
+| . | # | # | # | # | # | # | # | . | . | . | # | . | . | # |
+| . | # | . | . | . | . | u | # | . | . | . | + | . | . | # |
+| . | + | . | . | . | . | . | # | . | . | . | # | &amp;gt; | . | # |
+| . | # | X | . | . | . | . | # | . | . | . | # | . | r | # |
+| . | # | # | # | # | # | # | # | . | . | . | # | # | # | # |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Unfortunately my code was not beautiful back then.
+I still think it was a &lt;a href="https://github.com/foxyblue/Rogue_simple/blob/master/src/map_class.py"&gt;neat idea&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="code"></category><category term="game"></category><category term="roguelike"></category></entry></feed>
