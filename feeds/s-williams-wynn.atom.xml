@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="/" rel="alternate"></link><link href="/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>/</id><updated>2022-01-24T00:27:00+00:00</updated><entry><title>Configuring Traefik with Redis</title><link href="/configuring-traefik-with-redis.html" rel="alternate"></link><published>2022-01-24T00:27:00+00:00</published><updated>2022-01-24T00:27:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2022-01-24:/configuring-traefik-with-redis.html</id><summary type="html">&lt;p&gt;Short tutorial on using traefik as a reverse proxy configured with redis&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over a weekend I had a quick play around with the
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2022-01-24T00:27:00+00:00</updated><entry><title>Configuring Traefik with Redis</title><link href="https://s3bw.github.io/writes/configuring-traefik-with-redis.html" rel="alternate"></link><published>2022-01-24T00:27:00+00:00</published><updated>2022-01-24T00:27:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2022-01-24:/writes/configuring-traefik-with-redis.html</id><summary type="html">&lt;p&gt;Short tutorial on using traefik as a reverse proxy configured with redis&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over a weekend I had a quick play around with the
 config provider to traefik, experimenting with reverse
 proxies. I'm fairly familiar with the &lt;code&gt;redis-cli&lt;/code&gt;
 and it's fairly easy to build a redis client in any language
@@ -92,7 +92,7 @@ and stripping path prefixes.&lt;/p&gt;
 &lt;h3&gt;References&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;https://doc.traefik.io/traefik/routing/providers/kv/&lt;/li&gt;
-&lt;/ul&gt;</content><category term="Reverse-Proxy"></category><category term="docker"></category><category term="traefik"></category><category term="redis"></category></entry><entry><title>Python Deque</title><link href="/python-deque.html" rel="alternate"></link><published>2020-08-31T14:30:00+01:00</published><updated>2020-08-31T14:30:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2020-08-31:/python-deque.html</id><summary type="html">&lt;p&gt;Exploring python deque and lists&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is now my third article on lists. As someone that uses the
+&lt;/ul&gt;</content><category term="Reverse-Proxy"></category><category term="docker"></category><category term="traefik"></category><category term="redis"></category></entry><entry><title>Python Deque</title><link href="https://s3bw.github.io/writes/python-deque.html" rel="alternate"></link><published>2020-08-31T14:30:00+01:00</published><updated>2020-08-31T14:30:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2020-08-31:/writes/python-deque.html</id><summary type="html">&lt;p&gt;Exploring python deque and lists&lt;/p&gt;</summary><content type="html">&lt;p&gt;This is now my third article on lists. As someone that uses the
 built-in python list on a fairly regular basis, I might have
 built up a false sense of security. I'm pretty
 familiar with these listy-boys. However, recently I found out
@@ -161,7 +161,7 @@ lists&lt;/a&gt;&lt;/p&gt;
 &lt;li&gt;&lt;a href="https://docs.python.org/3.8/faq/design.html#how-are-lists-implemented-in-cpython"&gt;&lt;strong&gt;How are lists implemented:&lt;/strong&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;https://stackoverflow.com/a/15121933/3407256&lt;/li&gt;
 &lt;li&gt;https://stackoverflow.com/a/23487658/3407256&lt;/li&gt;
-&lt;/ul&gt;</content><category term="Python"></category><category term="code"></category><category term="programming"></category><category term="python"></category><category term="data-structures"></category></entry><entry><title>Module not found Heroku</title><link href="/module-not-found-heroku.html" rel="alternate"></link><published>2020-04-16T00:03:00+01:00</published><updated>2020-04-16T00:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2020-04-16:/module-not-found-heroku.html</id><summary type="html">&lt;p&gt;Debugging python application in heroku containers.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are some bugs and problems that give a thrill once they're
+&lt;/ul&gt;</content><category term="Python"></category><category term="code"></category><category term="programming"></category><category term="python"></category><category term="data-structures"></category></entry><entry><title>Module not found Heroku</title><link href="https://s3bw.github.io/writes/module-not-found-heroku.html" rel="alternate"></link><published>2020-04-16T00:03:00+01:00</published><updated>2020-04-16T00:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2020-04-16:/writes/module-not-found-heroku.html</id><summary type="html">&lt;p&gt;Debugging python application in heroku containers.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are some bugs and problems that give a thrill once they're
 solved. The best bugs are the ones that teach you something,
 the worst bugs are the ones that indicate that you've not
 improved your spelling and the difference between an &lt;code&gt;l&lt;/code&gt; and a &lt;code&gt;1&lt;/code&gt;
@@ -284,7 +284,7 @@ directory. 🤷‍♂️&lt;/p&gt;
 &lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;${HOME}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;And sure enough fixing my deployment.&lt;/p&gt;</content><category term="Python"></category><category term="web"></category><category term="python"></category><category term="heroku"></category></entry><entry><title>Chain of Responsibility</title><link href="/chain-of-responsibility.html" rel="alternate"></link><published>2018-12-06T00:40:00+00:00</published><updated>2018-12-06T00:40:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-12-06:/chain-of-responsibility.html</id><summary type="html">&lt;p&gt;Implement a chain of responsibility design pattern.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Easily one of my favourite patterns from the gang of four is the &lt;em&gt;chain of
+&lt;p&gt;And sure enough fixing my deployment.&lt;/p&gt;</content><category term="Python"></category><category term="web"></category><category term="python"></category><category term="heroku"></category></entry><entry><title>Chain of Responsibility</title><link href="https://s3bw.github.io/writes/chain-of-responsibility.html" rel="alternate"></link><published>2018-12-06T00:40:00+00:00</published><updated>2018-12-06T00:40:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2018-12-06:/writes/chain-of-responsibility.html</id><summary type="html">&lt;p&gt;Implement a chain of responsibility design pattern.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Easily one of my favourite patterns from the gang of four is the &lt;em&gt;chain of
 responsibility&lt;/em&gt; pattern. It aims to avoid coupling the object that sends a
 request to the handlers of the request. This is especially useful if the
 structure to our handlers follows a sense of hierarchy.&lt;/p&gt;
@@ -412,7 +412,7 @@ A&lt;span class="w"&gt; &lt;/span&gt;Massive&lt;span class="w"&gt; &lt;/span&gt;
 &lt;span class="o"&gt;(&lt;/span&gt;myenv&lt;span class="o"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;pc-name&lt;span class="w"&gt; &lt;/span&gt;~&lt;span class="w"&gt; &lt;/span&gt;$
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py"&gt;Implementation can be found here&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="code"></category><category term="wizard"></category><category term="DesignPatterns"></category><category term="go4"></category></entry><entry><title>Iterator Design Pattern</title><link href="/iterator-design-pattern.html" rel="alternate"></link><published>2018-10-11T18:37:00+01:00</published><updated>2018-10-11T18:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-11:/iterator-design-pattern.html</id><summary type="html">&lt;p&gt;Talk about my favourite design pattern&lt;/p&gt;</summary><content type="html">&lt;p&gt;Before I started reading &lt;a href="https://en.wikipedia.org/wiki/Design_Patterns"&gt;the gang of
+&lt;p&gt;&lt;a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py"&gt;Implementation can be found here&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="code"></category><category term="wizard"></category><category term="DesignPatterns"></category><category term="go4"></category></entry><entry><title>Iterator Design Pattern</title><link href="https://s3bw.github.io/writes/iterator-design-pattern.html" rel="alternate"></link><published>2018-10-11T18:37:00+01:00</published><updated>2018-10-11T18:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2018-10-11:/writes/iterator-design-pattern.html</id><summary type="html">&lt;p&gt;Talk about my favourite design pattern&lt;/p&gt;</summary><content type="html">&lt;p&gt;Before I started reading &lt;a href="https://en.wikipedia.org/wiki/Design_Patterns"&gt;the gang of
 4&lt;/a&gt;
 ["Go4"],
 I was convinced I would not need an
@@ -434,7 +434,7 @@ its underlying representations.&lt;/p&gt;
 &lt;h2&gt;Displaying notes&lt;/h2&gt;
 &lt;p&gt;Here I explain, how the iterator became my favourite design
 pattern.&lt;/p&gt;
-&lt;p&gt;I have written about &lt;a href="/foolscap-list-ordering.html"&gt;representation
+&lt;p&gt;I have written about &lt;a href="https://s3bw.github.io/writes/foolscap-list-ordering.html"&gt;representation
 of lists before&lt;/a&gt;,
 and I don't think this will be my last time. When
 implementing the drop-downs in
@@ -493,7 +493,7 @@ more compelling.&lt;/p&gt;
 &lt;p&gt;Provide a way to access the elements of an
 aggregate object sequentially without exposing
 its underlying representations.&lt;/p&gt;
-&lt;/blockquote&gt;</content><category term="Python, Design Patterns"></category><category term="code"></category><category term="patterns"></category><category term="design"></category></entry><entry><title>Random VM Name</title><link href="/random-vm-name.html" rel="alternate"></link><published>2018-10-10T19:19:00+01:00</published><updated>2018-10-10T19:19:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-10:/random-vm-name.html</id><summary type="html">&lt;p&gt;Generate a name for virtual machines&lt;/p&gt;</summary><content type="html">&lt;p&gt;Something I found to be cute about the docker
+&lt;/blockquote&gt;</content><category term="Python, Design Patterns"></category><category term="code"></category><category term="patterns"></category><category term="design"></category></entry><entry><title>Random VM Name</title><link href="https://s3bw.github.io/writes/random-vm-name.html" rel="alternate"></link><published>2018-10-10T19:19:00+01:00</published><updated>2018-10-10T19:19:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2018-10-10:/writes/random-vm-name.html</id><summary type="html">&lt;p&gt;Generate a name for virtual machines&lt;/p&gt;</summary><content type="html">&lt;p&gt;Something I found to be cute about the docker
 engine is it's feature to create a random name for
 your containers, when one is not specified.&lt;/p&gt;
 &lt;p&gt;I've had some good ones e.g:&lt;/p&gt;
@@ -547,7 +547,7 @@ line, you'll get a new "vm" name.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sebastien-livid-quagsire
 sebastien-lonely-metapod
 sebastien-gentle-rattata
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Bash"></category><category term="vm"></category><category term="gcp"></category></entry><entry><title>Foolscap List Ordering</title><link href="/foolscap-list-ordering.html" rel="alternate"></link><published>2018-10-09T22:37:00+01:00</published><updated>2018-10-09T22:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-09:/foolscap-list-ordering.html</id><summary type="html">&lt;p&gt;The ordering rules of Foolscap&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://github.com/foxyblue/foolscap"&gt;Foolscap&lt;/a&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content><category term="Bash"></category><category term="vm"></category><category term="gcp"></category></entry><entry><title>Foolscap List Ordering</title><link href="https://s3bw.github.io/writes/foolscap-list-ordering.html" rel="alternate"></link><published>2018-10-09T22:37:00+01:00</published><updated>2018-10-09T22:37:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2018-10-09:/writes/foolscap-list-ordering.html</id><summary type="html">&lt;p&gt;The ordering rules of Foolscap&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="https://github.com/foxyblue/foolscap"&gt;Foolscap&lt;/a&gt;
 was my answer to losing all my notes and
 forgetting the exact file I saved it.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -625,7 +625,7 @@ in the list.&lt;/p&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Pretty
-&lt;a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74"&gt;neat!&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="interface"></category><category term="workflow"></category></entry><entry><title>Procedural Villages</title><link href="/procedural-villages.html" rel="alternate"></link><published>2018-10-09T21:48:00+01:00</published><updated>2018-10-09T21:48:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:None,2018-10-09:/procedural-villages.html</id><summary type="html">&lt;p&gt;Show procedurally generated villages.&lt;/p&gt;</summary><content type="html">&lt;p&gt;My inspiration for any tool or project has always
+&lt;a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74"&gt;neat!&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="interface"></category><category term="workflow"></category></entry><entry><title>Procedural Villages</title><link href="https://s3bw.github.io/writes/procedural-villages.html" rel="alternate"></link><published>2018-10-09T21:48:00+01:00</published><updated>2018-10-09T21:48:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2018-10-09:/writes/procedural-villages.html</id><summary type="html">&lt;p&gt;Show procedurally generated villages.&lt;/p&gt;</summary><content type="html">&lt;p&gt;My inspiration for any tool or project has always
 been the thought that it could be done better, either
 that or I'd feel like I would benefit a lot from a
 missing feature.&lt;/p&gt;
