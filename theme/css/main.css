@@ -6,6 +6,28 @@ FileName:	Plain Diary（3カラム）
 Version:	2006.06.16
 -----------------------------------------------------
 */
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+    th, td {
+        border: 1px dotted #ddd;
+        font-family: monospace;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        font-weight: bold;
+    }
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
 	::selection {
 		background-color: #6cffdd;
 		color: #000;
@@ -23,8 +45,12 @@ Version:	2006.06.16
 	a:link{}
 	a:visited{}
 	a:active{}
-	a:hover{color:#605CA8;text-decoration:none;}
-
+    a:hover {
+        background-color: #ff5858;
+        text-decoration: underline overline wavy red;
+        border: #000;
+        text-decoration-color: #000;
+    }
 	#header{}
 	#header td{
 		color:#000;
