@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<script>
+    // Immediate dark mode detection
+    (function() {
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.style.background = '#363636';
+            document.documentElement.style.color = '#e0e0e0';
+            document.documentElement.setAttribute('data-theme', 'dark');
+        }
+    })();
+</script>
 <html lang="en" style="padding-bottom: 80px;">
 <head>
         <title>s3bw : Module not found Heroku</title>
@@ -8,6 +18,10 @@
         <meta property='og:description' content=" : <p>Debugging python application in heroku containers.</p>"/>
         <meta property='og:url' content="https://s3bw.github.io/writes : module-not-found-heroku.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
+        <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
+        <script src="http://localhost:8080/comet.js"></script>
+        <script src="https://s3bw.github.io/writes/theme/js/theme-toggle.js"></script>
+        <!-- <script src="https://localhost:8080/comet.js"></script> -->
         <script src="https://cdn.cosoft.uk/comet.js"></script>
 
 </head>
@@ -177,6 +191,7 @@ directory. 🤷‍♂️</p>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       loadComments('client_fBaxnE6w', '#comments', 'module-not-found-heroku.html');
+      // loadComments('client_qYrahpND', '#comments', 'module-not-found-heroku.html');
   });
 </script>
 
@@ -333,6 +348,9 @@ directory. 🤷‍♂️</p>
     </div>
 
     </div>
+
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"></button>
 
 </body>
 </html>

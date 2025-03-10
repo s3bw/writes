@@ -1,0 +1,233 @@
+/* Dark mode styles */
+:root {
+    --dark-bg: #363636;
+    --dark-text: #e0e0e0;
+    --dark-link: #928e8a;
+    --dark-border: #444;
+    --dark-hover-bg: #2a2a2a;
+    --transition-duration: 0.15s;
+}
+
+/* Smooth page transitions */
+html {
+    transition: background-color var(--transition-duration) ease,
+                color var(--transition-duration) ease;
+}
+
+body {
+    transition: background-color var(--transition-duration) ease,
+                color var(--transition-duration) ease;
+    backface-visibility: hidden;
+}
+
+/* Theme transition overlay */
+.theme-transition-overlay {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    background: var(--dark-bg);
+    clip-path: polygon(100% 100%, 0% 100%, 100% 0%);
+    z-index: 9999;
+    pointer-events: none;
+    visibility: hidden;
+    transition: width var(--transition-duration) cubic-bezier(0.4, 0, 0.2, 1),
+                height var(--transition-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-transition-overlay.to-dark {
+    background: var(--dark-bg);
+}
+
+.theme-transition-overlay.to-light {
+    background: #fff;
+}
+
+.theme-transition-overlay.active {
+    visibility: visible;
+    width: 200vmax;
+    height: 200vmax;
+}
+
+/* Base transitions */
+body, .main, .blogbody, .side, .blogtitle a,
+.description, .sidetitle, .title, .date,
+.posted, th, td, pre, blockquote {
+    transition: color var(--transition-duration) ease;
+}
+
+a, .sidebody a, .posted a {
+    transition: color var(--transition-duration) ease;
+}
+
+#banner, .sidetitlebody, .titlebody, .datebody,
+table, th, td, blockquote {
+    transition: border-color var(--transition-duration) ease;
+}
+
+tr:nth-child(even), tr:hover, pre {
+    transition: background-color var(--transition-duration) ease;
+}
+
+[data-theme="dark"] {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] body {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .main {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .blogbody {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .side {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] a {
+    color: var(--dark-link);
+}
+
+[data-theme="dark"] #banner {
+    border-bottom-color: var(--dark-border);
+}
+
+[data-theme="dark"] .blogtitle a {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .description {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .sidetitlebody {
+    border-bottom-color: var(--dark-border);
+}
+
+[data-theme="dark"] .sidetitle {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .titlebody {
+    border-bottom-color: var(--dark-border);
+}
+
+[data-theme="dark"] .title {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .date {
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] .datebody {
+    border-bottom-color: var(--dark-border);
+}
+
+[data-theme="dark"] .posted {
+    color: #999;
+}
+
+[data-theme="dark"] .posted a {
+    color: var(--dark-link);
+}
+
+[data-theme="dark"] table {
+    border-color: var(--dark-border);
+}
+
+[data-theme="dark"] th,
+[data-theme="dark"] td {
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+[data-theme="dark"] tr:nth-child(even) {
+    background-color: var(--dark-hover-bg);
+}
+
+[data-theme="dark"] tr:hover {
+    background-color: var(--dark-hover-bg);
+}
+
+[data-theme="dark"] pre {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+[data-theme="dark"] blockquote {
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+}
+
+/* Theme toggle button styles */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    transition: transform 0.2s ease;
+}
+
+.theme-toggle:active {
+    transform: scale(0.9);
+}
+
+.theme-toggle::before {
+    content: '';
+    width: 24px;
+    height: 24px;
+    background-color: #000;
+    transition: all var(--transition-duration) ease;
+    transform: rotate(0deg);
+}
+
+[data-theme="dark"] .theme-toggle::before {
+    background-color: #fff;
+    transform: rotate(45deg);
+}
+
+@keyframes spin-to-diamond {
+    0% {
+        transform: rotate(0deg);
+        background-color: #000;
+    }
+    100% {
+        transform: rotate(45deg);
+        background-color: #fff;
+    }
+}
+
+@keyframes spin-to-square {
+    0% {
+        transform: rotate(45deg);
+        background-color: #fff;
+    }
+    100% {
+        transform: rotate(0deg);
+        background-color: #000;
+    }
+}
+
+.theme-toggle.spinning-to-dark::before {
+    animation: spin-to-diamond var(--transition-duration) ease forwards;
+}
+
+.theme-toggle.spinning-to-light::before {
+    animation: spin-to-square var(--transition-duration) ease forwards;
+}
