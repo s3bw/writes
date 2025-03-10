@@ -1,5 +1,188 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2022-01-24T00:27:00+00:00</updated><entry><title>Configuring Traefik with Redis</title><link href="https://s3bw.github.io/writes/configuring-traefik-with-redis.html" rel="alternate"></link><published>2022-01-24T00:27:00+00:00</published><updated>2022-01-24T00:27:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2022-01-24:/writes/configuring-traefik-with-redis.html</id><summary type="html">&lt;p&gt;Short tutorial on using traefik as a reverse proxy configured with redis&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over a weekend I had a quick play around with the
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-10T12:38:00+00:00</updated><entry><title>Flash Cards</title><link href="https://s3bw.github.io/writes/flash-cards.html" rel="alternate"></link><published>2025-03-10T12:38:00+00:00</published><updated>2025-03-10T12:38:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-10:/writes/flash-cards.html</id><summary type="html">&lt;p&gt;How I created a Flash card command line tool&lt;/p&gt;</summary><content type="html">&lt;p&gt;A while back I found out that Jnr. Doctors are keen on using
+flash cards to help them revise for exams. It occurred to me
+that I could also use flash cards to drill some of the concepts
+that would come up in discussions about software systems
+and system design.&lt;/p&gt;
+&lt;p&gt;At the time I was developing on a raspberry-pi with a 7-inch
+screen and I was limited to how much I could install on the
+little SD card. At first I tried to use a browser based
+flash card tool, but I was in the mood for doing some deep
+dives to understanding how these actually work under the
+hood.&lt;/p&gt;
+&lt;p&gt;This led me to develop
+&lt;a href="https://github.com/s3bw/kanki"&gt;Kanki&lt;/a&gt; a bespoke flash card
+tool for the command line. In this blog post I break down the
+process I typically use to undertake a software project of
+this scale (i.e tiny scale).&lt;/p&gt;
+&lt;h3&gt;Requirements&lt;/h3&gt;
+&lt;p&gt;Like all good software projects we start with the high level
+expectations. What do we want this system to do? (Some of
+these are quoted straight out of my notebook.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;I want to have 1000+ flashcards based on software and
+system design&lt;/li&gt;
+&lt;li&gt;I should be able to hide the answer, I should be able to
+   reveal the answer.&lt;/li&gt;
+&lt;li&gt;Can I input &lt;em&gt;"correct"&lt;/em&gt;, &lt;em&gt;"close"&lt;/em&gt;, &lt;em&gt;"wrong"&lt;/em&gt; etc and
+   update an SR algorithm to handle recall.&lt;/li&gt;
+&lt;li&gt;Nice to have, filtering by topic.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;In order to understand how flash cards operate you'd need to
+dig into figuring how the SR works:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Spaced Repetition&lt;/strong&gt;: Newly introduced and more difficult
+flashcards are shown more frequently, while older and
+less difficult flashcards are shown less frequently in
+order to exploit the psychological spacing effect.
+The use of spaced repetition has been proven to increase
+the rate of learning. -
+&lt;a href="https://en.wikipedia.org/wiki/Spaced_repetition"&gt;Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;Entities&lt;/h3&gt;
+&lt;p&gt;We need to know what things we will be working with:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Card&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;- Question (string)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;- Answer (string)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;- Topic (string)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;- DeckID (int)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The card is the question and answer entity which I might
+have 1000 of (In the end I think I had about 60).&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Deck&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;- Id (int)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;- Name (string&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The deck is the entity which groups cards, so a card belongs
+to a deck and this allows me to have cards around separate
+topics.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3&gt;Interface&lt;/h3&gt;
+&lt;p&gt;This isn't far off from what I drew in the notebook
+but clearly I had a vision and the following sort of
+captures it at the time:&lt;/p&gt;
+&lt;p&gt;I want to have a view which allows me to load a specified
+deck. Create a new deck or add cards to an existing deck.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kr"&gt;Load&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;-&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;deck_a&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;deck_b&lt;/span&gt;
+&lt;span class="n"&gt;New&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;deck&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;Add&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;cards&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I want to display the different inputs I can provide as
+answers to each card.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;Again,  Hard,    Good,    Easy
+&amp;lt; 1min  &amp;lt; 6min   &amp;lt; 10min  4 days
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;These are some of the settings I'd like to fine tune as I
+get used to playing with the flashcard system.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="n"&gt;config&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+&lt;span class="k"&gt;new&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cards&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;day&lt;/span&gt;
+&lt;span class="n"&gt;review&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;cards&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;day&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Spaced Repetition Algorithm&lt;/h3&gt;
+&lt;p&gt;This is where things get slightly more involved since I had
+to understand how Anki and other flash card apps applied
+repetition. It was mostly finding the one that suited me
+best and felt the most natural to play with.&lt;/p&gt;
+&lt;p&gt;This is the algorithm I went for:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;step 1&lt;/strong&gt;: Cards have a &lt;code&gt;queue&lt;/code&gt; field (set to 1 for 'learning') and a
+&lt;code&gt;due&lt;/code&gt; field (in minutes) determining when a card should be shown again.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;step 2&lt;/strong&gt;: review cards, already studied but are now due to
+be relearnt. &lt;code&gt;queue&lt;/code&gt; field set to (2) and due less than or
+equal to today.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;step 3&lt;/strong&gt;: 'new', queue is set to (0), these new cards are capped.&lt;/p&gt;
+&lt;p&gt;Essentially this determines how we populate the flash cards
+during a session. Using the three queue types:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0: &lt;code&gt;new&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;1: &lt;code&gt;learning&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2: &lt;code&gt;review&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;3: &lt;code&gt;relearning&lt;/code&gt; (This is essentially a card deemed as
+    "learnt" but you've forgotten it and now it needs to be relearnt).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Properties of a card.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;due&lt;/strong&gt;: the timestamp for when the card should be shown again.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;left&lt;/strong&gt;: how many learning steps before the card graduates to review.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;reps&lt;/strong&gt;: how many times the card has been shown.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;ivl&lt;/strong&gt;: tracking the card interval (time to add when recalculating &lt;strong&gt;due&lt;/strong&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Input&lt;/h3&gt;
+&lt;p&gt;When answering the flash cards there's four inputs you can
+provide, each of which will cause a different effect, these
+decide the cards position in one of two or three queues.
+The result of these inputs also depends on which queue the
+card is currently in.
+You can see &lt;a href="https://github.com/s3bw/kanki/blob/main/models.py#L106-L134"&gt;this
+here&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Again&lt;/code&gt;: Reset number of training reps&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Hard&lt;/code&gt;: +1 rep, show again in 1 min&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Good&lt;/code&gt;: +1 rep, show again in 5 min&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Easy&lt;/code&gt;: +1 rep, show again in 1 day&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Development&lt;/h3&gt;
+&lt;p&gt;Up until this point I hadn't done a single line of code. The
+research done above was undertaken before I started writing
+any code. This helps me have a clear understanding of what
+I'm actually trying to do. It's far easier to scribble away
+in my notebook that it is to change code.&lt;/p&gt;
+&lt;p&gt;There are a few things I needed, which I learnt after I'd
+written the tool. Things such as being able to edit a card,
+but these were not major features.&lt;/p&gt;
+&lt;p&gt;The other thing that I find interesting (or obvious) is
+solution for the queue. During a learning session you need
+to have the card queues be dynamic since you're
+popping the earliest due card and then you're sorting them
+by when they are next due so the implementation fits using a
+heap quite well. You can see me &lt;a href="https://github.com/s3bw/kanki/blob/main/queues.py"&gt;initialising the
+heap&lt;/a&gt; here.&lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;I really enjoyed reading up on some of the complexities
+involved in getting the spaced repetition working in a way
+that allows new topics to be slowly introduced while working
+on cementing topics that were in the progress of being
+learnt. It feels a little exciting when you encounter
+something new during the learning session. I used kanki
+to prepare on some topics and every so often add new cards
+to system design.&lt;/p&gt;
+&lt;p&gt;One thing I found quite useful is getting someone else to
+ask you the questions verbally and they make a judgement on
+how close you are to the answer. This can get you more
+comfortable with talking about these topics and the person
+reading the questions can help keep you honest about how
+well you know a topic.&lt;/p&gt;
+&lt;p&gt;Lastly it's also interesting that learning is effectively
+broken down into three separate speeds. 1. This is new. 2.
+I'm actively learning this. 3. I should know this.&lt;/p&gt;</content><category term="software"></category><category term="cli"></category></entry><entry><title>Configuring Traefik with Redis</title><link href="https://s3bw.github.io/writes/configuring-traefik-with-redis.html" rel="alternate"></link><published>2022-01-24T00:27:00+00:00</published><updated>2022-01-24T00:27:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2022-01-24:/writes/configuring-traefik-with-redis.html</id><summary type="html">&lt;p&gt;Short tutorial on using traefik as a reverse proxy configured with redis&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over a weekend I had a quick play around with the
 config provider to traefik, experimenting with reverse
 proxies. I'm fairly familiar with the &lt;code&gt;redis-cli&lt;/code&gt;
 and it's fairly easy to build a redis client in any language
