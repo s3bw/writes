@@ -1,4 +1,3 @@
-
 /*
 -----------------------------------------------------
 livedoor Blog CSS
@@ -7,26 +6,231 @@ Version:	2006.06.16
 -----------------------------------------------------
 */
 
-    table {
+/* Desktop styles - keep original layout */
+body {
+    margin: 0;
+    padding: 0;
+    color: #000;
+    font-size: 12px;
+    font-family: verdana, arial, sans-serif;
+    text-align: center;
+}
+
+#container {
+    width: 775px;
+    margin: 0 auto;
+    text-align: center;
+    word-break: break-all;
+}
+
+#banner, #subbanner {
+    text-align: left;
+    margin: 0 auto;
+    border-bottom: 5px solid #000;
+}
+
+.blogtitle {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px 10px 0;
+}
+
+.description {
+    font-size: 14px;
+    padding: 5px 10px 10px;
+    line-height: 125%;
+}
+
+#blogcontainer {
+    width: 755px;
+    margin: 15px auto 0;
+    text-align: center;
+}
+
+#wrapper {
+    float: left;
+    width: 565px;
+}
+
+#content {
+    float: right;
+    width: 375px;
+    text-align: left;
+}
+
+#left {
+    float: left;
+    width: 170px;
+}
+
+#right {
+    float: right;
+    width: 170px;
+}
+
+/* Hide mobile elements on desktop */
+.mobile-nav-button, .mobile-nav {
+    display: none;
+}
+
+/* Mobile styles - only apply below 768px */
+@media screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+    }
+
+    #container, #blogcontainer, #wrapper, #content, #blog {
+        float: none;
         width: 100%;
-        border-collapse: collapse;
-        font-size: 14px;
-    }
-    th, td {
-        border: 1px dotted #ddd;
-        font-family: monospace;
-        padding: 8px;
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
         text-align: left;
+        overflow-x: hidden;
+        box-sizing: border-box;
     }
-    th {
-        font-weight: bold;
+
+    .blogbody {
+        float: none;
+        width: auto;
+        margin: 0;
+        padding: 10px;
+        text-align: left;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
-    tr:nth-child(even) {
-        background-color: #f9f9f9;
+
+    .main, .mainmore, .article_tags {
+        float: none;
+        width: auto;
+        margin: 0;
+        padding: 0;
+        font-size: 16px;
+        line-height: 1.6;
+        text-align: left;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
     }
-    tr:hover {
-        background-color: #f1f1f1;
+
+    #left, #right {
+        display: none;
     }
+
+    /* Adjust content spacing */
+    .blogtitle {
+        text-align: center;
+        font-size: 24px;
+        padding: 20px 10px 10px;
+    }
+
+    .description {
+        text-align: center;
+        padding: 0 10px 20px;
+    }
+
+    /* Ensure tables don't cause horizontal scroll */
+    table {
+        max-width: 100%;
+        margin: 15px 0;
+        display: block;
+        overflow-x: auto;
+        white-space: normal;
+    }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+    .blogbody {
+        padding: 8px;
+    }
+}
+
+/* Typography and content */
+h1, h2, h3 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.4;
+}
+
+a {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #ff5858;
+    text-decoration: underline overline wavy red;
+    border: #000;
+    text-decoration-color: #000;
+}
+
+/* Blog content */
+.blogbody {
+    line-height: 1.6;
+    text-align: justify;
+    margin: 0 auto;
+    padding: 0 15px 20px;
+}
+
+.title {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 15px 0 10px;
+}
+
+.main, .mainmore, .article_tags {
+    font-size: 1em;
+    line-height: 1.8;
+    word-break: break-word;
+}
+
+blockquote {
+    border: 2px dotted #605CA8;
+    padding: 15px;
+    margin: 15px 0;
+    text-align: left;
+    border-radius: 5px;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    margin: 15px 0;
+    overflow-x: auto;
+    display: block;
+}
+
+th, td {
+    border: 1px dotted #ddd;
+    font-family: monospace;
+    padding: 12px 8px;
+    text-align: left;
+}
+
+/* Forms
+input, textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+} */
+
+/* Theme toggle button - original styling */
+.theme-toggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+}
+
+::selection {
+    background-color: #6cffdd;
+    color: #000;
+}
 
 	::selection {
 		background-color: #6cffdd;
