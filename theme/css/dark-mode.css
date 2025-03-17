@@ -182,6 +182,7 @@ tr:nth-child(even), tr:hover, pre {
     justify-content: center;
     z-index: 10000;
     transition: transform 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .theme-toggle:active {
@@ -195,20 +196,25 @@ tr:nth-child(even), tr:hover, pre {
     background-color: #000;
     transition: all var(--transition-duration) ease;
     transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    will-change: transform;
 }
 
 [data-theme="dark"] .theme-toggle::before {
     background-color: #fff;
     transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
 }
 
 @keyframes spin-to-diamond {
     0% {
         transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
         background-color: #000;
     }
     100% {
         transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
         background-color: #fff;
     }
 }
@@ -216,10 +222,12 @@ tr:nth-child(even), tr:hover, pre {
 @keyframes spin-to-square {
     0% {
         transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
         background-color: #fff;
     }
     100% {
         transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
         background-color: #000;
     }
 }
