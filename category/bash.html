@@ -6,14 +6,8 @@
         const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
         
+        // Only set the data-theme attribute, let CSS handle the styling
         document.documentElement.setAttribute('data-theme', theme);
-        if (theme === 'dark') {
-            document.documentElement.style.background = '#363636';
-            document.documentElement.style.color = '#e0e0e0';
-        } else {
-            document.documentElement.style.background = '#ffffff';
-            document.documentElement.style.color = '#000000';
-        }
     })();
 </script>
 <html lang="en" style="padding-bottom: 80px;">

@@ -85,9 +85,13 @@ body {
         max-width: 100%;
         margin: 0;
         padding: 0;
-        text-align: center;
         overflow-x: hidden;
         box-sizing: border-box;
+    }
+
+    #content {
+        float: none !important;
+        margin: 0 auto;
     }
 
     .blogbody {
@@ -118,13 +122,13 @@ body {
 
     /* Adjust content spacing */
     .blogtitle {
-        text-align: center;
         font-size: 24px;
         padding: 20px 10px 10px;
     }
 
     .description {
-        text-align: center;
+        text-align: justify;
+		word-break: break-word;
         padding: 0 10px 20px;
     }
 
