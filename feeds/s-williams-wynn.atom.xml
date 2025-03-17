@@ -1,5 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-10T12:38:00+00:00</updated><entry><title>Flash Cards</title><link href="https://s3bw.github.io/writes/flash-cards.html" rel="alternate"></link><published>2025-03-10T12:38:00+00:00</published><updated>2025-03-10T12:38:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-10:/writes/flash-cards.html</id><summary type="html">&lt;p&gt;How I created a Flash card command line tool&lt;/p&gt;</summary><content type="html">&lt;p&gt;A while back I found out that Jnr. Doctors are keen on using
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-17T21:34:00+00:00</updated><entry><title>Chess Programming Part 1</title><link href="https://s3bw.github.io/writes/chess-programming-part-1.html" rel="alternate"></link><published>2025-03-17T21:34:00+00:00</published><updated>2025-03-17T21:34:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-17:/writes/chess-programming-part-1.html</id><summary type="html">&lt;p&gt;An explanation of bitboard in chess programming&lt;/p&gt;</summary><content type="html">&lt;p&gt;While exploring an &lt;a href="https://github.com/kitao/pyxel"&gt;interesting game
+engine&lt;/a&gt; which
+compiles python code to WASM; I thought, there's no better
+way to have fun than to write a chess engine. This was the
+start of a one month long project which led me to create
+my own chess AI.&lt;/p&gt;
+&lt;p&gt;Chess programming is a topic that has been written about
+extensively, it has been a proving ground for some of
+the first AI researchers and even today it is still used as
+a benchmark for techniques in &lt;a href="https://github.com/google-deepmind/searchless_chess"&gt;applied research.
+&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This article is the first part in a series of three in which
+I attempt to distill some insight into the application of
+algorithms in software, namely chess programming. In the
+hopes that it may inspire how you approach solving similar
+problems in the future.&lt;/p&gt;
+&lt;h2&gt;Bit Operations&lt;/h2&gt;
+&lt;p&gt;If you've ever done some leetcoding or any other live
+algorithm style interview prep in software engineering you
+might have come across the odd question on bit operations
+and wondered if you'll ever need to actually do these in
+your day to day job. I'm not here to answer that, but I am
+here to show you how it applies to chess programming.&lt;/p&gt;
+&lt;p&gt;Firstly what are bit operations:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;a bitwise operation operates on a bit string, a bit array
+or a binary numeral at the level of its individual bits.
+It is a fast and simple action, basic to the higher-level
+arithmetic operations and directly supported by the processor.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://en.wikipedia.org/wiki/Bitwise_operation"&gt;Wikipedia&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Essentially bitwise operations are physical operations that
+are embedded into the processor, they consist of your logical
+AND, OR, XOR and bit shifts. The mathematical operations that
+you're familiar with (such as Add, Subtract etc.) are all
+built upon bitwise operations.&lt;/p&gt;
+&lt;p&gt;Here's an example of a &lt;code&gt;NOT&lt;/code&gt; operation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;NOT 0111  (decimal 7)
+  = 1000  (decimal 8)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And an example of an &lt;code&gt;AND&lt;/code&gt; operation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;    1010 (decimal 5)
+AND 1100 (decimal 12)
+  = 1000 (decimal 8)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We can see these operations supported in python:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; 0b1100 &amp;amp; 0b1010
+8
+&amp;gt;&amp;gt;&amp;gt; bin(0b1100 &amp;amp; 0b1010)
+&amp;#39;0b1000&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There's two ways we can shift bits. (Left and right) Here's
+an example in python:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; # Left
+&amp;gt;&amp;gt;&amp;gt; bin(0b0010 &amp;lt;&amp;lt; 1)
+&amp;#39;0b100&amp;#39;
+
+&amp;gt;&amp;gt;&amp;gt; # Right
+&amp;gt;&amp;gt;&amp;gt; bin(0b0010 &amp;gt;&amp;gt; 1)
+&amp;#39;0b1&amp;#39;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Explaining how the processor does addition is out of scope
+of this blog post, but put together some of these bit
+operators and you've got yourself a function that can do
+addition.&lt;/p&gt;
+&lt;h2&gt;Bitboards&lt;/h2&gt;
+&lt;p&gt;Back to the chess:&lt;/p&gt;
+&lt;p&gt;We are doing all of this essentially to get as close to the
+processor as possible, since we want the most performance
+out of a computer as we can by avoiding any unnecessary
+operations.&lt;/p&gt;
+&lt;p&gt;In chess programming we will use a single number to keep
+track of all the positions of pieces on the board. This is
+what we call a &lt;em&gt;"bitboard"&lt;/em&gt;. We will have a few bitboards
+to maintain the game's state. The first one will be 'board'
+which tracks &lt;strong&gt;all&lt;/strong&gt; the pieces. At the start of the game
+this number will be: &lt;code&gt;0xFFFF00000000FFFF&lt;/code&gt;. Which is
+hexadecimal for &lt;code&gt;18446462598732906495&lt;/code&gt;. If we print the
+binary form of this number and format it over 8 rows we get
+the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt; Bitboard:
+
+8  1 1 1 1 1 1 1 1
+7  1 1 1 1 1 1 1 1
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  1 1 1 1 1 1 1 1
+   a b c d e f g h
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are a few other bitboards to track during a game of
+chess. There will be 2 boards for each colour (white and
+black). And there will be a bitboard for each type (6).
+Which gives us a total of 9 bitboards, or 9 numbers to cover
+the entire game state of chess. Here's two more examples of
+bitboards, one for pawns and one for white pieces:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; pawns = 0x00FF00000000FF00
+&amp;gt;&amp;gt;&amp;gt; white = 0x000000000000FFFF
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we can uses these three numbers to give us the answer
+to some questions for example; Where are all the white pawns?&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; board &amp;amp; pawns &amp;amp; white
+65280
+
+ Bitboard (65280):
+
+8  0 0 0 0 0 0 0 0
+7  0 0 0 0 0 0 0 0
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  0 0 0 0 0 0 0 0
+   a b c d e f g h
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;During a game of chess you'll use these to calculate which
+pieces are under attack. (e.g. given:
+&lt;code&gt;knightsmove &amp;amp; theirpieces&lt;/code&gt; the result will be &lt;code&gt;0&lt;/code&gt; if
+there's no piece under threat). We can also use these
+bitboards workout where the valid moves are with
+&lt;code&gt;moves &amp;amp; ~board&lt;/code&gt;. (Moves and not board).&lt;/p&gt;
+&lt;p&gt;A chess AI that's looking 4 moves ahead will have ~5mil
+positions to consider, so having these operations done on a
+low level can help boost the performance of the software.
+The more you squeeze out of performance the more accurate
+your chess AI will be, because this improves it's ability to
+look into the future.&lt;/p&gt;
+&lt;h2&gt;Beyond Chess&lt;/h2&gt;
+&lt;p&gt;In summary learning about how bitboards are applied to chess
+programming has allowed me to understand how bit operations can
+be applied practically in software. Before I dived into
+learning how chess is programmed I had only imagined keeping
+track of the board state using several objects and an array,
+however I now see there's more than one way to crack an egg;
+the board state egg.&lt;/p&gt;
+&lt;p&gt;I hope the article helps to providing insight into practical
+applications of bit operators and leaves them to be
+considered as valuable for solving technical problems or at
+least reminds software engineers that we have them in our
+toolbelt.&lt;/p&gt;
+&lt;h3&gt;Further Reading&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/official-stockfish/Stockfish"&gt;Stockfish&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.chessprogramming.org/Main_Page"&gt;Chess Programming&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="chess, coding, software"></category><category term="chess"></category></entry><entry><title>Flash Cards</title><link href="https://s3bw.github.io/writes/flash-cards.html" rel="alternate"></link><published>2025-03-10T12:38:00+00:00</published><updated>2025-03-10T12:38:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-10:/writes/flash-cards.html</id><summary type="html">&lt;p&gt;How I created a Flash card command line tool&lt;/p&gt;</summary><content type="html">&lt;p&gt;A while back I found out that Jnr. Doctors are keen on using
 flash cards to help them revise for exams. It occurred to me
 that I could also use flash cards to drill some of the concepts
 that would come up in discussions about software systems
