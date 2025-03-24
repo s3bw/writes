@@ -1,5 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-17T21:34:00+00:00</updated><entry><title>Chess Programming Part 1</title><link href="https://s3bw.github.io/writes/chess-programming-part-1.html" rel="alternate"></link><published>2025-03-17T21:34:00+00:00</published><updated>2025-03-17T21:34:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-17:/writes/chess-programming-part-1.html</id><summary type="html">&lt;p&gt;An explanation of bitboard in chess programming&lt;/p&gt;</summary><content type="html">&lt;p&gt;While exploring an &lt;a href="https://github.com/kitao/pyxel"&gt;interesting game
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-24T12:56:00+00:00</updated><entry><title>Budgeting For a 5 Month Trip</title><link href="https://s3bw.github.io/writes/budgeting-for-a-5-month-trip.html" rel="alternate"></link><published>2025-03-24T12:56:00+00:00</published><updated>2025-03-24T12:56:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-24:/writes/budgeting-for-a-5-month-trip.html</id><summary type="html">&lt;p&gt;A breakdown on how I budgeted for travelling for 5 months&lt;/p&gt;</summary><content type="html">&lt;p&gt;I've recently come back from a career break. During
+which I travelled around Asia with my fiance. Planning such
+a long trip can be quite daunting at first. So how here's
+how I did it&lt;/p&gt;
+&lt;p&gt;We were in Asia for 5 months, but I'd say planning a
+trip that's 1 or 2 months long is probably the same as
+planning a trip that's 5 months long. (With the exception of
+needing to also plan around seasonal weather). The first
+thing to figure out is how much you're willing to spend.&lt;/p&gt;
+&lt;h3&gt;Total Spend&lt;/h3&gt;
+&lt;p&gt;Your total spend should include flights, cost of taxis,
+and meals and nights outs. As an example let's imagine the most
+we are willing to spend on a two month trip (if we were to
+really dish out) is about ~£9,000. Remember this is a two
+person trip. So given that we can spend £9,000 on this trip
+how long can we go for?&lt;/p&gt;
+&lt;h3&gt;Cost Per Month&lt;/h3&gt;
+&lt;p&gt;It's roughly estimated from rent £1,400-£2,000 and monthly
+living expenses ~£1,500. Plus a return flight on the high
+end ~£1,000.&lt;/p&gt;
+&lt;p&gt;For a long trip you only need one flight, so you can
+average that cost of travel across the two months. In
+our case the largest flight cost was to Japan from London
+and back. Looking at it now I see this cost us £1087.&lt;/p&gt;
+&lt;p&gt;This is where we would divide the budget across the two
+months; giving us a rough monthly spend of £3,500.
+If we are going for two months that gives us £2,000 on
+flights.&lt;/p&gt;
+&lt;h3&gt;Cost Per Night&lt;/h3&gt;
+&lt;p&gt;We need to keep in mind how many days are in each month,
+March is 31 days and April is 30 days. We break our
+budget into a table and set a goal of spending £1,200
+a month on accommodation.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;month&lt;/th&gt;
+&lt;th&gt;max&lt;/th&gt;
+&lt;th&gt;days&lt;/th&gt;
+&lt;th&gt;npd&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;March&lt;/td&gt;
+&lt;td&gt;£1,200&lt;/td&gt;
+&lt;td&gt;31&lt;/td&gt;
+&lt;td&gt;£38.7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;April&lt;/td&gt;
+&lt;td&gt;£1,200&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;£40.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;From the table above you can notice that our cost per night
+for the hotel is actually slightly higher in April because
+it's one day less than March.&lt;/p&gt;
+&lt;p&gt;Now there's a goal to aim for when booking hotels. We
+booked all the hotels 6 months in advance. In some cases the
+hotels hadn't setup their availability in their calendar
+system since we were thinking further ahead than they were.&lt;/p&gt;
+&lt;p&gt;We would look up the price of the hotel again
+when we were at the hotel and found that in cases we
+saved money, we saved £50-£200. And when we overpaid we
+overpaid by £2-8. So overall advance bookings turned out
+well for us.&lt;/p&gt;
+&lt;p&gt;The actually cost for us per night in Japan ended up being
+£55.21 in March. (We did go skiing for 2 weeks) and £47.13
+in April So we blew the budget but the following month we
+spent £33.01 and then £30.02 so we clawed it back. There's
+also no reason to say you can't spend a little bit more on
+accommodation but this just means you'll need to spend less
+on other things like meals and capsule toys.&lt;/p&gt;
+&lt;p&gt;Because our spend was £55 this mean our "food/other" budget
+was about £61. Also keep in mind I'm trying on purpose to
+over budget. Having this £61 in mind meant I could keep a
+rough idea of how much we should cap our spend each day. £61
+does end up being quite a bit of money, especially if you're
+making breakfasts at home and you're not eating at fancy
+restaurants every night.&lt;/p&gt;
+&lt;p&gt;We also have to note that that £60 also includes metro/bus
+tickets, souvenirs and entrance to theatres/museums. This
+forced us to diversify what experiences we were having.
+Walking and exploring Tokyo is more affordable than seeing
+grand kabuki.&lt;/p&gt;
+&lt;h3&gt;Tracking&lt;/h3&gt;
+&lt;p&gt;Keeping track of all the costs is really important. Consider
+how many hotels and flights we had to book and I also had to
+make sure every night was accounted for so we weren't left
+scrabbling for a place to stay at the last minute.&lt;/p&gt;
+&lt;p&gt;I had two spreadsheets for this. The one was a "per day"
+budget where I listed the months of travel at the top and
+the day of the month on the left.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;day&lt;/th&gt;
+&lt;th&gt;March&lt;/th&gt;
+&lt;th&gt;April&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;35.1&lt;/td&gt;
+&lt;td&gt;42.18&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;42.18&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;42.18&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;This way I knew that, if there were gaps in this table,
+there were nights that were not accounted for. E.g. In the
+table above I need to book a hotel for the night of the 2nd
+and 3rd.&lt;/p&gt;
+&lt;p&gt;My second spreadsheet kept track of realised costs. A large
+table containing everything I've paid for, the date I paid,
+the number of nights, the start and end. In some cases we had
+to paid on arrival. I had a column which indicated if it was
+accommodation or travel and lastly notes which indicated if
+we should expect breakfast or dinner or both. So I'd make a
+payment, I'd then fill in the "per day" table so I knew
+where we were going to be and when.&lt;/p&gt;
+&lt;p&gt;In some cases we needed to note down on a certain day that
+we should prepare food the night before since we were
+catching a train which would not include a lunch and you'll
+want to avoid having to buy food at a station or while on a
+train as these will have an added margin on the cost that I
+wanted to avoid.&lt;/p&gt;
+&lt;h3&gt;Conclusion&lt;/h3&gt;
+&lt;p&gt;Planning a big trip can seem quite overwhelming at first,
+but once you break it down and you know where you're likely
+to be it's a matter of filling in the pieces. We started with
+Skiing then went to Tokyo and then did the Nakasendō trail
+between Kyoto and Tokyo. Making our trip as adventurous as
+we can. We gave ourself generous amounts of time to get
+across the town so we never missed a flight or train. It's
+better to need to waste time exploring shops and stations
+than miss a train you'd paid for.&lt;/p&gt;
+&lt;p&gt;We had the whole trip sorted out by the time we set foot in
+Japan so from then it was just a matter of enjoying ourselves
+and following the little reminders we'd set 6 months ago.&lt;/p&gt;
+&lt;p&gt;I'd say the best part was being able to forget what we'd
+booked half a year prior since it made for a pleasant
+surprise when we arrived and I had a reminder saying "the
+accommodation is taking care of breakfast and dinner so
+don't worry about finding food."&lt;/p&gt;</content><category term="travel, budgeting"></category><category term="travel"></category></entry><entry><title>Chess Programming Part 1</title><link href="https://s3bw.github.io/writes/chess-programming-part-1.html" rel="alternate"></link><published>2025-03-17T21:34:00+00:00</published><updated>2025-03-17T21:34:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-17:/writes/chess-programming-part-1.html</id><summary type="html">&lt;p&gt;An explanation of bitboard in chess programming&lt;/p&gt;</summary><content type="html">&lt;p&gt;While exploring an &lt;a href="https://github.com/kitao/pyxel"&gt;interesting game
 engine&lt;/a&gt; which
 compiles python code to WASM; I thought, there's no better
 way to have fun than to write a chess engine. This was the
