@@ -5,7 +5,7 @@
         const savedTheme = localStorage.getItem('theme');
         const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
-        
+
         // Only set the data-theme attribute, let CSS handle the styling
         document.documentElement.setAttribute('data-theme', theme);
     })();
@@ -159,6 +159,43 @@ in the list.</p>
           <div id="left">
             <div id="leftbody">
 
+              <div class="sidetitlebody">
+                <div class="sidetitle">Socials</div>
+              </div>
+              <div class="side">
+                  <div class="sidebody">
+                    <a href="https://github.com/s3bw" target="_blank">Github</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://stackoverflow.com/users/3407256/s3bw" target="_blank">Stackoverflow</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://www.linkedin.com/in/williams-wynn/" target="_blank">Linkedin</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://s3bw.github.io/writes//pdfs/vitae.pdf" target="_blank">Curriculum Vitae</a>
+                  </div>
+              </div>
+
+              <div class="sidetitlebody">
+                <div class="sidetitle">Friends</div>
+              </div>
+              <div class="side">
+                  <div class="sidebody">
+                    <a href="https://skailasa.github.io/" target="_blank">Skailasa</a>
+                  </div>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div id="right">
+        <div id="rightbody">
+
               <div class="sidewrapper">
                 <div class="sidetitlebody">
                   <div class="sidetitle">Previous</div>
@@ -206,25 +243,43 @@ in the list.</p>
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/travel.html">travel</a>
-                    </div>
-                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/chess.html">chess</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/cli.html">cli</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/code.html">code</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/design.html">design</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/docker.html">docker</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>
+                        <a href="https://s3bw.github.io/writes/tag/game.html">game</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/redis.html">redis</a>
+                        <a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/code.html">code</a>
+                        <a href="https://s3bw.github.io/writes/tag/go4.html">go4</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/interface.html">interface</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/programming.html">programming</a>
@@ -233,85 +288,30 @@ in the list.</p>
                         <a href="https://s3bw.github.io/writes/tag/python.html">python</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
+                        <a href="https://s3bw.github.io/writes/tag/redis.html">redis</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/web.html">web</a>
+                        <a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a>
+                        <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a>
-                    </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a>
-                    </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/go4.html">go4</a>
-                    </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a>
-                    </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/design.html">design</a>
+                        <a href="https://s3bw.github.io/writes/tag/travel.html">travel</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/vm.html">vm</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a>
+                        <a href="https://s3bw.github.io/writes/tag/web.html">web</a>
                     </div>
                     <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/interface.html">interface</a>
+                        <a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/workflow.html">workflow</a>
                     </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/game.html">game</a>
-                    </div>
-                    <div class="sidebody category-parent">
-                        <a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a>
-                    </div>
                 </div>
-              </div>
-
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <div id="right">
-        <div id="rightbody">
-
-              <div class="sidetitlebody">
-                <div class="sidetitle">Socials</div>
-              </div>
-              <div class="side">
-                  <div class="sidebody">
-                    <a href="https://s3bw.github.io/writes//pdfs/vitae.pdf" target="_blank">Curriculum Vitae</a>
-                  </div>
-                  <div class="sidebody">
-                    <a href="https://github.com/s3bw" target="_blank">Github</a>
-                  </div>
-                  <div class="sidebody">
-                    <a href="https://stackoverflow.com/users/3407256/s3bw" target="_blank">Stackoverflow</a>
-                  </div>
-                  <div class="sidebody">
-                    <a href="https://www.linkedin.com/in/williams-wynn/" target="_blank">Linkedin</a>
-                  </div>
-              </div>
-
-              <div class="sidetitlebody">
-                <div class="sidetitle">Friends</div>
-              </div>
-              <div class="side">
-                  <div class="sidebody">
-                    <a href="https://skailasa.github.io/" target="_blank">Skailasa</a>
-                  </div>
               </div>
 
         </div>

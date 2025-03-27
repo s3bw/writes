@@ -468,9 +468,12 @@ input, textarea {
 	}
 	.side a{}
 	.sidebody{
-		padding:1px 0px 1px 12px;
+		padding:1px 0px 1px 8px;
 		margin-bottom:3px;
 		text-align:left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 	}
 	.sidebottom{
 		margin-bottom:20px;
