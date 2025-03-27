@@ -248,6 +248,7 @@ input, textarea {
 		font-family: verdana ,arial ,sans-serif;
 		text-align:center;
 	}
+    img{max-width: -webkit-fill-available;}
 	h1,h2,h3{margin:0;padding:0;}
 	a{color:#000;}
 	a:link{}
