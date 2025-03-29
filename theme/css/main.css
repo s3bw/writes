@@ -225,351 +225,351 @@ th, td {
     color: #000;
 }
 
-	::selection {
-		background-color: #6cffdd;
-		color: #000;
-	}
-	body{
-		margin:0;
-		padding:0;
-		color:#000;
-		font-size:12px;
-		font-family: verdana ,arial ,sans-serif;
-		text-align:center;
-	}
-    img{max-width: -webkit-fill-available;}
-	h1,h2,h3{margin:0;padding:0;}
-	a{color:#000;}
-	a:link{}
-	a:visited{}
-	a:active{}
-    a:hover {
-        background-color: #ff5858;
-        text-decoration: underline overline wavy red;
-        border: #000;
-        text-decoration-color: #000;
+::selection {
+    background-color: #6cffdd;
+    color: #000;
+}
+body{
+    margin:0;
+    padding:0;
+    color:#000;
+    font-size:12px;
+    font-family: verdana ,arial ,sans-serif;
+    text-align:center;
+}
+img{max-width: -webkit-fill-available;}
+h1,h2,h3{margin:0;padding:0;}
+a{color:#000;}
+a:link{}
+a:visited{}
+a:active{}
+a:hover {
+    background-color: #ff5858;
+    text-decoration: underline overline wavy red;
+    border: #000;
+    text-decoration-color: #000;
+}
+#header{}
+#header td{
+    color:#000;
+    font-size:12px;
+    text-align:right;
+    padding-right:10px;
+}
+#header a{}
+
+#container{
+    width:775px;
+    margin:0 auto;
+    text-align:center;
+    word-break:break-all;
+}
+#banner,#subbanner{
+    text-align:left;
+    margin:0 auto;
+    border-bottom:5px solid #000;
+}
+#banner a{text-decoration:none;}
+#banner a:hover{text-decoration:underline;}
+.blogtitle{
+    font-size:20px;
+    font-weight:bold;
+    padding:20px 10px 0;
+}
+.description{
+    font-size:14px;
+    padding:5px 10px 10px;
+    line-height:125%;
+}
+#blogcontainer{
+    width:755px;
+    margin:15px auto 0;
+    text-align:center;
+}
+#wrapper{
+    float:left;
+    width:565px;
+}
+#content{
+    float:right;
+    width:375px;
+    text-align:left;
     }
-	#header{}
-	#header td{
-		color:#000;
-		font-size:12px;
-		text-align:right;
-		padding-right:10px;
-	}
-	#header a{}
-
-	#container{
-		width:775px;
-		margin:0 auto;
-		text-align:center;
-		word-break:break-all;
-	}
-	#banner,#subbanner{
-		text-align:left;
-		margin:0 auto;
-		border-bottom:5px solid #000;
-	}
-	#banner a{text-decoration:none;}
-	#banner a:hover{text-decoration:underline;}
-	.blogtitle{
-	 	font-size:20px;
-	 	font-weight:bold;
-		padding:20px 10px 0;
-	}
-	.description{
-		font-size:14px;
-		padding:5px 10px 10px;
-		line-height:125%;
-	}
-	#blogcontainer{
-		width:755px;
-		margin:15px auto 0;
-		text-align:center;
-	}
-	#wrapper{
-		float:left;
-		width:565px;
-	}
-	#content{
-		float:right;
-		width:375px;
-		text-align:left;
-		}
-	#blog{}
-	#left{
-		float:left;
-		width:170px;
-	}
-	#lefttop{}
-	#leftbody{}
-	#leftbottom{}
-	#right{
-		float:right;
-		width:170px;
-	}
-	#righttop{}
-	#rightbody{}
-	#rightbottom{}
-	#footer{}
-	#outfooter{height:70px;}
+#blog{}
+#left{
+    float:left;
+    width:170px;
+}
+#lefttop{}
+#leftbody{}
+#leftbottom{}
+#right{
+    float:right;
+    width:170px;
+}
+#righttop{}
+#rightbody{}
+#rightbottom{}
+#footer{}
+#outfooter{height:70px;}
 /*------------------------------*/
-	.datetop{}
-	.datebody{
-		border-bottom:2px solid #000;
-	}
-	.date{
-		font-size:18px;
-		font-weight:bold;
-		text-align:center;
-		padding-bottom:1px;
-	}
-	.dateend{margin-bottom:15px;}
-	.fullbody{}
-	.blogbodytop{}
-	.blogbody{
-		line-height:130%;
-		text-align:justify;
-		margin:0 auto;
-		padding:0 15px 20px;
-	}
-	.blogbodybottom{}
-	.titlebody{
-		border-bottom:2px dotted #000;
-		text-align:left;
-		margin:15px 0 5px;
-	}
-	.title{
-		font-size:12px;
-		font-weight:bold;
-		padding-bottom:3px;
-	}
-	.main,.mainmore,.article_tags{
-		font-size:12px;
-		line-height:150%;
-		word-break: break-word;
-	}
-	blockquote{
-		border:2px dotted #605CA8;
-		padding:10px;
-		margin:10px;
-		text-align:left;
-	}
-	.pict{}
-	a.continues{}
-	.posted{
-		font-size:10px;
-		color:#9a9a9a;
-		text-align:right;
-		padding:5px 0;
-	}
-	.posted a{}
-	.menu{
-		font-size:10px;
-		text-align:right;
-		padding:2px 0 5px;
-	}
-	.menu a{}
-	.nextpage{text-align:right;}
-	#categorytitlebody{
-		padding:0 15px 15px;
-		text-align:left;
-	}
-	#categorytitle{
-		font-size:14px;
-		font-weight:bold;
-	}
+.datetop{}
+.datebody{
+    border-bottom:2px solid #000;
+}
+.date{
+    font-size:18px;
+    font-weight:bold;
+    text-align:center;
+    padding-bottom:1px;
+}
+.dateend{margin-bottom:15px;}
+.fullbody{}
+.blogbodytop{}
+.blogbody{
+    line-height:130%;
+    text-align:justify;
+    margin:0 auto;
+    padding:0 15px 20px;
+}
+.blogbodybottom{}
+.titlebody{
+    border-bottom:2px dotted #000;
+    text-align:left;
+    margin:15px 0 5px;
+}
+.title{
+    font-size:12px;
+    font-weight:bold;
+    padding-bottom:3px;
+}
+.main,.mainmore,.article_tags{
+    font-size:12px;
+    line-height:150%;
+    word-break: break-word;
+}
+blockquote{
+    border:2px dotted #605CA8;
+    padding:10px;
+    margin:10px;
+    text-align:left;
+}
+.pict{}
+a.continues{}
+.posted{
+    font-size:10px;
+    color:#9a9a9a;
+    text-align:right;
+    padding:5px 0;
+}
+.posted a{}
+.menu{
+    font-size:10px;
+    text-align:right;
+    padding:2px 0 5px;
+}
+.menu a{}
+.nextpage{text-align:right;}
+#categorytitlebody{
+    padding:0 15px 15px;
+    text-align:left;
+}
+#categorytitle{
+    font-size:14px;
+    font-weight:bold;
+}
 /*-----------------------------------------------------*/
-	.comblogbodybottom{}
-	#contentcommentbottom{}
-	.formbodybottom{}
-	#articletop{}
-	#articlebody{}
-	#articlebottom{}
-	.trackbackurltop{}
-	.trackbackurlttl,.trackbackhead,.commenthead,.takecommenthead{font-size:12px;}
-	.trackbackurlbody,#trackback,#comment,#takecomment{padding:3px 15px 10px;}
-	.trackbackurl{padding:10px 0 20px;text-align:left;}
-	.trackbackurl table{}
-	input.trackbackbox{width:270px;}
-	.trackbackurlbottom{}
-	a.posttitle{}
-	#trackbackbody,#commentbody{padding:10px 0 10px;}
-	#takecommentbody{}
-	.trackbackttl,.commentttl{}
-	.trackbacktext,.commenttext{
-		line-height:125%;
-		padding:5px 0 20px 5px;
-	}
-	#error{
-		padding:10px;
-		font-size:12px;
-		line-height:125%;
-		font-weight:bold;
-	}
-	#error span{font-weight:normal;}
+.comblogbodybottom{}
+#contentcommentbottom{}
+.formbodybottom{}
+#articletop{}
+#articlebody{}
+#articlebottom{}
+.trackbackurltop{}
+.trackbackurlttl,.trackbackhead,.commenthead,.takecommenthead{font-size:12px;}
+.trackbackurlbody,#trackback,#comment,#takecomment{padding:3px 15px 10px;}
+.trackbackurl{padding:10px 0 20px;text-align:left;}
+.trackbackurl table{}
+input.trackbackbox{width:270px;}
+.trackbackurlbottom{}
+a.posttitle{}
+#trackbackbody,#commentbody{padding:10px 0 10px;}
+#takecommentbody{}
+.trackbackttl,.commentttl{}
+.trackbacktext,.commenttext{
+    line-height:125%;
+    padding:5px 0 20px 5px;
+}
+#error{
+    padding:10px;
+    font-size:12px;
+    line-height:125%;
+    font-weight:bold;
+}
+#error span{font-weight:normal;}
 
-	.loginon,.loginoff{
-		font-size:12px;
-		font-weight:bold;
-		margin:10px 15px;
-		padding:5px;
-		border:1px solid #666666;
-		text-align:center;
-	}
-	.loginon a{}
-	.loginoff a{}
+.loginon,.loginoff{
+    font-size:12px;
+    font-weight:bold;
+    margin:10px 15px;
+    padding:5px;
+    border:1px solid #666666;
+    text-align:center;
+}
+.loginon a{}
+.loginoff a{}
 
-	#formbody{
-		text-algin:center;
-		padding:0 0 10px 15px;
-	}
-	.form{font-size:12px;}
-	.form th{
-		padding:2px;
-		text-align:right;
-	}
-	.form td{}
+#formbody{
+    text-algin:center;
+    padding:0 0 10px 15px;
+}
+.form{font-size:12px;}
+.form th{
+    padding:2px;
+    text-align:right;
+}
+.form td{}
 
-	input#author{width:200px;}
-	input#email{width:200px;}
-	input#url{width:200px;}
-	input#bake{}
-	textarea#text{width:270px;height:200px;}
-	input.button{margin-top:20px;width:80px;}
+input#author{width:200px;}
+input#email{width:200px;}
+input#url{width:200px;}
+input#bake{}
+textarea#text{width:270px;height:200px;}
+input.button{margin-top:20px;width:80px;}
 
-	#blogcommentbottom{margin-bottom:15px;}
+#blogcommentbottom{margin-bottom:15px;}
 /*------------------------------*/
-	.sidetitlebody{
-		border-bottom:2px dotted #000;
-	}
-	.sidetitle{
-		text-align:left;
-		font-weight:bold;
-		padding:3px 0;
-	}
-	.sidetitle a{text-decoration:none;}
-	.sidetop{}
-	.side{
-		font-size:12px;
-		text-align:center;
-		line-height:125%;
-		padding:5px 0;
-	}
-	.side a{}
-	.sidebody{
-		padding:1px 0px 1px 8px;
-		margin-bottom:3px;
-		text-align:left;
-	}
-	.sidebody a{
-		display: flex;
-		width: 100%;
-	}
-	.sidebody a span{
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: nowrap;
-	}
-	.sidebottom{
-		margin-bottom:20px;
-	}
-	a.ttllink{}
+.sidetitlebody{
+    border-bottom:2px dotted #000;
+}
+.sidetitle{
+    text-align:left;
+    font-weight:bold;
+    padding:3px 0;
+}
+.sidetitle a{text-decoration:none;}
+.sidetop{}
+.side{
+    font-size:12px;
+    text-align:center;
+    line-height:125%;
+    padding:5px 0;
+}
+.side a{}
+.sidebody{
+    padding:1px 0px 1px 8px;
+    margin-bottom:3px;
+    text-align:left;
+}
+.sidebody a{
+    display: flex;
+    width: 100%;
+}
+.sidebody a span{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.sidebottom{
+    margin-bottom:20px;
+}
+a.ttllink{}
 /*------------------------------*/
-	.calendarheadbody{}
-	.calendarhead{
-		padding:8px 5px;
-		font-size:10px;
-		font-weight:bold;
-		text-align:center;
-	}
-	.calendarhead a{color:#000;}
-	.caltop{}
-	.calbody{padding-bottom:10px;}
-	.calendartable{}
-	.caltbl{margin:0 auto;}
-	.caltblwkbg{}
-	.calendarwd{}
-	.caltblwk{
-		border-bottom:1px solid #e7e7e7;
-		border-top:1px solid #fff;
-		border-left:1px solid #fff;
-	}
-	.caltblwk td{
-		width:18px;
-		height:22px;
-		padding:3px 1px;
-		font-size:9px;
-		text-align:center;
-		border-right:1px solid #fff;
-	}
-	.calendarweek{
-		padding:0 1px;
-	}
-	.weekday{}
-	.sat{}
-	.sun{}
-	.caltbldaybg{}
-	.caltblday{
-		margin:0 auto;
-		border-left:1px solid #fff;
-		}
-	.caltblday td{
-		width:18px;
-		height:22px;
-		padding:3px 1px;
-		border-right:1px solid #fff;
-		border-bottom:1px solid #fff;
-		font-size:9px;
-		text-align:center;
-		}
-	.calendar{}
-	.calendard{}
-	.calon{background:#e6e6e6;}
-	.caloff{}
-	.caltblday a{
-		font-weight:bold;
-	}
-	.even{}
-	.odd{}
-	.calbottom{margin-bottom:10px;}
+.calendarheadbody{}
+.calendarhead{
+    padding:8px 5px;
+    font-size:10px;
+    font-weight:bold;
+    text-align:center;
+}
+.calendarhead a{color:#000;}
+.caltop{}
+.calbody{padding-bottom:10px;}
+.calendartable{}
+.caltbl{margin:0 auto;}
+.caltblwkbg{}
+.calendarwd{}
+.caltblwk{
+    border-bottom:1px solid #e7e7e7;
+    border-top:1px solid #fff;
+    border-left:1px solid #fff;
+}
+.caltblwk td{
+    width:18px;
+    height:22px;
+    padding:3px 1px;
+    font-size:9px;
+    text-align:center;
+    border-right:1px solid #fff;
+}
+.calendarweek{
+    padding:0 1px;
+}
+.weekday{}
+.sat{}
+.sun{}
+.caltbldaybg{}
+.caltblday{
+    margin:0 auto;
+    border-left:1px solid #fff;
+    }
+.caltblday td{
+    width:18px;
+    height:22px;
+    padding:3px 1px;
+    border-right:1px solid #fff;
+    border-bottom:1px solid #fff;
+    font-size:9px;
+    text-align:center;
+    }
+.calendar{}
+.calendard{}
+.calon{background:#e6e6e6;}
+.caloff{}
+.caltblday a{
+    font-weight:bold;
+}
+.even{}
+.odd{}
+.calbottom{margin-bottom:10px;}
 /*------------------------------*/
-	input.sf{
-		width:110px;
-		margin-right:1px;
-	}
-	.sfbtn{}
-	.moblogbody,.linkme,.skypeme{text-align:center;}
-	.afbody{text-align:center;padding-bottom:10px;}
-	.afbody img{margin-bottom:3px;}
-	.photo{text-align:center;}
-	.nickname{font-size:12px;font-weight:bold;padding:5px 0;text-align:center;}
-	.profbody{}
-	.mysite{}
-	.message{padding:10px 0;text-align:left;font-size:10px;margin-bottom:10px;line-height:130%;}
-	.newslist{padding:5px 5px 0 0;}
-	.blogtimes{
-		margin:10px auto;
-		text-align:center;
-	}
-	.quotetable{
-		color:#000;
-		background:#000;
-		width:170px;
-	}
-	.quotetable img{width:160px;}
-	.quote{
-		font-size:12px;
-		padding:1px;
-		background:#fff;
-	}
-	.quote a{color:#0f1f3f;}
-	.elsehead{padding-top:6px;text-align:center;}
-	.elsebody{text-align:center;}
-	.elsebottom{padding-bottom:10px;}
-	.elsebody a{}
+input.sf{
+    width:110px;
+    margin-right:1px;
+}
+.sfbtn{}
+.moblogbody,.linkme,.skypeme{text-align:center;}
+.afbody{text-align:center;padding-bottom:10px;}
+.afbody img{margin-bottom:3px;}
+.photo{text-align:center;}
+.nickname{font-size:12px;font-weight:bold;padding:5px 0;text-align:center;}
+.profbody{}
+.mysite{}
+.message{padding:10px 0;text-align:left;font-size:10px;margin-bottom:10px;line-height:130%;}
+.newslist{padding:5px 5px 0 0;}
+.blogtimes{
+    margin:10px auto;
+    text-align:center;
+}
+.quotetable{
+    color:#000;
+    background:#000;
+    width:170px;
+}
+.quotetable img{width:160px;}
+.quote{
+    font-size:12px;
+    padding:1px;
+    background:#fff;
+}
+.quote a{color:#0f1f3f;}
+.elsehead{padding-top:6px;text-align:center;}
+.elsebody{text-align:center;}
+.elsebottom{padding-bottom:10px;}
+.elsebody a{}
 
-	.checkers{padding-bottom:10px;width:117px;font-size:11px;text-align:left;margin:0 auto;}
-	.reader{padding-bottom:20px;width:117px;font-size:11px;text-align:left;margin:0 auto;}
-	.powered{padding-bottom:10px;}
-	.syndicate{}
+.checkers{padding-bottom:10px;width:117px;font-size:11px;text-align:left;margin:0 auto;}
+.reader{padding-bottom:20px;width:117px;font-size:11px;text-align:left;margin:0 auto;}
+.powered{padding-bottom:10px;}
+.syndicate{}
 /*-----------------------------------------------------*/
