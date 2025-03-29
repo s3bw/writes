@@ -213,17 +213,6 @@ th, td {
     text-align: left;
 }
 
-/* Forms
-input, textarea {
-    width: 100%;
-    max-width: 100%;
-    padding: 8px;
-    margin: 5px 0;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-} */
-
 /* Theme toggle button - original styling */
 .theme-toggle {
     position: fixed;

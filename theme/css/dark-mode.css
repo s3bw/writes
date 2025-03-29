@@ -189,12 +189,8 @@ tr:nth-child(even), tr:hover, pre {
     align-items: center;
     justify-content: center;
     z-index: 10000;
-    transition: transform 0.2s ease;
+    transition: transform 0.15s ease;
     -webkit-tap-highlight-color: transparent;
-}
-
-.theme-toggle:active {
-    transform: scale(0.9);
 }
 
 .theme-toggle::before {
@@ -208,10 +204,15 @@ tr:nth-child(even), tr:hover, pre {
     will-change: transform;
 }
 
+:root {
+    --spin: 225deg;
+    --speed: 0.5s;
+}
+
 [data-theme="dark"] .theme-toggle::before {
     background-color: #fff;
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
+    transform: rotate(var(--spin));
+    -webkit-transform: rotate(var(--spin));
 }
 
 @keyframes spin-to-diamond {
@@ -221,16 +222,16 @@ tr:nth-child(even), tr:hover, pre {
         background-color: #000;
     }
     100% {
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
+        transform: rotate(var(--spin));
+        -webkit-transform: rotate(var(--spin));
         background-color: #fff;
     }
 }
 
 @keyframes spin-to-square {
     0% {
-        transform: rotate(45deg);
-        -webkit-transform: rotate(45deg);
+        transform: rotate(var(--spin));
+        -webkit-transform: rotate(var(--spin));
         background-color: #fff;
     }
     100% {
@@ -241,9 +242,9 @@ tr:nth-child(even), tr:hover, pre {
 }
 
 .theme-toggle.spinning-to-dark::before {
-    animation: spin-to-diamond var(--transition-duration) ease forwards;
+    animation: spin-to-diamond var(--speed) ease forwards;
 }
 
 .theme-toggle.spinning-to-light::before {
-    animation: spin-to-square var(--transition-duration) ease forwards;
+    animation: spin-to-square  var(--speed) ease forwards;
 }
