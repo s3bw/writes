@@ -471,9 +471,15 @@ input, textarea {
 		padding:1px 0px 1px 8px;
 		margin-bottom:3px;
 		text-align:left;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+	}
+	.sidebody a{
+		display: flex;
+		width: 100%;
+	}
+	.sidebody a span{
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 	.sidebottom{
 		margin-bottom:20px;

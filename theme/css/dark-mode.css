@@ -95,6 +95,10 @@ tr:nth-child(even), tr:hover, pre {
     color: var(--dark-link);
 }
 
+[data-theme="dark"] a:hover {
+    color: var(--dark-text);
+}
+
 [data-theme="dark"] #banner {
     border-bottom-color: var(--dark-border);
 }
@@ -137,6 +141,10 @@ tr:nth-child(even), tr:hover, pre {
 
 [data-theme="dark"] .posted a {
     color: var(--dark-link);
+}
+
+[data-theme="dark"] .posted a:hover {
+    color: var(--dark-text);
 }
 
 [data-theme="dark"] table {
