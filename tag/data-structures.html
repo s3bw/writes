@@ -46,34 +46,95 @@
 
           <div id="content">
             <div id="blog">
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 31 August 2020</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Python Deque</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>This is now my third article on lists. As someone that uses the
+built-in python list on a fairly regular basis, I might have
+built up a false sense of security. I'm pretty
+familiar with these listy-boys. However, recently I found out
+that I was not thinking about them correctly. Readers might smack
+themselves if they're familiar with data-structures but
+don't know how lists are implemented internally.
+The built-in lists are <em>dynamic arrays</em>.</p>
+<p>How else could they optimise a sweet <code>O(1)</code> lookup time
+on indexing: <code>mylist[4]</code>. Especially when analysts are
+trying to avoid the built-in iterator and cursing their code
+with: <code>for i in len(mylist): mylist[i]</code>.</p>
+<p>Another trait an established data-structurer
+with be familiar with when it comes to dynamic arrays
+is that the <code>append</code> and <code>pop</code> methods are an amortised
+<code>O(1)</code>. Amortised; because occasionally you have to suffer
+a cost of realloc(ating) memory across larger arrays.</p>
+<p>Where the list starts to suffer is from <code>pop</code>ing and
+<code>insert</code>ing at arbitrary positions.</p>
+<h2>Linked-List</h2>
+<p>The data-structurer will have had the linked-list
+slammed into their head often enough that it will
+pain them to hear about it again. So theory aside,
+I'll give you that sweet <code>O(1)</code> <code>append</code> and last item <code>pop</code>
+that you expect from a performant <code>Stack</code>.</p>
+<p>Python <code>deque</code> provides a comparatively larger
+performance hit on initialisation to <code>list</code> and
+has poor <code>O(n)</code> performance when you want any arbitrary
+item somewhere in the middle. It does, however, have
+<code>O(1)</code>; <code>popleft</code>, <code>pop</code>, <code>append</code> and <code>appendleft</code>. Due
+to being a doubly-linked list (or double-ended queue to
+get the abbreviation <code>deque</code>)</p>
+<h2>Deque in the wild</h2>
+<p>I saw a nice little quote from an enginneer on Quora:</p>
+<blockquote>
+<p>In 8 years of getting paid to write computer programs,
+this post is the only time I’ve typed ‘deque.’</p>
+</blockquote>
+<p>There are <em>many</em> places <code>deque</code> is used in the stdlib, most
+commonly whenever someone needs a <code>queue</code> or <code>stack</code> such as
+constructing a traceback, parsing python's sytax tree and
+keeping track of context scope.</p>
+<p>My little run-in with <code>deque</code> was using it instead of a
+recursive function to avoid python's</p>
+<div class="highlight"><pre><span></span><code>maximum<span class="w"> </span>recursion<span class="w"> </span>depth<span class="w"> </span>exceeded
+</code></pre></div>
+
+<p>This limit happens to be set to <code>10^4</code>. The solution was
+to add child nodes to a <code>deque</code> and when you were done with
+analysing the current node, <code>popleft</code> the next node.</p>
+<h2>Python Queue</h2>
+<p>You might be tempted to ask, well if <code>deque</code> is for queues.
+What on earth is <code>from queue import Queue</code>.</p>
+<p>These queues are different (although, still using <code>deque</code> under
+the hood). They are optimised for communication across threads,
+which need to involve locking mechanisms and support methods like
+<code>put_nowait()</code> and <code>join()</code>. These are not intended to be used
+as a collective data-structure, hence the lack of support for
+the <code>in</code> operator.</p>
+<h2>More information</h2>
+<p>There is some neat documentation in the cpython repo which
+contains more data-structures and other alternatives to
+the standard built-in <code>list</code>. <a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists">Tools for working with
+lists</a></p>
+<h3>References</h3>
 <ul>
-    <li><a href="https://s3bw.github.io/writes/tag/people.html">people</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/talking.html">talking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/networking.html">networking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/travel.html">travel</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/chess.html">chess</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/cli.html">cli</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/docker.html">docker</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/redis.html">redis</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/code.html">code</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/programming.html">programming</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/python.html">python</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/web.html">web</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/go4.html">go4</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/design.html">design</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/vm.html">vm</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/interface.html">interface</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/workflow.html">workflow</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/game.html">game</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a></li>
+<li><a href="https://docs.python.org/3.8/faq/design.html#how-are-lists-implemented-in-cpython"><strong>How are lists implemented:</strong></a></li>
+<li>https://stackoverflow.com/a/15121933/3407256</li>
+<li>https://stackoverflow.com/a/23487658/3407256</li>
 </ul>
+                </div>
+            </div>
+        </div>
+
+
             </div>
           </div>
 

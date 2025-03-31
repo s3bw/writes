@@ -46,34 +46,209 @@
 
           <div id="content">
             <div id="blog">
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 10 March 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Flash Cards</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>A while back I found out that Jnr. Doctors are keen on using
+flash cards to help them revise for exams. It occurred to me
+that I could also use flash cards to drill some of the concepts
+that would come up in discussions about software systems
+and system design.</p>
+<p>At the time I was developing on a raspberry-pi with a 7-inch
+screen and I was limited to how much I could install on the
+little SD card. At first I tried to use a browser based
+flash card tool, but I was in the mood for doing some deep
+dives to understanding how these actually work under the
+hood.</p>
+<p>This led me to develop
+<a href="https://github.com/s3bw/kanki">Kanki</a> a bespoke flash card
+tool for the command line. In this blog post I break down the
+process I typically use to undertake a software project of
+this scale (i.e tiny scale).</p>
+<h3>Requirements</h3>
+<p>Like all good software projects we start with the high level
+expectations. What do we want this system to do? (Some of
+these are quoted straight out of my notebook.</p>
+<ol>
+<li>I want to have 1000+ flashcards based on software and
+system design</li>
+<li>I should be able to hide the answer, I should be able to
+   reveal the answer.</li>
+<li>Can I input <em>"correct"</em>, <em>"close"</em>, <em>"wrong"</em> etc and
+   update an SR algorithm to handle recall.</li>
+<li>Nice to have, filtering by topic.</li>
+</ol>
+<p>In order to understand how flash cards operate you'd need to
+dig into figuring how the SR works:</p>
+<blockquote>
+<p><strong>Spaced Repetition</strong>: Newly introduced and more difficult
+flashcards are shown more frequently, while older and
+less difficult flashcards are shown less frequently in
+order to exploit the psychological spacing effect.
+The use of spaced repetition has been proven to increase
+the rate of learning. -
+<a href="https://en.wikipedia.org/wiki/Spaced_repetition">Wikipedia</a></p>
+</blockquote>
+<h3>Entities</h3>
+<p>We need to know what things we will be working with:</p>
+<table>
+<thead>
+<tr>
+<th>Card</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Question (string)</td>
+</tr>
+<tr>
+<td>- Answer (string)</td>
+</tr>
+<tr>
+<td>- Topic (string)</td>
+</tr>
+<tr>
+<td>- DeckID (int)</td>
+</tr>
+</tbody>
+</table>
+<p>The card is the question and answer entity which I might
+have 1000 of (In the end I think I had about 60).</p>
+<table>
+<thead>
+<tr>
+<th>Deck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Id (int)</td>
+</tr>
+<tr>
+<td>- Name (string</td>
+</tr>
+</tbody>
+</table>
+<p>The deck is the entity which groups cards, so a card belongs
+to a deck and this allows me to have cards around separate
+topics.</p>
+<hr />
+<h3>Interface</h3>
+<p>This isn't far off from what I drew in the notebook
+but clearly I had a vision and the following sort of
+captures it at the time:</p>
+<p>I want to have a view which allows me to load a specified
+deck. Create a new deck or add cards to an existing deck.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">Load</span><span class="o">:</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">deck_a</span><span class="p">,</span><span class="w"> </span><span class="n">deck_b</span>
+<span class="n">New</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>
+<span class="n">Add</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
+</code></pre></div>
+
+<p>I want to display the different inputs I can provide as
+answers to each card.</p>
+<div class="highlight"><pre><span></span><code>Again,  Hard,    Good,    Easy
+&lt; 1min  &lt; 6min   &lt; 10min  4 days
+</code></pre></div>
+
+<p>These are some of the settings I'd like to fine tune as I
+get used to playing with the flashcard system.</p>
+<div class="highlight"><pre><span></span><code><span class="n">config</span><span class="o">:</span>
+<span class="k">new</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+<span class="n">review</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+</code></pre></div>
+
+<h3>Spaced Repetition Algorithm</h3>
+<p>This is where things get slightly more involved since I had
+to understand how Anki and other flash card apps applied
+repetition. It was mostly finding the one that suited me
+best and felt the most natural to play with.</p>
+<p>This is the algorithm I went for:</p>
+<p><strong>step 1</strong>: Cards have a <code>queue</code> field (set to 1 for 'learning') and a
+<code>due</code> field (in minutes) determining when a card should be shown again.</p>
+<p><strong>step 2</strong>: review cards, already studied but are now due to
+be relearnt. <code>queue</code> field set to (2) and due less than or
+equal to today.</p>
+<p><strong>step 3</strong>: 'new', queue is set to (0), these new cards are capped.</p>
+<p>Essentially this determines how we populate the flash cards
+during a session. Using the three queue types:</p>
 <ul>
-    <li><a href="https://s3bw.github.io/writes/tag/people.html">people</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/talking.html">talking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/networking.html">networking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/travel.html">travel</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/chess.html">chess</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/cli.html">cli</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/docker.html">docker</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/redis.html">redis</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/code.html">code</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/programming.html">programming</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/python.html">python</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/web.html">web</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/go4.html">go4</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/design.html">design</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/vm.html">vm</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/interface.html">interface</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/workflow.html">workflow</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/game.html">game</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a></li>
+<li>0: <code>new</code></li>
+<li>1: <code>learning</code></li>
+<li>2: <code>review</code></li>
+<li>3: <code>relearning</code> (This is essentially a card deemed as
+    "learnt" but you've forgotten it and now it needs to be relearnt).</li>
 </ul>
+<p>Properties of a card.</p>
+<ul>
+<li><strong>due</strong>: the timestamp for when the card should be shown again.</li>
+<li><strong>left</strong>: how many learning steps before the card graduates to review.</li>
+<li><strong>reps</strong>: how many times the card has been shown.</li>
+<li><strong>ivl</strong>: tracking the card interval (time to add when recalculating <strong>due</strong>).</li>
+</ul>
+<h3>Input</h3>
+<p>When answering the flash cards there's four inputs you can
+provide, each of which will cause a different effect, these
+decide the cards position in one of two or three queues.
+The result of these inputs also depends on which queue the
+card is currently in.
+You can see <a href="https://github.com/s3bw/kanki/blob/main/models.py#L106-L134">this
+here</a></p>
+<ul>
+<li><code>Again</code>: Reset number of training reps</li>
+<li><code>Hard</code>: +1 rep, show again in 1 min</li>
+<li><code>Good</code>: +1 rep, show again in 5 min</li>
+<li><code>Easy</code>: +1 rep, show again in 1 day</li>
+</ul>
+<h3>Development</h3>
+<p>Up until this point I hadn't done a single line of code. The
+research done above was undertaken before I started writing
+any code. This helps me have a clear understanding of what
+I'm actually trying to do. It's far easier to scribble away
+in my notebook that it is to change code.</p>
+<p>There are a few things I needed, which I learnt after I'd
+written the tool. Things such as being able to edit a card,
+but these were not major features.</p>
+<p>The other thing that I find interesting (or obvious) is
+solution for the queue. During a learning session you need
+to have the card queues be dynamic since you're
+popping the earliest due card and then you're sorting them
+by when they are next due so the implementation fits using a
+heap quite well. You can see me <a href="https://github.com/s3bw/kanki/blob/main/queues.py">initialising the
+heap</a> here.</p>
+<h3>Conclusion</h3>
+<p>I really enjoyed reading up on some of the complexities
+involved in getting the spaced repetition working in a way
+that allows new topics to be slowly introduced while working
+on cementing topics that were in the progress of being
+learnt. It feels a little exciting when you encounter
+something new during the learning session. I used kanki
+to prepare on some topics and every so often add new cards
+to system design.</p>
+<p>One thing I found quite useful is getting someone else to
+ask you the questions verbally and they make a judgement on
+how close you are to the answer. This can get you more
+comfortable with talking about these topics and the person
+reading the questions can help keep you honest about how
+well you know a topic.</p>
+<p>Lastly it's also interesting that learning is effectively
+broken down into three separate speeds. 1. This is new. 2.
+I'm actively learning this. 3. I should know this.</p>
+                </div>
+            </div>
+        </div>
+
+
             </div>
           </div>
 

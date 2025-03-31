@@ -46,34 +46,107 @@
 
           <div id="content">
             <div id="blog">
-<ul>
-    <li><a href="https://s3bw.github.io/writes/tag/people.html">people</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/talking.html">talking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/networking.html">networking</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/travel.html">travel</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/chess.html">chess</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/cli.html">cli</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/docker.html">docker</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/redis.html">redis</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/code.html">code</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/programming.html">programming</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/python.html">python</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/web.html">web</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/go4.html">go4</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/design.html">design</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/vm.html">vm</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/interface.html">interface</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/workflow.html">workflow</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/game.html">game</a></li>
-    <li><a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a></li>
-</ul>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Thu 11 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Iterator Design Pattern</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>Before I started reading <a href="https://en.wikipedia.org/wiki/Design_Patterns">the gang of
+4</a>
+["Go4"],
+I was convinced I would not need an
+<a href="https://en.wikipedia.org/wiki/Iterator_pattern">iterator</a>.
+After all, in python, they are already implemented:</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div>
+
+<p>In the frame of <em>python lists</em> as aggregate objects, the
+intent of an iterator is satisfied.</p>
+<blockquote>
+<p>Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.</p>
+</blockquote>
+<h2>Displaying notes</h2>
+<p>Here I explain, how the iterator became my favourite design
+pattern.</p>
+<p>I have written about <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">representation
+of lists before</a>,
+and I don't think this will be my last time. When
+implementing the drop-downs in
+<a href="https://github.com/foxyblue/foolscap">foolscap</a>
+to allow a user to see sections contained in their note,
+I ran into an issue of complexity where I had blocks
+of conditionals dictating what should be displayed
+to a user. I wanted the user to have an indication
+that a note contains sections, and for them to be
+able to toggle a drop-down to see each section.
+Similar to:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="o">(</span>+<span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
+<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
+</code></pre></div>
+
+<p>Where my <code>"circleci"</code> note would contain sections
+and the <code>"docker"</code> note does not. Then expanding:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>&lt;-&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
+<span class="w">  </span>└─<span class="w"> </span><span class="p">|</span><span class="w"> </span>-workflow<span class="w"> </span><span class="p">|</span>
+<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
+</code></pre></div>
+
+<p>This is where I realised the abstraction power of an
+iterator, And I could hide the collapsed sections
+behind an <code>"if"</code> conditional in an iterator.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
+
+    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield the next appropriate item for display.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;expand&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">expand</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">sub_item</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">sub_items</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">sub_item</span><span class="o">.</span><span class="n">title</span>
+</code></pre></div>
+
+<p>Supporting further traversal policies in my <code>Menu</code>
+class is straightforward, and
+drawing becomes absurdly simplified:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">menu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw all viewable menu items.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">menu</span><span class="o">.</span><span class="n">visible</span><span class="p">():</span>
+        <span class="n">draw_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div>
+
+<p>After this I thought of a more complex <strong>aggregate</strong>
+structure that I could traverse, <a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/tree_iterator.py">like a tree depth
+first</a>.</p>
+<p>Realising the abstraction strength of the
+iterator, one finds its definition of intent far
+more compelling.</p>
+<blockquote>
+<p>Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.</p>
+</blockquote>
+                </div>
+            </div>
+        </div>
+
+
             </div>
           </div>
 
