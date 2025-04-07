@@ -566,7 +566,7 @@ I attempt to distill some insight into the application of
 algorithms in software, namely chess programming. In the
 hopes that it may inspire how you approach solving similar
 problems in the future.</p>
-<h2>Bit Operations</h2>
+<h3>Bit Operations</h3>
 <p>If you've ever done some leetcoding or any other live
 algorithm style interview prep in software engineering you
 might have come across the odd question on bit operations
@@ -619,7 +619,7 @@ an example in python:</p>
 of this blog post, but put together some of these bit
 operators and you've got yourself a function that can do
 addition.</p>
-<h2>Bitboards</h2>
+<h3>Bitboards</h3>
 <p>Back to the chess:</p>
 <p>We are doing all of this essentially to get as close to the
 processor as possible, since we want the most performance
@@ -687,7 +687,7 @@ low level can help boost the performance of the software.
 The more you squeeze out of performance the more accurate
 your chess AI will be, because this improves it's ability to
 look into the future.</p>
-<h2>Beyond Chess</h2>
+<h3>Beyond Chess</h3>
 <p>In summary learning about how bitboards are applied to chess
 programming has allowed me to understand how bit operations can
 be applied practically in software. Before I dived into
@@ -1071,7 +1071,7 @@ is that the <code>append</code> and <code>pop</code> methods are an amortised
 a cost of realloc(ating) memory across larger arrays.</p>
 <p>Where the list starts to suffer is from <code>pop</code>ing and
 <code>insert</code>ing at arbitrary positions.</p>
-<h2>Linked-List</h2>
+<h3>Linked-List</h3>
 <p>The data-structurer will have had the linked-list
 slammed into their head often enough that it will
 pain them to hear about it again. So theory aside,
@@ -1084,7 +1084,7 @@ item somewhere in the middle. It does, however, have
 <code>O(1)</code>; <code>popleft</code>, <code>pop</code>, <code>append</code> and <code>appendleft</code>. Due
 to being a doubly-linked list (or double-ended queue to
 get the abbreviation <code>deque</code>)</p>
-<h2>Deque in the wild</h2>
+<h3>Deque in the wild</h3>
 <p>I saw a nice little quote from an enginneer on Quora:</p>
 <blockquote>
 <p>In 8 years of getting paid to write computer programs,
@@ -1102,7 +1102,7 @@ recursive function to avoid python's</p>
 <p>This limit happens to be set to <code>10^4</code>. The solution was
 to add child nodes to a <code>deque</code> and when you were done with
 analysing the current node, <code>popleft</code> the next node.</p>
-<h2>Python Queue</h2>
+<h3>Python Queue</h3>
 <p>You might be tempted to ask, well if <code>deque</code> is for queues.
 What on earth is <code>from queue import Queue</code>.</p>
 <p>These queues are different (although, still using <code>deque</code> under
@@ -1111,7 +1111,7 @@ which need to involve locking mechanisms and support methods like
 <code>put_nowait()</code> and <code>join()</code>. These are not intended to be used
 as a collective data-structure, hence the lack of support for
 the <code>in</code> operator.</p>
-<h2>More information</h2>
+<h3>More information</h3>
 <p>There is some neat documentation in the cpython repo which
 contains more data-structures and other alternatives to
 the standard built-in <code>list</code>. <a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists">Tools for working with
@@ -1185,7 +1185,7 @@ receive traffic...</p>
 to do with permission. Looking back, it's quite clear that a
 permission has nothing to do with it, since the logs would say
 so.</p>
-<h2>Take a step back</h2>
+<h3>Take a step back</h3>
 <p>The difference between the image on heroku and the image
 running locally. What probably made me assume it was a
 permission error was the quote from their docs:</p>
@@ -1194,7 +1194,7 @@ permission error was the quote from their docs:</p>
 </blockquote>
 <p>So there was some <strong>funky</strong> business they're doing to the
 user I provided.</p>
-<h2>Get closer to the problem</h2>
+<h3>Get closer to the problem</h3>
 <p>Finding out that I could get inside the heroku container
 certainly helped me figure out the problem:</p>
 <div class="highlight"><pre><span></span><code>heroku<span class="w"> </span>run<span class="w"> </span>bash
@@ -1463,7 +1463,7 @@ intent of an iterator is satisfied.</p>
 aggregate object sequentially without exposing
 its underlying representations.</p>
 </blockquote>
-<h2>Displaying notes</h2>
+<h3>Displaying notes</h3>
 <p>Here I explain, how the iterator became my favourite design
 pattern.</p>
 <p>I have written about <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">representation
@@ -1562,7 +1562,7 @@ have to provide some generic name like
 <code>dev-sebastien</code>. So instead I thought my own
 arbitrary name generation could save some time
 here.</p>
-<h2>Random names</h2>
+<h3>Random names</h3>
 <p>The idea was to combine <code>&lt;adjective&gt;-&lt;pokemon&gt;</code>
 and use this as the VM parameter.</p>
 <p>Thus defining the following in <code>.create_name.sh</code></p>
@@ -1635,7 +1635,7 @@ forgetting the exact file I saved it.</p>
 </blockquote>
 <p>Thus I decided to write an application that took
 care of the saving and finding of my notes.</p>
-<h2>Unordered Lists</h2>
+<h3>Unordered Lists</h3>
 <p>One thing I have taken for granted is the ordering
 of my files in any file system. I only realised
 how important it was after unordered dictionaries
@@ -1650,7 +1650,7 @@ operations), I wrote the rule to provide me the
 list in alphabetical order. This was great my
 brain automatically switched to doing a binary
 search for note "M". <code>O(log n)</code></p>
-<h2>Ordered Lists</h2>
+<h3>Ordered Lists</h3>
 <p>Now that finding note "M" was optimised for my
 eyes, my finger had to press the down key until
 my cursor was on the note of choice. This wasn't
@@ -1673,7 +1673,7 @@ modified I could implement the following ordering:</p>
 <p>I had significantly cut down the amount of time it
 took for me to get to the notes I was using most
 frequently.</p>
-<h2>Search Lists</h2>
+<h3>Search Lists</h3>
 <p>Searching needed a slightly different ordering
 since applying the rules above to your search
 results will likely be meaningless. The

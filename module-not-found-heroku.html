@@ -102,7 +102,7 @@ receive traffic...</p>
 to do with permission. Looking back, it's quite clear that a
 permission has nothing to do with it, since the logs would say
 so.</p>
-<h2>Take a step back</h2>
+<h3>Take a step back</h3>
 <p>The difference between the image on heroku and the image
 running locally. What probably made me assume it was a
 permission error was the quote from their docs:</p>
@@ -111,7 +111,7 @@ permission error was the quote from their docs:</p>
 </blockquote>
 <p>So there was some <strong>funky</strong> business they're doing to the
 user I provided.</p>
-<h2>Get closer to the problem</h2>
+<h3>Get closer to the problem</h3>
 <p>Finding out that I could get inside the heroku container
 certainly helped me figure out the problem:</p>
 <div class="highlight"><pre><span></span><code>heroku<span class="w"> </span>run<span class="w"> </span>bash

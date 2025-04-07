@@ -79,7 +79,7 @@ is that the <code>append</code> and <code>pop</code> methods are an amortised
 a cost of realloc(ating) memory across larger arrays.</p>
 <p>Where the list starts to suffer is from <code>pop</code>ing and
 <code>insert</code>ing at arbitrary positions.</p>
-<h2>Linked-List</h2>
+<h3>Linked-List</h3>
 <p>The data-structurer will have had the linked-list
 slammed into their head often enough that it will
 pain them to hear about it again. So theory aside,
@@ -92,7 +92,7 @@ item somewhere in the middle. It does, however, have
 <code>O(1)</code>; <code>popleft</code>, <code>pop</code>, <code>append</code> and <code>appendleft</code>. Due
 to being a doubly-linked list (or double-ended queue to
 get the abbreviation <code>deque</code>)</p>
-<h2>Deque in the wild</h2>
+<h3>Deque in the wild</h3>
 <p>I saw a nice little quote from an enginneer on Quora:</p>
 <blockquote>
 <p>In 8 years of getting paid to write computer programs,
@@ -110,7 +110,7 @@ recursive function to avoid python's</p>
 <p>This limit happens to be set to <code>10^4</code>. The solution was
 to add child nodes to a <code>deque</code> and when you were done with
 analysing the current node, <code>popleft</code> the next node.</p>
-<h2>Python Queue</h2>
+<h3>Python Queue</h3>
 <p>You might be tempted to ask, well if <code>deque</code> is for queues.
 What on earth is <code>from queue import Queue</code>.</p>
 <p>These queues are different (although, still using <code>deque</code> under
@@ -119,7 +119,7 @@ which need to involve locking mechanisms and support methods like
 <code>put_nowait()</code> and <code>join()</code>. These are not intended to be used
 as a collective data-structure, hence the lack of support for
 the <code>in</code> operator.</p>
-<h2>More information</h2>
+<h3>More information</h3>
 <p>There is some neat documentation in the cpython repo which
 contains more data-structures and other alternatives to
 the standard built-in <code>list</code>. <a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists">Tools for working with
@@ -312,7 +312,7 @@ intent of an iterator is satisfied.</p>
 aggregate object sequentially without exposing
 its underlying representations.</p>
 </blockquote>
-<h2>Displaying notes</h2>
+<h3>Displaying notes</h3>
 <p>Here I explain, how the iterator became my favourite design
 pattern.</p>
 <p>I have written about <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">representation

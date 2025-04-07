@@ -432,7 +432,7 @@ I attempt to distill some insight into the application of
 algorithms in software, namely chess programming. In the
 hopes that it may inspire how you approach solving similar
 problems in the future.&lt;/p&gt;
-&lt;h2&gt;Bit Operations&lt;/h2&gt;
+&lt;h3&gt;Bit Operations&lt;/h3&gt;
 &lt;p&gt;If you've ever done some leetcoding or any other live
 algorithm style interview prep in software engineering you
 might have come across the odd question on bit operations
@@ -485,7 +485,7 @@ an example in python:&lt;/p&gt;
 of this blog post, but put together some of these bit
 operators and you've got yourself a function that can do
 addition.&lt;/p&gt;
-&lt;h2&gt;Bitboards&lt;/h2&gt;
+&lt;h3&gt;Bitboards&lt;/h3&gt;
 &lt;p&gt;Back to the chess:&lt;/p&gt;
 &lt;p&gt;We are doing all of this essentially to get as close to the
 processor as possible, since we want the most performance
@@ -553,7 +553,7 @@ low level can help boost the performance of the software.
 The more you squeeze out of performance the more accurate
 your chess AI will be, because this improves it's ability to
 look into the future.&lt;/p&gt;
-&lt;h2&gt;Beyond Chess&lt;/h2&gt;
+&lt;h3&gt;Beyond Chess&lt;/h3&gt;
 &lt;p&gt;In summary learning about how bitboards are applied to chess
 programming has allowed me to understand how bit operations can
 be applied practically in software. Before I dived into
@@ -865,7 +865,7 @@ is that the &lt;code&gt;append&lt;/code&gt; and &lt;code&gt;pop&lt;/code&gt; met
 a cost of realloc(ating) memory across larger arrays.&lt;/p&gt;
 &lt;p&gt;Where the list starts to suffer is from &lt;code&gt;pop&lt;/code&gt;ing and
 &lt;code&gt;insert&lt;/code&gt;ing at arbitrary positions.&lt;/p&gt;
-&lt;h2&gt;Linked-List&lt;/h2&gt;
+&lt;h3&gt;Linked-List&lt;/h3&gt;
 &lt;p&gt;The data-structurer will have had the linked-list
 slammed into their head often enough that it will
 pain them to hear about it again. So theory aside,
@@ -878,7 +878,7 @@ item somewhere in the middle. It does, however, have
 &lt;code&gt;O(1)&lt;/code&gt;; &lt;code&gt;popleft&lt;/code&gt;, &lt;code&gt;pop&lt;/code&gt;, &lt;code&gt;append&lt;/code&gt; and &lt;code&gt;appendleft&lt;/code&gt;. Due
 to being a doubly-linked list (or double-ended queue to
 get the abbreviation &lt;code&gt;deque&lt;/code&gt;)&lt;/p&gt;
-&lt;h2&gt;Deque in the wild&lt;/h2&gt;
+&lt;h3&gt;Deque in the wild&lt;/h3&gt;
 &lt;p&gt;I saw a nice little quote from an enginneer on Quora:&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;In 8 years of getting paid to write computer programs,
@@ -896,7 +896,7 @@ recursive function to avoid python's&lt;/p&gt;
 &lt;p&gt;This limit happens to be set to &lt;code&gt;10^4&lt;/code&gt;. The solution was
 to add child nodes to a &lt;code&gt;deque&lt;/code&gt; and when you were done with
 analysing the current node, &lt;code&gt;popleft&lt;/code&gt; the next node.&lt;/p&gt;
-&lt;h2&gt;Python Queue&lt;/h2&gt;
+&lt;h3&gt;Python Queue&lt;/h3&gt;
 &lt;p&gt;You might be tempted to ask, well if &lt;code&gt;deque&lt;/code&gt; is for queues.
 What on earth is &lt;code&gt;from queue import Queue&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;These queues are different (although, still using &lt;code&gt;deque&lt;/code&gt; under
@@ -905,7 +905,7 @@ which need to involve locking mechanisms and support methods like
 &lt;code&gt;put_nowait()&lt;/code&gt; and &lt;code&gt;join()&lt;/code&gt;. These are not intended to be used
 as a collective data-structure, hence the lack of support for
 the &lt;code&gt;in&lt;/code&gt; operator.&lt;/p&gt;
-&lt;h2&gt;More information&lt;/h2&gt;
+&lt;h3&gt;More information&lt;/h3&gt;
 &lt;p&gt;There is some neat documentation in the cpython repo which
 contains more data-structures and other alternatives to
 the standard built-in &lt;code&gt;list&lt;/code&gt;. &lt;a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists"&gt;Tools for working with
@@ -955,7 +955,7 @@ receive traffic...&lt;/p&gt;
 to do with permission. Looking back, it's quite clear that a
 permission has nothing to do with it, since the logs would say
 so.&lt;/p&gt;
-&lt;h2&gt;Take a step back&lt;/h2&gt;
+&lt;h3&gt;Take a step back&lt;/h3&gt;
 &lt;p&gt;The difference between the image on heroku and the image
 running locally. What probably made me assume it was a
 permission error was the quote from their docs:&lt;/p&gt;
@@ -964,7 +964,7 @@ permission error was the quote from their docs:&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;So there was some &lt;strong&gt;funky&lt;/strong&gt; business they're doing to the
 user I provided.&lt;/p&gt;
-&lt;h2&gt;Get closer to the problem&lt;/h2&gt;
+&lt;h3&gt;Get closer to the problem&lt;/h3&gt;
 &lt;p&gt;Finding out that I could get inside the heroku container
 certainly helped me figure out the problem:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;heroku&lt;span class="w"&gt; &lt;/span&gt;run&lt;span class="w"&gt; &lt;/span&gt;bash
@@ -1185,7 +1185,7 @@ intent of an iterator is satisfied.&lt;/p&gt;
 aggregate object sequentially without exposing
 its underlying representations.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2&gt;Displaying notes&lt;/h2&gt;
+&lt;h3&gt;Displaying notes&lt;/h3&gt;
 &lt;p&gt;Here I explain, how the iterator became my favourite design
 pattern.&lt;/p&gt;
 &lt;p&gt;I have written about &lt;a href="https://s3bw.github.io/writes/foolscap-list-ordering.html"&gt;representation
@@ -1260,7 +1260,7 @@ have to provide some generic name like
 &lt;code&gt;dev-sebastien&lt;/code&gt;. So instead I thought my own
 arbitrary name generation could save some time
 here.&lt;/p&gt;
-&lt;h2&gt;Random names&lt;/h2&gt;
+&lt;h3&gt;Random names&lt;/h3&gt;
 &lt;p&gt;The idea was to combine &lt;code&gt;&amp;lt;adjective&amp;gt;-&amp;lt;pokemon&amp;gt;&lt;/code&gt;
 and use this as the VM parameter.&lt;/p&gt;
 &lt;p&gt;Thus defining the following in &lt;code&gt;.create_name.sh&lt;/code&gt;&lt;/p&gt;
@@ -1309,7 +1309,7 @@ forgetting the exact file I saved it.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Thus I decided to write an application that took
 care of the saving and finding of my notes.&lt;/p&gt;
-&lt;h2&gt;Unordered Lists&lt;/h2&gt;
+&lt;h3&gt;Unordered Lists&lt;/h3&gt;
 &lt;p&gt;One thing I have taken for granted is the ordering
 of my files in any file system. I only realised
 how important it was after unordered dictionaries
@@ -1324,7 +1324,7 @@ operations), I wrote the rule to provide me the
 list in alphabetical order. This was great my
 brain automatically switched to doing a binary
 search for note "M". &lt;code&gt;O(log n)&lt;/code&gt;&lt;/p&gt;
-&lt;h2&gt;Ordered Lists&lt;/h2&gt;
+&lt;h3&gt;Ordered Lists&lt;/h3&gt;
 &lt;p&gt;Now that finding note "M" was optimised for my
 eyes, my finger had to press the down key until
 my cursor was on the note of choice. This wasn't
@@ -1347,7 +1347,7 @@ modified I could implement the following ordering:&lt;/p&gt;
 &lt;p&gt;I had significantly cut down the amount of time it
 took for me to get to the notes I was using most
 frequently.&lt;/p&gt;
-&lt;h2&gt;Search Lists&lt;/h2&gt;
+&lt;h3&gt;Search Lists&lt;/h3&gt;
 &lt;p&gt;Searching needed a slightly different ordering
 since applying the rules above to your search
 results will likely be meaningless. The
