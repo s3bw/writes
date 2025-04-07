@@ -16,6 +16,21 @@ body {
     text-align: center;
 }
 
+.footnote-ref {
+    padding: 4px;
+}
+
+
+.footnote-ref:hover {
+    background-color: #d3d3d3;
+}
+
+.footnote-ref:hover a {
+    background-color: none;
+}
+
+
+
 #container {
     width: 775px;
     margin: 0 auto;
@@ -162,9 +177,7 @@ a {
 }
 
 a:hover {
-    background-color: #ff5858;
-    text-decoration: underline overline wavy red;
-    border: #000;
+    border-radius: 3px;
     text-decoration-color: #000;
 }
 
@@ -245,8 +258,6 @@ a:visited{}
 a:active{}
 a:hover {
     background-color: #ff5858;
-    text-decoration: underline overline wavy red;
-    border: #000;
     text-decoration-color: #000;
 }
 #header{}
@@ -439,6 +450,27 @@ input.button{margin-top:20px;width:80px;}
 
 #blogcommentbottom{margin-bottom:15px;}
 /*------------------------------*/
+/* comments button */
+
+.comment-button:hover {
+    background: #d3d3d3;
+}
+
+
+.comment-dropdown:hover {
+    background: #d3d3d3;
+}
+
+.social-login-card {
+    background: #d3d3d3;
+    border-color: #5c5c5c;
+}
+
+.social-login-card input {
+    background: #d3d3d3;
+    color: #000;
+}
+/*------------------------------*/
 .sidetitlebody{
     border-bottom:2px dotted #000;
 }
@@ -455,7 +487,10 @@ input.button{margin-top:20px;width:80px;}
     line-height:125%;
     padding:5px 0;
 }
-.side a{}
+.side a{
+    padding: 1px;
+    padding-left: 6px;
+}
 .sidebody{
     padding:1px 0px 1px 8px;
     margin-bottom:3px;

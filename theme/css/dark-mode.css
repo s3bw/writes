@@ -6,6 +6,7 @@
     --dark-border: #444;
     --dark-hover-bg: #2a2a2a;
     --transition-duration: 0.15s;
+    --dark-bg-secondary: #5c5c5c;
 }
 
 /* Smooth page transitions */
@@ -18,6 +19,10 @@ body {
     transition: background-color var(--transition-duration) ease,
                 color var(--transition-duration) ease;
     backface-visibility: hidden;
+}
+
+p a {
+    text-decoration: underline
 }
 
 /* Theme transition overlay */
@@ -75,6 +80,14 @@ tr:nth-child(even), tr:hover, pre {
     color: var(--dark-text);
 }
 
+[data-theme="dark"] .footnote-ref:hover {
+    background-color: var(--dark-bg-secondary);
+}
+
+[data-theme="dark"] .footnote-ref:hover a {
+    background-color: none;
+}
+
 [data-theme="dark"] body {
     color: var(--dark-text);
 }
@@ -93,10 +106,12 @@ tr:nth-child(even), tr:hover, pre {
 
 [data-theme="dark"] a {
     color: var(--dark-link);
+    transition: none;
 }
 
 [data-theme="dark"] a:hover {
-    color: var(--dark-text);
+    color: var(--dark-hover-bg);
+    transition: none;
 }
 
 [data-theme="dark"] #banner {
@@ -248,3 +263,25 @@ tr:nth-child(even), tr:hover, pre {
 .theme-toggle.spinning-to-light::before {
     animation: spin-to-square  var(--speed) ease forwards;
 }
+
+
+/* comments button */
+[data-theme="dark"] .comment-button:hover {
+    background: var(--dark-bg-secondary);
+}
+
+
+[data-theme="dark"] .comment-dropdown:hover {
+    background: var(--dark-bg-secondary);
+}
+
+[data-theme="dark"] .social-login-card {
+    background: var(--dark-bg);
+    border-color: var(--dark-bg-secondary);
+}
+
+[data-theme="dark"] .social-login-card input {
+    background: var(--dark-bg);
+    color: white;
+}
+/*------------------------------*/

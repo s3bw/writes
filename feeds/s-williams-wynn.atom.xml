@@ -1,5 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-03-31T12:13:00+01:00</updated><entry><title>Being A Lurker</title><link href="https://s3bw.github.io/writes/being-a-lurker.html" rel="alternate"></link><published>2025-03-31T12:13:00+01:00</published><updated>2025-03-31T12:13:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-31:/writes/being-a-lurker.html</id><summary type="html">&lt;p&gt;It's time to stop caring about what people think&lt;/p&gt;</summary><content type="html">&lt;p&gt;Since the release of ChatGPT searches that include the term
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-07T12:10:00+01:00</updated><entry><title>Assisted Development</title><link href="https://s3bw.github.io/writes/assisted-development.html" rel="alternate"></link><published>2025-04-07T12:10:00+01:00</published><updated>2025-04-07T12:10:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-07:/writes/assisted-development.html</id><summary type="html">&lt;p&gt;Some of the strengths and weaknesses of AI assisted tools.&lt;/p&gt;</summary><content type="html">&lt;p&gt;76% of developers are either already using or plan to use ai
+assisted tools as part of their workflow, 82% of these developers
+cite that increased productivity is largest impact of using
+these tools&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;AI has integrated itself into our tooling, from search and
+planning to completely embedding
+itself into our development environment. There's a drive to
+apply LLMs into our workflow and it's important to see what
+works and what doesn't.&lt;/p&gt;
+&lt;p&gt;There's no doubt that these tools will be adopted by
+developers and we should figure out how best to use them, or
+risk being left behind.&lt;/p&gt;
+&lt;h3&gt;The great bot cloud in the sky&lt;/h3&gt;
+&lt;p&gt;We will never stop imagining machines taking over our lives.
+It's been 43 years since the release of 'Blade Runner' and 26
+years for 'The Matrix'. However, more significantly, it's been 8
+years since I released my existential twitter bot &lt;a href="https://x.com/CanDennisDream"&gt;Dennis&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Dennis was essentially a cronjob that ran every hour. He
+would read through ~100 comments on roughly 10 subreddits
+covering topics on existentialism and philosophy. Pulling
+this knowledge from the depth of Reddit he was able
+to spew 40.5k tweets of garbage for about 5 years.&lt;/p&gt;
+&lt;p&gt;Dennis trains a Markov chain and would begin his sentences
+with a random starting word. So OpenAI and Github weren't
+the first to train language models using the data available
+to them on the internet. I get the feeling that I was onto
+something in 2017 and with enough funding I could have
+trained either a personal life coach or replicated teenage
+angst.&lt;/p&gt;
+&lt;p&gt;YC &amp;amp; a16z, you're missing out here.&lt;/p&gt;
+&lt;h3&gt;Becoming a cyborg&lt;/h3&gt;
+&lt;p&gt;We are now able to integrate these large probabilistic models
+directly into our code editors. Previously I've been using
+the tab key to autocomplete single words, with a copilot
+assistant I can write an in-line comment such as
+&lt;em&gt;"func provides post-order iteration of a tree given root"&lt;/em&gt;
+and my copilot will suggest the entire function.&lt;/p&gt;
+&lt;p&gt;The code can be wrong, but in the end the developer is
+responsible for the code that gets checked into the
+codebase. It's easy to say &lt;em&gt;"yup, looks good"&lt;/em&gt; especially when
+under pressure to ship. Despite this I find it a massive
+boost to productivity since I only need to fill in some
+gaps or slightly modify the code-spit. On occasion I find
+myself feeling like I'm walking in mud when I hand write
+the code without this autocomplete feature. There are also
+occasions when I disable the feature altogether because it's
+context switching in its suggestions.&lt;/p&gt;
+&lt;p&gt;Perhaps it's problematic not knowing where this code came
+from. At least with Dennis; I knew I could rely on his
+thoughts of existence due to having control over his
+training data, but the code that a copilot provides me...&lt;/p&gt;
+&lt;p&gt;🤷 &lt;a href="https://www.techzine.eu/news/privacy-compliance/122050/developers-lose-github-copilot-copyright-case-again/"&gt;who
+knows...&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Is it a star sign or an LLM?&lt;/h3&gt;
+&lt;p&gt;Search has been disrupted. The only people that were
+thinking more than Dennis about their own existence was
+the Google board when OpenAI released ChatGPT.
+Just kidding, Google came in second, first place goes to
+Stack Overflow.&lt;/p&gt;
+&lt;p&gt;A big chunk of the job in software engineering is trying to
+discover if anyone else has faced a similar problem and if
+they've solved it. We are also tasked with
+understanding an API or how a library works or if it can
+be integrated in order to solve something or provide a new
+service.&lt;/p&gt;
+&lt;p&gt;Google was good for this, but it's slowly being consumed by
+adverts and medium articles. Giving straight forward answers
+doesn't seem to be Googles' focus. Stack Overflow is
+an alternative, but you're not going to plug your homework
+into a question and get someone else to do it for you, nor
+will anyone provide free assistance so that you can earn
+a salary, but they're helpful in ways none the less.&lt;/p&gt;
+&lt;p&gt;Claude, Copilot and ChatGPT are stark improvements in this
+area as you can do a bit of back and forth, provide
+clarity on what you're looking for and they'll
+happily bend it to your use-case, without referring
+their mate for the job because they get paid for ad-clicks.
+(Well not yet).&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;The rocket is taking off 🚀&lt;/h3&gt;
+&lt;p&gt;AI integrated environments for coding are certainly on
+trend and we are already rolling eyes at the phrase
+&lt;em&gt;"Vibe Coder"&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Entire classes of university students are
+scoring 100% on homework assignments, so professors are
+having to rethink how they assess their classes. I recall in
+high school a student questioned why we couldn't
+bring our calculators into an exam when we'd have access to
+this in the real world. There's a cohort of graduates coming
+into the workforce that's going to be more dependant or more
+adept at using AI tools so it's worth getting a sense for
+how these tools might be used.&lt;/p&gt;
+&lt;p&gt;While having access to Cursor I have found that I can have a
+working solution to a small problem that I'm facing in about an
+hour. Before cursor I might have taken note of my idea and
+then forgotten about it or spent the whole weekend putting it
+together. It's even better when you have a clear vision of
+how you wish the solution to look. The models don't do very
+well if your ideas are vague and you're relying on them to
+apply their best guess. It's multiples times more beneficial
+when you know what a good result should look like.&lt;/p&gt;
+&lt;p&gt;We will see more bespoke software. This could be a good
+thing,
+since we might find something better to match our preferences
+when it comes to tools. However due to the increase
+in productivity I've found myself leaning more towards, let
+me make that myself, instead of looking for existing
+solutions. This could be more pronounced in inexperienced
+software engineers as they will be less familiar with the
+tools that exist and they might power down their own path of
+reinventing the wheel.&lt;/p&gt;
+&lt;p&gt;With more bespoke software comes fewer people familiar with
+said software and perhaps we will be running into problems
+that have already been solved in the past. This is certainly
+a cyclical part of learning, so we might see us enter a new
+cycle of how we manage our server deployment, but this time
+with a Gen Z finesse.&lt;/p&gt;
+&lt;h3&gt;Just because you can&lt;/h3&gt;
+&lt;p&gt;I've also found myself questioning how I should dedicate my
+time more, if I can spit something out in an hour I'm
+question my design and interface far more. Maybe it's because
+that's actually the fun part of programming and the coding
+is going to take less time so I've got more time to assess
+if I'm thinking about the problem correctly.&lt;/p&gt;
+&lt;p&gt;I've found this not to be the case with less experienced
+developers, as they'd prefer to use this time to fit one
+more feature into their service without questioning if that
+feature makes holistic sense.&lt;/p&gt;
+&lt;h3&gt;Are thing going badly?&lt;/h3&gt;
+&lt;p&gt;There are weaknesses with AI tools in their current form,
+such as solving an entire problem from A-Z instead of using
+the library I wrote to solve A-M and focusing on N-Z. I've
+also found weaknesses when searching for things that are case
+sensitive. Seems like Google is still on top when I provide
+a search in quotations.&lt;/p&gt;
+&lt;p&gt;Now that I've been using it for a while I have developed
+some intuition on the strengths and weaknesses, despite this
+I still find myself hand writing code line by line without
+any assistance. Mostly in more complicated areas of the code
+base, spaces I'd like be familiar in. Having an
+understanding of the system is valuable when you want to
+contribution to discussion, help stake holders and
+make decisions independently.&lt;/p&gt;
+&lt;p&gt;It's still valuable to build intuition and understand how
+other might use these tools. Building on this knowledge
+could help create solutions that were previously out of
+reach. Otherwise if you're unfamiliar with the tools
+you might get some odds looks when you bring out your
+multiplication table.&lt;/p&gt;
+&lt;h3&gt;Further Reading:&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://martinfowler.com/articles/exploring-gen-ai.html"&gt;Martin Fowler: Exploring Gen
+    AI&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;Footnotes&lt;/h3&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://survey.stackoverflow.co/2024/ai#developer-tools-ai-ben-prof"&gt;Stack Overflow Developer's Survey
+  2024&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://help.netflix.com/en/node/126831"&gt;See Netflix&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="ai, software"></category><category term="ai"></category><category term="software"></category><category term="coding"></category></entry><entry><title>Being A Lurker</title><link href="https://s3bw.github.io/writes/being-a-lurker.html" rel="alternate"></link><published>2025-03-31T12:13:00+01:00</published><updated>2025-03-31T12:13:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-03-31:/writes/being-a-lurker.html</id><summary type="html">&lt;p&gt;It's time to stop caring about what people think&lt;/p&gt;</summary><content type="html">&lt;p&gt;Since the release of ChatGPT searches that include the term
 'reddit' have doubled. Meanwhile interest in Substack grew
 four-fold during the same period. We are living in a time
 where content created by people is becoming more valuable
