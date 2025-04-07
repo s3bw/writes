@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-07T12:10:00+01:00</updated><entry><title>Assisted Development</title><link href="https://s3bw.github.io/writes/assisted-development.html" rel="alternate"></link><published>2025-04-07T12:10:00+01:00</published><updated>2025-04-07T12:10:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-07:/writes/assisted-development.html</id><summary type="html">&lt;p&gt;Some of the strengths and weaknesses of AI assisted tools.&lt;/p&gt;</summary><content type="html">&lt;p&gt;76% of developers are either already using or plan to use ai
 assisted tools as part of their workflow, 82% of these developers
-cite that increased productivity is largest impact of using
+cite an increase in productivity as the largest impact from using
 these tools&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;AI has integrated itself into our tooling, from search and
 planning to completely embedding
@@ -97,7 +97,7 @@ then forgotten about it or spent the whole weekend putting it
 together. It's even better when you have a clear vision of
 how you wish the solution to look. The models don't do very
 well if your ideas are vague and you're relying on them to
-apply their best guess. It's multiples times more beneficial
+apply their best guess. It's multiple times more beneficial
 when you know what a good result should look like.&lt;/p&gt;
 &lt;p&gt;We will see more bespoke software. This could be a good
 thing,
