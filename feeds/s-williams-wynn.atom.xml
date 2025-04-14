@@ -1,5 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-07T12:10:00+01:00</updated><entry><title>Assisted Development</title><link href="https://s3bw.github.io/writes/assisted-development.html" rel="alternate"></link><published>2025-04-07T12:10:00+01:00</published><updated>2025-04-07T12:10:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-07:/writes/assisted-development.html</id><summary type="html">&lt;p&gt;Some of the strengths and weaknesses of AI assisted tools.&lt;/p&gt;</summary><content type="html">&lt;p&gt;76% of developers are either already using or plan to use ai
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-14T12:18:00+01:00</updated><entry><title>Engineering for Resilience</title><link href="https://s3bw.github.io/writes/engineering-for-resilience.html" rel="alternate"></link><published>2025-04-14T12:18:00+01:00</published><updated>2025-04-14T12:18:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-14:/writes/engineering-for-resilience.html</id><summary type="html">&lt;p&gt;Patterns for high velocity engineering teams&lt;/p&gt;</summary><content type="html">&lt;p&gt;Engineering velocity and delivery is strongly tied to how
+code is deployed to production. Having a certain level of
+safety and automation can enable teams to deliver and learn
+faster.&lt;/p&gt;
+&lt;p&gt;Engineers that avoid failure don't learn and won't ever put
+anything significant into production. The quickest way to
+learn is to fail, some teams aim to avoid failure instead
+of trying to optimise recovery from failure. Forget about
+trying to avoid failure think of failure as inevitable. Like
+it or not, there will be a system failure and knowing how to
+thrive in this space will separate you from the average
+developer.&lt;/p&gt;
+&lt;p&gt;Shorter feedback cycles and high confidence
+will distinguish your engineering team from any other, focus
+on a resilient system in production and short recovery time.
+Breaking things should become the norm as long as the
+repercussions are minimised.&lt;/p&gt;
+&lt;h3&gt;Compartmentalisation&lt;/h3&gt;
+&lt;p&gt;Stopping the ship from sinking. Bulkheads are used in the navel
+industry to avoid a ship from sinking. By compartmentalising
+the hull of the ship you allow it to be able to sustain some
+level of damage before it sinks.&lt;/p&gt;
+&lt;p&gt;The titanic had 16 bulk heads. It could stay afloat if 3
+flooded and in some cases it could maintain 4 flooded
+bulkheads. 5 or more would make the titanic meet its
+demise, when it sunk it had 6 compromised.&lt;/p&gt;
+&lt;p&gt;We also do this with software systems, we have built-in
+levels of redundancy. If one of our servers decides that
+today is the day it kicks the bucket we have more than one
+server available to fill-in and pickup the slack.&lt;/p&gt;
+&lt;h3&gt;Keeping a tight ship&lt;/h3&gt;
+&lt;p&gt;The military also practices compartmentalisation in the form
+of modularity. Information is given out on a need to know
+basis. You don't want the entire army carrying state
+secrets and ideally make it difficult for information, that
+may compromise soldiers, to leak.&lt;/p&gt;
+&lt;p&gt;It's also useful in hindsight to
+pinpoint where the leak occurred. If the information was
+privy to 4 individuals you can blacklist them and your
+overhead to discovering the snake is a lot smaller than had
+you provided the entire army with this knowledge.&lt;/p&gt;
+&lt;p&gt;Software runs on a similar structure called the principle of
+least privilege. In a large system with multiple services,
+you're granting each service the minimum level of access in
+order for it to be able to perform its job. If it's got
+write access to the production database but it only ever
+needs to read from this database, then we should restrict
+it's permissions down to read-only. In the event that this
+service is compromised, your surface area of attack is
+decreased, you're much less vulnerable in this situation
+than one where where the attacker had permission to do
+everything.&lt;/p&gt;
+&lt;h3&gt;He'll be long remembered&lt;/h3&gt;
+&lt;p&gt;We've taken practices from 1907. Canaries were used in coal
+mines because they're more sensitive to the toxic gasses
+that miners were exposed to underground. Carbon monoxide is
+odorless, colorless and tasteless so as you'd imagine it's
+tough to detect, however because these birds were bricking
+it at the first hint of these gasses they were used as early
+warning signals underground, if the canary drops dead you'd
+better get yourself out of there.&lt;/p&gt;
+&lt;p&gt;High velocity engineering teams that deploy multiple times a
+day at scale need their own canaries and luckily no one is
+going to die (industry dependent). We can do this in our
+deployment process, because we've got multiple servers, for
+redundancy. We can spin up a new server to receive a small
+percentage of the traffic and keep a close eye on its
+behaviour, if we notice errors or a reduction in performance
+we'd have an early signal that we've introduce something
+faulty in the new deployment and we can avoid risking
+rolling this out to the entire fleet.&lt;/p&gt;
+&lt;p&gt;We can juxtapose this to the alternative, sometimes called a
+big bang deployment. You can switch all the traffic over to the
+new code and hope (fingers crossed) that nothing bad
+happens. In a big bang deployment you're committing 100% of
+your traffic to new code, if things go bad you're more exposed
+to the downside of failures in this scenario.&lt;/p&gt;
+&lt;p&gt;Automation of these canary deployments brings a higher level
+of confidence to an engineering team as haywire metrics can
+automatically stop traffic to the wonky canary and your
+overall exposure to negative effects is greatly reduced.&lt;/p&gt;
+&lt;h3&gt;Cutting the wires&lt;/h3&gt;
+&lt;p&gt;A surge in electricity can cause damage to your home
+appliances. To prevent this homes will commonly have a switch
+board, this board is called a circuit breaker.&lt;/p&gt;
+&lt;p&gt;We implement these in engineering too, dynamic feature flags
+that prevent a user from hammering a broken system and in
+some cases we prevent even showing the feature completely. The
+user might not even notice that we've hidden the feature and
+if they don't notice we don't have a problem.&lt;/p&gt;
+&lt;p&gt;We can
+programmatically trip these flags on new features so that we
+can reliably fail over the weekend without much impact on
+our customers and engineers can follow up during work
+hours after the weekend to understand what caused the system
+to fail.&lt;/p&gt;
+&lt;p&gt;These are typically used alongside new features which we'd
+like to turn off at the first sign of something not working
+as intended.&lt;/p&gt;
+&lt;h3&gt;Can you hear me? How about now?.. And now?&lt;/h3&gt;
+&lt;p&gt;Enterprise software is always going to rely on external systems.
+These systems are out of our control yet we are still
+responsible for designing around failure. These
+systems might be from another company or they might be from
+another team within our business.&lt;/p&gt;
+&lt;p&gt;The more moving parts in our system the higher the likelihood
+of something failing. It's the same reason going on a trip
+with a large group of friends ends up being a practice of
+co-ordination and patience, the more things
+you bring into a system the higher the chance something
+fails or someone in the group doesn't want to eat at a
+particular restaurant or want's to wake up slightly later
+than the rest of the group.&lt;/p&gt;
+&lt;p&gt;Unlike friends, if a server doesn't want to respond to your
+request you can kill it. If you don't have the ability to
+kill it you can try again 50ms later. Retrying requests are
+very common because of the multiple ways things can go wrong
+with a network. We also need to consider that sharks have a habit
+of chewing our undersea cables.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;If we fail a retried request we can keep trying however the
+server might be failing because it's overloaded, so having a
+request being continually retried isn't the most ideal use
+of the networks' time. Plus we know it's failing and perhaps
+nothing has changed since the last retry. So we introduce
+exponential backoff. Simply put, it's a growing delay
+between each retry. If it doesn't work now, try in 50ms,
+if that doesn't work try again in 100ms, 200ms, 400ms and so
+on and so on. Eventually we can give up trying maybe flag it
+and let the engineer inspect it on Monday.&lt;/p&gt;
+&lt;p&gt;Retrying requests can be quite dangerous, especially if you've
+got a lot of clients and they're all retrying at the same
+time. This single explosion of requests can cause the server
+to burnout since it's already trying its hardest to recover.&lt;/p&gt;
+&lt;p&gt;In order to avoid a herd of requests at the same time,
+we introduce what is called jitter. Pick a random number and
+add that to the retry delay. If we have a number of clients
+attempting to retry after 50ms they'll be offset by some
+random number of milliseconds which helps to space out each
+request.&lt;/p&gt;
+&lt;h3&gt;Elements of resilient software&lt;/h3&gt;
+&lt;p&gt;Retried requests aren't a silver bullet and they come with
+some considerations. In any kind of transactional
+environment, like banking for example, if you're deducting
+money from an account and the request fails because the
+connection to the server has been lost. Your phone or client
+won't know if the transaction was successful or not.
+Attempting to retry this request might cause a double
+payment.&lt;/p&gt;
+&lt;p&gt;The solution to this is to introduce idempotent endpoints.
+The implementation of these endpoints often rely on having a
+header with an idempotency key, when you retry the request
+the server will check to see if it's handled this key
+previously, if it's already handled the server returns the
+original response, no matter how many times you send this
+key. If the key is new it will assume that this request is
+new and create a new transaction. With an idempotency key
+we can safely retry bank transactions in spotty environments.&lt;/p&gt;
+&lt;h3&gt;So why are we doing this again&lt;/h3&gt;
+&lt;p&gt;The feature that sits stuck in development doesn't face
+reality until its deployed. If we want to learn fast we
+should deploy fast, how can we build a system
+that allows developers to have high confidence that they're
+not going to collapse the business if they make a
+deployment.&lt;/p&gt;
+&lt;p&gt;There are patterns in engineering that enable high
+confidence, otherwise we are stuck with slower deployment
+cycles when the true learning comes from releasing software.
+You can theorise as much as you'd like about the impact you
+will have, but until your code is in front of users and
+used you don't have a benchmark to grow or improve.&lt;/p&gt;
+&lt;p&gt;Not having a robust system to handling failures is often
+the anxiety that slows down development. Slower development
+cycles can cause this problem to worsen if the code that is
+stuck in development grows, your certainty about how it
+behaves in production drops. Which lowers your confidence
+of actually shipping.&lt;/p&gt;
+&lt;p&gt;Developing in an environment with high resilience leads to
+higher confidence and higher velocity. Instead of focusing
+on avoiding failure focus on how you can grow from failure.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://www.business-reporter.co.uk/management/sharks-ate-our-data"&gt;Sharks ate our
+  data&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="deploy, software, scale"></category><category term="scale"></category><category term="software"></category></entry><entry><title>Assisted Development</title><link href="https://s3bw.github.io/writes/assisted-development.html" rel="alternate"></link><published>2025-04-07T12:10:00+01:00</published><updated>2025-04-07T12:10:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-07:/writes/assisted-development.html</id><summary type="html">&lt;p&gt;Some of the strengths and weaknesses of AI assisted tools.&lt;/p&gt;</summary><content type="html">&lt;p&gt;76% of developers are either already using or plan to use ai
 assisted tools as part of their workflow, 82% of these developers
 cite an increase in productivity as the largest impact from using
 these tools&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
