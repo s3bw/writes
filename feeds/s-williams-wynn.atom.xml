@@ -22,7 +22,7 @@ while switching between numbers, the higher the chance we introduce
 errors into the system. This is shown clearly as
 we transition between the numbers 3 and 4. Which requires
 changing three bit positions. &lt;code&gt;011&lt;/code&gt; -&amp;gt; &lt;code&gt;100&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="BinaryCounting" src="/static/counting.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="BinaryCounting" src="static/counting.gif" /&gt;&lt;/p&gt;
 &lt;p&gt;If these bits aren't switched instantly we can read any of the
 following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
 if you're working with a critical system and need precision.&lt;/p&gt;
@@ -34,7 +34,7 @@ switching one position and removes the chance of reading
 the wrong number during state transitions.&lt;/p&gt;
 &lt;p&gt;This ordering is called Gray code, and an animation of the
 bit positions, for an incrementing number, is shown below:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="GrayCounting" src="/static/graycounting.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GrayCounting" src="static/graycounting.gif" /&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
