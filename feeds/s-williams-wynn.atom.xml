@@ -1,5 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-14T12:18:00+01:00</updated><entry><title>Engineering for Resilience</title><link href="https://s3bw.github.io/writes/engineering-for-resilience.html" rel="alternate"></link><published>2025-04-14T12:18:00+01:00</published><updated>2025-04-14T12:18:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-14:/writes/engineering-for-resilience.html</id><summary type="html">&lt;p&gt;Patterns for high velocity engineering teams&lt;/p&gt;</summary><content type="html">&lt;p&gt;Engineering velocity and delivery is strongly tied to how
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-21T12:03:00+01:00</updated><entry><title>Gray Code</title><link href="https://s3bw.github.io/writes/gray-code.html" rel="alternate"></link><published>2025-04-21T12:03:00+01:00</published><updated>2025-04-21T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-21:/writes/gray-code.html</id><summary type="html">&lt;p&gt;Gray code counting system&lt;/p&gt;</summary><content type="html">&lt;p&gt;A modern laptop can run ~3.8 billion cycles per second. The
+cycle is determined by oscillation frequency of the
+electrical signal that hits the CPU. Contemporary CPUs manage
+synchronisation using all sorts of error correction tricks.&lt;/p&gt;
+&lt;p&gt;In mechanical systems, such as those used in medical
+equipment and robotics, the binary numbers that we are most
+familiar with can cause errors if they're read during state
+transition.&lt;/p&gt;
+&lt;h3&gt;Decimal and Binary&lt;/h3&gt;
+&lt;p&gt;We are most familiar with decimals, this is a base 10
+counting notation where each position in the number
+represents a different power of ten. E.g. 10, 100, 1000.&lt;/p&gt;
+&lt;p&gt;The computer relies on binary as this takes advantage of
+the fundamental on/off state within an electronic circuit.
+Binary is base 2, so each position represents a power of 2.
+E.g. 2, 4, 8, 16.&lt;/p&gt;
+&lt;h3&gt;Reading States&lt;/h3&gt;
+&lt;p&gt;Binary numbers can cause errors if they're read during
+transitions. The more positions that require toggling,
+while switching between numbers, the higher the chance we introduce
+errors into the system. This is shown clearly as
+we transition between the numbers 3 and 4. Which requires
+changing three bit positions. &lt;code&gt;011&lt;/code&gt; -&amp;gt; &lt;code&gt;100&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="BinaryCounting" src="/static/counting.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;If these bits aren't switched instantly we can read any of the
+following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
+if you're working with a critical system and need precision.&lt;/p&gt;
+&lt;h3&gt;Grey Code&lt;/h3&gt;
+&lt;p&gt;To get around this we use an alternative ordering of the
+binary system in which successive numbers are separated
+by a single bit. Incrementing a number only relies on
+switching one position and removes the chance of reading
+the wrong number during state transitions.&lt;/p&gt;
+&lt;p&gt;This ordering is called Gray code, and an animation of the
+bit positions, for an incrementing number, is shown below:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="GrayCounting" src="/static/graycounting.gif" /&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Decimal&lt;/th&gt;
+&lt;th&gt;Binary&lt;/th&gt;
+&lt;th&gt;Gray&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;0&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0000&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0000&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;1&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0001&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0001&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;2&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0010&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0011&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;3&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0011&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0010&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;4&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0100&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;0110&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3&gt;The Application&lt;/h3&gt;
+&lt;p&gt;In addition to reducing read errors, relying on only a
+single toggle to move up the number scale consumes less
+energy than traditional binary due the fewer toggled bits.&lt;/p&gt;
+&lt;p&gt;Some systems require testing every position of multiple
+switches or toggles. Gray code can improve the efficiency of
+these tests. If we had to iterate through all 16 combinations
+of 4 switches. Using ordinary binary would need to flip 1,
+2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
+code allows us to only ever need to flip a single toggle to
+eventually test all switch combinations.&lt;/p&gt;
+&lt;p&gt;One of the most common uses of gray code is in rotary
+encoders, also known as knobs. These convert angular
+position to an analog or digital signal. If we had to rely
+on a normal binary scale, when rotating the knob, it could
+end up sending the intermediary numbers between each angle,
+which would make it pretty useless.&lt;/p&gt;</content><category term="misc"></category><category term="software"></category><category term="binary"></category><category term="cpu"></category></entry><entry><title>Engineering for Resilience</title><link href="https://s3bw.github.io/writes/engineering-for-resilience.html" rel="alternate"></link><published>2025-04-14T12:18:00+01:00</published><updated>2025-04-14T12:18:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-14:/writes/engineering-for-resilience.html</id><summary type="html">&lt;p&gt;Patterns for high velocity engineering teams&lt;/p&gt;</summary><content type="html">&lt;p&gt;Engineering velocity and delivery is strongly tied to how
 code is deployed to production. Having a certain level of
 safety and automation can enable teams to deliver and learn
 faster.&lt;/p&gt;

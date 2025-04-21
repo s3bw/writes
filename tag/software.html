@@ -50,6 +50,112 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 21 April 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Gray Code</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>A modern laptop can run ~3.8 billion cycles per second. The
+cycle is determined by oscillation frequency of the
+electrical signal that hits the CPU. Contemporary CPUs manage
+synchronisation using all sorts of error correction tricks.</p>
+<p>In mechanical systems, such as those used in medical
+equipment and robotics, the binary numbers that we are most
+familiar with can cause errors if they're read during state
+transition.</p>
+<h3>Decimal and Binary</h3>
+<p>We are most familiar with decimals, this is a base 10
+counting notation where each position in the number
+represents a different power of ten. E.g. 10, 100, 1000.</p>
+<p>The computer relies on binary as this takes advantage of
+the fundamental on/off state within an electronic circuit.
+Binary is base 2, so each position represents a power of 2.
+E.g. 2, 4, 8, 16.</p>
+<h3>Reading States</h3>
+<p>Binary numbers can cause errors if they're read during
+transitions. The more positions that require toggling,
+while switching between numbers, the higher the chance we introduce
+errors into the system. This is shown clearly as
+we transition between the numbers 3 and 4. Which requires
+changing three bit positions. <code>011</code> -&gt; <code>100</code>.</p>
+<p><img alt="BinaryCounting" src="/static/counting.gif" /></p>
+<p>If these bits aren't switched instantly we can read any of the
+following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
+if you're working with a critical system and need precision.</p>
+<h3>Grey Code</h3>
+<p>To get around this we use an alternative ordering of the
+binary system in which successive numbers are separated
+by a single bit. Incrementing a number only relies on
+switching one position and removes the chance of reading
+the wrong number during state transitions.</p>
+<p>This ordering is called Gray code, and an animation of the
+bit positions, for an incrementing number, is shown below:</p>
+<p><img alt="GrayCounting" src="/static/graycounting.gif" /></p>
+<table>
+<thead>
+<tr>
+<th>Decimal</th>
+<th>Binary</th>
+<th>Gray</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td><code>0000</code></td>
+<td><code>0000</code></td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>0001</code></td>
+<td><code>0001</code></td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td><code>0010</code></td>
+<td><code>0011</code></td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td><code>0011</code></td>
+<td><code>0010</code></td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td><code>0100</code></td>
+<td><code>0110</code></td>
+</tr>
+</tbody>
+</table>
+<h3>The Application</h3>
+<p>In addition to reducing read errors, relying on only a
+single toggle to move up the number scale consumes less
+energy than traditional binary due the fewer toggled bits.</p>
+<p>Some systems require testing every position of multiple
+switches or toggles. Gray code can improve the efficiency of
+these tests. If we had to iterate through all 16 combinations
+of 4 switches. Using ordinary binary would need to flip 1,
+2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
+code allows us to only ever need to flip a single toggle to
+eventually test all switch combinations.</p>
+<p>One of the most common uses of gray code is in rotary
+encoders, also known as knobs. These convert angular
+position to an analog or digital signal. If we had to rely
+on a normal binary scale, when rotating the knob, it could
+end up sending the intermediary numbers between each angle,
+which would make it pretty useless.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 14 April 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -505,6 +611,11 @@ your dusty book of log tables.</p>
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/gray-code.html">
+                        <span>Gray Code</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/engineering-for-resilience.html">
                         <span>Engineering for Resilience</span>
                       </a>
@@ -586,6 +697,9 @@ your dusty book of log tables.</p>
                         <a href="https://s3bw.github.io/writes/tag/ai.html">ai</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/binary.html">binary</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/chess.html">chess</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -596,6 +710,9 @@ your dusty book of log tables.</p>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/coding.html">coding</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/cpu.html">cpu</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
