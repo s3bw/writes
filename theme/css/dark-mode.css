@@ -66,6 +66,10 @@ a, .sidebody a, .posted a {
     transition: color var(--transition-duration) ease;
 }
 
+.sidebody button{
+    transition: color var(--transition-duration) ease;
+}
+
 #banner, .sidetitlebody, .titlebody, .datebody,
 table, th, td, blockquote {
     transition: border-color var(--transition-duration) ease;
@@ -102,6 +106,15 @@ tr:nth-child(even), tr:hover, pre {
 
 [data-theme="dark"] .side {
     color: var(--dark-text);
+}
+
+[data-theme="dark"] .sidebody button{
+    color: var(--dark-link);
+    transition: none;
+}
+[data-theme="dark"] button:hover {
+    color: var(--dark-hover-bg);
+    transition: none;
 }
 
 [data-theme="dark"] a {
