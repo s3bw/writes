@@ -119,14 +119,46 @@ sebastien-gentle-rattata
 </code></pre></div>
                 </div>
                 <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:19| </font>
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:19 | </font>
                     <a href="random-vm-name.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font>
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
                     </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
+</script>
             </div>
           </div>
 

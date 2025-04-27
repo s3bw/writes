@@ -645,7 +645,6 @@ input.sf{
 }
 
 .inline-subscribe-form form {
-    width: 100%;
     border: 1px solid #c5c5c5;
     border-radius: 10px;
     padding: 8px;
@@ -680,4 +679,19 @@ input.sf{
 .inline-subscribe-form button:hover {
     opacity: 0.9;
     background-color: var(--hover-color);
+}
+
+.subscribe-link {
+    color: #9a9a9a;
+    padding: 1px 2px;
+}
+
+.subscribe-link svg {
+    vertical-align: text-bottom;
+    margin-right: 2px;
+}
+
+.article-subscribe-form {
+    width: 100%;
+    display: none;
 }
