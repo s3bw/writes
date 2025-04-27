@@ -84,6 +84,24 @@ tr:nth-child(even), tr:hover, pre {
     color: var(--dark-text);
 }
 
+[data-theme="dark"] .inline-subscribe-form button {
+    color: var(--dark-link);
+}
+
+[data-theme="dark"] .inline-subscribe-form button:hover {
+    color: var(--dark-hover-bg);
+}
+
+[data-theme="dark"] .inline-subscribe-form input {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+    border: 1px solid var(--dark-border);
+}
+
+[data-theme="dark"] .inline-subscribe-form form {
+    border: 1px solid #515151;
+}
+
 [data-theme="dark"] .footnote-ref:hover {
     background-color: var(--dark-bg-secondary);
 }

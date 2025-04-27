@@ -16,6 +16,11 @@ body {
     text-align: center;
 }
 
+:root {
+    --highlight-color: #6cffdd;
+    --hover-color: #ff5858;
+}
+
 .footnote-ref {
     padding: 4px;
 }
@@ -624,3 +629,46 @@ input.sf{
 .powered{padding-bottom:10px;}
 .syndicate{}
 /*-----------------------------------------------------*/
+
+
+.inline-subscribe-form {
+    margin-top: 10px;
+}
+
+.inline-subscribe-form form {
+    width: 100%;
+    border: 1px solid #c5c5c5;
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.inline-subscribe-form input {
+    display: block;
+    width: -webkit-fill-available;
+    margin-bottom: 10px;
+    outline-color: var(--hover-color);
+    padding: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 7px;
+}
+
+.inline-subscribe-form input:focus-visible {
+    outline-style: dashed;
+}
+
+.inline-subscribe-form button {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--link-color);
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    justify-content: center;
+    text-decoration: underline;
+}
+
+.inline-subscribe-form button:hover {
+    opacity: 0.9;
+    background-color: var(--hover-color);
+}
