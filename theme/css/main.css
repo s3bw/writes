@@ -648,6 +648,7 @@ input.sf{
     border: 1px solid #c5c5c5;
     border-radius: 10px;
     padding: 8px;
+    text-align: center;
 }
 
 .inline-subscribe-form input {
