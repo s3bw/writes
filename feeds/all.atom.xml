@@ -1,5 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-21T12:03:00+01:00</updated><entry><title>Gray Code</title><link href="https://s3bw.github.io/writes/gray-code.html" rel="alternate"></link><published>2025-04-21T12:03:00+01:00</published><updated>2025-04-21T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-21:/writes/gray-code.html</id><summary type="html">&lt;p&gt;Error reduction with Gray code&lt;/p&gt;</summary><content type="html">&lt;p&gt;A modern laptop can run ~3.8 billion cycles per second. The
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-28T12:08:00+01:00</updated><entry><title>Engineering Vibe</title><link href="https://s3bw.github.io/writes/engineering-vibe.html" rel="alternate"></link><published>2025-04-28T12:08:00+01:00</published><updated>2025-04-28T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-28:/writes/engineering-vibe.html</id><summary type="html">&lt;p&gt;Like it or not vibe coders are the next software
+engineers. 3 Years ago I made a similar prediction.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Like it or not, vibe coders are the next software engineers.&lt;/p&gt;
+&lt;p&gt;3 years ago I made a prediction that triggered a mixed
+response:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Within our lifetime. We will see a
+YouTuber or streamer becoming head of a state.&lt;/p&gt;
+&lt;p&gt;Me (March 4, 2022)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Whilst I don't believe this prediction has come true there's
+been progress. In June 2024 a Cypriot YouTuber was voted
+to become a member of the European Parliament, he earned 19.4%
+of the vote and earned 40% of votes from the 18-24 age group.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;The interesting thing about my prediction is that it seems
+that it's actually gone the other way. More politicians are
+becoming &lt;a href="https://www.youtube.com/@liambyrnemp"&gt;YouTubers&lt;/a&gt; and
+&lt;a href="https://www.theguardian.com/us-news/2024/oct/27/tim-walz-football-video-game-twitch"&gt;Streamers.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Could the same thing happen with vibe coders?
+Perhaps software engineers are the next vibe coders.&lt;/p&gt;
+&lt;h3&gt;We like to bash&lt;/h3&gt;
+&lt;p&gt;We see software engineers being dismissive at the
+content aimed at vibe coders. There's
+a new wave of people being introduced to coding and managing
+complexity; so &lt;a href="https://www.youtube.com/watch?v=BJjsfNO5JTo&amp;amp;t=1s&amp;amp;ab_channel=YCombinator"&gt;most of the
+content&lt;/a&gt;
+is covering the basics. I.e. Write tests, compartmentalise
+and plan things out before you dive into the code.&lt;/p&gt;
+&lt;p&gt;This wave of programmers haven't had the time to digest The
+Mythical Man-Month to learn; upfront planning in
+software leads to a huge reduction in downstream costs.
+They are however learning the hard way, by hitting these
+challenges head on. (For better or worse).&lt;/p&gt;
+&lt;h3&gt;How did you get here?&lt;/h3&gt;
+&lt;p&gt;It's all a journey and we're just at different stages of the
+process. A large overhead to learning is building up the
+vocabulary, this is the struggle for both early stage
+developers and vibe coders.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Experienced programmers have been exposed to more language
+and can therefore provide more specificity when commanding
+the computer, vibe coders will get there. Perhaps this
+specificity makes the experienced programmer a better vibe
+coder. Maybe it's &lt;a href="https://stackoverflow.blog/2021/09/28/become-a-better-coder-with-this-one-weird-click/"&gt;their
+keyboard&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;No one was born with the knowledge of how the computer
+works, there's hurdles to overcome to get there. It was
+only a decade ago we were cringing at someone stating
+they're full-time YouTubers or an Instagram influencer,
+and look, they've still got you glued to your screen.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://www.bbc.co.uk/news/articles/c4nnrwr72dqo"&gt;Cypriot Fidias Panayiotou&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;What exactly is the difference between "an early stage
+  developer" and a "vibe coder"? This sums up my point.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software, ai, coding"></category><category term="software"></category><category term="engineering"></category><category term="coding"></category><category term="ai"></category></entry><entry><title>Gray Code</title><link href="https://s3bw.github.io/writes/gray-code.html" rel="alternate"></link><published>2025-04-21T12:03:00+01:00</published><updated>2025-04-21T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-21:/writes/gray-code.html</id><summary type="html">&lt;p&gt;Error reduction with Gray code&lt;/p&gt;</summary><content type="html">&lt;p&gt;A modern laptop can run ~3.8 billion cycles per second. The
 cycle is determined by oscillation frequency of the
 electrical signal that hits the CPU. Contemporary CPUs manage
 synchronisation using all sorts of error correction tricks.&lt;/p&gt;
