@@ -696,3 +696,20 @@ input.sf{
     width: 100%;
     display: none;
 }
+
+.series-container {
+    border-bottom: 2px dotted #000;
+}
+
+.series-footer {
+    display: block;
+    border-bottom: 2px dotted #000;
+}
+
+.series-container ol a {
+    padding: 1px;
+}
+
+.series-container ol {
+    padding-left: 20px;
+}

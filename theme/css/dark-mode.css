@@ -102,6 +102,15 @@ tr:nth-child(even), tr:hover, pre {
     border: 1px solid #515151;
 }
 
+[data-theme="dark"] .series-container {
+    border-bottom: 2px dotted var(--dark-border);
+}
+
+[data-theme="dark"] .series-footer {
+    display: block;
+    border-bottom: 2px dotted var(--dark-border);
+}
+
 [data-theme="dark"] .footnote-ref:hover {
     background-color: var(--dark-bg-secondary);
 }
