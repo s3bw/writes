@@ -653,6 +653,8 @@ input.sf{
 
 .inline-subscribe-form input {
     display: block;
+    width: 100%;
+    width: -moz-available;
     width: -webkit-fill-available;
     margin-bottom: 10px;
     outline-color: var(--hover-color);
