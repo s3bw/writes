@@ -1,5 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-04-28T12:08:00+01:00</updated><entry><title>Engineering Vibe</title><link href="https://s3bw.github.io/writes/engineering-vibe.html" rel="alternate"></link><published>2025-04-28T12:08:00+01:00</published><updated>2025-04-28T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-28:/writes/engineering-vibe.html</id><summary type="html">&lt;p&gt;Like it or not vibe coders are the next software
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-05T12:05:00+01:00</updated><entry><title>A Piecemeal Approach</title><link href="https://s3bw.github.io/writes/a-piecemeal-approach.html" rel="alternate"></link><published>2025-05-05T12:05:00+01:00</published><updated>2025-05-05T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-05:/writes/a-piecemeal-approach.html</id><summary type="html">&lt;p&gt;Utopias exist in business, engineering and societal
+context. There are always fervent believers that have a do
+or die attitude to process. This often gets in the way of
+pragmatism.&lt;/p&gt;</summary><content type="html">&lt;blockquote&gt;
+&lt;p&gt;The piecemeal engineer knows, like Socrates, how little
+he knows&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.goodreads.com/book/show/61553.The_Poverty_of_Historicism"&gt;Karl
+Popper (1944)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Karl Popper's reflections on totalitarianism has had one
+of the largest impact on my approach to software engineering.&lt;/p&gt;
+&lt;p&gt;Utopias exist in business, engineering and societal
+context. There are always fervent believers that have a do
+or die attitude to process. This often gets in the way of
+pragmatism.&lt;/p&gt;
+&lt;h3&gt;Popper&lt;/h3&gt;
+&lt;p&gt;In his reflections KP makes the argument that if we are to
+progress as a society we should not attempt such large scale
+shifts of policy in pursuit of largely frivolous utopians.
+There exist peoples with high levels of confidence in their
+ability to understand how the world and society work. We
+should be wary of those that are uncompromising on their
+ideals.&lt;/p&gt;
+&lt;p&gt;Utopian views are often stated as goals in startups
+and engineering. Partially due to the need to sell the dream
+or idea before it's realised and when they're presented to
+potential investors and stakeholders. &lt;em&gt;"I can solve all your
+problems with my solution"&lt;/em&gt; sounds more valuable than &lt;em&gt;"I can
+solve half of an existing problem, maybe we can think of
+solving the rest later?"&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Within a totalitarian regime, similar promises are made to
+the governed by painting a picture of a utopian society, a
+dream world envisioned by a leader sold at the price of
+handing over control and power. In these cases the
+marketing strategy is to stoke fear and shift blame.&lt;/p&gt;
+&lt;p&gt;I have no bother with utopias if they form part of the
+ideation or they're used as a perspective to view a
+problem. It's when they're used as a justification to keep
+heading down a failing path, I find them to be dangerous.&lt;/p&gt;
+&lt;p&gt;If you find yourself hearing leadership or a colleague
+making unfalsifiable claims or using the "well it doesn't
+apply in &lt;em&gt;this&lt;/em&gt; situation" instead of conceding that perhaps
+they were wrong; you've found the charlatan. A fear of being
+wrong and being averse to pivoting leads projects and
+businesses into failure. If you know something isn't going
+to work, the sooner you know and respond the better.&lt;/p&gt;
+&lt;h3&gt;Ceteris paribus&lt;/h3&gt;
+&lt;p&gt;The business world is run on pragmatism. If it were plagued
+with "too much unscientific thought"&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; it would be brought
+down by complexity and mess. Dijkstra attempted to reign in
+on software complexity in business, by advocating for writing
+systems that allow an engineer to focus on one single concern
+at a time. Least they be overwhelmed by all the moving pieces.&lt;/p&gt;
+&lt;p&gt;Similar to Popper, this is a focus on changing one thing at a
+time in order to determine the effect of that action.
+Modern day vampire Bryan Johnson, Founder of braintree,
+attempts to live forever by running hundreds of tests on
+himself. One of the largest criticisms with his approach is
+in how the doctors measure causality when he consumes
+&lt;a href="https://www.youtube.com/watch?v=User8_dkz9s"&gt;~106 pills every morning.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Startups and businesses that aim to solve everything are
+at risk of not being able to measure what's working and
+what's failing. They also risk avoiding their core business
+issues until it's too late and they're out of runway.
+Start ups have limited time so finding and tackling the
+areas of highest value to the business should be a priority,
+also known as, finding product market fit.&lt;/p&gt;
+&lt;p&gt;Many successful businesses started out tackling issues by
+focusing on a niche market. Targeting a small user base that
+struggles the most with an issue allows them to focus on a
+core problem and refine their product without being distracted
+by the myriad of different people and their individual needs.
+You can look at PayPal targeting people with thousands
+of transactions over Ebay, in order to refine making
+payments online. Revolut focused on problems that travellers
+faced, starting specifically with currency exchange. Nintendo
+got it's start selling playing cards in 1889, at this point
+in time I can't imagine the founder envisioned an Italian
+plumber eating mushrooms and rescuing princesses. The key is
+to move one step at a time and gaining some initial start can
+get your ear to the ground.&lt;/p&gt;
+&lt;h3&gt;Don't be perfect&lt;/h3&gt;
+&lt;p&gt;Utopia's are a constant threat to getting us into better
+positions. If my team is flying a burning plane and we need
+to land ASAP, I understand landing 10metres from the office
+or your home might be &lt;em&gt;ideal&lt;/em&gt; but right now landing
+anywhere will do.&lt;/p&gt;
+&lt;p&gt;Perfect is the enemy of good. If we are constantly striving
+for a form of perfection we should acknowledge that we are
+delaying or forgoing getting to places that are good enough.
+And since Utopians are often unrelated to anyone's lived experience,
+there's no proof that this vision of perfect is indeed a
+great place to be. Which is why we need some resemblance of
+validation at each step of the process.&lt;/p&gt;
+&lt;p&gt;There are a number of successful companies and they are
+equally running numerous processes and styles of business.
+You might be able to find support for every methodology, if
+the self help expert says that eating carrots make you see
+in the dark, try it. But if it doesn't work, ditch it.
+If you're a team of one, perhaps doing daily stand ups will
+look different to a team of six.&lt;/p&gt;
+&lt;p&gt;Don't let the utopian process get in the way of driving value.&lt;/p&gt;
+&lt;h3&gt;Lastly&lt;/h3&gt;
+&lt;p&gt;Be wary of anyone that speaks with confidence and doesn't
+read.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Dijkstra in EWD-447 (1974)&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"></category><category term="software"></category><category term="utopia"></category></entry><entry><title>Engineering Vibe</title><link href="https://s3bw.github.io/writes/engineering-vibe.html" rel="alternate"></link><published>2025-04-28T12:08:00+01:00</published><updated>2025-04-28T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-04-28:/writes/engineering-vibe.html</id><summary type="html">&lt;p&gt;Like it or not vibe coders are the next software
 engineers. 3 Years ago I made a similar prediction.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Like it or not, vibe coders are the next software engineers.&lt;/p&gt;
 &lt;p&gt;3 years ago I made a prediction that triggered a mixed
 response:&lt;/p&gt;
