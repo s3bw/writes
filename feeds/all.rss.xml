@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 05 May 2025 12:05:00 +0100</lastBuildDate><item><title>A Piecemeal Approach</title><link>https://s3bw.github.io/writes/a-piecemeal-approach.html</link><description>&lt;p&gt;Utopias exist in business, engineering and societal
+<rss version="2.0"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 12 May 2025 12:03:00 +0100</lastBuildDate><item><title>Software Localisation</title><link>https://s3bw.github.io/writes/software-localisation.html</link><description>&lt;p&gt;Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 12 May 2025 12:03:00 +0100</pubDate><guid isPermaLink="false">tag:s3bw.github.io,2025-05-12:/writes/software-localisation.html</guid><category>python, software</category><category>python</category><category>localisation</category><category>software</category></item><item><title>A Piecemeal Approach</title><link>https://s3bw.github.io/writes/a-piecemeal-approach.html</link><description>&lt;p&gt;Utopias exist in business, engineering and societal
 context. There are always fervent believers that have a do
 or die attitude to process. This often gets in the way of
 pragmatism.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 05 May 2025 12:05:00 +0100</pubDate><guid isPermaLink="false">tag:s3bw.github.io,2025-05-05:/writes/a-piecemeal-approach.html</guid><category>software</category><category>software</category><category>utopia</category></item><item><title>Engineering Vibe</title><link>https://s3bw.github.io/writes/engineering-vibe.html</link><description>&lt;p&gt;Like it or not vibe coders are the next software

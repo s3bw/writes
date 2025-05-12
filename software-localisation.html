@@ -14,12 +14,18 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw - deploy, software, scale</title>
+        <title>s3bw : Software Localisation</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw"/>
+        <meta property='og:title' content="s3bw : Software Localisation"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=""/>
-        <meta property='og:url' content="https://s3bw.github.io/writes"/>
+        <meta property='og:description' content=" : <p>Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : software-localisation.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <script src="https://s3bw.github.io/writes/theme/js/theme-toggle.js"></script>
@@ -47,253 +53,259 @@
 
           <div id="content">
             <div id="blog">
+<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
+<article>
 
+<div class="fullbody">
+    <div class="datebody">
+        <h2 class="date">Mon 12 May 2025</h2>
+    </div>
+    <div class="blogbodytop"></div>
+    <div class="blogbody">
+        <div class="titlebody">
+            <h3 class="title">
+                <font style="vertical-align: inherit;">Software Localisation</font>
+            </h3>
+        </div>
+        <div class="main">
+            <p>American websites format the date as <code>MM/DD/YYYY</code> and this
+can be confusing for Europeans. If I see the date <code>05/03/2025</code>,
+I can't be sure if we're dealing with March or May.</p>
+<p>Localisation extends further than just the format of dates. There
+are many things things that <a href="https://www.mediawiki.org/wiki/Manual:Language#What_can_be_localised">require
+localisation</a>
+the most obvious is language. If your site does not support the
+dominant language within a geography you're creating a language
+barrier between you and your customers. In
+<a href="https://help.typeform.com/hc/en-us/articles/23541138531732-Create-multi-language-forms">Typeform's</a>
+case, their customer's customer.</p>
+<p>Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.</p>
+<h3>ID or string?</h3>
+<p>When translating software, the first thing you'll need to
+determine is how to identify text that requires translation.</p>
+<p>There's two ways you can do this:</p>
+<ol>
+<li>
+<p>Mapping a key to the text. This key will be used to
+   lookup the correct message given the user's preferred
+   language. Something like this:</p>
+<p>message_key: "MISSING_NAME_TEXT"</p>
+</li>
+<li>
+<p>Alternatively; provide the text as is and using that as the
+   message key:</p>
+<p>message: "You're missing your first name"</p>
+</li>
+</ol>
+<p>Systems have been written using both styles so there's no
+consensus on which one you should pick (I wish you luck in
+driving consensus in your own place of work). Here are some
+things to consider.</p>
+<p>Subtle punctuation can change the whole meaning of
+a sentence. This is why systems tend to
+favour the entire sentence as the key for translation.
+Updating the sentence, even if you're just adding
+punctuation, should invalidate the translation or at least
+flag the translation so that it can be double checked.</p>
+<p>It's also useful keeping the full text within the context
+of where it's being used. This way the developer or engineer
+can determine themselves if it makes sense. It is harder to
+determine if you're using the correct message if you're
+relying on message keys like: "missing.name_text" and
+"missing.text_name", the full text provides a clearer
+indication of the output.</p>
+<p>Scaling the message keys can also be tricky as you'll need to
+avoid name clashes. The best thing to do is use them with
+some sort of namespacing e.g. <code>"signup.error.missing_name"</code>
+and redefine the key for every use-case, even if the full
+text ends up being the same, this allows you to change each
+text independently.</p>
+<h3>Localisation built in</h3>
+<p>For those of us gifted enough to using a Unix based system
+you might have access to <code>gettext</code> and <code>xgettext</code> in the
+command line. These are tools used to translate
+"natural language messages into the user's language, by
+looking up the translation in a message catalog".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Python has some built-in libraries which allow you to manage
+internationalisation and localisation. Unless you've dealt
+with localisation, I think very few people are aware of the
+existence of <code>gettext</code>.</p>
+<h3>Localization for Python Applications</h3>
+<p>The python <code>gettext</code> library provides an interface which
+allows you to define your program in a core language and
+uses a separate message catalog to look up message
+translation. As an example we can define a message that
+requires localisation like so:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gettext</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 14 April 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Engineering for Resilience</font>
-                    </h3>
-                </div>
+<span class="n">_</span><span class="p">(</span><span class="s2">&quot;Welcome!&quot;</span><span class="p">)</span>
+</code></pre></div>
 
+<p>Using <code>xgettext</code> we can construct a <code>.pot</code> file. Which
+will be used as a template for our language catalogues.</p>
+<div class="highlight"><pre><span></span><code>xgettext<span class="w"> </span>-o<span class="w"> </span>messages.pot<span class="w"> </span>--language<span class="o">=</span>Python<span class="w"> </span>src/*.py
+</code></pre></div>
 
-                <div class="main">
-                    <p>Engineering velocity and delivery is strongly tied to how
-code is deployed to production. Having a certain level of
-safety and automation can enable teams to deliver and learn
-faster.</p>
-<p>Engineers that avoid failure don't learn and won't ever put
-anything significant into production. The quickest way to
-learn is to fail, some teams aim to avoid failure instead
-of trying to optimise recovery from failure. Forget about
-trying to avoid failure think of failure as inevitable. Like
-it or not, there will be a system failure and knowing how to
-thrive in this space will separate you from the average
-developer.</p>
-<p>Shorter feedback cycles and high confidence
-will distinguish your engineering team from any other, focus
-on a resilient system in production and short recovery time.
-Breaking things should become the norm as long as the
-repercussions are minimised.</p>
-<h3>Compartmentalisation</h3>
-<p>Stopping the ship from sinking. Bulkheads are used in the navel
-industry to avoid a ship from sinking. By compartmentalising
-the hull of the ship you allow it to sustain some level of
-damage before it sinks.</p>
-<p>The titanic had 16 bulk heads. It could stay afloat if 3
-flooded and in some cases it could maintain 4 flooded
-bulkheads. 5 or more would make the titanic meet its
-demise, when it sunk it had 6 compromised.</p>
-<p>We also do this with software systems, we have built-in
-levels of redundancy. If one of our servers decides that
-today is the day it kicks the bucket we have more than one
-server available to fill-in and pickup the slack.</p>
-<h3>Keeping a tight ship</h3>
-<p>The military also practices compartmentalisation in the form
-of modularity. Information is given out on a need to know
-basis. You don't want the entire army carrying state
-secrets and ideally make it difficult for information, that
-may compromise soldiers, to leak.</p>
-<p>It's also useful in hindsight to
-pinpoint where the leak occurred. If the information was
-privy to 4 individuals you can blacklist them and your
-overhead to discovering the snake is a lot smaller than had
-you provided the entire army with this knowledge.</p>
-<p>Software runs on a similar structure called the principle of
-least privilege. In a large system with multiple services,
-you're granting each service the minimum level of access in
-order for it to be able to perform its job. If it's got
-write access to the production database but it only ever
-needs to read from this database, then we should restrict
-it's permissions down to read-only. In the event that this
-service is compromised, your surface area of attack is
-decreased, you're much less vulnerable in this situation
-than one where where the attacker had permission to do
-everything.</p>
-<h3>He'll be long remembered</h3>
-<p>We've taken practices from 1907. Canaries were used in coal
-mines because they're more sensitive to the toxic gasses
-that miners were exposed to underground. Carbon monoxide is
-odorless, colorless and tasteless so as you'd imagine it's
-tough to detect, however because these birds were bricking
-it at the first hint of these gasses they were used as early
-warning signals underground, if the canary drops dead you'd
-better get yourself out of there.</p>
-<p>High velocity engineering teams that deploy multiple times a
-day at scale need their own canaries and luckily no one is
-going to die (industry dependent). We can do this in our
-deployment process, because we've got multiple servers, for
-redundancy. We can spin up a new server to receive a small
-percentage of the traffic and keep a close eye on its
-behaviour, if we notice errors or a reduction in performance
-we'd have an early signal that we've introduce something
-faulty in the new deployment and we can avoid risking
-rolling this out to the entire fleet.</p>
-<p>We can juxtapose this to the alternative, sometimes called a
-big bang deployment. You can switch all the traffic over to the
-new code and hope (fingers crossed) that nothing bad
-happens. In a big bang deployment you're committing 100% of
-your traffic to new code, if things go bad you're more exposed
-to the downside of failures in this scenario.</p>
-<p>Automation of these canary deployments brings a higher level
-of confidence to an engineering team as haywire metrics can
-automatically stop traffic to the wonky canary and your
-overall exposure to negative effects is greatly reduced.</p>
-<h3>Cutting the wires</h3>
-<p>A surge in electricity can cause damage to your home
-appliances. To prevent this homes will commonly have a switch
-board, this board is called a circuit breaker.</p>
-<p>We implement these in engineering too, dynamic feature flags
-that prevent a user from hammering a broken system and in
-some cases we prevent even showing the feature completely. The
-user might not even notice that we've hidden the feature and
-if they don't notice we don't have a problem.</p>
-<p>We can
-programmatically trip these flags on new features so that we
-can reliably fail over the weekend without much impact on
-our customers and engineers can follow up during work
-hours after the weekend to understand what caused the system
-to fail.</p>
-<p>These are typically used alongside new features which we'd
-like to turn off at the first sign of something not working
-as intended.</p>
-<h3>Can you hear me? How about now?.. And now?</h3>
-<p>Enterprise software is always going to rely on external systems.
-These systems are out of our control yet we are still
-responsible for designing around failure. These
-systems might be from another company or they might be from
-another team within our business.</p>
-<p>The more moving parts in our system the higher the likelihood
-of something failing. It's the same reason going on a trip
-with a large group of friends ends up being a practice of
-co-ordination and patience, the more things
-you bring into a system the higher the chance something
-fails or someone in the group doesn't want to eat at a
-particular restaurant or want's to wake up slightly later
-than the rest of the group.</p>
-<p>Unlike friends, if a server doesn't want to respond to your
-request you can kill it. If you don't have the ability to
-kill it you can try again 50ms later. Retrying requests are
-very common because of the multiple ways things can go wrong
-with a network. We also need to consider that sharks have a habit
-of chewing our undersea cables.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>If we fail a retried request we can keep trying however the
-server might be failing because it's overloaded, so having a
-request being continually retried isn't the most ideal use
-of the networks' time. Plus we know it's failing and perhaps
-nothing has changed since the last retry. So we introduce
-exponential backoff. Simply put, it's a growing delay
-between each retry. If it doesn't work now, try in 50ms,
-if that doesn't work try again in 100ms, 200ms, 400ms and so
-on and so on. Eventually we can give up trying maybe flag it
-and let the engineer inspect it on Monday.</p>
-<p>Retrying requests can be quite dangerous, especially if you've
-got a lot of clients and they're all retrying at the same
-time. This single explosion of requests can cause the server
-to burnout since it's already trying its hardest to recover.</p>
-<p>In order to avoid a herd of requests at the same time,
-we introduce what is called jitter. Pick a random number and
-add that to the retry delay. If we have a number of clients
-attempting to retry after 50ms they'll be offset by some
-random number of milliseconds which helps to space out each
-request.</p>
-<h3>Elements of resilient software</h3>
-<p>Retried requests aren't a silver bullet and they come with
-some considerations. In any kind of transactional
-environment, like banking for example, if you're deducting
-money from an account and the request fails because the
-connection to the server has been lost. Your phone or client
-won't know if the transaction was successful or not.
-Attempting to retry this request might cause a double
-payment.</p>
-<p>The solution to this is to introduce idempotent endpoints.
-The implementation of these endpoints often rely on having a
-header with an idempotency key, when you retry the request
-the server will check to see if it's handled this key
-previously, if it's already handled the server returns the
-original response, no matter how many times you send this
-key. If the key is new it will assume that this request is
-new and create a new transaction. With an idempotency key
-we can safely retry bank transactions in spotty environments.</p>
-<h3>So why are we doing this again</h3>
-<p>The feature that sits stuck in development doesn't face
-reality until its deployed. If we want to learn fast we
-should deploy fast, how can we build a system
-that allows developers to have high confidence that they're
-not going to collapse the business if they make a
-deployment.</p>
-<p>There are patterns in engineering that enable high
-confidence, otherwise we are stuck with slower deployment
-cycles when the true learning comes from releasing software.
-You can theorise as much as you'd like about the impact you
-will have, but until your code is in front of users and
-used you don't have a benchmark to grow or improve.</p>
-<p>Not having a robust system to handling failures is often
-the anxiety that slows down development. Slower development
-cycles can cause this problem to worsen if the code that is
-stuck in development grows, your certainty about how it
-behaves in production drops. Which lowers your confidence
-of actually shipping.</p>
-<p>Developing in an environment with high resilience leads to
-higher confidence and higher velocity. Instead of focusing
-on avoiding failure focus on how you can grow from failure.</p>
+<p>The pot file should look like this after running
+<code>xgettext</code>.</p>
+<div class="highlight"><pre><span></span><code>#: main.py:3
+msgid &quot;Welcome!&quot;
+msgstr &quot;&quot;
+</code></pre></div>
+
+<p>It's pretty neat that it has provided us the file name and
+the line number for the text, although more useful in larger
+codebases, we can use this to track redundant translation
+strings. You'll also notice that it's using the full string
+as the <code>msgid</code> instead of assigning it to a code or number.</p>
+<p>From this we create <code>.po</code> files (unrelated to the
+teletubby)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>
+, these are the concrete
+versions of the <code>.pot</code> file which contain the translations,
+if we were to make a <code>.po</code> file for Norwegian this would look
+like:</p>
+<div class="highlight"><pre><span></span><code>#: main.py:4
+msgid &quot;Welcome!&quot;
+msgstr &quot;Velkomst&quot;
+</code></pre></div>
+
+<p>Now that we have a localised form of our language catalogue
+we can use <code>msgfmt</code> to compile a binary version of our <code>.po</code>
+file, like so:</p>
+<div class="highlight"><pre><span></span><code>msgfmt -o messages.mo no_NO/messages.po
+</code></pre></div>
+
+<p>This command takes our <code>no_NO</code> (Norwegian) messages and
+compiles a precomputed hash table of the msgid -&gt; msgstr and
+outputs it to the <code>.mo</code> file. These files are stored in
+binaries so they're not human readable, but are efficient to
+load into the application at start up.</p>
+<p>When you start accumulating a lot of these catalogues they
+might require their own system to manage. These systems
+are also useful interfaces for the person providing the
+translation. As an example you can see
+<a href="https://poeditor.com/">PoEditor</a> or
+<a href="https://lokalise.com/">Lokalise</a></p>
+<p>People that work in localisation and translation will be
+familiar with <code>.po</code> files since they're often the file
+format used with translation software.</p>
+<h3>Translation within context</h3>
+<p>If our app supports more than one localisation we have to
+indicate which localisation should be returned to a user.
+For an API we can set the user's locale within the context
+of a request.</p>
+<p>Flask offers a library called <a href="https://python-babel.github.io/flask-babel/">Flask-Babel</a>
+which allows you to set this locale.
+So if a Norwegian was to hit our API we'd have the client set
+a header on the request: <code>Content-Language: no_NO</code><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>, on
+returning the response all the strings instantiated
+with <code>gettext</code> will be translated into Norwegian.</p>
+<p>There are some cases where you'll need to switch the locale
+context mid request or mid process, for example; a Norwegian
+user triggers an alert to an English user. We can
+instantiate a context manager with flask-babel, which will
+translate the strings to a specified locale:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
+    <span class="c1"># &lt;norwegian scope&gt;</span>
+    <span class="k">with</span> <span class="n">force_locale</span><span class="p">(</span><span class="n">to_user</span><span class="o">.</span><span class="n">locale</span><span class="p">):</span>
+        <span class="c1"># &lt;english scope&gt;</span>
+        <span class="n">send_email</span><span class="p">(</span><span class="n">to_user</span><span class="p">)</span>
+    <span class="c1"># &lt;norwegian scope&gt;</span>
+</code></pre></div>
+
+<h3>Plural Forms</h3>
+<p>Language is weird and there's nearly an edge-case for
+everything. One of these cases that <code>gettext</code> supports is
+defining rules for plural forms. For example in English we
+might say <em>"one apple"</em> and <em>"two apples"</em>. However in a
+language like Hebrew the plural form for two apples can't be
+used for three apples, so to account for this <code>gettext</code>
+provides <code>ngettext</code>. Which is used like so:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gettext</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">ngettext</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n_</span>
+
+<span class="n">n_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;num&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+</code></pre></div>
+
+<p>This allows <code>gettext</code> to pull the correct plural form given
+the int <code>3</code> and then formats the returning string,
+replacing <code>%(num)d</code> with <code>3</code>.</p>
+<h3>Lazy strings</h3>
+<p>If you're reusing the same string across your application
+and defining it at module level this string will be translated
+as soon as the module is instantiated. The module will
+always fallback to your app's default locale and your
+strings will not be translated. To get around this we use
+something called <code>lazy_gettext</code>. This allows us to define
+the string and reuse it across the application as
+<code>lazy_gettext</code> will keep a reference to the <code>msgid</code> and
+defer translation until the text is needed.</p>
+<p>You can see support for lazy_gettext in the <a href="https://docs.djangoproject.com/en/5.2/topics/i18n/translation/">django
+documentation</a></p>
+<h3>Wikipedia</h3>
+<p>Wikipedia manages content in over 300 languages. There are
+numerous volunteers which help to translate wiki into other
+languages and they do this through an interface called
+<a href="https://translatewiki.net/">translatewiki.net</a>. There's
+an entire
+<a href="https://www.mediawiki.org/wiki/Wikimedia_Language_and_Product_Localization">team</a>
+managing the infra and tools used in localisation.</p>
+<p>Similar to Wikipedia, I've seen interfaces used to
+manage and update translation files as well as a process
+that can be triggered automatically or on a schedule to
+update the <code>.mo</code> files that a service references. After
+updating the <code>.mo</code> file you can automatically roll out a
+deployment. The new deployment should then load the new
+<code>.mo</code> files into memory when the service is instantiated.</p>
+<p>You don't need to be working on a system the scale of
+Wikipedia to include translations. You can rely on
+a user's system locale to translate CLI tools. My Fiancee's
+system is set to Norwegian, if I ever write a CLI for her I
+think it would be fun to provide a Norwegian interface.</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p><a href="https://www.business-reporter.co.uk/management/sharks-ate-our-data">Sharks ate our
-  data</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p><code>$ man gettext</code>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>I'd like to draw attention that I stole this joke from
+  myself. I don't want to draw attention to the poorly
+  performed lightening talk I did. It was my first time and
+  I tried to fit this entire post into 5 minutes. <a href="https://youtu.be/chxsC2WYNTE?si=PI1u8Ei-o41RSZGS&amp;t=1357">Link
+  for
+  posterity</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Language">Mozilla:
+  Content-Language</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:18 | </font>
-                    <a href="engineering-for-resilience.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
+
+    </div>
+
+    <div id="comments"></div>
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
-
-    showFormButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const form = this.nextElementSibling;
-            if (form.style.display === 'block') {
-                form.style.display = 'none';
-            } else {
-                form.style.display = 'block';
-            }
-        });
-    });
-});
+  document.addEventListener('DOMContentLoaded', function() {
+    loadComments('client_fBaxnE6w', '#comments', 'software-localisation.html');
+  });
 </script>
+
+
+</div>
+
+
+</article>
             </div>
           </div>
 

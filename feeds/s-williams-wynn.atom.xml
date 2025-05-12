@@ -1,5 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-05T12:05:00+01:00</updated><entry><title>A Piecemeal Approach</title><link href="https://s3bw.github.io/writes/a-piecemeal-approach.html" rel="alternate"></link><published>2025-05-05T12:05:00+01:00</published><updated>2025-05-05T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-05:/writes/a-piecemeal-approach.html</id><summary type="html">&lt;p&gt;Utopias exist in business, engineering and societal
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-12T12:03:00+01:00</updated><entry><title>Software Localisation</title><link href="https://s3bw.github.io/writes/software-localisation.html" rel="alternate"></link><published>2025-05-12T12:03:00+01:00</published><updated>2025-05-12T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-12:/writes/software-localisation.html</id><summary type="html">&lt;p&gt;Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.&lt;/p&gt;</summary><content type="html">&lt;p&gt;American websites format the date as &lt;code&gt;MM/DD/YYYY&lt;/code&gt; and this
+can be confusing for Europeans. If I see the date &lt;code&gt;05/03/2025&lt;/code&gt;,
+I can't be sure if we're dealing with March or May.&lt;/p&gt;
+&lt;p&gt;Localisation extends further than just the format of dates. There
+are many things things that &lt;a href="https://www.mediawiki.org/wiki/Manual:Language#What_can_be_localised"&gt;require
+localisation&lt;/a&gt;
+the most obvious is language. If your site does not support the
+dominant language within a geography you're creating a language
+barrier between you and your customers. In
+&lt;a href="https://help.typeform.com/hc/en-us/articles/23541138531732-Create-multi-language-forms"&gt;Typeform's&lt;/a&gt;
+case, their customer's customer.&lt;/p&gt;
+&lt;p&gt;Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.&lt;/p&gt;
+&lt;h3&gt;ID or string?&lt;/h3&gt;
+&lt;p&gt;When translating software, the first thing you'll need to
+determine is how to identify text that requires translation.&lt;/p&gt;
+&lt;p&gt;There's two ways you can do this:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Mapping a key to the text. This key will be used to
+   lookup the correct message given the user's preferred
+   language. Something like this:&lt;/p&gt;
+&lt;p&gt;message_key: "MISSING_NAME_TEXT"&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Alternatively; provide the text as is and using that as the
+   message key:&lt;/p&gt;
+&lt;p&gt;message: "You're missing your first name"&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Systems have been written using both styles so there's no
+consensus on which one you should pick (I wish you luck in
+driving consensus in your own place of work). Here are some
+things to consider.&lt;/p&gt;
+&lt;p&gt;Subtle punctuation can change the whole meaning of
+a sentence. This is why systems tend to
+favour the entire sentence as the key for translation.
+Updating the sentence, even if you're just adding
+punctuation, should invalidate the translation or at least
+flag the translation so that it can be double checked.&lt;/p&gt;
+&lt;p&gt;It's also useful keeping the full text within the context
+of where it's being used. This way the developer or engineer
+can determine themselves if it makes sense. It is harder to
+determine if you're using the correct message if you're
+relying on message keys like: "missing.name_text" and
+"missing.text_name", the full text provides a clearer
+indication of the output.&lt;/p&gt;
+&lt;p&gt;Scaling the message keys can also be tricky as you'll need to
+avoid name clashes. The best thing to do is use them with
+some sort of namespacing e.g. &lt;code&gt;"signup.error.missing_name"&lt;/code&gt;
+and redefine the key for every use-case, even if the full
+text ends up being the same, this allows you to change each
+text independently.&lt;/p&gt;
+&lt;h3&gt;Localisation built in&lt;/h3&gt;
+&lt;p&gt;For those of us gifted enough to using a Unix based system
+you might have access to &lt;code&gt;gettext&lt;/code&gt; and &lt;code&gt;xgettext&lt;/code&gt; in the
+command line. These are tools used to translate
+"natural language messages into the user's language, by
+looking up the translation in a message catalog".&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Python has some built-in libraries which allow you to manage
+internationalisation and localisation. Unless you've dealt
+with localisation, I think very few people are aware of the
+existence of &lt;code&gt;gettext&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;Localization for Python Applications&lt;/h3&gt;
+&lt;p&gt;The python &lt;code&gt;gettext&lt;/code&gt; library provides an interface which
+allows you to define your program in a core language and
+uses a separate message catalog to look up message
+translation. As an example we can define a message that
+requires localisation like so:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt; &lt;span class="nn"&gt;gettext&lt;/span&gt; &lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="n"&gt;gettext&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;_&lt;/span&gt;
+
+&lt;span class="n"&gt;_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;Welcome!&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Using &lt;code&gt;xgettext&lt;/code&gt; we can construct a &lt;code&gt;.pot&lt;/code&gt; file. Which
+will be used as a template for our language catalogues.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;xgettext&lt;span class="w"&gt; &lt;/span&gt;-o&lt;span class="w"&gt; &lt;/span&gt;messages.pot&lt;span class="w"&gt; &lt;/span&gt;--language&lt;span class="o"&gt;=&lt;/span&gt;Python&lt;span class="w"&gt; &lt;/span&gt;src/*.py
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The pot file should look like this after running
+&lt;code&gt;xgettext&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;#: main.py:3
+msgid &amp;quot;Welcome!&amp;quot;
+msgstr &amp;quot;&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It's pretty neat that it has provided us the file name and
+the line number for the text, although more useful in larger
+codebases, we can use this to track redundant translation
+strings. You'll also notice that it's using the full string
+as the &lt;code&gt;msgid&lt;/code&gt; instead of assigning it to a code or number.&lt;/p&gt;
+&lt;p&gt;From this we create &lt;code&gt;.po&lt;/code&gt; files (unrelated to the
+teletubby)&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;
+, these are the concrete
+versions of the &lt;code&gt;.pot&lt;/code&gt; file which contain the translations,
+if we were to make a &lt;code&gt;.po&lt;/code&gt; file for Norwegian this would look
+like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;#: main.py:4
+msgid &amp;quot;Welcome!&amp;quot;
+msgstr &amp;quot;Velkomst&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have a localised form of our language catalogue
+we can use &lt;code&gt;msgfmt&lt;/code&gt; to compile a binary version of our &lt;code&gt;.po&lt;/code&gt;
+file, like so:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;msgfmt -o messages.mo no_NO/messages.po
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This command takes our &lt;code&gt;no_NO&lt;/code&gt; (Norwegian) messages and
+compiles a precomputed hash table of the msgid -&amp;gt; msgstr and
+outputs it to the &lt;code&gt;.mo&lt;/code&gt; file. These files are stored in
+binaries so they're not human readable, but are efficient to
+load into the application at start up.&lt;/p&gt;
+&lt;p&gt;When you start accumulating a lot of these catalogues they
+might require their own system to manage. These systems
+are also useful interfaces for the person providing the
+translation. As an example you can see
+&lt;a href="https://poeditor.com/"&gt;PoEditor&lt;/a&gt; or
+&lt;a href="https://lokalise.com/"&gt;Lokalise&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;People that work in localisation and translation will be
+familiar with &lt;code&gt;.po&lt;/code&gt; files since they're often the file
+format used with translation software.&lt;/p&gt;
+&lt;h3&gt;Translation within context&lt;/h3&gt;
+&lt;p&gt;If our app supports more than one localisation we have to
+indicate which localisation should be returned to a user.
+For an API we can set the user's locale within the context
+of a request.&lt;/p&gt;
+&lt;p&gt;Flask offers a library called &lt;a href="https://python-babel.github.io/flask-babel/"&gt;Flask-Babel&lt;/a&gt;
+which allows you to set this locale.
+So if a Norwegian was to hit our API we'd have the client set
+a header on the request: &lt;code&gt;Content-Language: no_NO&lt;/code&gt;&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt;, on
+returning the response all the strings instantiated
+with &lt;code&gt;gettext&lt;/code&gt; will be translated into Norwegian.&lt;/p&gt;
+&lt;p&gt;There are some cases where you'll need to switch the locale
+context mid request or mid process, for example; a Norwegian
+user triggers an alert to an English user. We can
+instantiate a context manager with flask-babel, which will
+translate the strings to a specified locale:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;handler&lt;/span&gt;&lt;span class="p"&gt;():&lt;/span&gt;
+    &lt;span class="c1"&gt;# &amp;lt;norwegian scope&amp;gt;&lt;/span&gt;
+    &lt;span class="k"&gt;with&lt;/span&gt; &lt;span class="n"&gt;force_locale&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to_user&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;locale&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+        &lt;span class="c1"&gt;# &amp;lt;english scope&amp;gt;&lt;/span&gt;
+        &lt;span class="n"&gt;send_email&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;to_user&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="c1"&gt;# &amp;lt;norwegian scope&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Plural Forms&lt;/h3&gt;
+&lt;p&gt;Language is weird and there's nearly an edge-case for
+everything. One of these cases that &lt;code&gt;gettext&lt;/code&gt; supports is
+defining rules for plural forms. For example in English we
+might say &lt;em&gt;"one apple"&lt;/em&gt; and &lt;em&gt;"two apples"&lt;/em&gt;. However in a
+language like Hebrew the plural form for two apples can't be
+used for three apples, so to account for this &lt;code&gt;gettext&lt;/code&gt;
+provides &lt;code&gt;ngettext&lt;/code&gt;. Which is used like so:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="kn"&gt;from&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nn"&gt;gettext&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ngettext&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;as&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;n_&lt;/span&gt;
+
+&lt;span class="n"&gt;n_&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%(num)d&lt;/span&gt;&lt;span class="s2"&gt; apple&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;&lt;/span&gt;&lt;span class="si"&gt;%(num)d&lt;/span&gt;&lt;span class="s2"&gt; apples&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;%&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;num&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This allows &lt;code&gt;gettext&lt;/code&gt; to pull the correct plural form given
+the int &lt;code&gt;3&lt;/code&gt; and then formats the returning string,
+replacing &lt;code&gt;%(num)d&lt;/code&gt; with &lt;code&gt;3&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;Lazy strings&lt;/h3&gt;
+&lt;p&gt;If you're reusing the same string across your application
+and defining it at module level this string will be translated
+as soon as the module is instantiated. The module will
+always fallback to your app's default locale and your
+strings will not be translated. To get around this we use
+something called &lt;code&gt;lazy_gettext&lt;/code&gt;. This allows us to define
+the string and reuse it across the application as
+&lt;code&gt;lazy_gettext&lt;/code&gt; will keep a reference to the &lt;code&gt;msgid&lt;/code&gt; and
+defer translation until the text is needed.&lt;/p&gt;
+&lt;p&gt;You can see support for lazy_gettext in the &lt;a href="https://docs.djangoproject.com/en/5.2/topics/i18n/translation/"&gt;django
+documentation&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Wikipedia&lt;/h3&gt;
+&lt;p&gt;Wikipedia manages content in over 300 languages. There are
+numerous volunteers which help to translate wiki into other
+languages and they do this through an interface called
+&lt;a href="https://translatewiki.net/"&gt;translatewiki.net&lt;/a&gt;. There's
+an entire
+&lt;a href="https://www.mediawiki.org/wiki/Wikimedia_Language_and_Product_Localization"&gt;team&lt;/a&gt;
+managing the infra and tools used in localisation.&lt;/p&gt;
+&lt;p&gt;Similar to Wikipedia, I've seen interfaces used to
+manage and update translation files as well as a process
+that can be triggered automatically or on a schedule to
+update the &lt;code&gt;.mo&lt;/code&gt; files that a service references. After
+updating the &lt;code&gt;.mo&lt;/code&gt; file you can automatically roll out a
+deployment. The new deployment should then load the new
+&lt;code&gt;.mo&lt;/code&gt; files into memory when the service is instantiated.&lt;/p&gt;
+&lt;p&gt;You don't need to be working on a system the scale of
+Wikipedia to include translations. You can rely on
+a user's system locale to translate CLI tools. My Fiancee's
+system is set to Norwegian, if I ever write a CLI for her I
+think it would be fun to provide a Norwegian interface.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;code&gt;$ man gettext&lt;/code&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;I'd like to draw attention that I stole this joke from
+  myself. I don't want to draw attention to the poorly
+  performed lightening talk I did. It was my first time and
+  I tried to fit this entire post into 5 minutes. &lt;a href="https://youtu.be/chxsC2WYNTE?si=PI1u8Ei-o41RSZGS&amp;amp;t=1357"&gt;Link
+  for
+  posterity&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Language"&gt;Mozilla:
+  Content-Language&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="python, software"></category><category term="python"></category><category term="localisation"></category><category term="software"></category></entry><entry><title>A Piecemeal Approach</title><link href="https://s3bw.github.io/writes/a-piecemeal-approach.html" rel="alternate"></link><published>2025-05-05T12:05:00+01:00</published><updated>2025-05-05T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-05:/writes/a-piecemeal-approach.html</id><summary type="html">&lt;p&gt;Utopias exist in business, engineering and societal
 context. There are always fervent believers that have a do
 or die attitude to process. This often gets in the way of
 pragmatism.&lt;/p&gt;</summary><content type="html">&lt;blockquote&gt;
