@@ -93,15 +93,15 @@ from being one person to a department and in some cases a
 team staying as one person while the organisation grows
 around them.</p>
 <h3>The Theorem</h3>
-<p>Generally CAP theorem is brought up in interview
-environments when discussing trade-offs within a distributed
+<p>Generally CAP theorem is brought up in interviews
+when discussing trade-offs within a distributed
 system. The idea simplifies a system into three attributes,
-of which you're constrained to pick only 2. Once you've
-made your selection there's usually a discussion of the pros
-and cons that follows.</p>
+of which you're constrained to pick only 2. After making
+your selection there's a follow up discussion of the pros
+and cons.</p>
 <p>We generalise that databases operate somewhere on these
 lines and understanding these trade-offs can help you decide
-on the best solution to fit your use-case.</p>
+the best solution to fit the system you're designing.</p>
 <h3>Partition tolerance</h3>
 <p>The first attribute is partition tolerance, which is
 typically a given, since you're trying to scale a system
@@ -115,12 +115,13 @@ Availability.</p>
 same data"</em> even in the presence of concurrent updates. Among
 databases this involves using distributed transactions or a
 consensus algorithm to ensure a level of consistency.</p>
-<p>Without consistency the system might not be able to agree on
-what the most recent value of a property. If you're
+<p>Without consistency the system will not be able to agree on
+the appropriate order of each update. If you're
 updating the profile image of a user, other users seeing an
 older profile image temporarily doesn't matter but if you're
 updating a bank balance you'd best be sure the system agrees
-on one true value.</p>
+on the order of each transaction, otherwise you might have
+parts of your systems computing different balances.</p>
 <h3>Availability</h3>
 <p>If a client is waiting to see the bank balance because it's
 in the process of being updated this wait time is a
@@ -135,7 +136,7 @@ response is a prioritisation of availability.</p>
 <h3>Modern CAP Theorem</h3>
 <p>In more contemporary software engineering and in practical
 terms there's more things we can talk about related to CAP.
-One can dig further into each attribute and get a slightly more
+One can dig further into each attribute and get a slightly
 more technical discussion around <em>eventual consistency</em>.
 There's also some that argue against a discussion of CAP
 since databases have come far enough that they can deal with
@@ -146,7 +147,7 @@ different application of CAP and apply it to teams.</p>
 <h3>Organisational CAP</h3>
 <p>Applying system thinking to teams isn't new, there's an entire
 book called Team Topologies<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> that defines
-team structure archetypes and how you can use these in an
+team structural archetypes and how you can use these in an
 organisation to structure optimal output.</p>
 <p>The theory I go into below is more around how a team should
 consider scaling as workload increases and is required to become
@@ -172,7 +173,7 @@ something you'd very much enjoy if this were work being
 given to a team.  Alternatively you can consider it as the
 number of things that can be worked on at one time, if
 you've got spare capacity then you have someone waiting to
-pick up new work as or when it comes in, this team would be
+pick up new work as or when it comes in. This team would be
 considered highly available.</p>
 <p>In short this is when they can work (or how much work they
 can achieve).</p>
@@ -181,11 +182,11 @@ can achieve).</p>
 Consistency in an organisation is an agreement on how things
 should be done, or why something should be done. In a one
 person team, one person makes this decision, in a small
-business it doesn't take much for everyone is get up to
+business it doesn't take much for everyone to get up to
 speed and chip in on how something should proceed. However
 things start to get tricky at scale. The more people/parts
 and teams you introduce into the organisation the harder it
-is to find agreement on direction or on decisions.</p>
+is to find agreement on direction or decisions.</p>
 <p>This is why we have meetings, and when we scale it is
 sometimes important to make sure that there's consensus at
 large, across multiple teams instead of just individuals.</p>
@@ -264,7 +265,7 @@ of the team from one that just does the work, to being
 responsible for defining how that work should be done.</p>
 <p>With proper instructions or with a self service system you
 enable other teams that are closer to the problem and thus
-have the most context to address the business's requirement.</p>
+have the most context to address the business requirements.</p>
 <p>If a single team is a bottleneck to other teams this might
 be an indication that they need to shift from doing the work
 to enabling the other teams to getting that work done.</p>
@@ -273,23 +274,23 @@ purpose and clear context domains, when the domain starts
 getting blurred it's tricker to scale teams as no one person
 can hold the entire context of a large organisation, you need
 to define those context boundaries and define what the
-purpose of the team should be.</p>
+purpose of each team should be.</p>
 <h3>The Specialist</h3>
 <blockquote>
 <p>Expertises scales better</p>
 <p>Software Engineering at Google</p>
 </blockquote>
 <p>Instead of requiring a specialist per team we can have a team
-of specialists that focus on how our stream aligned teams can
-serve themselves. This avoids having the business focused
-product team needing to communicate their needs and their
+of specialists that focus on how our stream aligned teams
+serve themselves. This avoids having business focused
+product teams communicating their needs and their
 context to a team that is focused on serving an internal
 problem. If these specialists had to listen to all product
-teams they would quickly burn-out from all the meetings they
-would need to attend. In this way we draw the context
-boundaries around this team and have them focus on a self
+teams they would quickly burn-out from all the meetings
+they're attending. This is why we'd need to draw the context
+boundaries around the specialists and have them focus on a self
 service system that's highly available to enable the product
-teams to utilise their context to get the job done.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+teams.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
 <h3>Further Reading</h3>
 <ul>
 <li><a href="https://d1wqtxts1xzle7.cloudfront.net/45478461/Brewers_Conjecture_Feasibility.pdf?1462800469=&amp;response-content-disposition=inline%3B+filename%3DBrewers_Conjecture_and_the_Feasibility_o.pdf&amp;Expires=1600706653&amp;Signature=fH93sySR0CDCI2JPsHRyG44-w6fNfUF0pOco18hM5zbYm1AtuzsG7fzFZwXTjJKkrAoElKh53uWi03ip2mS~0hzrew2MLufiBCOtzTfXyxuWJOmyaz-rcikND1fsukIKRS3VucnXewHweBISBqq1Ps-etUtbGJDBQe-xOfU24TguSO-Q218fgPek8UHkOY8LtlzCmGROaZF7jWK58m4j10Uky~QaLlqcvAg4qRy0HT8CBEbXE80XUdf8Ffjz1vnGdV-0mRKsJyAkjP0XGkxqg7BD2EU4UGFq8zKHz9Zdx71xLWdpcsnhDl16uaOxF0DpYtYSsVLDFKuTBbhL19tteA__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">Brewers Conjecture and the Feasibility</a></li>
