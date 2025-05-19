@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 12 May 2025 12:03:00 +0100</lastBuildDate><item><title>Software Localisation</title><link>https://s3bw.github.io/writes/software-localisation.html</link><description>&lt;p&gt;Translating and localising your software opens your business
+<rss version="2.0"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 19 May 2025 12:08:00 +0100</lastBuildDate><item><title>Scaling teams with CAP theorem</title><link>https://s3bw.github.io/writes/scaling-teams-with-cap-theorem.html</link><description>&lt;p&gt;If you've had enough time writing software you would have
+run into the smug lead developer that looks back on
+projects with the benefit of hind-sight and explains Conway's
+Law.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 19 May 2025 12:08:00 +0100</pubDate><guid isPermaLink="false">tag:s3bw.github.io,2025-05-19:/writes/scaling-teams-with-cap-theorem.html</guid><category>Organisation</category><category>software</category><category>theory</category><category>organisation</category><category>design</category></item><item><title>Software Localisation</title><link>https://s3bw.github.io/writes/software-localisation.html</link><description>&lt;p&gt;Translating and localising your software opens your business
 to new markets where relying on English won't cut it.
 Providing your system in a locale that's familiar to the user
 allows your system to feel natural and trustworthy.

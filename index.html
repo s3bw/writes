@@ -52,6 +52,290 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 19 May 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Scaling teams with CAP theorem</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>There's no hack to how you hold meetings, it all hinges on
+your organisation structure.</p>
+<p>If you've had enough time writing software you would have
+run into the smug lead developer that looks back on
+projects with the benefit of hind-sight and explains Conway's
+Law.</p>
+<blockquote>
+<p>Organizations which design systems are constrained to
+produce designs which are copies of the communication
+structures of these organizations.</p>
+<p>Mr Conway 1967</p>
+</blockquote>
+<p>This motivated me to look at the structure of an
+organisation as a system with it's own trade-offs and
+limitations. If we think about design and
+compartmentalisation in software shouldn't we also be
+applying this to how we structure the teams with-in an
+organisation.</p>
+<p>Time to bring out the neoclassical economist in
+me and start using maths as a metaphor in-order-to explain
+how learning CAP theorem will allow you to scale software
+teams. Most of the motivation has come from my observations
+while working at scaling startups where I've seen teams go
+from being one person to a department and in some cases a
+team staying as one person while the organisation grows
+around them.</p>
+<h3>The Theorem</h3>
+<p>Generally CAP theorem is brought up in interview
+environments when discussing trade-offs within a distributed
+system. The idea simplifies a system into three attributes,
+of which you're constrained to pick only 2. Once you've
+made your selection there's usually a discussion of the pros
+and cons that follows.</p>
+<p>We generalise that databases operate somewhere on these
+lines and understanding these trade-offs can help you decide
+on the best solution to fit your use-case.</p>
+<h3>Partition tolerance</h3>
+<p>The first attribute is partition tolerance, which is
+typically a given, since you're trying to scale a system
+beyond a single computer or server or database and
+segmentation across multiple machines is needed. This is
+one of the choices that is made for you.
+Now it's up to you to decide between Consistency and
+Availability.</p>
+<h3>Consistency</h3>
+<p>Consistency boils down to all systems <em>"agree"</em> or <em>"see the
+same data"</em> even in the presence of concurrent updates. Among
+databases this involves using distributed transactions or a
+consensus algorithm to ensure a level of consistency.</p>
+<p>Without consistency the system might not be able to agree on
+what the most recent value of a property. If you're
+updating the profile image of a user, other users seeing an
+older profile image temporarily doesn't matter but if you're
+updating a bank balance you'd best be sure the system agrees
+on one true value.</p>
+<h3>Availability</h3>
+<p>If a client is waiting to see the bank balance because it's
+in the process of being updated this wait time is a
+detriment to availability. In the example of fetching an old
+profile image this makes very little difference to the service
+you're providing so you can forgo consistency in favour of
+availability.</p>
+<p>Essentially availability gives the client access to some
+version of the data at all times, without wait. Ensuring
+every request to the system results in some positive
+response is a prioritisation of availability.</p>
+<h3>Modern CAP Theorem</h3>
+<p>In more contemporary software engineering and in practical
+terms there's more things we can talk about related to CAP.
+One can dig further into each attribute and get a slightly more
+more technical discussion around <em>eventual consistency</em>.
+There's also some that argue against a discussion of CAP
+since databases have come far enough that they can deal with
+both availability and consistency in a manner that's good
+enough for most systems.</p>
+<p>I'm not here to get into these weeds, I'd like to offer a
+different application of CAP and apply it to teams.</p>
+<h3>Organisational CAP</h3>
+<p>Applying system thinking to teams isn't new, there's an entire
+book called Team Topologies<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> that defines
+team structure archetypes and how you can use these in an
+organisation to structure optimal output.</p>
+<p>The theory I go into below is more around how a team should
+consider scaling as workload increases and is required to become
+distributed, in a sense, instead of relying on a single person
+to handle operations.</p>
+<p>As with CAP, I use the same three attributes but we'll
+provide new definitions for them since they're being applied
+to the context of a team, remember we will need to pick only
+2 out of the 3.</p>
+<h3>Partition Tolerance</h3>
+<p>As in software this is a given. If we are scaling an
+organisation we can't rely on a single person or a single
+team to become a bottleneck to our production. There's a
+chance this person will become overloaded with work and will
+no longer be able to operate at max capacity. Much like a
+database under significant load.</p>
+<p>We can also consider this as The number of teams you can
+support and still produce output.</p>
+<h3>Availability</h3>
+<p>Much like a system being able to take requests and respond
+without waiting on prior work being completed, which is
+something you'd very much enjoy if this were work being
+given to a team.  Alternatively you can consider it as the
+number of things that can be worked on at one time, if
+you've got spare capacity then you have someone waiting to
+pick up new work as or when it comes in, this team would be
+considered highly available.</p>
+<p>In short this is when they can work (or how much work they
+can achieve).</p>
+<h3>Consistency</h3>
+<p>Consistency in a system is consensus between machines.
+Consistency in an organisation is an agreement on how things
+should be done, or why something should be done. In a one
+person team, one person makes this decision, in a small
+business it doesn't take much for everyone is get up to
+speed and chip in on how something should proceed. However
+things start to get tricky at scale. The more people/parts
+and teams you introduce into the organisation the harder it
+is to find agreement on direction or on decisions.</p>
+<p>This is why we have meetings, and when we scale it is
+sometimes important to make sure that there's consensus at
+large, across multiple teams instead of just individuals.</p>
+<p>Everyone needs to have the same context, the same why.
+Unfortunately as you scale an organisation you also need to
+figure out how to propagate context. You can throw money at
+the problem by hiring a specialist for each team, however
+not all companies can afford to do this and so a
+specialist's time needs to be divided between teams in
+order for them to provide their insight.</p>
+<p>We can consider this specialist as a much larger machine,
+the best SSD drives on the market and maxed out memory
+limitations. In reality this could be someone with a ton of
+experience, knows what needs to get done and how to do it.
+We don't have this luxury in cutting edge tech with a lot of
+unknowns and usually you won't find someone that can cover
+many topics deeply which is why there's value in a diverse
+skill set within a team. In most cases we rule out the
+specialist per team.</p>
+<h3>The application of CAP</h3>
+<p>As with a software system we are limited to picking between
+Consistency and Availability, since we want to scale the
+organisation by bringing in more teams so we can ship
+more product out the door.</p>
+<p>Choosing between availability and consistency within a
+team is the same as choosing between workload and context.
+We can increase the context of the team by improving
+communication and introducing more meetings but this comes
+at a cost of availability which will reduce the amount of
+work they're able to output.</p>
+<p>The opposite is also true, you can increase the amount of
+workload they can get through but you sacrifice context.
+Which mean you're getting through a lot of work but the
+work lacks context, so we'd find ourselves doing
+more repeated work across teams and work that is misaligned or
+doesn't meet the requirement because the teams haven't a
+clue on why they're doing it.</p>
+<p>I've seen both extremes, work grinding to a halt as you
+spend more time in meetings than you have time for work and busy
+work being done for no purpose at all but to look busy.</p>
+<p>I understand there's a sentiment at large about not liking
+meetings, however meetings should serve a purpose. In order
+to deliver the best work possible you need context of the
+bigger picture, context of where the solution fits in,
+context of who the end user is and context of what everyone
+else is doing and lastly consensus with how work should be
+done.</p>
+<h3>Scaling an Organisation</h3>
+<p>Typically as a company scales you begin to notice that
+existing solutions or people become bottlenecks. If a single
+team owns or executes a solution they can become inundated
+with requests from other teams. This typically happens when
+context of executing a task is isolated to that one team and
+they've got no capacity to share context. Either that or the
+capability of solving the solution exists only within that
+team. What can happen, and what I've seen, is other teams
+get fed up with waiting for their request to be fulfilled
+and they decide to solve the problem on their own, leading
+to a second system which solves the same work.</p>
+<p><em>Team Topologies</em> defines four fundamental team types,
+however I think it can be simplified to just two. They
+mention Steam-Aligned teams, these are responsible for
+delivery and are generally high business context teams and
+Platform teams which act as an enabling service for the
+stream aligned teams.</p>
+<p>I believe you can have more than one platform team. These
+should be teams responsible for enabling how work gets done.
+To some extent all engineers that build internal tooling are
+actually defining how work gets done, they do their best job
+when they enable other teams to get things done faster,
+independently and without the need to grab context from this
+team or engineers.</p>
+<p>The best way I believe we can solve the Availability vs
+Consistency balance within teams is by shifting the purpose
+of the team from one that just does the work, to being
+responsible for defining how that work should be done.</p>
+<p>With proper instructions or with a self service system you
+enable other teams that are closer to the problem and thus
+have the most context to address the business's requirement.</p>
+<p>If a single team is a bottleneck to other teams this might
+be an indication that they need to shift from doing the work
+to enabling the other teams to getting that work done.</p>
+<p>I believe this thinking requires having teams with clear
+purpose and clear context domains, when the domain starts
+getting blurred it's tricker to scale teams as no one person
+can hold the entire context of a large organisation, you need
+to define those context boundaries and define what the
+purpose of the team should be.</p>
+<h3>The Specialist</h3>
+<blockquote>
+<p>Expertises scales better</p>
+<p>Software Engineering at Google</p>
+</blockquote>
+<p>Instead of requiring a specialist per team we can have a team
+of specialists that focus on how our stream aligned teams can
+serve themselves. This avoids having the business focused
+product team needing to communicate their needs and their
+context to a team that is focused on serving an internal
+problem. If these specialists had to listen to all product
+teams they would quickly burn-out from all the meetings they
+would need to attend. In this way we draw the context
+boundaries around this team and have them focus on a self
+service system that's highly available to enable the product
+teams to utilise their context to get the job done.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://d1wqtxts1xzle7.cloudfront.net/45478461/Brewers_Conjecture_Feasibility.pdf?1462800469=&amp;response-content-disposition=inline%3B+filename%3DBrewers_Conjecture_and_the_Feasibility_o.pdf&amp;Expires=1600706653&amp;Signature=fH93sySR0CDCI2JPsHRyG44-w6fNfUF0pOco18hM5zbYm1AtuzsG7fzFZwXTjJKkrAoElKh53uWi03ip2mS~0hzrew2MLufiBCOtzTfXyxuWJOmyaz-rcikND1fsukIKRS3VucnXewHweBISBqq1Ps-etUtbGJDBQe-xOfU24TguSO-Q218fgPek8UHkOY8LtlzCmGROaZF7jWK58m4j10Uky~QaLlqcvAg4qRy0HT8CBEbXE80XUdf8Ffjz1vnGdV-0mRKsJyAkjP0XGkxqg7BD2EU4UGFq8zKHz9Zdx71xLWdpcsnhDl16uaOxF0DpYtYSsVLDFKuTBbhL19tteA__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">Brewers Conjecture and the Feasibility</a></li>
+<li><a href="https://mwhittaker.github.io/blog/an_illustrated_proof_of_the_cap_theorem">A summary of the proof of CAP</a></li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Which I've read.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>I think businesses get team balance wrong all the time, most
+of the time this is caused by the assumption that the
+organic formation of the company will be most efficient but
+it takes a level of bravery to call out a larger structural
+issue in an org. It also take some buy in from the rest of
+the company&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:08 | </font>
+                    <a href="scaling-teams-with-cap-theorem.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 12 May 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -3095,6 +3379,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/scaling-teams-with-cap-theorem.html">
+                        <span>Scaling teams with CAP theorem</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/software-localisation.html">
                         <span>Software Localisation</span>
                       </a>
@@ -3250,6 +3539,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/networking.html">networking</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/organisation.html">organisation</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -3275,6 +3567,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/talking.html">talking</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/theory.html">theory</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>
