@@ -178,11 +178,11 @@ so: &lt;code&gt;user_account_id_idx&lt;/code&gt; which would be an index on the
 &lt;code&gt;account_id&lt;/code&gt; column in the &lt;code&gt;user&lt;/code&gt; table. You can also suffix
 it with the type of index; &lt;code&gt;_include&lt;/code&gt;, &lt;code&gt;_gin&lt;/code&gt;, &lt;code&gt;_brin&lt;/code&gt;.&lt;/p&gt;
 &lt;h3&gt;Guidelines&lt;/h3&gt;
-&lt;p&gt;Some of these can see pretty straight forward if you've been
+&lt;p&gt;Some of these can seem pretty straight forward if you've been
 writing code for a while, but you have to remember that not
-everyone would be exposed to some of these rules. There's
-also engineers who believe they're better than any
-convention or guideline.&lt;/p&gt;
+everyone would be exposed to these rules. There also exist
+engineers who believe they're better than any convention or
+guideline.&lt;/p&gt;
 &lt;p&gt;At the outset code reviews are the place to help form these
 conventions, they're certainly not for architectural design
 changes, the time for that has long past.&lt;/p&gt;
@@ -191,12 +191,11 @@ onboard. Having to select &lt;code&gt;request.statusCode&lt;/code&gt; and
 &lt;code&gt;request.status_code&lt;/code&gt; because you're naming things different
 across services will only get worse as the company gets
 older (it doesn't even need to scale, we're battling with
-time here).&lt;/p&gt;
+time).&lt;/p&gt;
 &lt;p&gt;Some of these guidelines might follow just simple stylistic
-reasoning, but some of them have been written down as they
-allow you to get dashboards with very little effort or they
-help you avoid potential hurdles that might only appear in
-the future.&lt;/p&gt;
+reasoning, but some of them allow you to get dashboards
+with very little effort or they help you avoid potential
+hurdles as the project grows.&lt;/p&gt;
 &lt;p&gt;Guidelines aren't here to hold developers back from self
 expression they're in place to help us work together and
 grow organisational learnings as well as provide a baseline

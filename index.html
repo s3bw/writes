@@ -241,11 +241,11 @@ so: <code>user_account_id_idx</code> which would be an index on the
 <code>account_id</code> column in the <code>user</code> table. You can also suffix
 it with the type of index; <code>_include</code>, <code>_gin</code>, <code>_brin</code>.</p>
 <h3>Guidelines</h3>
-<p>Some of these can see pretty straight forward if you've been
+<p>Some of these can seem pretty straight forward if you've been
 writing code for a while, but you have to remember that not
-everyone would be exposed to some of these rules. There's
-also engineers who believe they're better than any
-convention or guideline.</p>
+everyone would be exposed to these rules. There also exist
+engineers who believe they're better than any convention or
+guideline.</p>
 <p>At the outset code reviews are the place to help form these
 conventions, they're certainly not for architectural design
 changes, the time for that has long past.</p>
@@ -254,12 +254,11 @@ onboard. Having to select <code>request.statusCode</code> and
 <code>request.status_code</code> because you're naming things different
 across services will only get worse as the company gets
 older (it doesn't even need to scale, we're battling with
-time here).</p>
+time).</p>
 <p>Some of these guidelines might follow just simple stylistic
-reasoning, but some of them have been written down as they
-allow you to get dashboards with very little effort or they
-help you avoid potential hurdles that might only appear in
-the future.</p>
+reasoning, but some of them allow you to get dashboards
+with very little effort or they help you avoid potential
+hurdles as the project grows.</p>
 <p>Guidelines aren't here to hold developers back from self
 expression they're in place to help us work together and
 grow organisational learnings as well as provide a baseline
