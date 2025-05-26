@@ -1,5 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-19T12:08:00+01:00</updated><entry><title>Scaling teams with CAP theorem</title><link href="https://s3bw.github.io/writes/scaling-teams-with-cap-theorem.html" rel="alternate"></link><published>2025-05-19T12:08:00+01:00</published><updated>2025-05-19T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-19:/writes/scaling-teams-with-cap-theorem.html</id><summary type="html">&lt;p&gt;If you've had enough time writing software you would have
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-26T12:08:00+01:00</updated><entry><title>Conventional Wisdom</title><link href="https://s3bw.github.io/writes/conventional-wisdom.html" rel="alternate"></link><published>2025-05-26T12:08:00+01:00</published><updated>2025-05-26T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-26:/writes/conventional-wisdom.html</id><summary type="html">&lt;p&gt;It can be overwhelming jumping into an organisation or project
+where the conventions are all over the place.
+Sometimes we'd prefer if there was one way of doing things.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are two things that are impressive when looking at a
+software project. 1. The simplicity and 2 the consistency.&lt;/p&gt;
+&lt;p&gt;It can be overwhelming jumping into an organisation or project
+where the conventions are all over the place.
+Sometimes it's better if there's just one way to do things.&lt;/p&gt;
+&lt;p&gt;You're going to be battling with product and business problems,
+on top of that you're now having to deal with a team
+expecting XML and another team expecting JSON.&lt;/p&gt;
+&lt;p&gt;The more consistency and standardisation in a work place
+the easier it is to dive into a project and get familiar
+with the hard parts. Working across teams or on more than
+one code base can be a lot easier once the &lt;em&gt;ways of working&lt;/em&gt;
+become familiar.&lt;/p&gt;
+&lt;p&gt;We can compare this to picking up a new board game, there's
+an initial overhead of learning the instructions and how the
+game plays out. Moving to a new team should feel like you're
+changing the board but the rest plays out the same way. Going
+between teams shouldn't feel like jumping between Dune
+Imperium and Risk&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;There are many decisions that need to be made in software
+and not having a generally agreed set of
+conventions adds more overhead to decisions. The downside is
+that there's a bit of a cold start issue as we get familiar
+to new guidelines&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;, but the payoff is worth it.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Having code that is consistent across the codebase
+improves comprehension for all of engineering&lt;/p&gt;
+&lt;p&gt;Software Engineering at Google (pg 173)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Having guidelines and rules help us lift the standard of
+engineering within an organisation and speeds up decision
+making on minor things like naming if we have defined our
+expectations.&lt;/p&gt;
+&lt;h3&gt;How Stripe Builds APIs&lt;/h3&gt;
+&lt;p&gt;When building APIs, internally or externally there are a few
+things it would be good to agree on upfront.&lt;/p&gt;
+&lt;p&gt;The Stripe API is generally considered to be good; after all,
+their API is their business. Many documentation tools even
+use "stripe-like" in their marketing. Stripe has rules and
+guidelines, which they follow when constructing APIs and
+they're usually backed up by solid reasoning.&lt;/p&gt;
+&lt;p&gt;Here are a few of their suggestions:&lt;/p&gt;
+&lt;h4&gt;Avoid Jargon&lt;/h4&gt;
+&lt;p&gt;The example they give is using an industry specific term for
+an API property like &lt;code&gt;card.pan&lt;/code&gt; instead of &lt;code&gt;card.number&lt;/code&gt;.
+Most people are familiar with a card "number" there are
+fewer people familiar with a card "pan".&lt;/p&gt;
+&lt;p&gt;Accessible vocabulary can allow you to reach more users, you
+shouldn't gate keep your product and fence off your services to
+people that have insider knowledge.&lt;/p&gt;
+&lt;p&gt;Abbreviations are another
+example of this and should be called out e.g. GTM, you
+probably thought of Go To Market but I could have been
+talking about Google Tags Manager.&lt;/p&gt;
+&lt;p&gt;Your engineers might not come from the same industry and
+should ideally have diverse backgrounds. This can be played
+as a strength; if you notice someone asking for clarity on a
+phrase or word, perhaps you can find phrasing in your
+answer that is a more suitable term for the API.&lt;/p&gt;
+&lt;h4&gt;Nested Structure&lt;/h4&gt;
+&lt;p&gt;There will always be surprises with any integration.
+I've witnessed a &lt;code&gt;200&lt;/code&gt; status code returning
+the message &lt;code&gt;"Server Error"&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Having properties such as &lt;code&gt;account_number&lt;/code&gt; and
+&lt;code&gt;account_created_at&lt;/code&gt; is another one I've seen. Stripe avoids this
+by opting for nested
+structures, so in this case they would be returning:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;account: {
+    created_at: &amp;lt;timestamp&amp;gt;,
+    number: 10
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h4&gt;Properties as Enums&lt;/h4&gt;
+&lt;p&gt;This one prepares us for the future since having a
+property like &lt;code&gt;canceled&lt;/code&gt; being either true or false can get
+in the way when you introduce more state. We can
+avoid filling up our objects with a myriad of redundant
+booleans by sticking to an enum from the beginning.&lt;/p&gt;
+&lt;h4&gt;Express Changes with Verbs&lt;/h4&gt;
+&lt;p&gt;Stripe also tends to use clear verbs if a state change will
+occur when you hit that endpoint for example:
+&lt;code&gt;/paymant/:id/capture&lt;/code&gt;.&lt;/p&gt;
+&lt;h4&gt;Timestamps&lt;/h4&gt;
+&lt;p&gt;Having all properties that are related to timestamps
+suffixed with &lt;code&gt;*_at&lt;/code&gt;. This allows you to distinguish the
+type, which is harder had you gone with "&lt;code&gt;created&lt;/code&gt;" as
+this could be confused for a boolean.&lt;/p&gt;
+&lt;h4&gt;Currencies&lt;/h4&gt;
+&lt;p&gt;These should be represented in the lowest denomination, for
+example the pound is 100 pence, so we should be passing £10
+as the integer 1000. This also helps against pesky floating
+point arithmetic. When providing a monitary amount when
+should also provide an indication as to which currency it
+is. E.g. "GBP" or "USD".&lt;/p&gt;
+&lt;h3&gt;Metrics&lt;/h3&gt;
+&lt;p&gt;When you're only worried about a single service it seems like
+defining metric conventions is a wasted effort. Metrics are
+often an after thought and usually always end up in a mess.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Defining a naming convention for your metrics, tags, and
+services is crucial to have a clean, readable, and
+maintainable telemetry data.&lt;/p&gt;
+&lt;p&gt;DataDog&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;a href="https://docs.datadoghq.com/developers/guide/what-best-practices-are-recommended-for-naming-metrics-and-tags/"&gt;DataDog&lt;/a&gt;
+has some good insight into how to start providing guidelines
+for metric names.&lt;/p&gt;
+&lt;h4&gt;Avoid abbreviations&lt;/h4&gt;
+&lt;p&gt;For the same reason mentioned above, these might have multiple
+meanings and in the metric world you don't want to confuse
+things like Status Code and Service Charge.&lt;/p&gt;
+&lt;h4&gt;Namespaces&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Namespaces are one honking great idea -- let's do more of
+those!&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;python -c 'import this'&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;They recommend having the metrics prefixed with the service
+or application that's generating those metrics.&lt;/p&gt;
+&lt;h4&gt;Unified Tagging&lt;/h4&gt;
+&lt;p&gt;Using standard tags like &lt;code&gt;env&lt;/code&gt;, &lt;code&gt;service&lt;/code&gt; and &lt;code&gt;version&lt;/code&gt; can
+help your new service get off the ground quicker with
+dashboards that are already written to aggregate your metrics
+around those tags.&lt;/p&gt;
+&lt;h4&gt;Avoid Overly Specific Metrics&lt;/h4&gt;
+&lt;p&gt;If you have a metric for the number of requests you can
+start tagging your metrics with "&lt;code&gt;method&lt;/code&gt;" which can be either
+&lt;code&gt;POST&lt;/code&gt;, &lt;code&gt;GET&lt;/code&gt; et al. you shouldn't need to create a new metric
+called &lt;code&gt;post_requests&lt;/code&gt; to specifically capture post
+requests.&lt;/p&gt;
+&lt;h4&gt;Cardinality&lt;/h4&gt;
+&lt;p&gt;The other thing to keep in mind when creating metrics, which
+is useful for a guideline doc, is reminding ourselves that
+each unique key-value pair represents a new time series,
+so we should ensure we don't have tags with high cardinality.
+Avoid using tags like &lt;code&gt;user_id&lt;/code&gt; as you'll be storing
+&lt;code&gt;n&lt;/code&gt; time series, having a bounded set is better; for example
+request methods have at most ~5 values.&lt;/p&gt;
+&lt;h3&gt;Databases&lt;/h3&gt;
+&lt;p&gt;Software engineers are often required to give names to tables
+and columns in databases. You can generally take a look at
+the other tables and columns to get an idea for existing
+naming conventions but I'd lean more cautiously here as all
+you need is a single column out of line and the conventions
+go to shit.&lt;/p&gt;
+&lt;h4&gt;Naming Tables&lt;/h4&gt;
+&lt;p&gt;Should they be plural or singular? Well according to
+&lt;a href="https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions"&gt;stack
+overflow&lt;/a&gt;
+the second answer with 388 votes says "Plural table names"
+and the first answer with 388 votes says "Singular names for
+tables". So it beats me... Just pick one.&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h4&gt;Naming Columns&lt;/h4&gt;
+&lt;p&gt;Some people want to have the table name in the primary key,
+like &lt;code&gt;user.user_id&lt;/code&gt; these people shouldn't write software.
+Having all tables with the convention of &lt;code&gt;id&lt;/code&gt; as the primary
+key for that table I find makes most sense, having this in
+common across all tables keeps things simple.&lt;/p&gt;
+&lt;h4&gt;Timestamps&lt;/h4&gt;
+&lt;p&gt;Like with an API the tables are also going to contain
+timestamps and having a mix of column conventions to
+identify these can be a pain. Typically I've gone with the
+suffix of &lt;code&gt;*_at&lt;/code&gt;. E.g. &lt;code&gt;created_at&lt;/code&gt;, &lt;code&gt;completed_at&lt;/code&gt;. I've
+also seen &lt;code&gt;created_date&lt;/code&gt; or &lt;code&gt;date_completed&lt;/code&gt;. Similar with
+foreign keys these should all be &lt;code&gt;tablename_id&lt;/code&gt; where
+&lt;code&gt;tablename&lt;/code&gt; is the other table you're referencing.&lt;/p&gt;
+&lt;p&gt;Another convention that's typically followed with databases
+is ensuring all tables have a &lt;code&gt;created_at&lt;/code&gt; and &lt;code&gt;updated_at&lt;/code&gt;
+column from the start. Some people even push to having
+&lt;code&gt;deleted_at&lt;/code&gt; as one of those default columns.&lt;/p&gt;
+&lt;h4&gt;Indexes&lt;/h4&gt;
+&lt;p&gt;I've noticed an unspoken convention of naming indexes like
+so: &lt;code&gt;user_account_id_idx&lt;/code&gt; which would be an index on the
+&lt;code&gt;account_id&lt;/code&gt; column in the &lt;code&gt;user&lt;/code&gt; table. You can also suffix
+it with the type of index; &lt;code&gt;_include&lt;/code&gt;, &lt;code&gt;_gin&lt;/code&gt;, &lt;code&gt;_brin&lt;/code&gt;.&lt;/p&gt;
+&lt;h3&gt;Guidelines&lt;/h3&gt;
+&lt;p&gt;Some of these can see pretty straight forward if you've been
+writing code for a while, but you have to remember that not
+everyone would be exposed to some of these rules. There's
+also engineers who believe they're better than any
+convention or guideline.&lt;/p&gt;
+&lt;p&gt;At the outset code reviews are the place to help form these
+conventions, they're certainly not for architectural design
+changes, the time for that has long past.&lt;/p&gt;
+&lt;p&gt;Setting out some initial guidelines can help you scale and
+onboard. Having to select &lt;code&gt;request.statusCode&lt;/code&gt; and
+&lt;code&gt;request.status_code&lt;/code&gt; because you're naming things different
+across services will only get worse as the company gets
+older (it doesn't even need to scale, we're battling with
+time here).&lt;/p&gt;
+&lt;p&gt;Some of these guidelines might follow just simple stylistic
+reasoning, but some of them have been written down as they
+allow you to get dashboards with very little effort or they
+help you avoid potential hurdles that might only appear in
+the future.&lt;/p&gt;
+&lt;p&gt;Guidelines aren't here to hold developers back from self
+expression they're in place to help us work together and
+grow organisational learnings as well as provide a baseline
+for engineering standards.&lt;/p&gt;
+&lt;p&gt;How do you ensure your organisation is learning if you're
+not adding or molding your guidelines, does every new
+project start from zero?&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;The board game.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;With Dune: Imperium it took me around 2 or 3
+  playthroughs&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;I prefer singular since you're going to be writing
+  queries like &lt;code&gt;user.name&lt;/code&gt; not &lt;code&gt;users.name&lt;/code&gt; and what are you
+  going to do for &lt;code&gt;address&lt;/code&gt;? &lt;code&gt;addresses&lt;/code&gt; yuck!. How about
+  &lt;code&gt;person&lt;/code&gt; and &lt;code&gt;people&lt;/code&gt;, &lt;code&gt;people.name&lt;/code&gt; lol.&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"></category><category term="software"></category><category term="naming"></category><category term="coding"></category></entry><entry><title>Scaling teams with CAP theorem</title><link href="https://s3bw.github.io/writes/scaling-teams-with-cap-theorem.html" rel="alternate"></link><published>2025-05-19T12:08:00+01:00</published><updated>2025-05-19T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-19:/writes/scaling-teams-with-cap-theorem.html</id><summary type="html">&lt;p&gt;If you've had enough time writing software you would have
 run into the smug lead developer that looks back on
 projects with the benefit of hind-sight and explains Conway's
 Law.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There's no hack to how you hold meetings, it all hinges on
