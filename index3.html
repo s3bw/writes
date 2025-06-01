@@ -49,237 +49,560 @@
             <div id="blog">
 
 
+
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 12 May 2025</h2>
+                <h2 class="date">Mon 17 March 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Software Localisation</font>
+                        <font style="vertical-align: inherit;">Chess Programming - Bitboards</font>
                     </h3>
                 </div>
-                <div class="main">
-                    <p>American websites format the date as <code>MM/DD/YYYY</code> and this
-can be confusing for Europeans. If I see the date <code>05/03/2025</code>,
-I can't be sure if we're dealing with March or May.</p>
-<p>Localisation extends further than just the format of dates. There
-are many things that <a href="https://www.mediawiki.org/wiki/Manual:Language#What_can_be_localised">require
-localisation</a>
-the most obvious is language. If your site does not support the
-dominant language within a geography you're creating a language
-barrier between you and your customers. In
-<a href="https://help.typeform.com/hc/en-us/articles/23541138531732-Create-multi-language-forms">Typeform's</a>
-case, their customer's customer.</p>
-<p>Translating and localising your software opens your business
-to new markets where relying on English won't cut it.
-Providing your system in a locale that's familiar to the user
-allows your system to feel natural and trustworthy.
-Luckily for us the internet has been around for more than 40 years
-and this, is sort of an old problem. There's been a good effort
-put towards enabling multilingual support.</p>
-<h3>ID or string?</h3>
-<p>When translating software, the first thing you'll need to
-determine is how to identify text that requires translation.</p>
-<p>There's two ways you can do this:</p>
-<ol>
-<li>
-<p>Mapping a key to the text. This key will be used to
-   lookup the correct message given the user's preferred
-   language. Something like this:</p>
-<p>message_key: "MISSING_NAME_TEXT"</p>
-</li>
-<li>
-<p>Alternatively; provide the text as is and using that as the
-   message key:</p>
-<p>message: "You're missing your first name"</p>
-</li>
-</ol>
-<p>Systems have been written using both styles so there's no
-consensus on which one you should pick (I wish you luck in
-driving consensus in your own place of work). Here are some
-things to consider.</p>
-<p>Subtle punctuation can change the whole meaning of
-a sentence. This is why systems tend to
-favour the entire sentence as the key for translation.
-Updating the sentence, even if you're just adding
-punctuation, should invalidate the translation or at least
-flag the translation so that it can be double checked.</p>
-<p>It's also useful keeping the full text within the context
-of where it's being used. This way the developer or engineer
-can determine themselves if it makes sense. It is harder to
-determine if you're using the correct message if you're
-relying on message keys like: "missing.name_text" and
-"missing.text_name", the full text provides a clearer
-indication of the output.</p>
-<p>Scaling the message keys can also be tricky as you'll need to
-avoid name clashes. The best thing to do is use them with
-some sort of namespacing e.g. <code>"signup.error.missing_name"</code>
-and redefine the key for every use-case, even if the full
-text ends up being the same, this allows you to change each
-text independently.</p>
-<h3>Localisation built in</h3>
-<p>For those of us gifted enough to using a Unix based system
-you might have access to <code>gettext</code> and <code>xgettext</code> in the
-command line. These are tools used to translate
-"natural language messages into the user's language, by
-looking up the translation in a message catalog".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>Python has some built-in libraries which allow you to manage
-internationalisation and localisation. Unless you've dealt
-with localisation, I think very few people are aware of the
-existence of <code>gettext</code>.</p>
-<h3>Localization for Python Applications</h3>
-<p>The python <code>gettext</code> library provides an interface which
-allows you to define your program in a core language and
-uses a separate message catalog to look up message
-translation. As an example we can define a message that
-requires localisation like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gettext</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
 
-<span class="n">_</span><span class="p">(</span><span class="s2">&quot;Welcome!&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Using <code>xgettext</code> we can construct a <code>.pot</code> file. Which
-will be used as a template for our language catalogues.</p>
-<div class="highlight"><pre><span></span><code>xgettext<span class="w"> </span>-o<span class="w"> </span>messages.pot<span class="w"> </span>--language<span class="o">=</span>Python<span class="w"> </span>src/*.py
-</code></pre></div>
-
-<p>The pot file should look like this after running
-<code>xgettext</code>.</p>
-<div class="highlight"><pre><span></span><code>#: main.py:3
-msgid &quot;Welcome!&quot;
-msgstr &quot;&quot;
-</code></pre></div>
-
-<p>It's pretty neat that it has provided us the file name and
-the line number for the text, although more useful in larger
-codebases, we can use this to track redundant translation
-strings. You'll also notice that it's using the full string
-as the <code>msgid</code> instead of assigning it to a code or number.</p>
-<p>From this we create <code>.po</code> files (unrelated to the
-teletubby)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>
-, these are the concrete
-versions of the <code>.pot</code> file which contain the translations,
-if we were to make a <code>.po</code> file for Norwegian this would look
-like:</p>
-<div class="highlight"><pre><span></span><code>#: main.py:4
-msgid &quot;Welcome!&quot;
-msgstr &quot;Velkomst&quot;
-</code></pre></div>
-
-<p>Now that we have a localised form of our language catalogue
-we can use <code>msgfmt</code> to compile a binary version of our <code>.po</code>
-file, like so:</p>
-<div class="highlight"><pre><span></span><code>msgfmt -o messages.mo no_NO/messages.po
-</code></pre></div>
-
-<p>This command takes our <code>no_NO</code> (Norwegian) messages and
-compiles a precomputed hash table of the msgid -&gt; msgstr and
-outputs it to the <code>.mo</code> file. These files are stored in
-binaries so they're not human readable, but are efficient to
-load into the application at start up.</p>
-<p>When you start accumulating a lot of these catalogues they
-might require their own system to manage. These systems
-are also useful interfaces for the person providing the
-translation. As an example you can see
-<a href="https://poeditor.com/">PoEditor</a> or
-<a href="https://lokalise.com/">Lokalise</a></p>
-<p>People that work in localisation and translation will be
-familiar with <code>.po</code> files since they're often the file
-format used with translation software.</p>
-<h3>Translation within context</h3>
-<p>If our app supports more than one localisation we have to
-indicate which localisation should be returned to a user.
-For an API we can set the user's locale within the context
-of a request.</p>
-<p>Flask offers a library called <a href="https://python-babel.github.io/flask-babel/">Flask-Babel</a>
-which allows you to set this locale.
-So if a Norwegian was to hit our API we'd have the client set
-a header on the request: <code>Content-Language: no_NO</code><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>, on
-returning the response all the strings instantiated
-with <code>gettext</code> will be translated into Norwegian.</p>
-<p>There are some cases where you'll need to switch the locale
-context mid request or mid process, for example; a Norwegian
-user triggers an alert to an English user. We can
-instantiate a context manager with flask-babel, which will
-translate the strings to a specified locale:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
-    <span class="c1"># &lt;norwegian scope&gt;</span>
-    <span class="k">with</span> <span class="n">force_locale</span><span class="p">(</span><span class="n">to_user</span><span class="o">.</span><span class="n">locale</span><span class="p">):</span>
-        <span class="c1"># &lt;english scope&gt;</span>
-        <span class="n">send_email</span><span class="p">(</span><span class="n">to_user</span><span class="p">)</span>
-    <span class="c1"># &lt;norwegian scope&gt;</span>
-</code></pre></div>
-
-<h3>Plural Forms</h3>
-<p>Language is weird and there's nearly an edge-case for
-everything. One of these cases that <code>gettext</code> supports is
-defining rules for plural forms. For example in English we
-might say <em>"one apple"</em> and <em>"two apples"</em>. However in a
-language like Hebrew the plural form for two apples can't be
-used for three apples, so to account for this <code>gettext</code>
-provides <code>ngettext</code>. Which is used like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gettext</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">ngettext</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n_</span>
-
-<span class="n">n_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;num&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
-</code></pre></div>
-
-<p>This allows <code>gettext</code> to pull the correct plural form given
-the int <code>3</code> and then formats the returning string,
-replacing <code>%(num)d</code> with <code>3</code>.</p>
-<h3>Lazy strings</h3>
-<p>If you're reusing the same string across your application
-and defining it at module level this string will be translated
-as soon as the module is instantiated. The module will
-always fallback to your app's default locale and your
-strings will not be translated. To get around this we use
-something called <code>lazy_gettext</code>. This allows us to define
-the string and reuse it across the application as
-<code>lazy_gettext</code> will keep a reference to the <code>msgid</code> and
-defer translation until the text is needed.</p>
-<p>You can see support for lazy_gettext in the <a href="https://docs.djangoproject.com/en/5.2/topics/i18n/translation/">django
-documentation</a></p>
-<h3>Wikipedia</h3>
-<p>Wikipedia manages content in over 300 languages. There are
-numerous volunteers which help to translate wiki into other
-languages and they do this through an interface called
-<a href="https://translatewiki.net/">translatewiki.net</a>. There's
-an entire
-<a href="https://www.mediawiki.org/wiki/Wikimedia_Language_and_Product_Localization">team</a>
-managing the infra and tools used in localisation.</p>
-<p>Similar to Wikipedia, I've seen interfaces used to
-manage and update translation files as well as a process
-that can be triggered automatically or on a schedule to
-update the <code>.mo</code> files that a service references. After
-updating the <code>.mo</code> file you can automatically roll out a
-deployment. The new deployment should then load the new
-<code>.mo</code> files into memory when the service is instantiated.</p>
-<p>You don't need to be working on a system the scale of
-Wikipedia to include translations. You can rely on
-a user's system locale to translate CLI tools. My Fiancee's
-system is set to Norwegian, if I ever write a CLI for her I
-think it would be fun to provide a Norwegian interface.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p><code>$ man gettext</code>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>I'd like to draw attention that I stole this joke from
-  myself. I don't want to draw attention to the poorly
-  performed lightening talk I did. It was my first time and
-  I tried to fit this entire post into 5 minutes. <a href="https://youtu.be/chxsC2WYNTE?si=PI1u8Ei-o41RSZGS&amp;t=1357">Link
-  for
-  posterity</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Language">Mozilla:
-  Content-Language</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-</ol>
+<div class="series-container">
+    <p class="series-title">The "Chess Programming" series:</p>
+    <ol class="series-list">
+            <ol class="active">
+                1: (here) Chess Programming - Bitboards
+            </ol>
+    </ol>
 </div>
+
+                <div class="main">
+                    <p>While exploring an <a href="https://github.com/kitao/pyxel">interesting game
+engine</a> which
+compiles python code to WASM; I thought, there's no better
+way to have fun than to write a chess engine. This was the
+start of a one month long project which led me to create
+my own chess AI.</p>
+<p>Chess programming is a topic that has been written about
+extensively, it has been a proving ground for some of
+the first AI researchers and even today it is still used as
+a benchmark for techniques in <a href="https://github.com/google-deepmind/searchless_chess">applied research.
+</a></p>
+<p>This article is the first part in a series of three in which
+I attempt to distill some insight into the application of
+algorithms in software, namely chess programming. In the
+hopes that it may inspire how you approach solving similar
+problems in the future.</p>
+<h3>Bit Operations</h3>
+<p>If you've ever done some leetcoding or any other live
+algorithm style interview prep in software engineering you
+might have come across the odd question on bit operations
+and wondered if you'll ever need to actually do these in
+your day to day job. I'm not here to answer that, but I am
+here to show you how it applies to chess programming.</p>
+<p>Firstly what are bit operations:</p>
+<blockquote>
+<p>a bitwise operation operates on a bit string, a bit array
+or a binary numeral at the level of its individual bits.
+It is a fast and simple action, basic to the higher-level
+arithmetic operations and directly supported by the processor.</p>
+<p><a href="https://en.wikipedia.org/wiki/Bitwise_operation">Wikipedia</a></p>
+</blockquote>
+<p>Essentially bitwise operations are physical operations that
+are embedded into the processor, they consist of your logical
+AND, OR, XOR and bit shifts. The mathematical operations that
+you're familiar with (such as Add, Subtract etc.) are all
+built upon bitwise operations.</p>
+<p>Here's an example of a <code>NOT</code> operation:</p>
+<div class="highlight"><pre><span></span><code>NOT 0111  (decimal 7)
+  = 1000  (decimal 8)
+</code></pre></div>
+
+<p>And an example of an <code>AND</code> operation:</p>
+<div class="highlight"><pre><span></span><code>    1010 (decimal 5)
+AND 1100 (decimal 12)
+  = 1000 (decimal 8)
+</code></pre></div>
+
+<p>We can see these operations supported in python:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 0b1100 &amp; 0b1010
+8
+&gt;&gt;&gt; bin(0b1100 &amp; 0b1010)
+&#39;0b1000&#39;
+</code></pre></div>
+
+<p>There's two ways we can shift bits. (Left and right) Here's
+an example in python:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; # Left
+&gt;&gt;&gt; bin(0b0010 &lt;&lt; 1)
+&#39;0b100&#39;
+
+&gt;&gt;&gt; # Right
+&gt;&gt;&gt; bin(0b0010 &gt;&gt; 1)
+&#39;0b1&#39;
+</code></pre></div>
+
+<p>Explaining how the processor does addition is out of scope
+of this blog post, but put together some of these bit
+operators and you've got yourself a function that can do
+addition.</p>
+<h3>Bitboards</h3>
+<p>Back to the chess:</p>
+<p>We are doing all of this essentially to get as close to the
+processor as possible, since we want the most performance
+out of a computer as we can by avoiding any unnecessary
+operations.</p>
+<p>In chess programming we will use a single number to keep
+track of all the positions of pieces on the board. This is
+what we call a <em>"bitboard"</em>. We will have a few bitboards
+to maintain the game's state. The first one will be 'board'
+which tracks <strong>all</strong> the pieces. At the start of the game
+this number will be: <code>0xFFFF00000000FFFF</code>. Which is
+hexadecimal for <code>18446462598732906495</code>. If we print the
+binary form of this number and format it over 8 rows we get
+the following:</p>
+<div class="highlight"><pre><span></span><code> Bitboard:
+
+8  1 1 1 1 1 1 1 1
+7  1 1 1 1 1 1 1 1
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  1 1 1 1 1 1 1 1
+   a b c d e f g h
+</code></pre></div>
+
+<p>There are a few other bitboards to track during a game of
+chess. There will be 2 boards for each colour (white and
+black). And there will be a bitboard for each type (6).
+Which gives us a total of 9 bitboards, or 9 numbers to cover
+the entire game state of chess. Here's two more examples of
+bitboards, one for pawns and one for white pieces:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; pawns = 0x00FF00000000FF00
+&gt;&gt;&gt; white = 0x000000000000FFFF
+</code></pre></div>
+
+<p>Now we can uses these three numbers to give us the answer
+to some questions for example; Where are all the white pawns?</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; board &amp; pawns &amp; white
+65280
+
+ Bitboard (65280):
+
+8  0 0 0 0 0 0 0 0
+7  0 0 0 0 0 0 0 0
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  0 0 0 0 0 0 0 0
+   a b c d e f g h
+</code></pre></div>
+
+<p>During a game of chess you'll use these to calculate which
+pieces are under attack. (e.g. given:
+<code>knightsmove &amp; theirpieces</code> the result will be <code>0</code> if
+there's no piece under threat). We can also use these
+bitboards workout where the valid moves are with
+<code>moves &amp; ~board</code>. (Moves and not board).</p>
+<p>A chess AI that's looking 4 moves ahead will have ~5mil
+positions to consider, so having these operations done on a
+low level can help boost the performance of the software.
+The more you squeeze out of performance the more accurate
+your chess AI will be, because this improves it's ability to
+look into the future.</p>
+<h3>Beyond Chess</h3>
+<p>In summary learning about how bitboards are applied to chess
+programming has allowed me to understand how bit operations can
+be applied practically in software. Before I dived into
+learning how chess is programmed I had only imagined keeping
+track of the board state using several objects and an array,
+however I now see there's more than one way to crack an egg;
+the board state egg.</p>
+<p>I hope the article helps to providing insight into practical
+applications of bit operators and leaves them to be
+considered as valuable for solving technical problems or at
+least reminds software engineers that we have them in our
+toolbelt.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://github.com/official-stockfish/Stockfish">Stockfish</a></li>
+<li><a href="https://www.chessprogramming.org/Main_Page">Chess Programming</a></li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 21:34 | </font>
+                    <a href="chess-programming-bitboards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 10 March 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Flash Cards</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>A while back I found out that Jnr. Doctors are keen on using
+flash cards to help them revise for exams. It occurred to me
+that I could also use flash cards to drill some of the concepts
+that would come up in discussions about software systems
+and system design.</p>
+<p>At the time I was developing on a raspberry-pi with a 7-inch
+screen and I was limited to how much I could install on the
+little SD card. At first I tried to use a browser based
+flash card tool, but I was in the mood for doing some deep
+dives to understanding how these actually work under the
+hood.</p>
+<p>This led me to develop
+<a href="https://github.com/s3bw/kanki">Kanki</a> a bespoke flash card
+tool for the command line. In this blog post I break down the
+process I typically use to undertake a software project of
+this scale (i.e tiny scale).</p>
+<h3>Requirements</h3>
+<p>Like all good software projects we start with the high level
+expectations. What do we want this system to do? (Some of
+these are quoted straight out of my notebook.</p>
+<ol>
+<li>I want to have 1000+ flashcards based on software and
+system design</li>
+<li>I should be able to hide the answer, I should be able to
+   reveal the answer.</li>
+<li>Can I input <em>"correct"</em>, <em>"close"</em>, <em>"wrong"</em> etc and
+   update an SR algorithm to handle recall.</li>
+<li>Nice to have, filtering by topic.</li>
+</ol>
+<p>In order to understand how flash cards operate you'd need to
+dig into figuring how the SR works:</p>
+<blockquote>
+<p><strong>Spaced Repetition</strong>: Newly introduced and more difficult
+flashcards are shown more frequently, while older and
+less difficult flashcards are shown less frequently in
+order to exploit the psychological spacing effect.
+The use of spaced repetition has been proven to increase
+the rate of learning. -
+<a href="https://en.wikipedia.org/wiki/Spaced_repetition">Wikipedia</a></p>
+</blockquote>
+<h3>Entities</h3>
+<p>We need to know what things we will be working with:</p>
+<table>
+<thead>
+<tr>
+<th>Card</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Question (string)</td>
+</tr>
+<tr>
+<td>- Answer (string)</td>
+</tr>
+<tr>
+<td>- Topic (string)</td>
+</tr>
+<tr>
+<td>- DeckID (int)</td>
+</tr>
+</tbody>
+</table>
+<p>The card is the question and answer entity which I might
+have 1000 of (In the end I think I had about 60).</p>
+<table>
+<thead>
+<tr>
+<th>Deck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Id (int)</td>
+</tr>
+<tr>
+<td>- Name (string</td>
+</tr>
+</tbody>
+</table>
+<p>The deck is the entity which groups cards, so a card belongs
+to a deck and this allows me to have cards around separate
+topics.</p>
+<hr />
+<h3>Interface</h3>
+<p>This isn't far off from what I drew in the notebook
+but clearly I had a vision and the following sort of
+captures it at the time:</p>
+<p>I want to have a view which allows me to load a specified
+deck. Create a new deck or add cards to an existing deck.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">Load</span><span class="o">:</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">deck_a</span><span class="p">,</span><span class="w"> </span><span class="n">deck_b</span>
+<span class="n">New</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>
+<span class="n">Add</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
+</code></pre></div>
+
+<p>I want to display the different inputs I can provide as
+answers to each card.</p>
+<div class="highlight"><pre><span></span><code>Again,  Hard,    Good,    Easy
+&lt; 1min  &lt; 6min   &lt; 10min  4 days
+</code></pre></div>
+
+<p>These are some of the settings I'd like to fine tune as I
+get used to playing with the flashcard system.</p>
+<div class="highlight"><pre><span></span><code><span class="n">config</span><span class="o">:</span>
+<span class="k">new</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+<span class="n">review</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+</code></pre></div>
+
+<h3>Spaced Repetition Algorithm</h3>
+<p>This is where things get slightly more involved since I had
+to understand how Anki and other flash card apps applied
+repetition. It was mostly finding the one that suited me
+best and felt the most natural to play with.</p>
+<p>This is the algorithm I went for:</p>
+<p><strong>step 1</strong>: Cards have a <code>queue</code> field (set to 1 for 'learning') and a
+<code>due</code> field (in minutes) determining when a card should be shown again.</p>
+<p><strong>step 2</strong>: review cards, already studied but are now due to
+be relearnt. <code>queue</code> field set to (2) and due less than or
+equal to today.</p>
+<p><strong>step 3</strong>: 'new', queue is set to (0), these new cards are capped.</p>
+<p>Essentially this determines how we populate the flash cards
+during a session. Using the three queue types:</p>
+<ul>
+<li>0: <code>new</code></li>
+<li>1: <code>learning</code></li>
+<li>2: <code>review</code></li>
+<li>3: <code>relearning</code> (This is essentially a card deemed as
+    "learnt" but you've forgotten it and now it needs to be relearnt).</li>
+</ul>
+<p>Properties of a card.</p>
+<ul>
+<li><strong>due</strong>: the timestamp for when the card should be shown again.</li>
+<li><strong>left</strong>: how many learning steps before the card graduates to review.</li>
+<li><strong>reps</strong>: how many times the card has been shown.</li>
+<li><strong>ivl</strong>: tracking the card interval (time to add when recalculating <strong>due</strong>).</li>
+</ul>
+<h3>Input</h3>
+<p>When answering the flash cards there's four inputs you can
+provide, each of which will cause a different effect, these
+decide the cards position in one of two or three queues.
+The result of these inputs also depends on which queue the
+card is currently in.
+You can see <a href="https://github.com/s3bw/kanki/blob/main/models.py#L106-L134">this
+here</a></p>
+<ul>
+<li><code>Again</code>: Reset number of training reps</li>
+<li><code>Hard</code>: +1 rep, show again in 1 min</li>
+<li><code>Good</code>: +1 rep, show again in 5 min</li>
+<li><code>Easy</code>: +1 rep, show again in 1 day</li>
+</ul>
+<h3>Development</h3>
+<p>Up until this point I hadn't done a single line of code. The
+research done above was undertaken before I started writing
+any code. This helps me have a clear understanding of what
+I'm actually trying to do. It's far easier to scribble away
+in my notebook that it is to change code.</p>
+<p>There are a few things I needed, which I learnt after I'd
+written the tool. Things such as being able to edit a card,
+but these were not major features.</p>
+<p>The other thing that I find interesting (or obvious) is
+solution for the queue. During a learning session you need
+to have the card queues be dynamic since you're
+popping the earliest due card and then you're sorting them
+by when they are next due so the implementation fits using a
+heap quite well. You can see me <a href="https://github.com/s3bw/kanki/blob/main/queues.py">initialising the
+heap</a> here.</p>
+<h3>Conclusion</h3>
+<p>I really enjoyed reading up on some of the complexities
+involved in getting the spaced repetition working in a way
+that allows new topics to be slowly introduced while working
+on cementing topics that were in the progress of being
+learnt. It feels a little exciting when you encounter
+something new during the learning session. I used kanki
+to prepare on some topics and every so often add new cards
+to system design.</p>
+<p>One thing I found quite useful is getting someone else to
+ask you the questions verbally and they make a judgement on
+how close you are to the answer. This can get you more
+comfortable with talking about these topics and the person
+reading the questions can help keep you honest about how
+well you know a topic.</p>
+<p>Lastly it's also interesting that learning is effectively
+broken down into three separate speeds. 1. This is new. 2.
+I'm actively learning this. 3. I should know this.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:38 | </font>
+                    <a href="flash-cards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 24 January 2022</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Configuring Traefik with Redis</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Over a weekend I had a quick play around with the
+config provider to traefik, experimenting with reverse
+proxies. I'm fairly familiar with the <code>redis-cli</code>
+and it's fairly easy to build a redis client in any language
+so getting off the grounds is a 10min job at most.</p>
+<p>I've always got redis container running locally, so I'm
+sticking with that, to get this running I do:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>some-redis<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>-d<span class="w"> </span>redis
+</code></pre></div>
+
+<p>Since I am running traefik on docker-compose and I'll need
+it to connect to redis, I have to create a network and redis
+should be connected to this network:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>mynet
+docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>mynet<span class="w"> </span>some-redis
+</code></pre></div>
+
+<p>The next step is the compose file for traefik:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># docker-compose.yml</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">maunet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">services</span><span class="p">:</span>
+
+<span class="w">  </span><span class="nt">reverse-proxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik:v2.5</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--api.insecure=true&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis.endpoints=some-redis:6379&quot;</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># HTTP</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;80:80&quot;</span>
+<span class="w">      </span><span class="c1"># Web UI</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8080:8080&quot;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">maunet</span>
+</code></pre></div>
+
+<p>And up:</p>
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<p>The traefik frontend should be accessible at
+<a href="http://127.0.0.1:8080">127.0.0.1:8080</a>.</p>
+<h2>Configuration</h2>
+<p>A few of the traefik concepts didn't make sense at first,
+but it didn't take long to understand what they're talking
+about.</p>
+<ul>
+<li>
+<p>I have another container running a simple rest server,
+   it's serving on port 3000 which is exposed at port 53782
+   this container is called <code>'some-server'</code>.</p>
+</li>
+<li>
+<p>A hurdle that took me a while to figure out was to also
+   connect this container to the network we have
+   traefik and redis running on:</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nv">docker</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">mynet</span><span class="w"> </span><span class="nv">some</span><span class="o">-</span><span class="nv">server</span>
+</code></pre></div>
+
+<ul>
+<li>I need to tell traefik a service (server) exists:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">set</span><span class="w"> </span><span class="n">traefik</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">services</span><span class="o">/&lt;</span><span class="n">service</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">loadbalancer</span><span class="o">/</span><span class="n">servers</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="n">url</span><span class="w"> </span><span class="s2">&quot;http://some-server:3000&quot;</span>
+</code></pre></div>
+
+<ul>
+<li>Now assign this service to a router:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/service some-server
+</code></pre></div>
+
+<ul>
+<li>Lastly give the router a rule: (Note those are backticks
+  around the forward slash.)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/rule &quot;Path(`/`)&quot;
+</code></pre></div>
+
+<p>Now hitting <a href="http://127.0.0.1:80">127.0.0.1:80</a> will forward the
+request to your server. You can also do all the other
+interesting things that traefik provides like loadbalancing
+and stripping path prefixes.</p>
+<h3>References</h3>
+<ul>
+<li>https://doc.traefik.io/traefik/routing/providers/kv/</li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:27 | </font>
+                    <a href="configuring-traefik-with-redis.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -296,6 +619,8 @@ think it would be fun to provide a Norwegian interface.</p>
                         <font style="vertical-align: inherit;">Python Deque</font>
                     </h3>
                 </div>
+
+
                 <div class="main">
                     <p>This is now my third article on lists. As someone that uses the
 built-in python list on a fairly regular basis, I might have
@@ -368,6 +693,26 @@ lists</a></p>
 <li>https://stackoverflow.com/a/23487658/3407256</li>
 </ul>
                 </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 14:30 | </font>
+                    <a href="python-deque.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -383,6 +728,8 @@ lists</a></p>
                         <font style="vertical-align: inherit;">Module not found Heroku</font>
                     </h3>
                 </div>
+
+
                 <div class="main">
                     <p>There are some bugs and problems that give a thrill once they're
 solved. The best bugs are the ones that teach you something,
@@ -509,10 +856,51 @@ directory. 🤷‍♂️</p>
 
 <p>And sure enough fixing my deployment.</p>
                 </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:03 | </font>
+                    <a href="module-not-found-heroku.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
+    <div class="pagination">
+            <a href="https://s3bw.github.io/writes/index4.html" class="next-page">⬅ Older</a>
+            <a href="https://s3bw.github.io/writes/index2.html" class="previous-page">Newer ⮕</a>
+    </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
+</script>
             </div>
           </div>
 

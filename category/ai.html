@@ -14,7 +14,7 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw - misc</title>
+        <title>s3bw - Ai</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
         <meta property='og:title' content="s3bw"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
@@ -52,111 +52,81 @@
 
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 21 April 2025</h2>
+                <h2 class="date">Mon 28 April 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Gray Code</font>
+                        <font style="vertical-align: inherit;">Engineering Vibe</font>
                     </h3>
                 </div>
 
 
                 <div class="main">
-                    <p>A modern laptop can run ~3.8 billion cycles per second. The
-cycle is determined by oscillation frequency of the
-electrical signal that hits the CPU. Contemporary CPUs manage
-synchronisation using all sorts of error correction tricks.</p>
-<p>In mechanical systems, such as those used in medical
-equipment and robotics, the binary numbers that we are most
-familiar with can cause errors if they're read during state
-transition.</p>
-<h3>Decimal and Binary</h3>
-<p>We are most familiar with decimals, this is a base 10
-counting notation where each position in the number
-represents a different power of ten. E.g. 10, 100, 1000.</p>
-<p>The computer relies on binary as this takes advantage of
-the fundamental on/off state within an electronic circuit.
-Binary is base 2, so each position represents a power of 2.
-E.g. 2, 4, 8, 16.</p>
-<h3>Reading States</h3>
-<p>Binary numbers can cause errors if they're read during
-transitions. The more positions that require toggling,
-while switching between numbers, the higher the chance we introduce
-errors into the system. This is shown clearly as
-we transition between the numbers 3 and 4. Which requires
-changing three bit positions. <code>011</code> -&gt; <code>100</code>.</p>
-<p><img alt="BinaryCounting" src="static/counting.gif" /></p>
-<p>If these bits aren't switched instantly we can read any of the
-following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
-if you're working with a critical system and need precision.</p>
-<h3>Grey Code</h3>
-<p>To get around this we use an alternative ordering of the
-binary system in which successive numbers are separated
-by a single bit. Incrementing a number only relies on
-switching one position and removes the chance of reading
-the wrong number during state transitions.</p>
-<p>This ordering is called Gray code, and an animation of the
-bit positions, for an incrementing number, is shown below:</p>
-<p><img alt="GrayCounting" src="static/graycounting.gif" /></p>
-<table>
-<thead>
-<tr>
-<th>Decimal</th>
-<th>Binary</th>
-<th>Gray</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>0</code></td>
-<td><code>0000</code></td>
-<td><code>0000</code></td>
-</tr>
-<tr>
-<td><code>1</code></td>
-<td><code>0001</code></td>
-<td><code>0001</code></td>
-</tr>
-<tr>
-<td><code>2</code></td>
-<td><code>0010</code></td>
-<td><code>0011</code></td>
-</tr>
-<tr>
-<td><code>3</code></td>
-<td><code>0011</code></td>
-<td><code>0010</code></td>
-</tr>
-<tr>
-<td><code>4</code></td>
-<td><code>0100</code></td>
-<td><code>0110</code></td>
-</tr>
-</tbody>
-</table>
-<h3>The Application</h3>
-<p>In addition to reducing read errors, relying on only a
-single toggle to move up the number scale consumes less
-energy than traditional binary due the fewer toggled bits.</p>
-<p>Some systems require testing every position of multiple
-switches or toggles. Gray code can improve the efficiency of
-these tests. If we had to iterate through all 16 combinations
-of 4 switches. Using ordinary binary would need to flip 1,
-2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
-code allows us to only ever need to flip a single toggle to
-eventually test all switch combinations.</p>
-<p>One of the most common uses of gray code is in rotary
-encoders, also known as knobs. These convert angular
-position to an analog or digital signal. If we had to rely
-on a normal binary scale, when rotating the knob, it could
-end up sending the intermediary numbers between each angle,
-which would make it pretty useless.</p>
+                    <p>Like it or not, vibe coders are the next software engineers.</p>
+<p>3 years ago I made a prediction that triggered a mixed
+response:</p>
+<blockquote>
+<p>Within our lifetime. We will see a
+YouTuber or streamer becoming head of a state.</p>
+<p>Me (March 4, 2022)</p>
+</blockquote>
+<p>Whilst I don't believe this prediction has come true there's
+been progress. In June 2024 a Cypriot YouTuber was voted
+to become a member of the European Parliament, he earned 19.4%
+of the vote and earned 40% of votes from the 18-24 age group.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>The interesting thing about my prediction is that it seems
+that it's actually gone the other way. More politicians are
+becoming <a href="https://www.youtube.com/@liambyrnemp">YouTubers</a> and
+<a href="https://www.theguardian.com/us-news/2024/oct/27/tim-walz-football-video-game-twitch">Streamers.</a></p>
+<p>Could the same thing happen with vibe coders?
+Perhaps software engineers are the next vibe coders.</p>
+<h3>We like to bash</h3>
+<p>We see software engineers being dismissive at the
+content aimed at vibe coders. There's
+a new wave of people being introduced to coding and managing
+complexity; so <a href="https://www.youtube.com/watch?v=BJjsfNO5JTo&amp;t=1s&amp;ab_channel=YCombinator">most of the
+content</a>
+is covering the basics. I.e. Write tests, compartmentalise
+and plan things out before you dive into the code.</p>
+<p>This wave of programmers haven't had the time to digest The
+Mythical Man-Month to learn; upfront planning in
+software leads to a huge reduction in downstream costs.
+They are however learning the hard way, by hitting these
+challenges head on. (For better or worse).</p>
+<h3>How did you get here?</h3>
+<p>It's all a journey and we're at different stages of the
+process. A large overhead to programming is building up the
+vocabulary, this is the struggle for both early stage
+developers and vibe coders.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<p>Experienced programmers have been exposed to more language
+and can therefore provide more specificity when commanding
+the computer, vibe coders will get there. Perhaps this
+specificity makes the experienced programmer a better vibe
+coder. Maybe it's <a href="https://stackoverflow.blog/2021/09/28/become-a-better-coder-with-this-one-weird-click/">their
+keyboard.</a></p>
+<p>No one was born with the knowledge of how the computer
+works, there's hurdles to overcome. It was
+only a decade ago we were cringing at someone stating
+they're full-time YouTubers or an Instagram influencer,
+and look, they've still got you glued to your screen.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://www.bbc.co.uk/news/articles/c4nnrwr72dqo">Cypriot Fidias Panayiotou</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>What exactly is the difference between "an early stage
+  developer" and a "vibe coder"? This sums up my point.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 </div>
                 <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:03 | </font>
-                    <a href="gray-code.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:08 | </font>
+                    <a href="engineering-vibe.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
                         <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
                     <a href="#" class="subscribe-link show-subscribe-form">
                         Subscribe
@@ -180,115 +150,189 @@ which would make it pretty useless.</p>
 
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 31 March 2025</h2>
+                <h2 class="date">Mon 07 April 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Being A Lurker</font>
+                        <font style="vertical-align: inherit;">Assisted Development</font>
                     </h3>
                 </div>
 
 
                 <div class="main">
-                    <p>Since the release of ChatGPT searches that include the term
-'reddit' have doubled. Meanwhile interest in Substack grew
-four-fold during the same period. We are living in a time
-where content created by people is becoming more valuable
-and the best content is moving behind a paywall.</p>
-<p>It's becoming easier to stand out. The information on the
-internet is converging to an average as the same SEO tactics
-are being applied to every webpage, marketing teams pay
-for the privilege of appearing at the top of search
-results or there's a constant need to churn out content in
-fear of losing relevance. People are hungrier than ever for
-an authentic and relatable tone of voice.</p>
-<p>It's time to stop caring about what people think. The sooner
-you do so the better, and a few other reasons as to why you
-should start putting yourself out there.</p>
-<h3>People want to make connections</h3>
-<p>At one point there were at least three tech meet-ups a week
-in London. They are all similar, it's a good place to go to
-get some food when you're penny pinching. You come away
-from these conferences with a full belly and some esoteric
-knowledge from the presentations, however one thing I've
-come to realise is that these tech gatherings aren't very
-conducive to networking.</p>
-<p>At first I thought it may be the type of persona these
-caverns attract, however I have come to realise that
-being the most outgoing person in the room was the wrong
-way to approach getting to know people.</p>
-<p>Instead of making an effort to introduce yourself one
-person at a time you can save a lot of this hassle by
-booking a slot on stage and introducing yourself to
-everyone at the same time. Your name will be on the
-program, so those that forget can look you up. You're
-also forced to give 5 mins of content to everyone in
-the room.</p>
-<p>(Wait for my next lightning talk, where I try not make
-it passed the introduction).</p>
-<p>After your presentation you'll find that people start
-introducing themselves to you and you'll get away from
-actively trying to locate the like-minded individuals. Your
-talk also acts like a filter, so you might get people
-approaching that are interested in what you had said.</p>
-<h3>Improving and feedback</h3>
-<p>You might not like every follow up or the opinions others have.
-Putting something out there in the universe enables others
-to interact with it. It opens you up to feedback. Which is
-a great conductor to learning. We have modern physics due to
-trial and error, and we can probably thank trial and error
-for <a href="https://www.youtube.com/shorts/y_HqjuiUzJg">#npc #ganggang</a>
-Either way, it's about discovering what works.</p>
-<p>In software we learn that it's best to
-have tight feedback loops. The sooner we know we are doing
-the wrong thing the better. This saves us working on
-something for 6 months which ends up being a dead end.
-Some of my most memorable 'Ah-ha' moments have been
-from feedback. Important feedback sticks.</p>
-<p>The easiest way to launch bad software is to shut yourself
-out to feedback. The same can be said about a skill,
-knowledge or an idea. You don't know if you're decent at
-anything unless you've tried it. If you think you're good at
-something, prove it.</p>
-<h3>Why I Write</h3>
-<p>There are about ten to twelve notebooks of thoughts I've
-accumulated over my working years. I'm sure each idea, in
-those books, is amazing and I can live pretending that's the
-truth or I can put some of them into writing and learn where
-they're flawed or where my writing is flawed.</p>
-<p>If I wanted my writing to be terrible, the best way I could
-do this; is to avoid writing at all costs.</p>
-<p>At the moment it's like seeing someone that doesn't look like
-they workout; in the gym. They've probably already
-acknowledged that they've been programming for the last 8
-years but at least they're doing something about it.</p>
-<p>There are a lot of half baked product ideas out there that
-have never seen the light of day and I'm sure they're
-amazing in the minds of the creator, but nothing will bring
-them down to earth quicker than getting user feedback. There
-might be one key piece of feedback between them and making
-something amazing, what ever thought is stopping you from
-getting here is probably silly in comparison.</p>
-<p>There's also the benefit of going over something half baked
-with a fine comb that allows an idea to develop. It also
-helps the concept sink in.</p>
-<h3>Start being uncomfortable</h3>
-<p>I've convinced myself that we learn the most from being
-uncomfortable.</p>
-<p>There's a reason we call something a comfort zone. It's the
-space that you operate in that is most familiar to you. So
-by definition the unfamiliar is probably a space you know
-least about. Diving into the unknown and getting a little
-uncomfortable can help you grow and learn. You might not be
-as bad as you thought you were, and if you're rubbish you're
-still a mile ahead of all the lurkers.</p>
-<p>It's mostly crap on average.</p>
+                    <p>76% of developers are either already using or plan to use ai
+assisted tools as part of their workflow, 82% of these developers
+cite an increase in productivity as the largest impact from using
+these tools<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>AI has integrated itself into our tooling, from search and
+planning to completely embedding
+itself into our development environment. There's a drive to
+apply LLMs into our workflow and it's important to see what
+works and what doesn't.</p>
+<p>There's no doubt that these tools will be adopted by
+developers and we should figure out how best to use them, or
+risk being left behind.</p>
+<h3>The great bot cloud in the sky</h3>
+<p>We will never stop imagining machines taking over our lives.
+It's been 43 years since the release of 'Blade Runner' and 26
+years for 'The Matrix'. However, more significantly, it's been 8
+years since I released my existential twitter bot <a href="https://x.com/CanDennisDream">Dennis</a>.</p>
+<p>Dennis was essentially a cronjob that ran every hour. He
+would read through ~100 comments on roughly 10 subreddits
+covering topics on existentialism and philosophy. Pulling
+this knowledge from the depth of Reddit he was able
+to spew 40.5k tweets of garbage for about 5 years.</p>
+<p>Dennis trains a Markov chain and would begin his sentences
+with a random starting word. So OpenAI and Github weren't
+the first to train language models using the data available
+to them on the internet. I get the feeling that I was onto
+something in 2017 and with enough funding I could have
+trained either a personal life coach or replicated teenage
+angst.</p>
+<p>YC &amp; a16z, you're missing out here.</p>
+<h3>Becoming a cyborg</h3>
+<p>We are now able to integrate these large probabilistic models
+directly into our code editors. Previously I've been using
+the tab key to autocomplete single words, with a copilot
+assistant I can write an in-line comment such as
+<em>"func provides post-order iteration of a tree given root"</em>
+and my copilot will suggest the entire function.</p>
+<p>The code can be wrong, but in the end the developer is
+responsible for the code that gets checked into the
+codebase. It's easy to say <em>"yup, looks good"</em> especially when
+under pressure to ship. Despite this I find it a massive
+boost to productivity since I only need to fill in some
+gaps or slightly modify the code-spit. On occasion I find
+myself feeling like I'm walking in mud when I hand write
+the code without this autocomplete feature. There are also
+occasions when I disable the feature altogether because it's
+context switching in its suggestions.</p>
+<p>Perhaps it's problematic not knowing where this code came
+from. At least with Dennis; I knew I could rely on his
+thoughts of existence due to having control over his
+training data, but the code that a copilot provides me...</p>
+<p>🤷 <a href="https://www.techzine.eu/news/privacy-compliance/122050/developers-lose-github-copilot-copyright-case-again/">who
+knows...</a></p>
+<h3>Is it a star sign or an LLM?</h3>
+<p>Search has been disrupted. The only people that were
+thinking more than Dennis about their own existence was
+the Google board when OpenAI released ChatGPT.
+Just kidding, Google came in second, first place goes to
+Stack Overflow.</p>
+<p>A big chunk of the job in software engineering is trying to
+discover if anyone else has faced a similar problem and if
+they've solved it. We are also tasked with
+understanding an API or how a library works or if it can
+be integrated in order to solve something or provide a new
+service.</p>
+<p>Google was good for this, but it's slowly being consumed by
+adverts and medium articles. Giving straight forward answers
+doesn't seem to be Googles' focus. Stack Overflow is
+an alternative, but you're not going to plug your homework
+into a question and get someone else to do it for you, nor
+will anyone provide free assistance so that you can earn
+a salary, but they're helpful in ways none the less.</p>
+<p>Claude, Copilot and ChatGPT are stark improvements in this
+area as you can do a bit of back and forth, provide
+clarity on what you're looking for and they'll
+happily bend it to your use-case, without referring
+their mate for the job because they get paid for ad-clicks.
+(Well not yet).<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<h3>The rocket is taking off 🚀</h3>
+<p>AI integrated environments for coding are certainly on
+trend and we are already rolling eyes at the phrase
+<em>"Vibe Coder"</em>.</p>
+<p>Entire classes of university students are
+scoring 100% on homework assignments, so professors are
+having to rethink how they assess their classes. I recall in
+high school a student questioned why we couldn't
+bring our calculators into an exam when we'd have access to
+this in the real world. There's a cohort of graduates coming
+into the workforce that's going to be more dependant or more
+adept at using AI tools so it's worth getting a sense for
+how these tools might be used.</p>
+<p>While having access to Cursor I have found that I can have a
+working solution to a small problem that I'm facing in about an
+hour. Before cursor I might have taken note of my idea and
+then forgotten about it or spent the whole weekend putting it
+together. It's even better when you have a clear vision of
+how you wish the solution to look. The models don't do very
+well if your ideas are vague and you're relying on them to
+apply their best guess. It's multiple times more beneficial
+when you know what a good result should look like.</p>
+<p>We will see more bespoke software. This could be a good
+thing,
+since we might find something better to match our preferences
+when it comes to tools. However due to the increase
+in productivity I've found myself leaning more towards, let
+me make that myself, instead of looking for existing
+solutions. This could be more pronounced in inexperienced
+software engineers as they will be less familiar with the
+tools that exist and they might power down their own path of
+reinventing the wheel.</p>
+<p>With more bespoke software comes fewer people familiar with
+said software and perhaps we will be running into problems
+that have already been solved in the past. This is certainly
+a cyclical part of learning, so we might see us enter a new
+cycle of how we manage our server deployment, but this time
+with a Gen Z finesse.</p>
+<h3>Just because you can</h3>
+<p>I've also found myself questioning how I should dedicate my
+time more, if I can spit something out in an hour I'm
+question my design and interface far more. Maybe it's because
+that's actually the fun part of programming and the coding
+is going to take less time so I've got more time to assess
+if I'm thinking about the problem correctly.</p>
+<p>I've found this not to be the case with less experienced
+developers, as they'd prefer to use this time to fit one
+more feature into their service without questioning if that
+feature makes holistic sense.</p>
+<h3>Are thing going badly?</h3>
+<p>There are weaknesses with AI tools in their current form,
+such as solving an entire problem from A-Z instead of using
+the library I wrote to solve A-M and focusing on N-Z. I've
+also found weaknesses when searching for things that are case
+sensitive. Seems like Google is still on top when I provide
+a search in quotations.</p>
+<p>Now that I've been using it for a while I have developed
+some intuition on the strengths and weaknesses, despite this
+I still find myself hand writing code line by line without
+any assistance. Mostly in more complicated areas of the code
+base, spaces I'd like be familiar in. Having an
+understanding of the system is valuable when you want to
+contribution to discussion, help stake holders and
+make decisions independently.</p>
+<p>It's still valuable to build intuition and understand how
+others might use these tools. Building on this knowledge
+could help create solutions that were previously out of
+reach, or just get you a seat at the table of decision
+making. In the end it's good be be familiar with the tools,
+it might help you avoid the odd looks when you bring out
+your dusty book of log tables.</p>
+<h3>Further Reading:</h3>
+<ul>
+<li><a href="https://martinfowler.com/articles/exploring-gen-ai.html">Martin Fowler: Exploring Gen
+    AI</a></li>
+</ul>
+<h3>Footnotes</h3>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://survey.stackoverflow.co/2024/ai#developer-tools-ai-ben-prof">Stack Overflow Developer's Survey
+  2024</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://help.netflix.com/en/node/126831">See Netflix</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 </div>
                 <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:13 | </font>
-                    <a href="being-a-lurker.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:10 | </font>
+                    <a href="assisted-development.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
                         <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
                     <a href="#" class="subscribe-link show-subscribe-form">
                         Subscribe
@@ -309,6 +353,8 @@ still a mile ahead of all the lurkers.</p>
             </div>
         </div>
 
+    <div class="pagination">
+    </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -538,6 +584,39 @@ document.addEventListener('DOMContentLoaded', function() {
 
               <div class="sidewrapper">
                 <div class="sidetitlebody">
+                  <div class="sidetitle">Categories</div>
+                </div>
+                <div class="side">
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/ai.html">ai</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/algorithms.html">algorithms</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/debugging.html">debugging</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/design.html">design</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/engineering.html">engineering</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/miscellaneous.html">miscellaneous</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/organisation.html">organisation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/practice.html">practice</a>
+                    </div>
+                </div>
+              </div>
+
+            <!--
+              <div class="sidewrapper">
+                <div class="sidetitlebody">
                   <div class="sidetitle">Tags</div>
                 </div>
                 <div class="side">
@@ -657,6 +736,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                 </div>
               </div>
+            -->
 
         </div>
       </div>

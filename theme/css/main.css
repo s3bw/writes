@@ -639,6 +639,13 @@ input.sf{
 .syndicate{}
 /*-----------------------------------------------------*/
 
+.pagination {
+    display: flex;
+    justify-content: space-between;
+}
+.pagination a {
+    padding: 0px 8px;
+}
 
 .inline-subscribe-form {
     margin-top: 10px;

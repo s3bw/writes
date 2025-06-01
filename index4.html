@@ -49,6 +49,7 @@
             <div id="blog">
 
 
+
         <div class="fullbody">
             <div class="datebody">
                 <h2 class="date">Thu 06 December 2018</h2>
@@ -60,6 +61,8 @@
                         <font style="vertical-align: inherit;">Chain of Responsibility</font>
                     </h3>
                 </div>
+
+
                 <div class="main">
                     <p>Easily one of my favourite patterns from the gang of four is the <em>chain of
 responsibility</em> pattern. It aims to avoid coupling the object that sends a
@@ -191,10 +194,563 @@ A<span class="w"> </span>Massive<span class="w"> </span>column<span class="w"> <
 
 <p><a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py">Implementation can be found here</a></p>
                 </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:40 | </font>
+                    <a href="chain-of-responsibility.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
 
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Thu 11 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Iterator Design Pattern</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Before I started reading <a href="https://en.wikipedia.org/wiki/Design_Patterns">the gang of
+4</a>
+["Go4"],
+I was convinced I would not need an
+<a href="https://en.wikipedia.org/wiki/Iterator_pattern">iterator</a>.
+After all, in python, they are already implemented:</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+</code></pre></div>
+
+<p>In the frame of <em>python lists</em> as aggregate objects, the
+intent of an iterator is satisfied.</p>
+<blockquote>
+<p>Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.</p>
+</blockquote>
+<h3>Displaying notes</h3>
+<p>Here I explain, how the iterator became my favourite design
+pattern.</p>
+<p>I have written about <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">representation
+of lists before</a>,
+and I don't think this will be my last time. When
+implementing the drop-downs in
+<a href="https://github.com/foxyblue/foolscap">foolscap</a>
+to allow a user to see sections contained in their note,
+I ran into an issue of complexity where I had blocks
+of conditionals dictating what should be displayed
+to a user. I wanted the user to have an indication
+that a note contains sections, and for them to be
+able to toggle a drop-down to see each section.
+Similar to:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="o">(</span>+<span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
+<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
+</code></pre></div>
+
+<p>Where my <code>"circleci"</code> note would contain sections
+and the <code>"docker"</code> note does not. Then expanding:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span>&lt;-&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
+<span class="w">  </span>└─<span class="w"> </span><span class="p">|</span><span class="w"> </span>-workflow<span class="w"> </span><span class="p">|</span>
+<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
+</code></pre></div>
+
+<p>This is where I realised the abstraction power of an
+iterator, And I could hide the collapsed sections
+behind an <code>"if"</code> conditional in an iterator.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
+
+    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield the next appropriate item for display.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;expand&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">expand</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">sub_item</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">sub_items</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">sub_item</span><span class="o">.</span><span class="n">title</span>
+</code></pre></div>
+
+<p>Supporting further traversal policies in my <code>Menu</code>
+class is straightforward, and
+drawing becomes absurdly simplified:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">menu</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw all viewable menu items.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">menu</span><span class="o">.</span><span class="n">visible</span><span class="p">():</span>
+        <span class="n">draw_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</code></pre></div>
+
+<p>After this I thought of a more complex <strong>aggregate</strong>
+structure that I could traverse, <a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/tree_iterator.py">like a tree depth
+first</a>.</p>
+<p>Realising the abstraction strength of the
+iterator, one finds its definition of intent far
+more compelling.</p>
+<blockquote>
+<p>Provide a way to access the elements of an
+aggregate object sequentially without exposing
+its underlying representations.</p>
+</blockquote>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 18:37 | </font>
+                    <a href="iterator-design-pattern.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Wed 10 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Random VM Name</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Something I found to be cute about the docker
+engine is it's feature to create a random name for
+your containers, when one is not specified.</p>
+<p>I've had some good ones e.g:</p>
+<div class="highlight"><pre><span></span><code>objective_galileo
+distracted_euclid
+</code></pre></div>
+
+<p>Occasionally I'd be spinning up the odd VM and
+have to provide some generic name like
+<code>dev-sebastien</code>. So instead I thought my own
+arbitrary name generation could save some time
+here.</p>
+<h3>Random names</h3>
+<p>The idea was to combine <code>&lt;adjective&gt;-&lt;pokemon&gt;</code>
+and use this as the VM parameter.</p>
+<p>Thus defining the following in <code>.create_name.sh</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>gen_name<span class="o">()</span>
+<span class="o">{</span>
+<span class="w">    </span><span class="nv">pokemon</span><span class="o">=(</span>
+<span class="w">        </span><span class="s2">&quot;pidgey&quot;</span>
+<span class="w">        </span><span class="s2">&quot;pikachu&quot;</span>
+<span class="w">        </span><span class="s2">&quot;cubone&quot;</span>
+<span class="w">    </span><span class="o">)</span>
+<span class="w">    </span><span class="nv">adjectives</span><span class="o">=(</span>
+<span class="w">        </span><span class="s2">&quot;hungry&quot;</span>
+<span class="w">        </span><span class="s2">&quot;adorable&quot;</span>
+<span class="w">        </span><span class="s2">&quot;jittery&quot;</span>
+<span class="w">    </span><span class="o">)</span>
+
+<span class="w">    </span><span class="nv">select_pokemon</span><span class="o">=</span><span class="si">${</span><span class="nv">pokemon</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#pokemon[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="nv">select_desc</span><span class="o">=</span><span class="si">${</span><span class="nv">adjectives</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#adjectives[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">result</span><span class="o">=</span>sebastien-<span class="nv">$select_desc</span>-<span class="nv">$select_pokemon</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$result</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Call this in your <code>.bash_aliases</code> file.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.create_name.sh
+</code></pre></div>
+
+<p>And every time you run <code>gen_name</code> in your command
+line, you'll get a new "vm" name.</p>
+<p>I've coupled this with:</p>
+<div class="highlight"><pre><span></span><code>create_instance<span class="o">(){</span>
+<span class="w">    </span>gcloud<span class="w"> </span>compute<span class="w"> </span>instances<span class="w"> </span>create<span class="w"> </span><span class="k">$(</span>gen_name<span class="k">)</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Here are some of the names of my machines:</p>
+<div class="highlight"><pre><span></span><code>sebastien-livid-quagsire
+sebastien-lonely-metapod
+sebastien-gentle-rattata
+</code></pre></div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:19 | </font>
+                    <a href="random-vm-name.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Tue 09 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Foolscap List Ordering</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p><a href="https://github.com/foxyblue/foolscap">Foolscap</a>
+was my answer to losing all my notes and
+forgetting the exact file I saved it.</p>
+<blockquote>
+<p>Was it on Desktop or next to the project?</p>
+</blockquote>
+<p>Thus I decided to write an application that took
+care of the saving and finding of my notes.</p>
+<h3>Unordered Lists</h3>
+<p>One thing I have taken for granted is the ordering
+of my files in any file system. I only realised
+how important it was after unordered dictionaries
+in python allocated my notes random positions on
+the list.</p>
+<p>The random ordering meant if I have note "M" in
+mind, it could appear anywhere on the list. So my
+eyes would track down <code>n</code> positions in the list to
+find "M". An <code>O(n)</code> operation for my eyes.</p>
+<p>After growing tired (a whole day of <code>O(n)</code> eye
+operations), I wrote the rule to provide me the
+list in alphabetical order. This was great my
+brain automatically switched to doing a binary
+search for note "M". <code>O(log n)</code></p>
+<h3>Ordered Lists</h3>
+<p>Now that finding note "M" was optimised for my
+eyes, my finger had to press the down key until
+my cursor was on the note of choice. This wasn't
+good enough, I was referring to note "M" several
+times a day and the other notes I'd reference once
+a month were adding computation time to my finger.</p>
+<p>This is where I introduced two of the most
+powerful rules of Foolscap. Since I tracked the
+number of views, and time it was last viewed or
+modified I could implement the following ordering:</p>
+<div class="highlight"><pre><span></span><code><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">LastView</span><span class="sr">/Modified/</span><span class="n">RecentlyCreated</span>
+<span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="n">MostViewed</span>
+<span class="mi">3</span><span class="o">:</span><span class="w"> </span><span class="mi">2</span><span class="n">ndMostViewed</span>
+<span class="mi">4</span><span class="o">:</span><span class="w"> </span><span class="mi">3</span><span class="n">rdMostViewed</span>
+<span class="mi">5</span><span class="o">:</span><span class="w"> </span><span class="n">A</span>
+<span class="mi">6</span><span class="o">:</span><span class="w"> </span><span class="n">Z</span>
+</code></pre></div>
+
+<p>This was neat!</p>
+<p>I had significantly cut down the amount of time it
+took for me to get to the notes I was using most
+frequently.</p>
+<h3>Search Lists</h3>
+<p>Searching needed a slightly different ordering
+since applying the rules above to your search
+results will likely be meaningless. The
+meaningless will come from your inability to
+predict what will appear in the list to begin
+with.</p>
+<p>Python has a neat method for it's strings.</p>
+<div class="highlight"><pre><span></span><code><span class="n">note_title</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Which I used as the initial search feature. A
+search by the prefix of my note title. To me this
+made sense since my notes are titled by their
+subject matter, e.g. <code>"linux", "elastic"</code>.</p>
+<p>The iteration to this search functionality was to
+include the conditional:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">note_title</span><span class="p">:</span>
+</code></pre></div>
+
+<p>I still wanted to provide the user with the result
+of the initial prefix search as the first result
+in the list.</p>
+<p>This is when I fathomed this solution:</p>
+<div class="highlight"><pre><span></span><code><span class="n">search</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span> <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">notes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+          <span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">title</span><span class="p">]</span>
+
+<span class="c1"># Sort by the position the query appears in the title</span>
+<span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Pretty
+<a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74">neat!</a></p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 22:37 | </font>
+                    <a href="foolscap-list-ordering.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Tue 09 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Procedural Villages</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>My inspiration for any tool or project has always
+been the thought that it could be done better, either
+that or I'd feel like I would benefit a lot from a
+missing feature.</p>
+<p>In my first embarked I attempted to create a
+dungeon crawler, full of all the creatures
+and characters I thought were missing from
+traditional games.</p>
+<p>It was through brute-force of the <a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod">Roguebasin
+tutorial</a>
+where I learnt how to code.</p>
+<p>I must have created the same game 4 or 5 times
+before I decided to scrap the libtcod library and
+create a game without an interface.</p>
+<p>Armed with <code>stdout</code> and turn-based printing, I
+implemented feature after feature. One of the
+features I was quite proud of was the randomly
+generated villages I'd spawn my player into.</p>
+<h2>Objects</h2>
+<p>I was aiming for something simple, just populate
+the map with houses that the player can interact
+with, for this I deconstructed a <code>house</code> into a
+rectangle.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Rect</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">h</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">center_x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">center_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        [ ][ ][ ][ ]</span>
+<span class="sd">        [ ][X][X][ ]</span>
+<span class="sd">        [ ][X][X][ ]</span>
+<span class="sd">        [ ][X][X][ ]</span>
+<span class="sd">        [ ][ ][ ][ ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        [X][X][X][X]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [X][X][X][X]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">sides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        [ ][X][X][ ]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [X][ ][ ][X]</span>
+<span class="sd">        [ ][X][X][ ]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="o">...</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
+</code></pre></div>
+
+<p>The poorly defined object above could now provide
+boolean confirmation to a co-ordinates existence
+in appropriate sections of a rectangle.</p>
+<p>From the above <code>Rect</code> class I can place a door on
+a <code>Rect.sides()</code> and I can fill the area
+defined by <code>Rect.internal()</code> with items.</p>
+<div class="highlight"><pre><span></span><code>Empty space: | . |
+Wall:        | # |
+Monster:     | m |
+Door:        | + |
+
+| . | . | . | . | . | . |
+| . | # | # | + | # | . |
+| . | # | m | . | # | . |
+| . | # | . | . | # | . |
+| . | # | . | . | # | . |
+| . | # | # | # | # | . |
+| . | . | . | . | . | . |
+</code></pre></div>
+
+<p>Throwing in some size variations and randomising
+the house position on the map, (making sure there
+are no houses intersecting each other). Allowed
+me to generate maps that looked like these:</p>
+<h3>Example 1</h3>
+<div class="highlight"><pre><span></span><code>| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
+| . | # | u | . | . | @ | # | . | # | . | m | # | . | . | . |
+| . | + | . | . | . | . | # | . | # | . | . | + | . | . | . |
+| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | &gt; | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | # | # | + | # | # | # | . | . | . | . | . | . | . | . |
+| . | # | . | . | r | . | # | . | . | . | . | . | . | . | . |
+| . | # | . | . | . | . | # | . | . | . | . | . | . | . | . |
+| . | # | # | # | # | # | # | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+</code></pre></div>
+
+<h3>Example 2</h3>
+<div class="highlight"><pre><span></span><code>| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | # | # | + | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | m | . | # | . | . | . | . |
+| . | . | . | . | . | . | . | # | # | # | # | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . | . | . | # | # | # | # |
+| . | # | # | # | # | # | # | # | . | . | . | # | . | . | # |
+| . | # | . | . | . | . | u | # | . | . | . | + | . | . | # |
+| . | + | . | . | . | . | . | # | . | . | . | # | &gt; | . | # |
+| . | # | X | . | . | . | . | # | . | . | . | # | . | r | # |
+| . | # | # | # | # | # | # | # | . | . | . | # | # | # | # |
+| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
+</code></pre></div>
+
+<p>Unfortunately my code was not beautiful back then.
+I still think it was a <a href="https://github.com/foxyblue/Rogue_simple/blob/master/src/map_class.py">neat idea</a></p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 21:48 | </font>
+                    <a href="procedural-villages.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="pagination">
+            <a href="https://s3bw.github.io/writes/index3.html" class="previous-page">Newer ⮕</a>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
+</script>
             </div>
           </div>
 
