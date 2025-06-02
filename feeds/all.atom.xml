@@ -1,5 +1,131 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-05-26T12:08:00+01:00</updated><entry><title>Conventional Wisdom</title><link href="https://s3bw.github.io/writes/conventional-wisdom.html" rel="alternate"></link><published>2025-05-26T12:08:00+01:00</published><updated>2025-05-26T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-26:/writes/conventional-wisdom.html</id><summary type="html">&lt;p&gt;It can be overwhelming jumping into an organisation or project
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-02T12:01:00+01:00</updated><entry><title>Understanding Time and Space</title><link href="https://s3bw.github.io/writes/understanding-time-and-space.html" rel="alternate"></link><published>2025-06-02T12:01:00+01:00</published><updated>2025-06-02T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-02:/writes/understanding-time-and-space.html</id><summary type="html">&lt;p&gt;On May 24th 2000 the Clay Math Institute announced a
+$1,000,000 prize for solving one of 7 maths problems. Since
+then only 1 has been solved. The mathematician that solved
+the problem rejected the money.&lt;/p&gt;</summary><content type="html">&lt;p&gt;On May 24th 2000 the Clay Math Institute announced a
+$1,000,000 prize for solving one of 7 maths problems. Since
+then only 1 has been solved. The mathematician that solved
+the problem rejected the money.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;One of those problems is the P vs NP question which relates
+to how we estimate time and space complexity for algorithms
+in computer science and software engineering.&lt;/p&gt;
+&lt;h3&gt;Complexity&lt;/h3&gt;
+&lt;p&gt;Complexity is an estimate of the growth in either time
+or space given an increase in the size of the input. Some
+algorithms have a linear relationship between time and input,
+we signify this complexity as &lt;code&gt;O(n)&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Constant complexity is signified as &lt;code&gt;O(1)&lt;/code&gt; this means that
+as we increase &lt;code&gt;n&lt;/code&gt; (the size of the input) the time and
+space is consistent, the algorithm doesn't take any longer
+and doesn't require more RAM.&lt;/p&gt;
+&lt;p&gt;An example of an algorithm that take constant &lt;code&gt;O(1)&lt;/code&gt; space is
+finding the largest number in an unordered list of &lt;code&gt;n&lt;/code&gt;
+numbers. You'll notice below, as we move through the list
+there's only one element we need to keep track of. This
+element is the largest item we've seen up to that point.
+When we see a larger number we replace the tracked number
+with this new larger number.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="MaxAlgo" src="/static/maxalgo.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;No matter how many items we include in this list we would
+still only need to track a single number, so the space
+complexity of this algorithm is &lt;code&gt;O(1)&lt;/code&gt;. We might apply this
+algorithm to find the largest file on a computer.&lt;/p&gt;
+&lt;p&gt;In terms of time complexity if we were to add more files or
+more items to this list the amount of time it takes would
+increase proportionally to the number of items we add. We
+therefore say this algorithm has an &lt;code&gt;O(n)&lt;/code&gt; time complexity.&lt;/p&gt;
+&lt;p&gt;If we wish to improve the time complexity of finding the
+largest file, we can do this by having something track the
+largest file in the systems and checks and updates this
+whenever a file is written. This would provide us with a
+constant time &lt;code&gt;O(1)&lt;/code&gt; algorithm as we avoid having to check all
+the file sizes every time we request the largest file. The
+trade off here is added complexity when updating any file on
+our system. If we were to reduce the size of the largest
+file the second largest might now be the largest and we'd
+have to find which file that might be.&lt;/p&gt;
+&lt;p&gt;We don't often require knowing what the largest
+file on the system might be so this added complexity is
+probably a waste of resource, additionally the overhead of
+creating, updating and deleting files has now increased.
+An &lt;code&gt;O(n)&lt;/code&gt; search is probably enough for most machines.&lt;/p&gt;
+&lt;h3&gt;Sorting&lt;/h3&gt;
+&lt;p&gt;Sorting is often used to explain time complexity as there are
+a number of
+&lt;a href="https://en.wikipedia.org/wiki/Sorting_algorithm#Comparison_sorts"&gt;ways to sort items&lt;/a&gt;
+each with their own complexity. It's also useful because
+we can visualise sorting. Below I have provided an example of
+bubble sort, this has a time complexity of O(n&lt;sup&gt;2&lt;/sup&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sorting" src="/static/sortingn2.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;This isn't the most efficient way to sort a list of
+items, but it's a good representation of an O(n&lt;sup&gt;2&lt;/sup&gt;)
+algorithm.&lt;/p&gt;
+&lt;h3&gt;Categorising complexity&lt;/h3&gt;
+&lt;p&gt;So far we've been discussing polynomial time algorithms,
+there exist algorithms which take exponential time to
+produce a solution. As an example in the case we have 2
+items this would take 4 operations, if we increase to 3
+items it would take us 8 operations. Such an algorithm
+is said to have O(2&lt;sup&gt;n&lt;/sup&gt;) time complexity.&lt;/p&gt;
+&lt;p&gt;An example of an exponential algorithmic problem is the
+&lt;a href="https://leetcode.com/problems/n-queens-ii"&gt;N-Queens ii&lt;/a&gt;
+problem. The time complexity for an algorithm to solve this
+problem is O(n!). So 3 items is 6 operations, 4 items is 24
+operations. These are algorithms which a computer would
+struggle to solve, in a sensible time, as n gets larger.&lt;/p&gt;
+&lt;p&gt;Within the realm of these exponential algorithms exist
+problems which we can solve in &lt;code&gt;O(n!)&lt;/code&gt; time but we can
+validate the solution in polynomial time. So even if n is
+exceptionally large, given a solution, we are able to
+validate the correctness relatively quickly.&lt;/p&gt;
+&lt;h3&gt;P vs NP&lt;/h3&gt;
+&lt;p&gt;This class of algorithms forms the basis for one of the
+millennium problems, known as P vs NP. The problem asks if
+there's a relationship between the complexity of validating
+the solution and complexity in solving the problem. If P =
+NP then problems that can be verified in polynomial time
+can also be solvable in polynomial time. However
+P ≠ NP implies that some problems are inherently harder
+to solve than they are to verify.&lt;/p&gt;
+&lt;p&gt;There are a few problems which have no existing polynomial
+solution, which upon finding one will determine that P = NP.
+Problems such as &lt;a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem"&gt;the traveling salesman problem&lt;/a&gt; (TSP),
+&lt;a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem"&gt;The boolean satisfiability problem&lt;/a&gt;
+and the &lt;a href="https://en.wikipedia.org/wiki/Vertex_cover"&gt;vertex cover
+problem&lt;/a&gt;
+Proving that there exists a polynomial solution to these
+problems will net you $1 million.&lt;/p&gt;
+&lt;h3&gt;In Practice&lt;/h3&gt;
+&lt;p&gt;Solving these problems have practical applications. Solving
+TSP would provide us optimal solutions for delivery routing
+and vertex cover has an application in DNA sequencing. So
+how do we produce solutions in these areas when attempting
+to find the best solution can take a computer as long as the
+lifetime of the universe.&lt;/p&gt;
+&lt;p&gt;We tend to rely on algorithms that are fast on average,
+these algorithms may involve backtracking with a large
+amount of pruning; this approach is used in chess.
+There are also approximation algorithms or heuristic based
+approaches such as
+&lt;a href="https://github.com/jedrazb/python-tsp-simulated-annealing"&gt;simulated annealing&lt;/a&gt;.&lt;/p&gt;
+&lt;h3&gt;Trade Offs&lt;/h3&gt;
+&lt;p&gt;Understanding time and space allows us to make trade offs
+between strategies. Certain algorithms can provide us
+an efficient approach to solving technical problems.
+There is a limit to how much we can do with
+algorithms and sometimes even problems that sound simple on
+the surface could have a $1 million bounty standing
+for 25 years, without you realising it.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;I wonder if this will ever be adjusted for inflation
+  otherwise the prize might not be that significant by the
+  time the problem is solved.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="algorithms"></category><category term="software"></category></entry><entry><title>Conventional Wisdom</title><link href="https://s3bw.github.io/writes/conventional-wisdom.html" rel="alternate"></link><published>2025-05-26T12:08:00+01:00</published><updated>2025-05-26T12:08:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-05-26:/writes/conventional-wisdom.html</id><summary type="html">&lt;p&gt;It can be overwhelming jumping into an organisation or project
 where the conventions are all over the place.
 Sometimes we'd prefer if there was one way of doing things.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are two things that are impressive when looking at a
 software project. 1. The simplicity and 2 the consistency.&lt;/p&gt;
