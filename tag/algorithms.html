@@ -14,12 +14,12 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Configuring Traefik with Redis</title>
+        <title>s3bw</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Configuring Traefik with Redis"/>
+        <meta property='og:title' content="s3bw"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>Short tutorial on using traefik as a reverse proxy configured with redis</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : configuring-traefik-with-redis.html"/>
+        <meta property='og:description' content=""/>
+        <meta property='og:url' content="https://s3bw.github.io/writes"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <script src="https://s3bw.github.io/writes/theme/js/theme-toggle.js"></script>
@@ -48,134 +48,188 @@
 
           <div id="content">
             <div id="blog">
-<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
-<article>
 
-<div class="fullbody">
-    <div class="datebody">
-        <h2 class="date">Mon 24 January 2022</h2>
-    </div>
-    <div class="blogbodytop"></div>
-    <div class="blogbody">
-        <div class="titlebody">
-            <h3 class="title">
-                <font style="vertical-align: inherit;">Configuring Traefik with Redis</font>
-            </h3>
-        </div>
-        <div class="main">
-            <p>Over a weekend I had a quick play around with the
-config provider to traefik, experimenting with reverse
-proxies. I'm fairly familiar with the <code>redis-cli</code>
-and it's fairly easy to build a redis client in any language
-so getting off the grounds is a 10min job at most.</p>
-<p>I've always got redis container running locally, so I'm
-sticking with that, to get this running I do:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>some-redis<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>-d<span class="w"> </span>redis
-</code></pre></div>
-
-<p>Since I am running traefik on docker-compose and I'll need
-it to connect to redis, I have to create a network and redis
-should be connected to this network:</p>
-<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>mynet
-docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>mynet<span class="w"> </span>some-redis
-</code></pre></div>
-
-<p>The next step is the compose file for traefik:</p>
-<div class="highlight"><pre><span></span><code><span class="c1"># docker-compose.yml</span>
-<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
-
-<span class="nt">networks</span><span class="p">:</span>
-<span class="w">  </span><span class="nt">maunet</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
-
-<span class="nt">services</span><span class="p">:</span>
-
-<span class="w">  </span><span class="nt">reverse-proxy</span><span class="p">:</span>
-<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik:v2.5</span>
-<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--api.insecure=true&quot;</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis&quot;</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis.endpoints=some-redis:6379&quot;</span>
-<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
-<span class="w">      </span><span class="c1"># HTTP</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;80:80&quot;</span>
-<span class="w">      </span><span class="c1"># Web UI</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8080:8080&quot;</span>
-<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
-<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">maunet</span>
-</code></pre></div>
-
-<p>And up:</p>
-<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
-</code></pre></div>
-
-<p>The traefik frontend should be accessible at
-<a href="http://127.0.0.1:8080">127.0.0.1:8080</a>.</p>
-<h2>Configuration</h2>
-<p>A few of the traefik concepts didn't make sense at first,
-but it didn't take long to understand what they're talking
-about.</p>
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 09 June 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Reframe Binary Search</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>Binary search is quite a simple algorithm to explain and
+thus it is often one of the first algorithms computer
+scientists learn. It's also occasionally brought up in
+software engineering interviews as it can be applied when
+solving optimisation problems.</p>
+<p>However, the traditional explanation of binary search is,
+flawed and acts as a barrier to its application. Binary
+search is not an algorithm that believes a set can be
+divided into three groups, e.g. these numbers are too cold,
+these number are too hot and this number is <em>just</em> right.</p>
+<p>This goldilocks framing of binary search forces us to look
+for situations where the problem contains an
+array of porridge ordered by temperature and we are in
+search of the one falls into our preferred consumption
+temperature.</p>
+<p>Binary search is an algorithm
+that is optimal at finding state transitions and framing
+it as such opens up the application of binary search as
+we no longer approach problems like goldilocks and
+instead; finding the best porridge becomes finding the point
+at which the ordered bowls of porridge transition from
+being tepid to scolding.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<h3>The Basics</h3>
+<p>Commonly, binary search is introduced with the example of
+finding a word in a dictionary. As an example say we are
+tasked to find the word <em>"Hippo"</em>:</p>
+<p>The brute force approach is to start at A, and flick through
+the pages until you get to the page that contains <em>"Hippo"</em>.
+This approach works, however the time complexity of this
+algorithm is <code>O(n)</code>; where <code>n</code> is the number of pages in the
+dictionary. So in the worst case, <em>"Zebra"</em> or
+something, You're looking at all <code>n</code> pages.</p>
+<p>Pretend <code>H</code> is <em>Hippo</em>:</p>
+<p><img alt="BruteForceSearch" src="static/bruteforce-search.gif" /></p>
+<p><code>n</code> operations is not inherently bad. If you have a list
+of 10 words. <code>n</code> operations isn't going to harm you. It
+starts to get a bit much when you have a billion words
+and it's not practical when you have <code>n</code> words to
+find among a billion words.</p>
+<p>Here's where we can apply binary search. If we want to find
+the word <em>"Hippo"</em>. We
+start by jumping to a random page, or we open the book in
+the middle.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> If the dictionary is
+260 pages the middle will land us on 130 which will be <em>M</em>.
+We know that H is before <em>M</em> so we can throw away half the
+dictionary. <code>M</code>-&gt;<code>Z</code>, so from a single operation we've
+already chopped the worst case scenario to <code>n/2</code>. We
+don't stop here, now we go to page 65 (half of 130) which
+lands us somewhere between <code>F</code> and <code>G</code> we know <code>H</code> is after
+<code>G</code> so now we can pick something in between <code>G</code> -&gt; <code>M</code> =
+<code>J</code>. We continue doing this, narrowing down the pages, until
+we land on the page that contains <em>Hippo</em>.</p>
+<p><img alt="BinarySearch" src="static/binarysearch.gif" /></p>
+<p>In the worst-case scenario, when we are looking in a
+dictionary of 260 pages, we do <code>9</code> operations. If we relied
+on the previous algorithm we would do <code>260</code> operations in
+the worst-case.</p>
+<h3>The Weaknesses</h3>
+<p>This explanation does a good job to help us understand the
+algorithm but it overcomplicates binary search as it
+breaks down the operations that binary search is doing into
+three parts.</p>
+<ol>
+<li>Is the current word the word we are looking for?</li>
+<li>Is the word we are looking for ahead of the current word?</li>
+<li>Is the word we are looking for behind the current word?</li>
+</ol>
+<p>These questions may help inform us as to how the algorithm
+behaves, but we can simplify it to the single binary question.</p>
+<blockquote>
+<p>When does the word we are looking for no longer appear
+after our current word?</p>
+</blockquote>
+<p>Instead of imaging the sequence as the words that might appear
+on each page, we can picture the sequence as the outcome of the
+statement: The word I'm looking for is after the current
+word.</p>
+<p><img alt="StateTransition" src="static/state-transition.gif" /></p>
+<p>As a result this frames binary search as a solution to finding
+a state transition. It is at the point when our word not
+longer appears after the current word that we find the word
+we are looking for.</p>
+<h3>Git Bisect</h3>
+<p>Binary search is used to find bugs. If you're familiar with
+<code>git</code> then you might have heard of <code>git bisect</code>. For those
+unfamiliar with <code>git</code> imagine a timeline with each point in
+that timeline being a change to a file. So every time the
+file is saved it adds a new node to the timeline.</p>
+<p>Now instead of a single file, git works across a whole
+software project and each save is being noted down on the
+timeline. A change is what is being added and what is being
+removed, so the accumulated sum of all these changes is the
+current state of the project.</p>
+<p>On large teams and complex projects bugs can occur after
+several changes have been made to the code. If we
+know that the code is broken in its current state but
+aren't sure what change caused the bug we can use <code>git
+bisect</code> to figure out which change is the culprit.</p>
+<p>When we run <code>git bisect</code> we provide it with a point in time
+that we are certain no bug existed. <code>git bisect</code> will
+then present us a change between that time and now.</p>
+<ol>
+<li>No bug</li>
+<li>?</li>
+<li>?</li>
+<li>broken?</li>
+<li>?</li>
+<li>?</li>
+<li>Bug</li>
+</ol>
+<p>We then have to answer; is the software at point <code>4</code>
+broken? If yes, the bug was introduced between <code>1</code> and <code>4</code>.
+This rules out all points after <code>4</code>. Cutting the
+points we have to analyse down in half. <code>git bisect</code>
+continues, running a binary search over the changes in
+the project until we find the change on the timeline that
+introduced the bug.</p>
+<p>Essentially we are using binary search to answer the
+statement: The bug exists, because we are interested when the
+state transitions from "The bug doesn't exist" to "The bug
+exists".</p>
+<h3>The Boolean Function</h3>
+<p>We can now separate binary search into two
+distinct parts. The algorithm part, which moves a pointer
+either up or down the timeline and the function that
+computes a boolean response. With this we can ask more
+interesting questions for which binary search provides
+an answer, as an example; "When did spend increase?" or
+"When did the user go into debt?".</p>
+<p>We can even provide two arrays and find the answer for
+"When did trend A over take trend B", without computing the
+delta for all observations on the timeline.</p>
+<p><img alt="DeltaSearch" src="static/delta-search.gif" /></p>
+<p>The main underlining assumption taught with the
+traditional explanation is that the set you're operating on
+should already be sorted for the search to work. The example
+above shows that this isn't true.
+Binary search only requires the underlying data to be bisect-able.</p>
+<p>Binary search is an effective tool for these state
+transition problems. It is interesting that the
+algorithm on its own is easy to understand, the
+complexity and it's application seems to grow when you
+separate the algorithms <em>iterator</em> and the <em>statement</em>.</p>
+<p>I'd be interested in finding out if the application of other
+algorithms grows when they're decomposed in a similar way.</p>
+<h3>Further reading</h3>
 <ul>
-<li>
-<p>I have another container running a simple rest server,
-   it's serving on port 3000 which is exposed at port 53782
-   this container is called <code>'some-server'</code>.</p>
+<li><a href="https://en.wikipedia.org/wiki/Root-finding_algorithm">Root
+    Finding</a></li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>I realise that using an analogy before explaining
+binary search might have lost some people.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
-<li>
-<p>A hurdle that took me a while to figure out was to also
-   connect this container to the network we have
-   traefik and redis running on:</p>
+<li id="fn:2">
+<p>We assume that words are evenly distributed in a
+  dictionary to keep things simple.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="nv">docker</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">mynet</span><span class="w"> </span><span class="nv">some</span><span class="o">-</span><span class="nv">server</span>
-</code></pre></div>
-
-<ul>
-<li>I need to tell traefik a service (server) exists:</li>
-</ul>
-<div class="highlight"><pre><span></span><code><span class="n">set</span><span class="w"> </span><span class="n">traefik</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">services</span><span class="o">/&lt;</span><span class="n">service</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">loadbalancer</span><span class="o">/</span><span class="n">servers</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="n">url</span><span class="w"> </span><span class="s2">&quot;http://some-server:3000&quot;</span>
-</code></pre></div>
-
-<ul>
-<li>Now assign this service to a router:</li>
-</ul>
-<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/service some-server
-</code></pre></div>
-
-<ul>
-<li>Lastly give the router a rule: (Note those are backticks
-  around the forward slash.)</li>
-</ul>
-<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/rule &quot;Path(`/`)&quot;
-</code></pre></div>
-
-<p>Now hitting <a href="http://127.0.0.1:80">127.0.0.1:80</a> will forward the
-request to your server. You can also do all the other
-interesting things that traefik provides like loadbalancing
-and stripping path prefixes.</p>
-<h3>References</h3>
-<ul>
-<li>https://doc.traefik.io/traefik/routing/providers/kv/</li>
-</ul>
-        </div>
-
-    </div>
-
-    <div id="comments"></div>
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'configuring-traefik-with-redis.html');
-  });
-</script>
-
-
+</ol>
 </div>
+                </div>
+            </div>
+        </div>
 
 
-</article>
             </div>
           </div>
 

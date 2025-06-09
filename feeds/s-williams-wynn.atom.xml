@@ -1,5 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-02T12:01:00+01:00</updated><entry><title>Understanding Time and Space</title><link href="https://s3bw.github.io/writes/understanding-time-and-space.html" rel="alternate"></link><published>2025-06-02T12:01:00+01:00</published><updated>2025-06-02T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-02:/writes/understanding-time-and-space.html</id><summary type="html">&lt;p&gt;On May 24th 2000 the Clay Math Institute announced a
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-09T12:15:00+01:00</updated><entry><title>Reframe Binary Search</title><link href="https://s3bw.github.io/writes/reframe-binary-search.html" rel="alternate"></link><published>2025-06-09T12:15:00+01:00</published><updated>2025-06-09T12:15:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-09:/writes/reframe-binary-search.html</id><summary type="html">&lt;p&gt;Traditional explanations of binary search is,
+flawed and acts as a barrier to its application. Binary
+search is not an algorithm that believes a set can be
+divided into three groups, e.g. these numbers are too cold,
+these number are too hot and this number is &lt;em&gt;just&lt;/em&gt; right.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Binary search is quite a simple algorithm to explain and
+thus it is often one of the first algorithms computer
+scientists learn. It's also occasionally brought up in
+software engineering interviews as it can be applied when
+solving optimisation problems.&lt;/p&gt;
+&lt;p&gt;However, the traditional explanation of binary search is,
+flawed and acts as a barrier to its application. Binary
+search is not an algorithm that believes a set can be
+divided into three groups, e.g. these numbers are too cold,
+these number are too hot and this number is &lt;em&gt;just&lt;/em&gt; right.&lt;/p&gt;
+&lt;p&gt;This goldilocks framing of binary search forces us to look
+for situations where the problem contains an
+array of porridge ordered by temperature and we are in
+search of the one falls into our preferred consumption
+temperature.&lt;/p&gt;
+&lt;p&gt;Binary search is an algorithm
+that is optimal at finding state transitions and framing
+it as such opens up the application of binary search as
+we no longer approach problems like goldilocks and
+instead; finding the best porridge becomes finding the point
+at which the ordered bowls of porridge transition from
+being tepid to scolding.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;The Basics&lt;/h3&gt;
+&lt;p&gt;Commonly, binary search is introduced with the example of
+finding a word in a dictionary. As an example say we are
+tasked to find the word &lt;em&gt;"Hippo"&lt;/em&gt;:&lt;/p&gt;
+&lt;p&gt;The brute force approach is to start at A, and flick through
+the pages until you get to the page that contains &lt;em&gt;"Hippo"&lt;/em&gt;.
+This approach works, however the time complexity of this
+algorithm is &lt;code&gt;O(n)&lt;/code&gt;; where &lt;code&gt;n&lt;/code&gt; is the number of pages in the
+dictionary. So in the worst case, &lt;em&gt;"Zebra"&lt;/em&gt; or
+something, You're looking at all &lt;code&gt;n&lt;/code&gt; pages.&lt;/p&gt;
+&lt;p&gt;Pretend &lt;code&gt;H&lt;/code&gt; is &lt;em&gt;Hippo&lt;/em&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="BruteForceSearch" src="static/bruteforce-search.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;n&lt;/code&gt; operations is not inherently bad. If you have a list
+of 10 words. &lt;code&gt;n&lt;/code&gt; operations isn't going to harm you. It
+starts to get a bit much when you have a billion words
+and it's not practical when you have &lt;code&gt;n&lt;/code&gt; words to
+find among a billion words.&lt;/p&gt;
+&lt;p&gt;Here's where we can apply binary search. If we want to find
+the word &lt;em&gt;"Hippo"&lt;/em&gt;. We
+start by jumping to a random page, or we open the book in
+the middle.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt; If the dictionary is
+260 pages the middle will land us on 130 which will be &lt;em&gt;M&lt;/em&gt;.
+We know that H is before &lt;em&gt;M&lt;/em&gt; so we can throw away half the
+dictionary. &lt;code&gt;M&lt;/code&gt;-&amp;gt;&lt;code&gt;Z&lt;/code&gt;, so from a single operation we've
+already chopped the worst case scenario to &lt;code&gt;n/2&lt;/code&gt;. We
+don't stop here, now we go to page 65 (half of 130) which
+lands us somewhere between &lt;code&gt;F&lt;/code&gt; and &lt;code&gt;G&lt;/code&gt; we know &lt;code&gt;H&lt;/code&gt; is after
+&lt;code&gt;G&lt;/code&gt; so now we can pick something in between &lt;code&gt;G&lt;/code&gt; -&amp;gt; &lt;code&gt;M&lt;/code&gt; =
+&lt;code&gt;J&lt;/code&gt;. We continue doing this, narrowing down the pages, until
+we land on the page that contains &lt;em&gt;Hippo&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="BinarySearch" src="static/binarysearch.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;In the worst-case scenario, when we are looking in a
+dictionary of 260 pages, we do &lt;code&gt;9&lt;/code&gt; operations. If we relied
+on the previous algorithm we would do &lt;code&gt;260&lt;/code&gt; operations in
+the worst-case.&lt;/p&gt;
+&lt;h3&gt;The Weaknesses&lt;/h3&gt;
+&lt;p&gt;This explanation does a good job to help us understand the
+algorithm but it overcomplicates binary search as it
+breaks down the operations that binary search is doing into
+three parts.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Is the current word the word we are looking for?&lt;/li&gt;
+&lt;li&gt;Is the word we are looking for ahead of the current word?&lt;/li&gt;
+&lt;li&gt;Is the word we are looking for behind the current word?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;These questions may help inform us as to how the algorithm
+behaves, but we can simplify it to the single binary question.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When does the word we are looking for no longer appear
+after our current word?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Instead of imaging the sequence as the words that might appear
+on each page, we can picture the sequence as the outcome of the
+statement: The word I'm looking for is after the current
+word.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="StateTransition" src="static/state-transition.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;As a result this frames binary search as a solution to finding
+a state transition. It is at the point when our word not
+longer appears after the current word that we find the word
+we are looking for.&lt;/p&gt;
+&lt;h3&gt;Git Bisect&lt;/h3&gt;
+&lt;p&gt;Binary search is used to find bugs. If you're familiar with
+&lt;code&gt;git&lt;/code&gt; then you might have heard of &lt;code&gt;git bisect&lt;/code&gt;. For those
+unfamiliar with &lt;code&gt;git&lt;/code&gt; imagine a timeline with each point in
+that timeline being a change to a file. So every time the
+file is saved it adds a new node to the timeline.&lt;/p&gt;
+&lt;p&gt;Now instead of a single file, git works across a whole
+software project and each save is being noted down on the
+timeline. A change is what is being added and what is being
+removed, so the accumulated sum of all these changes is the
+current state of the project.&lt;/p&gt;
+&lt;p&gt;On large teams and complex projects bugs can occur after
+several changes have been made to the code. If we
+know that the code is broken in its current state but
+aren't sure what change caused the bug we can use &lt;code&gt;git
+bisect&lt;/code&gt; to figure out which change is the culprit.&lt;/p&gt;
+&lt;p&gt;When we run &lt;code&gt;git bisect&lt;/code&gt; we provide it with a point in time
+that we are certain no bug existed. &lt;code&gt;git bisect&lt;/code&gt; will
+then present us a change between that time and now.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;No bug&lt;/li&gt;
+&lt;li&gt;?&lt;/li&gt;
+&lt;li&gt;?&lt;/li&gt;
+&lt;li&gt;broken?&lt;/li&gt;
+&lt;li&gt;?&lt;/li&gt;
+&lt;li&gt;?&lt;/li&gt;
+&lt;li&gt;Bug&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We then have to answer; is the software at point &lt;code&gt;4&lt;/code&gt;
+broken? If yes, the bug was introduced between &lt;code&gt;1&lt;/code&gt; and &lt;code&gt;4&lt;/code&gt;.
+This rules out all points after &lt;code&gt;4&lt;/code&gt;. Cutting the
+points we have to analyse down in half. &lt;code&gt;git bisect&lt;/code&gt;
+continues, running a binary search over the changes in
+the project until we find the change on the timeline that
+introduced the bug.&lt;/p&gt;
+&lt;p&gt;Essentially we are using binary search to answer the
+statement: The bug exists, because we are interested when the
+state transitions from "The bug doesn't exist" to "The bug
+exists".&lt;/p&gt;
+&lt;h3&gt;The Boolean Function&lt;/h3&gt;
+&lt;p&gt;We can now separate binary search into two
+distinct parts. The algorithm part, which moves a pointer
+either up or down the timeline and the function that
+computes a boolean response. With this we can ask more
+interesting questions for which binary search provides
+an answer, as an example; "When did spend increase?" or
+"When did the user go into debt?".&lt;/p&gt;
+&lt;p&gt;We can even provide two arrays and find the answer for
+"When did trend A over take trend B", without computing the
+delta for all observations on the timeline.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="DeltaSearch" src="static/delta-search.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;The main underlining assumption taught with the
+traditional explanation is that the set you're operating on
+should already be sorted for the search to work. The example
+above shows that this isn't true.
+Binary search only requires the underlying data to be bisect-able.&lt;/p&gt;
+&lt;p&gt;Binary search is an effective tool for these state
+transition problems. It is interesting that the
+algorithm on its own is easy to understand, the
+complexity and it's application seems to grow when you
+separate the algorithms &lt;em&gt;iterator&lt;/em&gt; and the &lt;em&gt;statement&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;I'd be interested in finding out if the application of other
+algorithms grows when they're decomposed in a similar way.&lt;/p&gt;
+&lt;h3&gt;Further reading&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://en.wikipedia.org/wiki/Root-finding_algorithm"&gt;Root
+    Finding&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;I realise that using an analogy before explaining
+binary search might have lost some people.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;We assume that words are evenly distributed in a
+  dictionary to keep things simple.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="algorithms"></category><category term="algorithms"></category><category term="search"></category></entry><entry><title>Understanding Time and Space</title><link href="https://s3bw.github.io/writes/understanding-time-and-space.html" rel="alternate"></link><published>2025-06-02T12:01:00+01:00</published><updated>2025-06-02T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-02:/writes/understanding-time-and-space.html</id><summary type="html">&lt;p&gt;On May 24th 2000 the Clay Math Institute announced a
 $1,000,000 prize for solving one of 7 maths problems. Since
 then only 1 has been solved. The mathematician that solved
 the problem rejected the money.&lt;/p&gt;</summary><content type="html">&lt;p&gt;On May 24th 2000 the Clay Math Institute announced a
