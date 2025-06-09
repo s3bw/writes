@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-09T12:15:00+01:00</updated><entry><title>Reframe Binary Search</title><link href="https://s3bw.github.io/writes/reframe-binary-search.html" rel="alternate"></link><published>2025-06-09T12:15:00+01:00</published><updated>2025-06-09T12:15:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-09:/writes/reframe-binary-search.html</id><summary type="html">&lt;p&gt;Traditional explanations of binary search is,
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-09T12:15:00+01:00</updated><entry><title>Reframe Binary Search</title><link href="https://s3bw.github.io/writes/reframe-binary-search.html" rel="alternate"></link><published>2025-06-09T12:15:00+01:00</published><updated>2025-06-09T12:15:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-09:/writes/reframe-binary-search.html</id><summary type="html">&lt;p&gt;Traditional explanations of binary search is
 flawed and acts as a barrier to its application. Binary
 search is not an algorithm that believes a set can be
 divided into three groups, e.g. these numbers are too cold,
@@ -8,7 +8,7 @@ thus it is often one of the first algorithms computer
 scientists learn. It's also occasionally brought up in
 software engineering interviews as it can be applied when
 solving optimisation problems.&lt;/p&gt;
-&lt;p&gt;However, the traditional explanation of binary search is,
+&lt;p&gt;The traditional explanation of binary search is
 flawed and acts as a barrier to its application. Binary
 search is not an algorithm that believes a set can be
 divided into three groups, e.g. these numbers are too cold,

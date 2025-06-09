@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 09 Jun 2025 12:15:00 +0100</lastBuildDate><item><title>Reframe Binary Search</title><link>https://s3bw.github.io/writes/reframe-binary-search.html</link><description>&lt;p&gt;Traditional explanations of binary search is,
+<rss version="2.0"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 09 Jun 2025 12:15:00 +0100</lastBuildDate><item><title>Reframe Binary Search</title><link>https://s3bw.github.io/writes/reframe-binary-search.html</link><description>&lt;p&gt;Traditional explanations of binary search is
 flawed and acts as a barrier to its application. Binary
 search is not an algorithm that believes a set can be
 divided into three groups, e.g. these numbers are too cold,
