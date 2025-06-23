@@ -88,6 +88,10 @@ body {
     width: 170px;
 }
 
+iframe {
+    border: none;
+}
+
 /* Hide mobile elements on desktop */
 .mobile-nav-button, .mobile-nav {
     display: none;

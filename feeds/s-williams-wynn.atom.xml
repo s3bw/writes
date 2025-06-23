@@ -1,5 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-09T12:15:00+01:00</updated><entry><title>Reframe Binary Search</title><link href="https://s3bw.github.io/writes/reframe-binary-search.html" rel="alternate"></link><published>2025-06-09T12:15:00+01:00</published><updated>2025-06-09T12:15:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-09:/writes/reframe-binary-search.html</id><summary type="html">&lt;p&gt;Traditional explanations of binary search is
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-23T12:02:00+01:00</updated><entry><title>Leadership Patterns</title><link href="https://s3bw.github.io/writes/leadership-patterns.html" rel="alternate"></link><published>2025-06-23T12:02:00+01:00</published><updated>2025-06-23T12:02:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-23:/writes/leadership-patterns.html</id><summary type="html">&lt;p&gt;Reflecting on failing teams, I've identified how I would
+nudge/how I've nudged a group of under
+performers into a team that delivers impact. Often there's a
+single missing ingredient and the team needs a
+catalyst for change. This can come from within the team and
+doesn't have to come from a leader.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Low performing teams have a lot in common. These teams often
+lack some of the basics. Low context, no direction and no
+understanding of purpose. We can summarise these basics into
+one thing: a lack of leadership.&lt;/p&gt;
+&lt;p&gt;Reflecting on failing teams, I've identified how I would
+nudge/how I've nudged a group of under
+performers into a team that delivers impact. Often there's a
+single missing ingredient and the team needs a
+catalyst for change. This can come from within the team and
+doesn't have to come from a leader.&lt;/p&gt;
+&lt;p&gt;Most failure patterns occur in companies that rely on
+organic organisation, as they've determined that autonomy
+is at odds with any intentional organisation design.&lt;/p&gt;
+&lt;p&gt;Things that are done with an intent in mind will
+always lead to a better outcome, otherwise you're just
+leaving it up to chance. We can have both, autonomy and
+organisation.&lt;/p&gt;
+&lt;h3&gt;Failure case 1.&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Everyone's a leader.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Communication is good, avoiding a decision is bad. In
+teams where everyone thinks/tries to be a leader the team
+behaves as if it were leaderless.&lt;/p&gt;
+&lt;p&gt;Individual contributors will state what they believe ought
+to be the best direction but it ends without consensus.
+These meetings are pointless as members stick to the idea
+that they've presented, and a team with 5 members will have
+5 directions.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;This pattern is hard to notice since they usually come to
+light when you're in the middle of a stressful situation and
+everyone is sharing an opinion as a means to turn the ship
+around. It's also easy to be absorbed into giving your own
+bit of advice in order to feign contribution.&lt;/p&gt;
+&lt;p&gt;The members present a large amount of information and set
+no goal, or goals are highly individualistic. There's no
+point in calling yourself a &lt;em&gt;team&lt;/em&gt; if there's no underlying
+vision/goal to achieve. You could now say this is hardly
+even a team and you would have saved time by not having a
+meeting at all.&lt;/p&gt;
+&lt;p&gt;The best way to address this situation is to take a step
+back and be honest. "I'm not going to remember half of this
+meeting." Then direct the attention to someone that is meant
+to be taking a leadership role and say: "Maybe x can
+summarize these thoughts into one or two points and we can
+focus on this, so we leave this meeting with the same
+aim". What ever is said next will certainly be remembered.&lt;/p&gt;
+&lt;p&gt;If you are the leader, then don't let your team leave
+more uncertain about how they should address the
+situation than when they arrived. A mature leader might
+even recognise that there's a team mate that's probably
+the most knowledgable and should use the opportunity to
+direct them to state the focus.&lt;/p&gt;
+&lt;p&gt;It's similar to a half time chat, you can't have 11 people
+in the team telling you what you should do better in the
+next half. That's not how a rally works.&lt;/p&gt;
+&lt;p&gt;Agreeing to commit to a direction and a goal is all part of
+being a team. Someone needs to stand up in moments when
+there's dysfunction.&lt;/p&gt;
+&lt;h3&gt;Failure Case 2&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;No one is a leader.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Communication is good. Some teams are just sitting around
+waiting to be told what to do, if there's a sit around culture
+then nothing impactful gets done.&lt;/p&gt;
+&lt;p&gt;It's quite easy to tell if you're in a team that lacks
+leadership since no one will know what work should be
+done or how their own work fits into the bigger
+picture of the organisation.&lt;/p&gt;
+&lt;p&gt;Teams without a leader will lack context and purpose which
+are all traits that lead to lower motivation. Assuming
+that people will just know what to do, without forming
+some consensus is naive and might lead the team to doing
+work that is pointless.&lt;/p&gt;
+&lt;p&gt;Turning these kind of teams around requires a little
+more diagnosis of the no-leader symptom.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Why is no one grabbing initiative?&lt;/li&gt;
+&lt;li&gt;What are the risks involved in grabbing initiative?&lt;/li&gt;
+&lt;li&gt;Is there fear involved?&lt;/li&gt;
+&lt;li&gt;Do we provide positive examples that initiative is rewarded?&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You might come to realise that no one want's to take on the
+risk that comes from taking initiative, especially if
+there's only downside and no upside. Initiative should always
+be rewarded in organisations even if the wrong initiative was
+taken. Learning from mistakes is always better than sitting
+and doing nothing.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Diagnosing why the team is behaving this way can lead you to
+notice that your org is not incentivising the correct
+behaviours.&lt;/p&gt;
+&lt;p&gt;There can be other reasons, like a lack of experience in
+taking ownership. There could also be a lack of hiring with
+intent leading to a skill misalignment. What ever it is, if
+there's a team that appears leaderless then there's a
+problem that needs fixing.&lt;/p&gt;
+&lt;h3&gt;Leaders&lt;/h3&gt;
+&lt;p&gt;In truth leaders are in a team not to be dictators, but to
+hear the concerns of everyone and distill it down to a
+direction and focus. Getting the whole team aiming at the
+same target can shift a low performing team to a high
+performing team over night.&lt;/p&gt;
+&lt;p&gt;Having a team aim all over the place will result in a weak
+performance.&lt;/p&gt;
+&lt;p&gt;Motivating teams, is about context and purpose - you can
+leave them to do what they want as long as they have context
+and purpose. Without this they're directionless and will not
+meet expectations.&lt;/p&gt;
+&lt;p&gt;Some situations are a prime ground for someone to take
+ownership, just make sure you're awarding this behaviour.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Not always the case, if the team has been like this
+  for quite sometime you'll have members of the team
+  state something in the discussion and they won't stick to
+  it themselves because making points for the sake of it has
+  become a culture.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Within reason.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="organisation"></category><category term="leadership"></category><category term="teams"></category><category term="organisation"></category></entry><entry><title>Reframe Binary Search</title><link href="https://s3bw.github.io/writes/reframe-binary-search.html" rel="alternate"></link><published>2025-06-09T12:15:00+01:00</published><updated>2025-06-09T12:15:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-09:/writes/reframe-binary-search.html</id><summary type="html">&lt;p&gt;Traditional explanations of binary search is
 flawed and acts as a barrier to its application. Binary
 search is not an algorithm that believes a set can be
 divided into three groups, e.g. these numbers are too cold,
