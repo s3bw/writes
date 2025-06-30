@@ -1,5 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-23T12:02:00+01:00</updated><entry><title>Leadership Patterns</title><link href="https://s3bw.github.io/writes/leadership-patterns.html" rel="alternate"></link><published>2025-06-23T12:02:00+01:00</published><updated>2025-06-23T12:02:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-23:/writes/leadership-patterns.html</id><summary type="html">&lt;p&gt;Reflecting on failing teams, I've identified how I would
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-30T12:05:00+01:00</updated><entry><title>Low Latency Computation</title><link href="https://s3bw.github.io/writes/low-latency-computation.html" rel="alternate"></link><published>2025-06-30T12:05:00+01:00</published><updated>2025-06-30T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-30:/writes/low-latency-computation.html</id><summary type="html">&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
+humans, anything slower and we would perceive the delay.
+Some systems are built to respond quicker than this,
+business cost can be sensitive to latency and every ms can
+make a difference.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
+humans, anything slower and we would perceive the delay.
+Some systems are built to respond quicker than this,
+business cost can be sensitive to latency and every ms can
+make a difference.&lt;/p&gt;
+&lt;p&gt;How do we develop highly performant systems? I happened to
+share a train ride with Mark Shannon, who at the time was
+leading a team at Microsoft that had one goal: Make Python
+Fast.&lt;/p&gt;
+&lt;p&gt;I asked him, how does one make code more performant? To
+which he responded.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Make it do less.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Here's what doing less looks like:&lt;/p&gt;
+&lt;h3&gt;Loop Invariant&lt;/h3&gt;
+&lt;p&gt;A simple example of doing less in order to achieve better
+performance is with loop invariant conditions.&lt;/p&gt;
+&lt;p&gt;We loop over arrays while we code and make calls to other
+functions while looping. During a refactor or while we move
+code around we might not realise that some of the variables
+we are computing are constant.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;expensive&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Trade&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;trade&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;beta&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;compute_beta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+        &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;beta&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;trade&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;risk&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You'll notice in the example that I am looping over the list
+&lt;code&gt;trades&lt;/code&gt; and computing a &lt;code&gt;beta&lt;/code&gt; value, but this &lt;code&gt;beta&lt;/code&gt; value
+is computed with the integer &lt;code&gt;n&lt;/code&gt; which is consistent within
+the scope of this function. If we move the computation of
+&lt;code&gt;beta&lt;/code&gt; to a point before we've entered loop we avoid having
+to compute &lt;code&gt;beta&lt;/code&gt; for each &lt;code&gt;trade&lt;/code&gt; in &lt;code&gt;trades&lt;/code&gt;.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;expensive&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;list&lt;/span&gt;&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="n"&gt;Trade&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="nb"&gt;int&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
+    &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="mi"&gt;0&lt;/span&gt;
+    &lt;span class="n"&gt;beta&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;compute_beta&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="n"&gt;trade&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;
+        &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;+=&lt;/span&gt; &lt;span class="n"&gt;beta&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;trade&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;risk&lt;/span&gt;
+
+    &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;rolling_sum&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt; &lt;span class="nb"&gt;len&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;trades&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now &lt;code&gt;beta&lt;/code&gt; is computed at most once within this method
+scope, we have essentially achieved doing less. If the
+&lt;code&gt;compute_beta&lt;/code&gt; method incurs an expensive overhead and we
+are looking at a lengthy &lt;code&gt;trades&lt;/code&gt; list this subtle oversight
+would have a significant impact on our latency.&lt;/p&gt;
+&lt;h3&gt;Python&lt;/h3&gt;
+&lt;p&gt;There are several layers of abstraction in Python and there
+are ways we can code that allow us to utilise computation in
+C more effectively. One such example of this: using list
+comprehension over a vanilla for-loop.&lt;/p&gt;
+&lt;p&gt;If we wish to
+understand the number of steps the machine is doing
+for a method, Python allows us to disassemble bytecode using
+&lt;code&gt;import dis&lt;/code&gt;. You might notice that there are additional
+&lt;code&gt;LOAD_ATTR&lt;/code&gt; instructions in a vanilla for-loop so defaulting
+to a list comprehension avoids this overhead and allows us
+to do less.&lt;/p&gt;
+&lt;h3&gt;Databases&lt;/h3&gt;
+&lt;p&gt;Relying on external systems can be expensive, in some
+cases we might query the same system several times in
+order to complete an operation. If we have a distributed system
+or intend to scale our server horizontally we are increasing
+the number of things that open and close connections to the
+database. Each time we open/close a connection the CPU has
+to process these instructions, this overhead can be
+significant when we are working in low latency environments.
+To get around this we introduce a connection pool between
+the database and our server, the connection pool manages
+long lived connections on the database and frees up the
+database to focus on database things.&lt;/p&gt;
+&lt;p&gt;A common anti-pattern involving a database is having your
+ORM make N+1 queries. For this to occur we have a 1-many
+entity relationship. If we ask the database to return a
+group of n countries and then for each country we ask for
+all cities in that country we are making &lt;code&gt;N&lt;/code&gt; (number of
+countries in our initial query) &lt;code&gt;+ 1&lt;/code&gt; (the initial query)
+total requests to the database. These can be tricky to spot
+since the individual query could be performant, but the
+accumulative overhead and latency of all these queries can
+cause problems.&lt;/p&gt;
+&lt;p&gt;We get around this by either asking for all countries and
+then ask for all cities given a set of country ids and
+perform the mapping in memory on the server, or we can
+increase the complexity of the query using a JOIN and allow
+the database to make the mapping. Either way we avoid the
+back and forth overhead of making &lt;code&gt;N+1&lt;/code&gt; queries, effectively
+doing less.&lt;/p&gt;
+&lt;h3&gt;When we can't do less&lt;/h3&gt;
+&lt;p&gt;Sometimes we can't do less, but we can decide when work is
+done. There are situations that allow us to pre compute
+results and provide performant computation at the cost of a
+slower start time.&lt;/p&gt;
+&lt;p&gt;Chess programming is an area which relies on high
+performance, the quick our program the further into the
+future we can look on each move during the game. One way we
+speed up a chess engine is by precomputing the movesets for
+every piece on the board for every possible position they
+might be in before the game starts. This allows us to look
+up all possible board positions for a piece during the game
+instead of computing only when we need it.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;In &lt;a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46"&gt;3b1b's wordle
+solver&lt;/a&gt;
+he actually computes a pattern matrix for each word and
+saves it to a file in order to avoid having to incur the
+overhead on each execution of his wordle solver.&lt;/p&gt;
+&lt;h3&gt;Constant Folding&lt;/h3&gt;
+&lt;p&gt;Lastly there's an interesting optimisation that compilers
+make which is also utilised in python called &lt;a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant"&gt;Constant
+Folding.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;When python is interpreted it parses the AST before
+executing. During this AST construction it finds expressions
+who's outcome is constant and computes the constant at this
+point instead of computing the expression every time it is
+referenced. As an example the variable &lt;code&gt;x = 24
+* 60&lt;/code&gt; will be converted to &lt;code&gt;1440&lt;/code&gt; before compiling the
+bytecode instructs for the machine.&lt;/p&gt;
+&lt;p&gt;So in all cases, if we want a computer to be highly
+performant we just have to make it do less.&lt;/p&gt;
+&lt;h3&gt;Further Reading&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127"&gt;perflint&lt;/a&gt; try running this on your python codebase to check for performance optimisations.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;More on this will be explained when I write my second
+  post on chess programming.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"></category><category term="code"></category><category term="speed"></category><category term="efficiency"></category></entry><entry><title>Leadership Patterns</title><link href="https://s3bw.github.io/writes/leadership-patterns.html" rel="alternate"></link><published>2025-06-23T12:02:00+01:00</published><updated>2025-06-23T12:02:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-23:/writes/leadership-patterns.html</id><summary type="html">&lt;p&gt;Reflecting on failing teams, I've identified how I would
 nudge/how I've nudged a group of under
 performers into a team that delivers impact. Often there's a
 single missing ingredient and the team needs a

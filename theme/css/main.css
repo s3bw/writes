@@ -260,13 +260,20 @@ img {
     object-fit: contain;
 }
 h1,h2,h3{margin:0;padding:0;}
-a{color:#000;text-decoration: none;}
+a{
+    color:#000;
+    padding: 0px 5px;
+    text-decoration: none;
+}
 button{color:#000;}
 a:link{}
 a:visited{}
 a:active{}
 a:hover {
-    background-color: #ff5858;
+    /*background-color: #ff5858;*/
+    animation: colorChange linear;
+    animation-timeline: scroll(root);
+    padding: 0px 5px;
     text-decoration-color: #000;
     border-radius: 3px;
 }
@@ -725,4 +732,39 @@ input.sf{
 
 .series-container ol {
     padding-left: 20px;
+}
+
+/* Coding
+ *
+ */
+
+pre {
+    padding: 2px 7px;
+    overflow: auto;
+}
+
+:root {
+    --h1: hsl(350, 35%, 90%);  /* Washed-out dusty rose */
+    --h2: hsl(180, 45%, 90%);  /* Washed-out sage green */
+    --h3: hsl(30, 70%, 90%);   /* Washed-out cream */
+    --h4: hsl(270, 85%, 90%);  /* Washed-out lavender */
+}
+
+@keyframes colorChange {
+  0% { background: var(--h1); }
+  12% { background: var(--h3); }
+  25% { background: var(--h2); }
+  37% { background: var(--h4);  }
+  50% { background: var(--h1); }
+  62% { background: var(--h3); }
+  75% { background: var(--h2); }
+  87% { background: var(--h4);  }
+  100% { background: var(--h1); }
+}
+
+
+.highlight {
+    border-radius: 4px;
+    animation: colorChange linear;
+    animation-timeline: scroll(root);
 }

@@ -150,6 +150,7 @@ tr:nth-child(even), tr:hover, pre {
 }
 
 [data-theme="dark"] a:hover {
+    background: var(--dark-text);
     color: var(--dark-hover-bg);
     transition: none;
 }
@@ -223,6 +224,8 @@ tr:nth-child(even), tr:hover, pre {
 [data-theme="dark"] pre {
     background-color: #2d2d2d;
     color: #e0e0e0;
+    padding: 2px 7px;
+    border-radius: 4px;
 }
 
 [data-theme="dark"] blockquote {

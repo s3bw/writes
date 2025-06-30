@@ -14,7 +14,7 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw</title>
+        <title>s3bw - software</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
         <meta property='og:title' content="s3bw"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
@@ -51,242 +51,202 @@
             <div id="blog">
 
 
+
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 12 May 2025</h2>
+                <h2 class="date">Mon 30 June 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Software Localisation</font>
+                        <font style="vertical-align: inherit;">Low Latency Computation</font>
                     </h3>
                 </div>
+
+
                 <div class="main">
-                    <p>American websites format the date as <code>MM/DD/YYYY</code> and this
-can be confusing for Europeans. If I see the date <code>05/03/2025</code>,
-I can't be sure if we're dealing with March or May.</p>
-<p>Localisation extends further than just the format of dates. There
-are many things that <a href="https://www.mediawiki.org/wiki/Manual:Language#What_can_be_localised">require
-localisation</a>
-the most obvious is language. If your site does not support the
-dominant language within a geography you're creating a language
-barrier between you and your customers. In
-<a href="https://help.typeform.com/hc/en-us/articles/23541138531732-Create-multi-language-forms">Typeform's</a>
-case, their customer's customer.</p>
-<p>Translating and localising your software opens your business
-to new markets where relying on English won't cut it.
-Providing your system in a locale that's familiar to the user
-allows your system to feel natural and trustworthy.
-Luckily for us the internet has been around for more than 40 years
-and this, is sort of an old problem. There's been a good effort
-put towards enabling multilingual support.</p>
-<h3>ID or string?</h3>
-<p>When translating software, the first thing you'll need to
-determine is how to identify text that requires translation.</p>
-<p>There's two ways you can do this:</p>
-<ol>
-<li>
-<p>Mapping a key to the text. This key will be used to
-   lookup the correct message given the user's preferred
-   language. Something like this:</p>
-<p>message_key: "MISSING_NAME_TEXT"</p>
-</li>
-<li>
-<p>Alternatively; provide the text as is and using that as the
-   message key:</p>
-<p>message: "You're missing your first name"</p>
-</li>
-</ol>
-<p>Systems have been written using both styles so there's no
-consensus on which one you should pick (I wish you luck in
-driving consensus in your own place of work). Here are some
-things to consider.</p>
-<p>Subtle punctuation can change the whole meaning of
-a sentence. This is why systems tend to
-favour the entire sentence as the key for translation.
-Updating the sentence, even if you're just adding
-punctuation, should invalidate the translation or at least
-flag the translation so that it can be double checked.</p>
-<p>It's also useful keeping the full text within the context
-of where it's being used. This way the developer or engineer
-can determine themselves if it makes sense. It is harder to
-determine if you're using the correct message if you're
-relying on message keys like: "missing.name_text" and
-"missing.text_name", the full text provides a clearer
-indication of the output.</p>
-<p>Scaling the message keys can also be tricky as you'll need to
-avoid name clashes. The best thing to do is use them with
-some sort of namespacing e.g. <code>"signup.error.missing_name"</code>
-and redefine the key for every use-case, even if the full
-text ends up being the same, this allows you to change each
-text independently.</p>
-<h3>Localisation built in</h3>
-<p>For those of us gifted enough to using a Unix based system
-you might have access to <code>gettext</code> and <code>xgettext</code> in the
-command line. These are tools used to translate
-"natural language messages into the user's language, by
-looking up the translation in a message catalog".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>Python has some built-in libraries which allow you to manage
-internationalisation and localisation. Unless you've dealt
-with localisation, I think very few people are aware of the
-existence of <code>gettext</code>.</p>
-<h3>Localization for Python Applications</h3>
-<p>The python <code>gettext</code> library provides an interface which
-allows you to define your program in a core language and
-uses a separate message catalog to look up message
-translation. As an example we can define a message that
-requires localisation like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gettext</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+                    <p>Anything that loads faster than 200ms is instantaneous for
+humans, anything slower and we would perceive the delay.
+Some systems are built to respond quicker than this,
+business cost can be sensitive to latency and every ms can
+make a difference.</p>
+<p>How do we develop highly performant systems? I happened to
+share a train ride with Mark Shannon, who at the time was
+leading a team at Microsoft that had one goal: Make Python
+Fast.</p>
+<p>I asked him, how does one make code more performant? To
+which he responded.</p>
+<blockquote>
+<p>Make it do less.</p>
+</blockquote>
+<p>Here's what doing less looks like:</p>
+<h3>Loop Invariant</h3>
+<p>A simple example of doing less in order to achieve better
+performance is with loop invariant conditions.</p>
+<p>We loop over arrays while we code and make calls to other
+functions while looping. During a refactor or while we move
+code around we might not realise that some of the variables
+we are computing are constant.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
 
-<span class="n">_</span><span class="p">(</span><span class="s2">&quot;Welcome!&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
 </code></pre></div>
 
-<p>Using <code>xgettext</code> we can construct a <code>.pot</code> file. Which
-will be used as a template for our language catalogues.</p>
-<div class="highlight"><pre><span></span><code>xgettext<span class="w"> </span>-o<span class="w"> </span>messages.pot<span class="w"> </span>--language<span class="o">=</span>Python<span class="w"> </span>src/*.py
+<p>You'll notice in the example that I am looping over the list
+<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
+is computed with the integer <code>n</code> which is consistent within
+the scope of this function. If we move the computation of
+<code>beta</code> to a point before we've entered loop we avoid having
+to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
+
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
 </code></pre></div>
 
-<p>The pot file should look like this after running
-<code>xgettext</code>.</p>
-<div class="highlight"><pre><span></span><code>#: main.py:3
-msgid &quot;Welcome!&quot;
-msgstr &quot;&quot;
-</code></pre></div>
-
-<p>It's pretty neat that it has provided us the file name and
-the line number for the text, although more useful in larger
-codebases, we can use this to track redundant translation
-strings. You'll also notice that it's using the full string
-as the <code>msgid</code> instead of assigning it to a code or number.</p>
-<p>From this we create <code>.po</code> files (unrelated to the
-teletubby)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>
-, these are the concrete
-versions of the <code>.pot</code> file which contain the translations,
-if we were to make a <code>.po</code> file for Norwegian this would look
-like:</p>
-<div class="highlight"><pre><span></span><code>#: main.py:4
-msgid &quot;Welcome!&quot;
-msgstr &quot;Velkomst&quot;
-</code></pre></div>
-
-<p>Now that we have a localised form of our language catalogue
-we can use <code>msgfmt</code> to compile a binary version of our <code>.po</code>
-file, like so:</p>
-<div class="highlight"><pre><span></span><code>msgfmt -o messages.mo no_NO/messages.po
-</code></pre></div>
-
-<p>This command takes our <code>no_NO</code> (Norwegian) messages and
-compiles a precomputed hash table of the msgid -&gt; msgstr and
-outputs it to the <code>.mo</code> file. These files are stored in
-binaries so they're not human readable, but are efficient to
-load into the application at start up.</p>
-<p>When you start accumulating a lot of these catalogues they
-might require their own system to manage. These systems
-are also useful interfaces for the person providing the
-translation. As an example you can see
-<a href="https://poeditor.com/">PoEditor</a> or
-<a href="https://lokalise.com/">Lokalise</a></p>
-<p>People that work in localisation and translation will be
-familiar with <code>.po</code> files since they're often the file
-format used with translation software.</p>
-<h3>Translation within context</h3>
-<p>If our app supports more than one localisation we have to
-indicate which localisation should be returned to a user.
-For an API we can set the user's locale within the context
-of a request.</p>
-<p>Flask offers a library called <a href="https://python-babel.github.io/flask-babel/">Flask-Babel</a>
-which allows you to set this locale.
-So if a Norwegian was to hit our API we'd have the client set
-a header on the request: <code>Content-Language: no_NO</code><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>, on
-returning the response all the strings instantiated
-with <code>gettext</code> will be translated into Norwegian.</p>
-<p>There are some cases where you'll need to switch the locale
-context mid request or mid process, for example; a Norwegian
-user triggers an alert to an English user. We can
-instantiate a context manager with flask-babel, which will
-translate the strings to a specified locale:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
-    <span class="c1"># &lt;norwegian scope&gt;</span>
-    <span class="k">with</span> <span class="n">force_locale</span><span class="p">(</span><span class="n">to_user</span><span class="o">.</span><span class="n">locale</span><span class="p">):</span>
-        <span class="c1"># &lt;english scope&gt;</span>
-        <span class="n">send_email</span><span class="p">(</span><span class="n">to_user</span><span class="p">)</span>
-    <span class="c1"># &lt;norwegian scope&gt;</span>
-</code></pre></div>
-
-<h3>Plural Forms</h3>
-<p>Language is weird and there's nearly an edge-case for
-everything. One of these cases that <code>gettext</code> supports is
-defining rules for plural forms. For example in English we
-might say <em>"one apple"</em> and <em>"two apples"</em>. However in a
-language like Hebrew the plural form for two apples can't be
-used for three apples, so to account for this <code>gettext</code>
-provides <code>ngettext</code>. Which is used like so:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gettext</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">ngettext</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n_</span>
-
-<span class="n">n_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;num&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
-</code></pre></div>
-
-<p>This allows <code>gettext</code> to pull the correct plural form given
-the int <code>3</code> and then formats the returning string,
-replacing <code>%(num)d</code> with <code>3</code>.</p>
-<h3>Lazy strings</h3>
-<p>If you're reusing the same string across your application
-and defining it at module level this string will be translated
-as soon as the module is instantiated. The module will
-always fallback to your app's default locale and your
-strings will not be translated. To get around this we use
-something called <code>lazy_gettext</code>. This allows us to define
-the string and reuse it across the application as
-<code>lazy_gettext</code> will keep a reference to the <code>msgid</code> and
-defer translation until the text is needed.</p>
-<p>You can see support for lazy_gettext in the <a href="https://docs.djangoproject.com/en/5.2/topics/i18n/translation/">django
-documentation</a></p>
-<h3>Wikipedia</h3>
-<p>Wikipedia manages content in over 300 languages. There are
-numerous volunteers which help to translate wiki into other
-languages and they do this through an interface called
-<a href="https://translatewiki.net/">translatewiki.net</a>. There's
-an entire
-<a href="https://www.mediawiki.org/wiki/Wikimedia_Language_and_Product_Localization">team</a>
-managing the infra and tools used in localisation.</p>
-<p>Similar to Wikipedia, I've seen interfaces used to
-manage and update translation files as well as a process
-that can be triggered automatically or on a schedule to
-update the <code>.mo</code> files that a service references. After
-updating the <code>.mo</code> file you can automatically roll out a
-deployment. The new deployment should then load the new
-<code>.mo</code> files into memory when the service is instantiated.</p>
-<p>You don't need to be working on a system the scale of
-Wikipedia to include translations. You can rely on
-a user's system locale to translate CLI tools. My Fiancee's
-system is set to Norwegian, if I ever write a CLI for her I
-think it would be fun to provide a Norwegian interface.</p>
+<p>Now <code>beta</code> is computed at most once within this method
+scope, we have essentially achieved doing less. If the
+<code>compute_beta</code> method incurs an expensive overhead and we
+are looking at a lengthy <code>trades</code> list this subtle oversight
+would have a significant impact on our latency.</p>
+<h3>Python</h3>
+<p>There are several layers of abstraction in Python and there
+are ways we can code that allow us to utilise computation in
+C more effectively. One such example of this: using list
+comprehension over a vanilla for-loop.</p>
+<p>If we wish to
+understand the number of steps the machine is doing
+for a method, Python allows us to disassemble bytecode using
+<code>import dis</code>. You might notice that there are additional
+<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
+to a list comprehension avoids this overhead and allows us
+to do less.</p>
+<h3>Databases</h3>
+<p>Relying on external systems can be expensive, in some
+cases we might query the same system several times in
+order to complete an operation. If we have a distributed system
+or intend to scale our server horizontally we are increasing
+the number of things that open and close connections to the
+database. Each time we open/close a connection the CPU has
+to process these instructions, this overhead can be
+significant when we are working in low latency environments.
+To get around this we introduce a connection pool between
+the database and our server, the connection pool manages
+long lived connections on the database and frees up the
+database to focus on database things.</p>
+<p>A common anti-pattern involving a database is having your
+ORM make N+1 queries. For this to occur we have a 1-many
+entity relationship. If we ask the database to return a
+group of n countries and then for each country we ask for
+all cities in that country we are making <code>N</code> (number of
+countries in our initial query) <code>+ 1</code> (the initial query)
+total requests to the database. These can be tricky to spot
+since the individual query could be performant, but the
+accumulative overhead and latency of all these queries can
+cause problems.</p>
+<p>We get around this by either asking for all countries and
+then ask for all cities given a set of country ids and
+perform the mapping in memory on the server, or we can
+increase the complexity of the query using a JOIN and allow
+the database to make the mapping. Either way we avoid the
+back and forth overhead of making <code>N+1</code> queries, effectively
+doing less.</p>
+<h3>When we can't do less</h3>
+<p>Sometimes we can't do less, but we can decide when work is
+done. There are situations that allow us to pre compute
+results and provide performant computation at the cost of a
+slower start time.</p>
+<p>Chess programming is an area which relies on high
+performance, the quick our program the further into the
+future we can look on each move during the game. One way we
+speed up a chess engine is by precomputing the movesets for
+every piece on the board for every possible position they
+might be in before the game starts. This allows us to look
+up all possible board positions for a piece during the game
+instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
+solver</a>
+he actually computes a pattern matrix for each word and
+saves it to a file in order to avoid having to incur the
+overhead on each execution of his wordle solver.</p>
+<h3>Constant Folding</h3>
+<p>Lastly there's an interesting optimisation that compilers
+make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
+Folding.</a></p>
+<p>When python is interpreted it parses the AST before
+executing. During this AST construction it finds expressions
+who's outcome is constant and computes the constant at this
+point instead of computing the expression every time it is
+referenced. As an example the variable <code>x = 24
+* 60</code> will be converted to <code>1440</code> before compiling the
+bytecode instructs for the machine.</p>
+<p>So in all cases, if we want a computer to be highly
+performant we just have to make it do less.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
+</ul>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p><code>$ man gettext</code>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>I'd like to draw attention that I stole this joke from
-  myself. I don't want to draw attention to the poorly
-  performed lightening talk I did. It was my first time and
-  I tried to fit this entire post into 5 minutes. <a href="https://youtu.be/chxsC2WYNTE?si=PI1u8Ei-o41RSZGS&amp;t=1357">Link
-  for
-  posterity</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Language">Mozilla:
-  Content-Language</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+<p>More on this will be explained when I write my second
+  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
                 </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
+                    <a href="low-latency-computation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
+    <div class="pagination">
+    </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
+</script>
             </div>
           </div>
 
