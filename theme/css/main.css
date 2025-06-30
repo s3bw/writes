@@ -765,6 +765,13 @@ pre {
 
 .highlight {
     border-radius: 4px;
-    animation: colorChange linear;
-    animation-timeline: scroll(root);
+    animation: colorChange 120s linear infinite;
+}
+
+/* Only apply scroll-timeline if supported */
+@supports (animation-timeline: scroll()) {
+    .highlight {
+        animation: colorChange linear;
+        animation-timeline: scroll(root);
+    }
 }
