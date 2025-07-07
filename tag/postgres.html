@@ -69,8 +69,8 @@ data, an inefficient database can impact the overall
 performance of our system. There are, however, a few
 ways we can improve database performance, one such way
 is defining appropriate indexes.</p>
-<p>This article describes what indexes are and some of the
-lesser known indexes such as GIN and BRIN indexes.</p>
+<p>This article describes indexes in Postgres and some of the
+lesser known indexes it uses, such as GIN and BRIN indexes.</p>
 <h3>Why do we use indexes.</h3>
 <p>We use indexes in postgres to optimise how we scan the data
 we have stored in the database. Similar to how binary search
@@ -99,21 +99,23 @@ table requires updating the index. Indexes also require
 disk space, so having unnecessary indexes will contribute to
 the rate at which your disk usage grows.</p>
 <h3>B-Tree</h3>
-<p>The default index type that Postgres uses is a B-Tree. This
-is a tree data structure similar to a binary tree except
-instead of having a node with two pointers a node contains a
-maximum size relative to the disk's block size, in postgres
-the default block size is 8kb. The node will store as many
-sorted keys as it can until it reaches the block size limit.</p>
-<p>Having a smaller index key can improve the performance of
+<p>The default index type Postgres uses is a B-Tree. This
+data structure is similar to a binary tree except
+instead of having a node with only two pointers a node can
+contain many pointer. The number of pointers is determined
+by Postgres's default block size, which is 8kb. A single
+node will store as many sorted keys as it can until it
+reaches this size limit. Postgres refers to these nodes as
+pages.</p>
+<p>Having a smaller index keys can improve the performance of
 your index as you'll be able to store more keys within the
-block limit. Resulting in fewer i/o instructions as fewer
-blocks require reading.</p>
+page limit. Resulting in fewer i/o instructions as fewer
+pages are required to be read from disk.</p>
 <p><a href="https://www.postgresql.org/docs/current/btree.html#BTREE-STRUCTURE">In postgres</a>
 leaf nodes will point to the physical
 location of the row on disk and the intermediary nodes
-(called <em>internal pages</em> in postgres) will point to the nodes on
-the next level down the tree.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+(or <em>internal pages</em>) will point to the nodes on
+the next level down the tree.</p>
 <p>There's a neat animation that can help visualise
 b-trees: <a href="https://btree.app/">https://btree.app/</a></p>
 <h3>Partition Indexes</h3>
@@ -121,11 +123,11 @@ b-trees: <a href="https://btree.app/">https://btree.app/</a></p>
 usage patterns and having some intuition about the
 system and the business. One such optimisation is the
 use of partition indexes, these are handy when you have
-a large table but only a subset of the data is used more
+a large table but only a subset of the data is used most
 frequently.</p>
-<p>As an example, we can imagine an order system for online
-orders, it's quite likely that once an order is fulfilled
-the status transitions to "complete" this order isn't
+<p>As an example, we can imagine an online order system,
+it's quite likely that once an order is fulfilled
+the status transitions to "complete" and this order isn't
 likely to be accessed as frequently as the orders that are
 still in progress. We can partition our index so that it
 contains only unfulfilled orders which will be a
@@ -172,7 +174,7 @@ So as an example a row that has a column with the value
 "Here's is a blog post" will create an index entry for
 each word in the value, (e.g. "blog") and then each entry
 will point to the rows that contain "blog" inside the
-composite column.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+composite column.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">1</a></sup></p>
 <div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">blogposts</span>
 <span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">search_vector</span><span class="w"> </span><span class="n">tsvector</span><span class="p">;</span>
 
@@ -196,7 +198,7 @@ small or data is updated or inserted out of chronological
 order then they won't form a good fit for BRIN indexes.</p>
 <p>Instead of storing pointers to entry locations in the B-Tree
 leaf nodes, BRIN indexes store summary information for the
-ranges that disk blocks are ordered. This allows for a
+ranges that the blocks on disk are ordered. This allows for a
 smaller overhead compared to the default B-Tree which stores
 all entries and their corresponding locations.</p>
 <div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_transactions_created_at_brin</span>
@@ -212,12 +214,8 @@ rows between certain ranges.</p>
 <div class="footnote">
 <hr />
 <ol>
-<li id="fn:1">
-<p>One thing to also note is that Postgres refers to the
-  blocks as pages.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
 <li id="fn:2">
-<p>I'm describing a reverse index.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p>I'm describing a reverse index.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
