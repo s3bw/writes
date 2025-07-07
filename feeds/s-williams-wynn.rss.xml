@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 07 Jul 2025 12:32:00 +0100</lastBuildDate><item><title>Database Indexes</title><link>https://s3bw.github.io/writes/database-indexes.html</link><description>&lt;p&gt;Insight into different postgres indexes&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 07 Jul 2025 12:32:00 +0100</pubDate><guid isPermaLink="false">tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</guid><category>software</category><category>postgres</category><category>software</category></item><item><title>Low Latency Computation</title><link>https://s3bw.github.io/writes/low-latency-computation.html</link><description>&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
+<rss version="2.0"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description></description><lastBuildDate>Mon, 07 Jul 2025 12:32:00 +0100</lastBuildDate><item><title>Database Indexes</title><link>https://s3bw.github.io/writes/database-indexes.html</link><description>&lt;p&gt;Often the most crucial part of a system is the database.
+Databases manage and handle the storage of our business
+data, an inefficient database can impact the overall
+performance of our system. There are, however, a few
+ways we can improve database performance, one such way
+is defining appropriate indexes.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 07 Jul 2025 12:32:00 +0100</pubDate><guid isPermaLink="false">tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</guid><category>software</category><category>postgres</category><category>software</category></item><item><title>Low Latency Computation</title><link>https://s3bw.github.io/writes/low-latency-computation.html</link><description>&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
 humans, anything slower and we would perceive the delay.
 Some systems are built to respond quicker than this,
 business cost can be sensitive to latency and every ms can

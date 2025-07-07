@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-07-07T12:32:00+01:00</updated><entry><title>Database Indexes</title><link href="https://s3bw.github.io/writes/database-indexes.html" rel="alternate"></link><published>2025-07-07T12:32:00+01:00</published><updated>2025-07-07T12:32:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</id><summary type="html">&lt;p&gt;Insight into different postgres indexes&lt;/p&gt;</summary><content type="html">&lt;p&gt;Often the most crucial part of a system is the database.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-07-07T12:32:00+01:00</updated><entry><title>Database Indexes</title><link href="https://s3bw.github.io/writes/database-indexes.html" rel="alternate"></link><published>2025-07-07T12:32:00+01:00</published><updated>2025-07-07T12:32:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</id><summary type="html">&lt;p&gt;Often the most crucial part of a system is the database.
+Databases manage and handle the storage of our business
+data, an inefficient database can impact the overall
+performance of our system. There are, however, a few
+ways we can improve database performance, one such way
+is defining appropriate indexes.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Often the most crucial part of a system is the database.
 Databases manage and handle the storage of our business
 data, an inefficient database can impact the overall
 performance of our system. There are, however, a few
