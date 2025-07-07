@@ -1,5 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-06-30T12:05:00+01:00</updated><entry><title>Low Latency Computation</title><link href="https://s3bw.github.io/writes/low-latency-computation.html" rel="alternate"></link><published>2025-06-30T12:05:00+01:00</published><updated>2025-06-30T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-30:/writes/low-latency-computation.html</id><summary type="html">&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-07-07T12:32:00+01:00</updated><entry><title>Database Indexes</title><link href="https://s3bw.github.io/writes/database-indexes.html" rel="alternate"></link><published>2025-07-07T12:32:00+01:00</published><updated>2025-07-07T12:32:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</id><summary type="html">&lt;p&gt;Insight into different postgres indexes&lt;/p&gt;</summary><content type="html">&lt;p&gt;Often the most crucial part of a system is the database.
+Databases manage and handle the storage of our business
+data, an inefficient database can impact the overall
+performance of our system. There are, however, a few
+ways we can improve database performance, one such way
+is defining appropriate indexes.&lt;/p&gt;
+&lt;p&gt;This article describes what indexes are and some of the
+lesser known indexes such as GIN and BRIN indexes.&lt;/p&gt;
+&lt;h3&gt;Why do we use indexes.&lt;/h3&gt;
+&lt;p&gt;We use indexes in postgres to optimise how we scan the data
+we have stored in the database. Similar to how binary search
+can optimise how quickly we find things in a dictionary (see
+my post on &lt;a href="/reframe-binary-search.html"&gt;binary search&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;We can use an index to inform the
+database on how to structure data in a way that allows us
+to find what we are looking for effectively i.e. fewer
+operations, fewer i/o and fewer comparisons leading to lower
+CPU usage and better performance.&lt;/p&gt;
+&lt;h3&gt;What is an index.&lt;/h3&gt;
+&lt;p&gt;An index is a data structure which allows us to minimise the
+number of instructions performed by the database
+in order to lookup table rows or improve the speed at which
+a result is sorted.&lt;/p&gt;
+&lt;p&gt;In the case of sorting if there's an
+index on a column that you require results to be
+&lt;em&gt;ordered by&lt;/em&gt;, the query can scan the index to return the
+results in sorted order, if there is no index on the column
+the data must first be fetched and then sorted in a separate
+step.&lt;/p&gt;
+&lt;h3&gt;Indexes aren't always good&lt;/h3&gt;
+&lt;p&gt;Over doing the number of indexes on a table can lead to
+lower write performance as every update or insert into the
+table requires updating the index. Indexes also require
+disk space, so having unnecessary indexes will contribute to
+the rate at which your disk usage grows.&lt;/p&gt;
+&lt;h3&gt;B-Tree&lt;/h3&gt;
+&lt;p&gt;The default index type that Postgres uses is a B-Tree. This
+is a tree data structure similar to a binary tree except
+instead of having a node with two pointers a node contains a
+maximum size relative to the disk's block size, in postgres
+the default block size is 8kb. The node will store as many
+sorted keys as it can until it reaches the block size limit.&lt;/p&gt;
+&lt;p&gt;Having a smaller index key can improve the performance of
+your index as you'll be able to store more keys within the
+block limit. Resulting in fewer i/o instructions as fewer
+blocks require reading.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.postgresql.org/docs/current/btree.html#BTREE-STRUCTURE"&gt;In postgres&lt;/a&gt;
+leaf nodes will point to the physical
+location of the row on disk and the intermediary nodes
+(called &lt;em&gt;internal pages&lt;/em&gt; in postgres) will point to the nodes on
+the next level down the tree.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;There's a neat animation that can help visualise
+b-trees: &lt;a href="https://btree.app/"&gt;https://btree.app/&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Partition Indexes&lt;/h3&gt;
+&lt;p&gt;We can optimise the indexes we create by understanding
+usage patterns and having some intuition about the
+system and the business. One such optimisation is the
+use of partition indexes, these are handy when you have
+a large table but only a subset of the data is used more
+frequently.&lt;/p&gt;
+&lt;p&gt;As an example, we can imagine an order system for online
+orders, it's quite likely that once an order is fulfilled
+the status transitions to "complete" this order isn't
+likely to be accessed as frequently as the orders that are
+still in progress. We can partition our index so that it
+contains only unfulfilled orders which will be a
+significantly smaller portion of our overall orders.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;INDEX&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx_uncomplete_orders_customer&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;ON&lt;/span&gt;
+&lt;span class="n"&gt;orders&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;customer_id&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;status&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;!=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;complete&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We also have to include this &lt;em&gt;WHERE&lt;/em&gt; filter in our queries
+if we wish to make use of this index.&lt;/p&gt;
+&lt;h3&gt;Covering Index&lt;/h3&gt;
+&lt;p&gt;A covering index allows us to add columns to the index's
+leaf nodes and thus avoids the lookup and reading of the
+entire the table row from disk. Essentially everything that
+the query needs is available on the index, reducing the number
+of operations required to complete the query.&lt;/p&gt;
+&lt;p&gt;As an example if we typically request a user's first name
+and last name with an email we can write an index on the
+email that includes the first and last name.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;INDEX&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx_user_email_include&lt;/span&gt;
+&lt;span class="k"&gt;ON&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;users&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;email&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;INCLUDE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;firstname&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;lastname&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We have to bare in mind that we should only include columns
+which change as frequently or less frequently than the key
+we are indexes otherwise we are duplicating data and
+increasing the write overhead. This isn't an issue for
+columns that rarely change.&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://www.postgresql.org/docs/current/sql-createindex.html"&gt;More on covering
+indexes&lt;/a&gt;
+see "INCLUDE".&lt;/p&gt;
+&lt;h3&gt;&lt;a href="https://www.postgresql.org/docs/current/gin.html"&gt;Gin Index&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;GIN stands for Generalised Inverted Index, similar to the
+inverted index that Lucene is built on, the same Lucene that
+Elasticsearch is built on. The slight difference is that
+this inverted index is generalised so it expects items
+that are indexed to be composed of multiple values the same
+way a sentence is composed of multiple words, with the goal
+to &lt;a href="http://www.sai.msu.su/~megera/wiki/Gin"&gt;support full-text
+search&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;An index entry is created for each element in the composite
+column and the entry points to a list of matching locations.
+So as an example a row that has a column with the value
+"Here's is a blog post" will create an index entry for
+each word in the value, (e.g. "blog") and then each entry
+will point to the rows that contain "blog" inside the
+composite column.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;ALTER&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;TABLE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;blogposts&lt;/span&gt;
+&lt;span class="k"&gt;ADD&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;COLUMN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;search_vector&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;tsvector&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+
+&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;INDEX&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx_blogposts_search&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;ON&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;blogposts&lt;/span&gt;
+&lt;span class="k"&gt;USING&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;GIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;search_vector&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;GIN indexes aren't limited to just text, they are
+generalised so they can be used with any composite type,
+JSONB for example.&lt;/p&gt;
+&lt;h3&gt;&lt;a href="https://www.postgresql.org/docs/current/brin.html"&gt;BRIN Index&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;BRIN stands for Block Range Index. These are indexes that
+specialise in handling very large tables in which certain
+columns have some natural correlation to their physical
+storage location. Essentially if each row in the table can
+be grouped in some manner to the blocks on disk then we have
+a potential use-case for the BRIN Index.&lt;/p&gt;
+&lt;p&gt;GPS tracking points and log tables are good examples of data
+with this natural correlation, if you have a table that is
+small or data is updated or inserted out of chronological
+order then they won't form a good fit for BRIN indexes.&lt;/p&gt;
+&lt;p&gt;Instead of storing pointers to entry locations in the B-Tree
+leaf nodes, BRIN indexes store summary information for the
+ranges that disk blocks are ordered. This allows for a
+smaller overhead compared to the default B-Tree which stores
+all entries and their corresponding locations.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;INDEX&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;idx_transactions_created_at_brin&lt;/span&gt;
+&lt;span class="k"&gt;ON&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;transactions&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;using&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;BRIN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;created_at&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This can be used to optimise queries that rely on fetching
+rows between certain ranges.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;orders&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt;
+&lt;span class="n"&gt;created_at&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;BETWEEN&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;2024-01-01&amp;#39;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AND&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;2024-12-31&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;One thing to also note is that Postgres refers to the
+  blocks as pages.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;I'm describing a reverse index.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"></category><category term="postgres"></category><category term="software"></category></entry><entry><title>Low Latency Computation</title><link href="https://s3bw.github.io/writes/low-latency-computation.html" rel="alternate"></link><published>2025-06-30T12:05:00+01:00</published><updated>2025-06-30T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-06-30:/writes/low-latency-computation.html</id><summary type="html">&lt;p&gt;Anything that loads faster than 200ms is instantaneous for
 humans, anything slower and we would perceive the delay.
 Some systems are built to respond quicker than this,
 business cost can be sensitive to latency and every ms can

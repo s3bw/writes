@@ -14,12 +14,12 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw - Ai</title>
+        <title>s3bw : Database Indexes</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw"/>
+        <meta property='og:title' content="s3bw : Database Indexes"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=""/>
-        <meta property='og:url' content="https://s3bw.github.io/writes"/>
+        <meta property='og:description' content=" : <p>Insight into different postgres indexes</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : database-indexes.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -49,332 +49,198 @@
 
           <div id="content">
             <div id="blog">
+<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
+<article>
 
+<div class="fullbody">
+    <div class="datebody">
+        <h2 class="date">Mon 07 July 2025</h2>
+    </div>
+    <div class="blogbodytop"></div>
+    <div class="blogbody">
+        <div class="titlebody">
+            <h3 class="title">
+                <font style="vertical-align: inherit;">Database Indexes</font>
+            </h3>
+        </div>
+        <div class="main">
+            <p>Often the most crucial part of a system is the database.
+Databases manage and handle the storage of our business
+data, an inefficient database can impact the overall
+performance of our system. There are, however, a few
+ways we can improve database performance, one such way
+is defining appropriate indexes.</p>
+<p>This article describes what indexes are and some of the
+lesser known indexes such as GIN and BRIN indexes.</p>
+<h3>Why do we use indexes.</h3>
+<p>We use indexes in postgres to optimise how we scan the data
+we have stored in the database. Similar to how binary search
+can optimise how quickly we find things in a dictionary (see
+my post on <a href="/reframe-binary-search.html">binary search</a>).</p>
+<p>We can use an index to inform the
+database on how to structure data in a way that allows us
+to find what we are looking for effectively i.e. fewer
+operations, fewer i/o and fewer comparisons leading to lower
+CPU usage and better performance.</p>
+<h3>What is an index.</h3>
+<p>An index is a data structure which allows us to minimise the
+number of instructions performed by the database
+in order to lookup table rows or improve the speed at which
+a result is sorted.</p>
+<p>In the case of sorting if there's an
+index on a column that you require results to be
+<em>ordered by</em>, the query can scan the index to return the
+results in sorted order, if there is no index on the column
+the data must first be fetched and then sorted in a separate
+step.</p>
+<h3>Indexes aren't always good</h3>
+<p>Over doing the number of indexes on a table can lead to
+lower write performance as every update or insert into the
+table requires updating the index. Indexes also require
+disk space, so having unnecessary indexes will contribute to
+the rate at which your disk usage grows.</p>
+<h3>B-Tree</h3>
+<p>The default index type that Postgres uses is a B-Tree. This
+is a tree data structure similar to a binary tree except
+instead of having a node with two pointers a node contains a
+maximum size relative to the disk's block size, in postgres
+the default block size is 8kb. The node will store as many
+sorted keys as it can until it reaches the block size limit.</p>
+<p>Having a smaller index key can improve the performance of
+your index as you'll be able to store more keys within the
+block limit. Resulting in fewer i/o instructions as fewer
+blocks require reading.</p>
+<p><a href="https://www.postgresql.org/docs/current/btree.html#BTREE-STRUCTURE">In postgres</a>
+leaf nodes will point to the physical
+location of the row on disk and the intermediary nodes
+(called <em>internal pages</em> in postgres) will point to the nodes on
+the next level down the tree.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>There's a neat animation that can help visualise
+b-trees: <a href="https://btree.app/">https://btree.app/</a></p>
+<h3>Partition Indexes</h3>
+<p>We can optimise the indexes we create by understanding
+usage patterns and having some intuition about the
+system and the business. One such optimisation is the
+use of partition indexes, these are handy when you have
+a large table but only a subset of the data is used more
+frequently.</p>
+<p>As an example, we can imagine an order system for online
+orders, it's quite likely that once an order is fulfilled
+the status transitions to "complete" this order isn't
+likely to be accessed as frequently as the orders that are
+still in progress. We can partition our index so that it
+contains only unfulfilled orders which will be a
+significantly smaller portion of our overall orders.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_uncomplete_orders_customer</span><span class="w"> </span><span class="k">ON</span>
+<span class="n">orders</span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;complete&#39;</span><span class="p">;</span>
+</code></pre></div>
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 28 April 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Engineering Vibe</font>
-                    </h3>
-                </div>
+<p>We also have to include this <em>WHERE</em> filter in our queries
+if we wish to make use of this index.</p>
+<h3>Covering Index</h3>
+<p>A covering index allows us to add columns to the index's
+leaf nodes and thus avoids the lookup and reading of the
+entire the table row from disk. Essentially everything that
+the query needs is available on the index, reducing the number
+of operations required to complete the query.</p>
+<p>As an example if we typically request a user's first name
+and last name with an email we can write an index on the
+email that includes the first and last name.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_email_include</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="n">INCLUDE</span><span class="w"> </span><span class="p">(</span><span class="n">firstname</span><span class="p">,</span><span class="w"> </span><span class="n">lastname</span><span class="p">);</span>
+</code></pre></div>
 
+<p>We have to bare in mind that we should only include columns
+which change as frequently or less frequently than the key
+we are indexes otherwise we are duplicating data and
+increasing the write overhead. This isn't an issue for
+columns that rarely change.</p>
+<p><a href="https://www.postgresql.org/docs/current/sql-createindex.html">More on covering
+indexes</a>
+see "INCLUDE".</p>
+<h3><a href="https://www.postgresql.org/docs/current/gin.html">Gin Index</a></h3>
+<p>GIN stands for Generalised Inverted Index, similar to the
+inverted index that Lucene is built on, the same Lucene that
+Elasticsearch is built on. The slight difference is that
+this inverted index is generalised so it expects items
+that are indexed to be composed of multiple values the same
+way a sentence is composed of multiple words, with the goal
+to <a href="http://www.sai.msu.su/~megera/wiki/Gin">support full-text
+search</a>.</p>
+<p>An index entry is created for each element in the composite
+column and the entry points to a list of matching locations.
+So as an example a row that has a column with the value
+"Here's is a blog post" will create an index entry for
+each word in the value, (e.g. "blog") and then each entry
+will point to the rows that contain "blog" inside the
+composite column.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">blogposts</span>
+<span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">search_vector</span><span class="w"> </span><span class="n">tsvector</span><span class="p">;</span>
 
-                <div class="main">
-                    <p>Like it or not, vibe coders are the next software engineers.</p>
-<p>3 years ago I made a prediction that triggered a mixed
-response:</p>
-<blockquote>
-<p>Within our lifetime. We will see a
-YouTuber or streamer becoming head of a state.</p>
-<p>Me (March 4, 2022)</p>
-</blockquote>
-<p>Whilst I don't believe this prediction has come true there's
-been progress. In June 2024 a Cypriot YouTuber was voted
-to become a member of the European Parliament, he earned 19.4%
-of the vote and earned 40% of votes from the 18-24 age group.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>The interesting thing about my prediction is that it seems
-that it's actually gone the other way. More politicians are
-becoming <a href="https://www.youtube.com/@liambyrnemp">YouTubers</a> and
-<a href="https://www.theguardian.com/us-news/2024/oct/27/tim-walz-football-video-game-twitch">Streamers.</a></p>
-<p>Could the same thing happen with vibe coders?
-Perhaps software engineers are the next vibe coders.</p>
-<h3>We like to bash</h3>
-<p>We see software engineers being dismissive at the
-content aimed at vibe coders. There's
-a new wave of people being introduced to coding and managing
-complexity; so <a href="https://www.youtube.com/watch?v=BJjsfNO5JTo&amp;t=1s&amp;ab_channel=YCombinator">most of the
-content</a>
-is covering the basics. I.e. Write tests, compartmentalise
-and plan things out before you dive into the code.</p>
-<p>This wave of programmers haven't had the time to digest The
-Mythical Man-Month to learn; upfront planning in
-software leads to a huge reduction in downstream costs.
-They are however learning the hard way, by hitting these
-challenges head on. (For better or worse).</p>
-<h3>How did you get here?</h3>
-<p>It's all a journey and we're at different stages of the
-process. A large overhead to programming is building up the
-vocabulary, this is the struggle for both early stage
-developers and vibe coders.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
-<p>Experienced programmers have been exposed to more language
-and can therefore provide more specificity when commanding
-the computer, vibe coders will get there. Perhaps this
-specificity makes the experienced programmer a better vibe
-coder. Maybe it's <a href="https://stackoverflow.blog/2021/09/28/become-a-better-coder-with-this-one-weird-click/">their
-keyboard.</a></p>
-<p>No one was born with the knowledge of how the computer
-works, there's hurdles to overcome. It was
-only a decade ago we were cringing at someone stating
-they're full-time YouTubers or an Instagram influencer,
-and look, they've still got you glued to your screen.</p>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_blogposts_search</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">blogposts</span>
+<span class="k">USING</span><span class="w"> </span><span class="n">GIN</span><span class="w"> </span><span class="p">(</span><span class="n">search_vector</span><span class="p">);</span>
+</code></pre></div>
+
+<p>GIN indexes aren't limited to just text, they are
+generalised so they can be used with any composite type,
+JSONB for example.</p>
+<h3><a href="https://www.postgresql.org/docs/current/brin.html">BRIN Index</a></h3>
+<p>BRIN stands for Block Range Index. These are indexes that
+specialise in handling very large tables in which certain
+columns have some natural correlation to their physical
+storage location. Essentially if each row in the table can
+be grouped in some manner to the blocks on disk then we have
+a potential use-case for the BRIN Index.</p>
+<p>GPS tracking points and log tables are good examples of data
+with this natural correlation, if you have a table that is
+small or data is updated or inserted out of chronological
+order then they won't form a good fit for BRIN indexes.</p>
+<p>Instead of storing pointers to entry locations in the B-Tree
+leaf nodes, BRIN indexes store summary information for the
+ranges that disk blocks are ordered. This allows for a
+smaller overhead compared to the default B-Tree which stores
+all entries and their corresponding locations.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_transactions_created_at_brin</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">transactions</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">BRIN</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
+</code></pre></div>
+
+<p>This can be used to optimise queries that rely on fetching
+rows between certain ranges.</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span>
+<span class="n">created_at</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">&#39;2024-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">&#39;2024-12-31&#39;</span><span class="p">;</span>
+</code></pre></div>
+
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p><a href="https://www.bbc.co.uk/news/articles/c4nnrwr72dqo">Cypriot Fidias Panayiotou</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>One thing to also note is that Postgres refers to the
+  blocks as pages.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 <li id="fn:2">
-<p>What exactly is the difference between "an early stage
-  developer" and a "vibe coder"? This sums up my point.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+<p>I'm describing a reverse index.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:08 | </font>
-                    <a href="engineering-vibe.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 07 April 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Assisted Development</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>76% of developers are either already using or plan to use ai
-assisted tools as part of their workflow, 82% of these developers
-cite an increase in productivity as the largest impact from using
-these tools<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>AI has integrated itself into our tooling, from search and
-planning to completely embedding
-itself into our development environment. There's a drive to
-apply LLMs into our workflow and it's important to see what
-works and what doesn't.</p>
-<p>There's no doubt that these tools will be adopted by
-developers and we should figure out how best to use them, or
-risk being left behind.</p>
-<h3>The great bot cloud in the sky</h3>
-<p>We will never stop imagining machines taking over our lives.
-It's been 43 years since the release of 'Blade Runner' and 26
-years for 'The Matrix'. However, more significantly, it's been 8
-years since I released my existential twitter bot <a href="https://x.com/CanDennisDream">Dennis</a>.</p>
-<p>Dennis was essentially a cronjob that ran every hour. He
-would read through ~100 comments on roughly 10 subreddits
-covering topics on existentialism and philosophy. Pulling
-this knowledge from the depth of Reddit he was able
-to spew 40.5k tweets of garbage for about 5 years.</p>
-<p>Dennis trains a Markov chain and would begin his sentences
-with a random starting word. So OpenAI and Github weren't
-the first to train language models using the data available
-to them on the internet. I get the feeling that I was onto
-something in 2017 and with enough funding I could have
-trained either a personal life coach or replicated teenage
-angst.</p>
-<p>YC &amp; a16z, you're missing out here.</p>
-<h3>Becoming a cyborg</h3>
-<p>We are now able to integrate these large probabilistic models
-directly into our code editors. Previously I've been using
-the tab key to autocomplete single words, with a copilot
-assistant I can write an in-line comment such as
-<em>"func provides post-order iteration of a tree given root"</em>
-and my copilot will suggest the entire function.</p>
-<p>The code can be wrong, but in the end the developer is
-responsible for the code that gets checked into the
-codebase. It's easy to say <em>"yup, looks good"</em> especially when
-under pressure to ship. Despite this I find it a massive
-boost to productivity since I only need to fill in some
-gaps or slightly modify the code-spit. On occasion I find
-myself feeling like I'm walking in mud when I hand write
-the code without this autocomplete feature. There are also
-occasions when I disable the feature altogether because it's
-context switching in its suggestions.</p>
-<p>Perhaps it's problematic not knowing where this code came
-from. At least with Dennis; I knew I could rely on his
-thoughts of existence due to having control over his
-training data, but the code that a copilot provides me...</p>
-<p>🤷 <a href="https://www.techzine.eu/news/privacy-compliance/122050/developers-lose-github-copilot-copyright-case-again/">who
-knows...</a></p>
-<h3>Is it a star sign or an LLM?</h3>
-<p>Search has been disrupted. The only people that were
-thinking more than Dennis about their own existence was
-the Google board when OpenAI released ChatGPT.
-Just kidding, Google came in second, first place goes to
-Stack Overflow.</p>
-<p>A big chunk of the job in software engineering is trying to
-discover if anyone else has faced a similar problem and if
-they've solved it. We are also tasked with
-understanding an API or how a library works or if it can
-be integrated in order to solve something or provide a new
-service.</p>
-<p>Google was good for this, but it's slowly being consumed by
-adverts and medium articles. Giving straight forward answers
-doesn't seem to be Googles' focus. Stack Overflow is
-an alternative, but you're not going to plug your homework
-into a question and get someone else to do it for you, nor
-will anyone provide free assistance so that you can earn
-a salary, but they're helpful in ways none the less.</p>
-<p>Claude, Copilot and ChatGPT are stark improvements in this
-area as you can do a bit of back and forth, provide
-clarity on what you're looking for and they'll
-happily bend it to your use-case, without referring
-their mate for the job because they get paid for ad-clicks.
-(Well not yet).<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
-<h3>The rocket is taking off 🚀</h3>
-<p>AI integrated environments for coding are certainly on
-trend and we are already rolling eyes at the phrase
-<em>"Vibe Coder"</em>.</p>
-<p>Entire classes of university students are
-scoring 100% on homework assignments, so professors are
-having to rethink how they assess their classes. I recall in
-high school a student questioned why we couldn't
-bring our calculators into an exam when we'd have access to
-this in the real world. There's a cohort of graduates coming
-into the workforce that's going to be more dependant or more
-adept at using AI tools so it's worth getting a sense for
-how these tools might be used.</p>
-<p>While having access to Cursor I have found that I can have a
-working solution to a small problem that I'm facing in about an
-hour. Before cursor I might have taken note of my idea and
-then forgotten about it or spent the whole weekend putting it
-together. It's even better when you have a clear vision of
-how you wish the solution to look. The models don't do very
-well if your ideas are vague and you're relying on them to
-apply their best guess. It's multiple times more beneficial
-when you know what a good result should look like.</p>
-<p>We will see more bespoke software. This could be a good
-thing,
-since we might find something better to match our preferences
-when it comes to tools. However due to the increase
-in productivity I've found myself leaning more towards, let
-me make that myself, instead of looking for existing
-solutions. This could be more pronounced in inexperienced
-software engineers as they will be less familiar with the
-tools that exist and they might power down their own path of
-reinventing the wheel.</p>
-<p>With more bespoke software comes fewer people familiar with
-said software and perhaps we will be running into problems
-that have already been solved in the past. This is certainly
-a cyclical part of learning, so we might see us enter a new
-cycle of how we manage our server deployment, but this time
-with a Gen Z finesse.</p>
-<h3>Just because you can</h3>
-<p>I've also found myself questioning how I should dedicate my
-time more, if I can spit something out in an hour I'm
-question my design and interface far more. Maybe it's because
-that's actually the fun part of programming and the coding
-is going to take less time so I've got more time to assess
-if I'm thinking about the problem correctly.</p>
-<p>I've found this not to be the case with less experienced
-developers, as they'd prefer to use this time to fit one
-more feature into their service without questioning if that
-feature makes holistic sense.</p>
-<h3>Are thing going badly?</h3>
-<p>There are weaknesses with AI tools in their current form,
-such as solving an entire problem from A-Z instead of using
-the library I wrote to solve A-M and focusing on N-Z. I've
-also found weaknesses when searching for things that are case
-sensitive. Seems like Google is still on top when I provide
-a search in quotations.</p>
-<p>Now that I've been using it for a while I have developed
-some intuition on the strengths and weaknesses, despite this
-I still find myself hand writing code line by line without
-any assistance. Mostly in more complicated areas of the code
-base, spaces I'd like be familiar in. Having an
-understanding of the system is valuable when you want to
-contribution to discussion, help stake holders and
-make decisions independently.</p>
-<p>It's still valuable to build intuition and understand how
-others might use these tools. Building on this knowledge
-could help create solutions that were previously out of
-reach, or just get you a seat at the table of decision
-making. In the end it's good be be familiar with the tools,
-it might help you avoid the odd looks when you bring out
-your dusty book of log tables.</p>
-<h3>Further Reading:</h3>
-<ul>
-<li><a href="https://martinfowler.com/articles/exploring-gen-ai.html">Martin Fowler: Exploring Gen
-    AI</a></li>
-</ul>
-<h3>Footnotes</h3>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p><a href="https://survey.stackoverflow.co/2024/ai#developer-tools-ai-ben-prof">Stack Overflow Developer's Survey
-  2024</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p><a href="https://help.netflix.com/en/node/126831">See Netflix</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:10 | </font>
-                    <a href="assisted-development.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    <div class="pagination">
     </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+    <div id="comments"></div>
 
-    showFormButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const form = this.nextElementSibling;
-            if (form.style.display === 'block') {
-                form.style.display = 'none';
-            } else {
-                form.style.display = 'block';
-            }
-        });
-    });
-});
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    loadComments('client_fBaxnE6w', '#comments', 'database-indexes.html');
+  });
 </script>
+
+
+</div>
+
+
+</article>
             </div>
           </div>
 
