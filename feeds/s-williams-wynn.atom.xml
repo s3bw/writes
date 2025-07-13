@@ -59,11 +59,11 @@ location of the row on disk and the intermediary nodes
 the next level down the tree.&lt;/p&gt;
 &lt;p&gt;There's a neat animation that can help visualise
 b-trees: &lt;a href="https://btree.app/"&gt;https://btree.app/&lt;/a&gt;&lt;/p&gt;
-&lt;h3&gt;Partition Indexes&lt;/h3&gt;
+&lt;h3&gt;Partial Indexes&lt;/h3&gt;
 &lt;p&gt;We can optimise the indexes we create by understanding
 usage patterns and having some intuition about the
 system and the business. One such optimisation is the
-use of partition indexes, these are handy when you have
+use of partial indexes, these are handy when you have
 a large table but only a subset of the data is used most
 frequently.&lt;/p&gt;
 &lt;p&gt;As an example, we can imagine an online order system,
