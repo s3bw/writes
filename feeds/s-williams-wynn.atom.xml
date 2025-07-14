@@ -1,5 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-07-07T12:32:00+01:00</updated><entry><title>Database Indexes</title><link href="https://s3bw.github.io/writes/database-indexes.html" rel="alternate"></link><published>2025-07-07T12:32:00+01:00</published><updated>2025-07-07T12:32:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</id><summary type="html">&lt;p&gt;Often the most crucial part of a system is the database.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"></link><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"></link><id>https://s3bw.github.io/writes/</id><updated>2025-07-14T12:07:00+01:00</updated><entry><title>Assert</title><link href="https://s3bw.github.io/writes/assert.html" rel="alternate"></link><published>2025-07-14T12:07:00+01:00</published><updated>2025-07-14T12:07:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-14:/writes/assert.html</id><summary type="html">&lt;p&gt;We are prompting a machine using an ambiguous and context
+dependent natural language to create precise and detailed
+machine instructions. It is no wonder we are finding
+those with experience with coding are at an
+advantage when it comes to commanding the machine. The vibe
+coder is overlooking the techniques and the vocabulary
+the profession has developed over several decades.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Natural language is context dependant and ambiguous. Do you
+think you can one shot a solid business idea? It took twitch
+seven years to pivot into gaming. It
+wasn't seven years of accumulating stacks of code that
+helped them stick this landing.&lt;/p&gt;
+&lt;p&gt;We are prompting a machine using an ambiguous and context
+dependent natural language to create precise and detailed
+machine instructions. It is no wonder we are finding
+those with experience with coding are at an
+advantage when it comes to commanding the machine. The vibe
+coder is overlooking the techniques and the vocabulary
+the profession has developed over several decades.&lt;/p&gt;
+&lt;p&gt;We've learnt in order to generate the best response from an
+LLM we need more precision and less ambiguity from our
+prompts. If only we could develop a language that helps us
+achieve a precise way of creating machine instructions that
+eliminates ambiguity, perhaps we could call this a &lt;em&gt;programming
+language&lt;/em&gt;?&lt;/p&gt;
+&lt;h3&gt;Fingers crossed&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Nothing is built on stone; all is built on sand, but we
+must build as if the sand were stone.&lt;/p&gt;
+&lt;p&gt;Jorge Luis Borges (From "Software Engineering at
+Google")&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Most software is built on hope. I write a function that
+multiplies two integers together and hope that it works. We
+can also write a test to assert that these numbers will
+output the correct number, but are you going to write a test
+for every combination of all numbers?&lt;/p&gt;
+&lt;p&gt;Once we put lines of code into production the function may
+or may not be run with the exact input that we expected when
+we wrote the code.&lt;/p&gt;
+&lt;p&gt;We are required to create programs without knowledge of the
+concrete values that will be passed into it; to think of a
+result in terms of it's name.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;double_n = add(n, n)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;For every computation we rely on hope.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Program testing can be used to show the presence of bugs,
+but never to show their absence!&lt;/p&gt;
+&lt;p&gt;EWD-249 (1970)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;Staying Organised&lt;/h3&gt;
+&lt;p&gt;How we ensure our programs are correct also tends to relate
+to how we scale a project. We've recognised the limitations
+of a single mind to contain the details of an entire program&lt;/p&gt;
+&lt;p&gt;It's the core responsibility of a software engineer to watch
+and manage this complexity.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The art of programming is the art of organizing
+complexity, of mastering multitude and avoiding its bastard
+chaos as effectively as possible.&lt;/p&gt;
+&lt;p&gt;EWD-249 (1970)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Since then we've had multiple attempts at growing a project.
+There's a link between how we structure code and how we test
+it. Tests enables us to offload the checking of our
+functionality and well structured code tends to be easier to
+test.&lt;/p&gt;
+&lt;p&gt;This line of thinking led to the practice of Test Driven
+Development (TDD) where it's thought that writing out the
+tests as a first step leads the programmer to write more
+cohesive and well structured code.&lt;/p&gt;
+&lt;h3&gt;Describing Tests&lt;/h3&gt;
+&lt;p&gt;If our tests are determining how we structure the code,
+what's determining how we structure the tests?&lt;/p&gt;
+&lt;p&gt;First let's address one of the biggest issues in
+software engineering. The way we teach and introduce
+how-to-test is vague and ambiguous, using abstract
+examples of
+unrealistic classes and functions. The worse offending term
+being the "Unit Test" as the definitive boundary for
+a unit can always be argued.&lt;/p&gt;
+&lt;p&gt;We have a better understanding of what is not a unit test,
+than what a unit test is.&lt;/p&gt;
+&lt;p&gt;The second offender is the testing pyramid. Vehement
+advocates will disagree on the boundaries of each layer and
+these layers won't apply to all projects. Setting out to
+define these at the beginning of a project just waste our
+time. Often we can only determine where areas of a project
+will grow with hindsight and we are already building
+software on a foundation of hope so we should stick to just
+enough testing.&lt;/p&gt;
+&lt;p&gt;We shouldn't let the question "Where should we test it"
+get in the way of testing it.&lt;/p&gt;
+&lt;h3&gt;Managing Tests&lt;/h3&gt;
+&lt;p&gt;We should start thinking more about how we manage tests.&lt;/p&gt;
+&lt;p&gt;The first thing to address is test duplication. It is all
+too easy to see a test, make a copy and change it slightly.
+This can lead us to having the same thing tested across
+multiple tests. We can reduce the amount of code we are
+maintaining if we have tests that are targeted. If
+small changes lead to an unexpected amount of tests breaking
+we have too much assert duplication.&lt;/p&gt;
+&lt;p&gt;I compare testing to a climber scaling a mountain with a
+limited number of pegs. If you are too cautious and nail a
+peg after every metre you'll find it tougher to make
+changes when you change direction as the climber's rope is
+limited by the distance between each peg. Each peg also
+requires removing when a direction needs to change larger
+than a metre. However if you nail a peg every 10 metres
+the climber is flexible to direction changes at the risk
+of taking a battering when they fall.&lt;/p&gt;
+&lt;p&gt;Techniques that lead us to balance being defensive and
+flexible lead us to having a better test suite. Reducing
+test duplication is one example of this. If we are using 3
+pegs in the same location we aren't providing a greater
+level of safety and we risk requiring unnecessary changes
+in the future.&lt;/p&gt;</content><category term="testing"></category><category term="testing"></category><category term="software"></category></entry><entry><title>Database Indexes</title><link href="https://s3bw.github.io/writes/database-indexes.html" rel="alternate"></link><published>2025-07-07T12:32:00+01:00</published><updated>2025-07-07T12:32:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-07:/writes/database-indexes.html</id><summary type="html">&lt;p&gt;Often the most crucial part of a system is the database.
 Databases manage and handle the storage of our business
 data, an inefficient database can impact the overall
 performance of our system. There are, however, a few

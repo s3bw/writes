@@ -14,7 +14,7 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw</title>
+        <title>s3bw - testing</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
         <meta property='og:title' content="s3bw"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
@@ -51,152 +51,185 @@
             <div id="blog">
 
 
+
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Thu 06 December 2018</h2>
+                <h2 class="date">Mon 14 July 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Chain of Responsibility</font>
+                        <font style="vertical-align: inherit;">Assert</font>
                     </h3>
                 </div>
+
+<div class="series-container">
+    <p class="series-title">The "Software Testing" series:</p>
+    <ol class="series-list">
+            <ol class="active">
+                1: (here) Assert
+            </ol>
+    </ol>
+</div>
+
                 <div class="main">
-                    <p>Easily one of my favourite patterns from the gang of four is the <em>chain of
-responsibility</em> pattern. It aims to avoid coupling the object that sends a
-request to the handlers of the request. This is especially useful if the
-structure to our handlers follows a sense of hierarchy.</p>
-<p>I've had very few opportunities to implement design patterns, but gaming
-has really helped me to envision a context where several designs can be
-applied as handy solutions to managing complexity.</p>
-<p>So we will apply the chain of responsibility to a situation where we have
-gathered four of the most powerful wizards in a room, each of whom will test
-their power by casting a spell.</p>
-<p>For this example we have our wizards as the objects which send requests.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Wizard</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a wizard.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">intelligence</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="c1">#: Identify the wizard by name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1">#: Intelligence as a proxy of a wizard&#39;s power.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">=</span> <span class="n">intelligence</span>
-
-    <span class="k">def</span> <span class="nf">cast_spell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">:</span> <span class="n">Spell</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Have the wizard cast a spell.&quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> casts </span><span class="si">{</span><span class="n">spell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> spell.&quot;</span><span class="p">)</span>
-        <span class="n">spell</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+                    <p>Natural language is context dependant and ambiguous. Do you
+think you can one shot a solid business idea? It took twitch
+seven years to pivot into gaming. It
+wasn't seven years of accumulating stacks of code that
+helped them stick this landing.</p>
+<p>We are prompting a machine using an ambiguous and context
+dependent natural language to create precise and detailed
+machine instructions. It is no wonder we are finding
+those with experience with coding are at an
+advantage when it comes to commanding the machine. The vibe
+coder is overlooking the techniques and the vocabulary
+the profession has developed over several decades.</p>
+<p>We've learnt in order to generate the best response from an
+LLM we need more precision and less ambiguity from our
+prompts. If only we could develop a language that helps us
+achieve a precise way of creating machine instructions that
+eliminates ambiguity, perhaps we could call this a <em>programming
+language</em>?</p>
+<h3>Fingers crossed</h3>
+<blockquote>
+<p>Nothing is built on stone; all is built on sand, but we
+must build as if the sand were stone.</p>
+<p>Jorge Luis Borges (From "Software Engineering at
+Google")</p>
+</blockquote>
+<p>Most software is built on hope. I write a function that
+multiplies two integers together and hope that it works. We
+can also write a test to assert that these numbers will
+output the correct number, but are you going to write a test
+for every combination of all numbers?</p>
+<p>Once we put lines of code into production the function may
+or may not be run with the exact input that we expected when
+we wrote the code.</p>
+<p>We are required to create programs without knowledge of the
+concrete values that will be passed into it; to think of a
+result in terms of it's name.</p>
+<div class="highlight"><pre><span></span><code>double_n = add(n, n)
 </code></pre></div>
 
-<p>We will make each behaviour of the spell, which is determined by the power of
-the wizard casting it, as an object handling a request. If the wizard does not
-meet the handler's requirements it passes the request on, to it's successor.
-This is where we have applied a sense of hierarchy to the handler.</p>
-<p>To begin we have an Abstract Handler:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-
-
-<span class="k">class</span> <span class="nc">AbstractHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">successor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span> <span class="o">=</span> <span class="n">successor</span>
-
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="n">reaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">reaction</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">create</span><span class="p">)</span>
-
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Must provide implementation in subclass.&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Now we can define our handler hierarchy:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LowPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spell backfires.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">MediumPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Small fire ball is cast.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">HighPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A fire ball blazes across the room&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">GodlikePowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Massive column of fire burns through the room!&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
-</code></pre></div>
-
-<p>Finally a single object to identify the spell chain.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Spell</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="c1">#: Identifying the spell by a name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1">#: How the spell behaves at differing levels of user&#39;s power</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">LowPowerFireSpell</span><span class="p">(</span>
-            <span class="n">MediumPowerFireSpell</span><span class="p">(</span>
-                <span class="n">HighPowerFireSpell</span><span class="p">(</span>
-                    <span class="n">GodlikePowerFireSpell</span><span class="p">()</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
-</code></pre></div>
-
-<p>To test their skill, we have a spell which casts a "Fire Ball".
-We have the following wizards present:</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">fire_spell</span> <span class="o">=</span> <span class="n">Spell</span><span class="p">(</span><span class="s1">&#39;Fire Ball&#39;</span><span class="p">)</span>
-    <span class="n">merlin</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Merlin&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-    <span class="n">albus</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Albus&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
-    <span class="n">howl</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Howl&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
-    <span class="n">gandalf</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Gandalf&quot;</span><span class="p">,</span> <span class="mi">38</span><span class="p">)</span>
-</code></pre></div>
-
-<p>They are all gathered in a room, and take turns casting the same spell.</p>
-<div class="highlight"><pre><span></span><code><span class="n">room</span> <span class="o">=</span> <span class="p">[</span><span class="n">merlin</span><span class="p">,</span> <span class="n">albus</span><span class="p">,</span> <span class="n">howl</span><span class="p">,</span> <span class="n">gandalf</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">wizard</span> <span class="ow">in</span> <span class="n">room</span><span class="p">:</span>
-    <span class="n">wizard</span><span class="o">.</span><span class="n">cast_spell</span><span class="p">(</span><span class="n">fire_spell</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>To which we should see the spell behave according to their intelligence:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>script.py
-Merlin<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-Spell<span class="w"> </span>backfires.
-
-Albus<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-Small<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>is<span class="w"> </span>cast.
-
-Howl<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-A<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>blazes<span class="w"> </span>across<span class="w"> </span>the<span class="w"> </span>room
-
-Gandalf<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-A<span class="w"> </span>Massive<span class="w"> </span>column<span class="w"> </span>of<span class="w"> </span>fire<span class="w"> </span>burns<span class="w"> </span>through<span class="w"> </span>the<span class="w"> </span>room!
-
-<span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$
-</code></pre></div>
-
-<p><a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py">Implementation can be found here</a></p>
+<p>For every computation we rely on hope.</p>
+<blockquote>
+<p>Program testing can be used to show the presence of bugs,
+but never to show their absence!</p>
+<p>EWD-249 (1970)</p>
+</blockquote>
+<h3>Staying Organised</h3>
+<p>How we ensure our programs are correct also tends to relate
+to how we scale a project. We've recognised the limitations
+of a single mind to contain the details of an entire program</p>
+<p>It's the core responsibility of a software engineer to watch
+and manage this complexity.</p>
+<blockquote>
+<p>The art of programming is the art of organizing
+complexity, of mastering multitude and avoiding its bastard
+chaos as effectively as possible.</p>
+<p>EWD-249 (1970)</p>
+</blockquote>
+<p>Since then we've had multiple attempts at growing a project.
+There's a link between how we structure code and how we test
+it. Tests enables us to offload the checking of our
+functionality and well structured code tends to be easier to
+test.</p>
+<p>This line of thinking led to the practice of Test Driven
+Development (TDD) where it's thought that writing out the
+tests as a first step leads the programmer to write more
+cohesive and well structured code.</p>
+<h3>Describing Tests</h3>
+<p>If our tests are determining how we structure the code,
+what's determining how we structure the tests?</p>
+<p>First let's address one of the biggest issues in
+software engineering. The way we teach and introduce
+how-to-test is vague and ambiguous, using abstract
+examples of
+unrealistic classes and functions. The worse offending term
+being the "Unit Test" as the definitive boundary for
+a unit can always be argued.</p>
+<p>We have a better understanding of what is not a unit test,
+than what a unit test is.</p>
+<p>The second offender is the testing pyramid. Vehement
+advocates will disagree on the boundaries of each layer and
+these layers won't apply to all projects. Setting out to
+define these at the beginning of a project just waste our
+time. Often we can only determine where areas of a project
+will grow with hindsight and we are already building
+software on a foundation of hope so we should stick to just
+enough testing.</p>
+<p>We shouldn't let the question "Where should we test it"
+get in the way of testing it.</p>
+<h3>Managing Tests</h3>
+<p>We should start thinking more about how we manage tests.</p>
+<p>The first thing to address is test duplication. It is all
+too easy to see a test, make a copy and change it slightly.
+This can lead us to having the same thing tested across
+multiple tests. We can reduce the amount of code we are
+maintaining if we have tests that are targeted. If
+small changes lead to an unexpected amount of tests breaking
+we have too much assert duplication.</p>
+<p>I compare testing to a climber scaling a mountain with a
+limited number of pegs. If you are too cautious and nail a
+peg after every metre you'll find it tougher to make
+changes when you change direction as the climber's rope is
+limited by the distance between each peg. Each peg also
+requires removing when a direction needs to change larger
+than a metre. However if you nail a peg every 10 metres
+the climber is flexible to direction changes at the risk
+of taking a battering when they fall.</p>
+<p>Techniques that lead us to balance being defensive and
+flexible lead us to having a better test suite. Reducing
+test duplication is one example of this. If we are using 3
+pegs in the same location we aren't providing a greater
+level of safety and we risk requiring unnecessary changes
+in the future.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:07 | </font>
+                    <a href="assert.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
 
+    <div class="pagination">
+    </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
+</script>
             </div>
           </div>
 

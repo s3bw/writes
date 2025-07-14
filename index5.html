@@ -54,6 +54,169 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Thu 16 April 2020</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Module not found Heroku</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>There are some bugs and problems that give a thrill once they're
+solved. The best bugs are the ones that teach you something,
+the worst bugs are the ones that indicate that you've not
+improved your spelling and the difference between an <code>l</code> and a <code>1</code>
+is large.</p>
+<p>Figuring out why I was facing the following traceback in heroku
+provided a time consuming learning experience, but probably one
+that I won't forget.</p>
+<div class="highlight"><pre><span></span><code>heroku<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>State<span class="w"> </span>changed<span class="w"> </span>from<span class="w"> </span>crashed<span class="w"> </span>to<span class="w"> </span>starting
+heroku<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>State<span class="w"> </span>changed<span class="w"> </span>from<span class="w"> </span>starting<span class="w"> </span>to<span class="w"> </span>crashed
+heroku<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>State<span class="w"> </span>changed<span class="w"> </span>from<span class="w"> </span>crashed<span class="w"> </span>to<span class="w"> </span>starting
+app<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>Traceback<span class="w"> </span><span class="o">(</span>most<span class="w"> </span>recent<span class="w"> </span>call<span class="w"> </span>last<span class="o">)</span>:
+app<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>File<span class="w"> </span><span class="s2">&quot;/home/app/server/bin/server&quot;</span>,<span class="w"> </span>line<span class="w"> </span><span class="m">3</span>,<span class="w"> </span><span class="k">in</span><span class="w"> </span>&lt;module&gt;
+app<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>from<span class="w"> </span>api.server<span class="w"> </span>import<span class="w"> </span>deploy
+app<span class="o">[</span>web.1<span class="o">]</span>:<span class="w"> </span>ModuleNotFoundError:<span class="w"> </span>No<span class="w"> </span>module<span class="w"> </span>named<span class="w"> </span><span class="s1">&#39;api&#39;</span>
+</code></pre></div>
+
+<p>Why can't the module be found 🤔!</p>
+<p>Worst of all, the dockerfile builds locally, and when I run it.
+It's executing <code>/home/app/server/bin/server</code> and ready to
+receive traffic...</p>
+<div class="highlight"><pre><span></span><code><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.8.2</span>
+
+<span class="k">ENV</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s">appuser</span>
+<span class="k">ENV</span><span class="w"> </span>HOME<span class="w"> </span>/home/<span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+
+<span class="k">RUN</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/server
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">${HOME}/server</span>
+
+<span class="k">ENV</span><span class="w"> </span>PATH<span class="w"> </span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/server/bin:<span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>/.local/bin:<span class="nv">$PATH</span>
+
+<span class="k">USER</span><span class="w"> </span><span class="s">appuser</span>
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;server&quot;</span><span class="p">]</span>
+</code></pre></div>
+
+<p>I won't go into how long I spent on thinking it had something
+to do with permission. Looking back, it's quite clear that a
+permission has nothing to do with it, since the logs would say
+so.</p>
+<h3>Take a step back</h3>
+<p>The difference between the image on heroku and the image
+running locally. What probably made me assume it was a
+permission error was the quote from their docs:</p>
+<blockquote>
+<p>containers are not run with root privileges in Heroku</p>
+</blockquote>
+<p>So there was some <strong>funky</strong> business they're doing to the
+user I provided.</p>
+<h3>Get closer to the problem</h3>
+<p>Finding out that I could get inside the heroku container
+certainly helped me figure out the problem:</p>
+<div class="highlight"><pre><span></span><code>heroku<span class="w"> </span>run<span class="w"> </span>bash
+</code></pre></div>
+
+<p>I could now recreate the Module not found error. I tried using
+<code>pipenv</code> to install the module that was missing, however that
+didn't work either. hmm.. Where are these modules installed??</p>
+<p>Show me the site-packages:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>site
+</code></pre></div>
+
+<h3>Heroku</h3>
+<div class="highlight"><pre><span></span><code><span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python38.zip&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8/lib-dynload&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/appuser/server/.local/lib/python3.8/site-packages&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/appuser/server&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8/site-packages&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">USER_BASE</span><span class="p">:</span> <span class="s1">&#39;/home/appuser/server/.local&#39;</span> <span class="p">(</span><span class="n">exists</span><span class="p">)</span>
+<span class="n">USER_SITE</span><span class="p">:</span> <span class="s1">&#39;/home/appuser/server/.local/lib/python3.8/site-packages&#39;</span> <span class="p">(</span><span class="n">exists</span><span class="p">)</span>
+<span class="n">ENABLE_USER_SITE</span><span class="p">:</span> <span class="kc">True</span>
+</code></pre></div>
+
+<h3>Local Docker Container</h3>
+<div class="highlight"><pre><span></span><code><span class="n">sys</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;/home/appuser/server&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python38.zip&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8/lib-dynload&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/home/hints/.local/lib/python3.8/site-packages&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8/site-packages&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+<span class="n">USER_BASE</span><span class="p">:</span> <span class="s1">&#39;/home/appuser/.local&#39;</span> <span class="p">(</span><span class="n">exists</span><span class="p">)</span>
+<span class="n">USER_SITE</span><span class="p">:</span> <span class="s1">&#39;/home/appuser/.local/lib/python3.8/site-packages&#39;</span> <span class="p">(</span><span class="n">exists</span><span class="p">)</span>
+<span class="n">ENABLE_USER_SITE</span><span class="p">:</span> <span class="kc">True</span>
+</code></pre></div>
+
+<p>Right so they are not referencing the same site-packages.
+Are the site packages even installed in the heroku container?!?</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>ls<span class="w"> </span>/home/appuser/.local/lib/python3.8/site-packages
+Flask-1.1.2.dist-info<span class="w">               </span>mccabe-0.6.1.dist-info
+Flask_Alembic-2.0.1.dist-info<span class="w">       </span>mccabe.py
+Flask_Cors-3.0.8.dist-info<span class="w">          </span>more_itertools
+Flask_JWT_Extended-3.24.1.dist-info<span class="w"> </span>more_itertools-8.2.0.dist-info
+Flask_SQLAlchemy-2.4.1.dist-info<span class="w">    </span>oauthlib
+</code></pre></div>
+
+<p>🎉 so they aren't missing...</p>
+<h3>Locally</h3>
+<div class="highlight"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="nv">$HOME</span>
+/home/hints
+</code></pre></div>
+
+<h3>Heroku</h3>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$HOME</span>
+/home/hints/server
+</code></pre></div>
+
+<p>Ah.. So <code>$HOME</code> has something to do with it.</p>
+<p>Well I have <code>$HOME=/home/appuser</code> and <code>WORKDIR=/home/appuser/server</code>
+perhaps heroku is setting the work directory to the home
+directory. 🤷‍♂️</p>
+<div class="highlight"><pre><span></span><code><span class="k">ENV</span><span class="w"> </span><span class="k">USER</span><span class="w"> </span><span class="s">hints</span>
+<span class="k">ENV</span><span class="w"> </span>HOME<span class="w"> </span>/home/<span class="si">${</span><span class="nv">USER</span><span class="si">}</span>
+
+<span class="k">RUN</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="si">${</span><span class="nv">HOME</span><span class="si">}</span>
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">${HOME}</span>
+</code></pre></div>
+
+<p>And sure enough fixing my deployment.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:03 | </font>
+                    <a href="module-not-found-heroku.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Thu 06 December 2018</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -552,187 +715,8 @@ in the list.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Tue 09 October 2018</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Procedural Villages</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>My inspiration for any tool or project has always
-been the thought that it could be done better, either
-that or I'd feel like I would benefit a lot from a
-missing feature.</p>
-<p>In my first embarked I attempted to create a
-dungeon crawler, full of all the creatures
-and characters I thought were missing from
-traditional games.</p>
-<p>It was through brute-force of the <a href="http://www.roguebasin.com/index.php?title=Complete_Roguelike_Tutorial,_using_python%2Blibtcod">Roguebasin
-tutorial</a>
-where I learnt how to code.</p>
-<p>I must have created the same game 4 or 5 times
-before I decided to scrap the libtcod library and
-create a game without an interface.</p>
-<p>Armed with <code>stdout</code> and turn-based printing, I
-implemented feature after feature. One of the
-features I was quite proud of was the randomly
-generated villages I'd spawn my player into.</p>
-<h2>Objects</h2>
-<p>I was aiming for something simple, just populate
-the map with houses that the player can interact
-with, for this I deconstructed a <code>house</code> into a
-rectangle.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Rect</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">=</span> <span class="n">x</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">=</span> <span class="n">y</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">x2</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">h</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">y2</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">v</span>
-
-    <span class="k">def</span> <span class="nf">center</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">center_x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">x2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="n">center_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">center_x</span><span class="p">,</span> <span class="n">center_y</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">internal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        [ ][ ][ ][ ]</span>
-<span class="sd">        [ ][X][X][ ]</span>
-<span class="sd">        [ ][X][X][ ]</span>
-<span class="sd">        [ ][X][X][ ]</span>
-<span class="sd">        [ ][ ][ ][ ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="o">...</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        [X][X][X][X]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [X][X][X][X]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="o">...</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">sides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        [ ][X][X][ ]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [X][ ][ ][X]</span>
-<span class="sd">        [ ][X][X][ ]</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="o">...</span>
-        <span class="k">return</span> <span class="nb">bool</span><span class="p">()</span>
-</code></pre></div>
-
-<p>The poorly defined object above could now provide
-boolean confirmation to a co-ordinates existence
-in appropriate sections of a rectangle.</p>
-<p>From the above <code>Rect</code> class I can place a door on
-a <code>Rect.sides()</code> and I can fill the area
-defined by <code>Rect.internal()</code> with items.</p>
-<div class="highlight"><pre><span></span><code>Empty space: | . |
-Wall:        | # |
-Monster:     | m |
-Door:        | + |
-
-| . | . | . | . | . | . |
-| . | # | # | + | # | . |
-| . | # | m | . | # | . |
-| . | # | . | . | # | . |
-| . | # | . | . | # | . |
-| . | # | # | # | # | . |
-| . | . | . | . | . | . |
-</code></pre></div>
-
-<p>Throwing in some size variations and randomising
-the house position on the map, (making sure there
-are no houses intersecting each other). Allowed
-me to generate maps that looked like these:</p>
-<h3>Example 1</h3>
-<div class="highlight"><pre><span></span><code>| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
-| . | # | u | . | . | @ | # | . | # | . | m | # | . | . | . |
-| . | + | . | . | . | . | # | . | # | . | . | + | . | . | . |
-| . | # | # | # | # | # | # | . | # | # | # | # | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | &gt; | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | # | # | + | # | # | # | . | . | . | . | . | . | . | . |
-| . | # | . | . | r | . | # | . | . | . | . | . | . | . | . |
-| . | # | . | . | . | . | # | . | . | . | . | . | . | . | . |
-| . | # | # | # | # | # | # | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-</code></pre></div>
-
-<h3>Example 2</h3>
-<div class="highlight"><pre><span></span><code>| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | # | # | + | # | . | . | . | . |
-| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
-| . | . | . | . | . | . | . | # | . | . | # | . | . | . | . |
-| . | . | . | . | . | . | . | # | m | . | # | . | . | . | . |
-| . | . | . | . | . | . | . | # | # | # | # | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-| . | . | . | . | . | . | . | . | . | . | . | # | # | # | # |
-| . | # | # | # | # | # | # | # | . | . | . | # | . | . | # |
-| . | # | . | . | . | . | u | # | . | . | . | + | . | . | # |
-| . | + | . | . | . | . | . | # | . | . | . | # | &gt; | . | # |
-| . | # | X | . | . | . | . | # | . | . | . | # | . | r | # |
-| . | # | # | # | # | # | # | # | . | . | . | # | # | # | # |
-| . | . | . | . | . | . | . | . | . | . | . | . | . | . | . |
-</code></pre></div>
-
-<p>Unfortunately my code was not beautiful back then.
-I still think it was a <a href="https://github.com/foxyblue/Rogue_simple/blob/master/src/map_class.py">neat idea</a></p>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 21:48 | </font>
-                    <a href="procedural-villages.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
+            <a href="https://s3bw.github.io/writes/index6.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/index4.html" class="previous-page">Newer ⮕</a>
     </div>
 
@@ -859,6 +843,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/assert.html">
+                        <span>Assert</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/database-indexes.html">
                         <span>Database Indexes</span>
@@ -1019,6 +1008,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/software.html">software</a>
                     </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/testing.html">testing</a>
+                    </div>
                 </div>
               </div>
 
@@ -1138,6 +1130,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/teams.html">teams</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/testing.html">testing</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/theory.html">theory</a>
