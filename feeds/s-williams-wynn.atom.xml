@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-07-21T12:04:00+01:00</updated><entry><title>Strategic Testing</title><link href="https://s3bw.github.io/writes/strategic-testing.html" rel="alternate"/><published>2025-07-21T12:04:00+01:00</published><updated>2025-07-21T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-21:/writes/strategic-testing.html</id><summary type="html">&lt;p&gt;Different kinds of software tests&lt;/p&gt;</summary><content type="html">&lt;p&gt;Are our tests good? Are they bad? Do we have enough tests?&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-07-21T12:04:00+01:00</updated><entry><title>Strategic Testing</title><link href="https://s3bw.github.io/writes/strategic-testing.html" rel="alternate"/><published>2025-07-21T12:04:00+01:00</published><updated>2025-07-21T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-21:/writes/strategic-testing.html</id><summary type="html">&lt;p&gt;Beyond writing isolated and targeted unit tests, there are
+methods that ensure our tests are appropriate. This
+article covers some strategies that answer these questions.
+Namely; using test coverage metrics, include mutation testing,
+applying fuzzy tests and finally test fixtures.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Are our tests good? Are they bad? Do we have enough tests?&lt;/p&gt;
 &lt;p&gt;Beyond writing isolated and targeted unit tests, there are
 methods that ensure our tests are appropriate. This
 article covers some strategies that answer these questions.
