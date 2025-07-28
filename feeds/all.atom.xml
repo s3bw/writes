@@ -1,5 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-07-21T12:04:00+01:00</updated><entry><title>Strategic Testing</title><link href="https://s3bw.github.io/writes/strategic-testing.html" rel="alternate"/><published>2025-07-21T12:04:00+01:00</published><updated>2025-07-21T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-21:/writes/strategic-testing.html</id><summary type="html">&lt;p&gt;Beyond writing isolated and targeted unit tests, there are
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-07-28T12:05:00+01:00</updated><entry><title>Software Is Planning</title><link href="https://s3bw.github.io/writes/software-is-planning.html" rel="alternate"/><published>2025-07-28T12:05:00+01:00</published><updated>2025-07-28T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-28:/writes/software-is-planning.html</id><summary type="html">&lt;p&gt;Everyone likes the story of the programmer that
+disappears and resurfaces after a week with some revolutionising
+software. We all enjoy a compelling narrative but in reality
+great software takes time, additionally for most great
+projects the code is actually the smallest part of the
+project.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Software is planning, and as the adage goes, failing to
+plan is planning to fail. This article goes into the
+development of Git and UNIX with the goal of dispelling the
+myth that the genius software engineer exists and when we hear
+something was written entirely over night there's key
+information being omitted.&lt;/p&gt;
+&lt;p&gt;Everyone likes the story of the programmer that
+disappears and resurfaces after a week with some revolutionising
+software. We all enjoy a compelling narrative but in reality
+great software takes time, additionally for most great
+projects the code is actually the smallest part of the
+project.&lt;/p&gt;
+&lt;h3&gt;Planning&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Projects don't go wrong they start wrong&lt;/p&gt;
+&lt;p&gt;How Big Things Get Done (2023)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;We shouldn't view software creation from the point when
+coding starts. The process should include the upfront planning.
+In 1975 Brooke advocated that the coding portion of a software
+project should amount to 17% of the overall time and it should
+be noted that in the 1970s the most dominant programming languages
+were FORTRAN and COBOL.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If a software requirements error is detected
+and corrected during the plans and requirements phase,
+its correction is a relatively simple matter of updating
+the requirements specification.&lt;/p&gt;
+&lt;p&gt;Software Engineering Economics (1981)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;When we think of planning we often think of planning
+permissions, regulation and endless bureaucracy. We don't
+have time for that, we are trying to move fast and break
+things. However, in software, the planning stage is usually when
+most of the thinking happens and the hard problems get
+ironed out. Thinking is hard and most people avoid it,
+make thinking easier and you can stand out from other
+developers.&lt;/p&gt;
+&lt;p&gt;The planning phase of a project is also the point in time
+when large changes are the cheapest.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;UNIX&lt;/h3&gt;
+&lt;p&gt;One fable within software is that UNIX was developed over
+the weekend by Ken Thompson. Ken is quite the mythical
+figure in the software world, Brian Kernighan attests to
+this in multiple interviews.&lt;/p&gt;
+&lt;p&gt;We must keep in mind though that Ken worked for three
+years on Multics which he carried many features forward to
+UNIX. Here's not saying Ken isn't a great programmer, but
+we shouldn't discount that his mind was focused on an operating
+system for quite an amount of time and probably made some
+contribution towards formulating a better system.&lt;/p&gt;
+&lt;p&gt;Imagine your best programmer said to you, "sure let me work
+on the project for two to three years then we will scrap it;
+and start again. You are bound to have the best in class
+software." Instead businesses want every project to have a
+fabled programmer and to continue the trope.&lt;/p&gt;
+&lt;p&gt;Ken Thompson developed UNIX over 3 weeks, there's a video
+where &lt;a href="https://youtu.be/EY6q5dv_B-o?si=yyes5eYeowOCjWoJ&amp;amp;t=1414"&gt;Brian
+Kernighan&lt;/a&gt;
+remarks that modern software engineers aren't as
+productive&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;h3&gt;Git&lt;/h3&gt;
+&lt;p&gt;At this point Git is the most popular form of version
+control for software, it's also famously known to have been
+written in a fairly short amount of time. Linus states that
+he wrote Git in 10 days and we mostly assume the timeline
+for the project was - I have an idea and ten days later we
+have Git.&lt;/p&gt;
+&lt;p&gt;However this is not the case. Linus wrote Git in 10 days but
+it took him &lt;a href="https://github.blog/open-source/git/git-turns-20-a-qa-with-linus-torvalds/#:~:text=So%20by%20the%20time%20I,in%20the%20situation%20where%20Larry"&gt;4 month of
+thinking&lt;/a&gt;
+about the problem until he
+had a solution that he was satisfied with. 10 days after
+that we had Git.&lt;/p&gt;
+&lt;h3&gt;Being a Creator&lt;/h3&gt;
+&lt;p&gt;When it comes to creation, sometimes we are too excited by
+the answer that we fail to think about the question. A lot
+of software gets written without getting to the root of the
+problem and thus fail to materialise any value.&lt;/p&gt;
+&lt;p&gt;Large projects fail when creation comes first and planning
+comes never. Even after you have complete knowledge of the
+problem, solutions may have challenges which require
+addressing upfront, addressing them when you are midway
+through a project is going to cost both time and money.&lt;/p&gt;
+&lt;p&gt;For some problems you can have an attitude of "we will work
+it out when we get there", but you don't want to have this
+attitude to all problems as when you get there you might be
+95% of the way through your time and budget and you have
+crossed the point of no return and getting over this hurdle
+requires going over budget.&lt;/p&gt;
+&lt;p&gt;Use your planning to categorise problems into "it won't work
+unless we know this" and "we can figure this out when we get
+there".&lt;/p&gt;
+&lt;h3&gt;Board Games&lt;/h3&gt;
+&lt;p&gt;"Is it fun" is the most important question in board game
+design. Ideally you should find this out before you hire
+an artist, write storyboards or even print and design cards.
+In board game creation circles they advocate tearing up
+pieces of paper and scribbling out a prototype to answer
+this question. The same thing applies to software.&lt;/p&gt;
+&lt;p&gt;Determine if the question you are answering is the correct
+one and determine if your software will actual solve the
+problem, do this; Wizard of Oz style, before putting a shovel
+into the ground.&lt;/p&gt;
+&lt;h3&gt;Assumptions&lt;/h3&gt;
+&lt;p&gt;All projects start with assumptions. These are typically the
+first things that need to be addressed before you start
+coding. Sometimes asking someone if a solution exists or how
+something works can knock off some unknowns
+and you'll be in a better position to start than had you
+remained silent.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Design it Twice&lt;/p&gt;
+&lt;p&gt;A Philosophy of Software Design (2018)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;John Ousterhout advocates that designing software once is
+not enough and when you are planning something out you
+should make multiple attempts at it before you move ahead.
+He's found this leads to better design.&lt;/p&gt;
+&lt;p&gt;Every project comes with its unknowns and challenges,
+we are probably never going to rebuild the exact same
+solution twice. So packing in as much learning as you can
+upfront about the challenges ahead will leave you at least
+the most prepared you could have been.&lt;/p&gt;
+&lt;p&gt;The beginning of project is the cheapest time to learn so we
+should maximise and front load learning. Learning midway
+through a project is an expensive way of learning. It's
+fine if we can afford these learnings but on big and
+critical projects you don't want to bring up the point that
+the work we've been doing for the last 6 months was all for
+nothing especially if we could have learnt this earlier on.&lt;/p&gt;
+&lt;p&gt;Break things down, explore and figure out how each piece of
+the project will work and that we are actually providing the
+right answer to the correct question, this is the only way
+to deliver on time and on budget.&lt;/p&gt;
+&lt;p&gt;If we jump straight into code our design strategy is hope.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Whenever I hear "prompt engineering" I roll my eyes, mainly
+because it's a term that offers zero value. If instead we
+referred to it as "prompt planning" I think we would get
+people onto the correct page. Having a clear idea of the
+answer, having thought about what you want to create and
+providing a clear unambiguous prompt is essentially doing
+the upfront planning, which I hope you're doing when writing
+your software.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;and I took that personally.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"/><category term="programming"/><category term="creation"/><category term="product"/></entry><entry><title>Strategic Testing</title><link href="https://s3bw.github.io/writes/strategic-testing.html" rel="alternate"/><published>2025-07-21T12:04:00+01:00</published><updated>2025-07-21T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-21:/writes/strategic-testing.html</id><summary type="html">&lt;p&gt;Beyond writing isolated and targeted unit tests, there are
 methods that ensure our tests are appropriate. This
 article covers some strategies that answer these questions.
 Namely; using test coverage metrics, include mutation testing,

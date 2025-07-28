@@ -54,6 +54,139 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 24 January 2022</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Configuring Traefik with Redis</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Over a weekend I had a quick play around with the
+config provider to traefik, experimenting with reverse
+proxies. I'm fairly familiar with the <code>redis-cli</code>
+and it's fairly easy to build a redis client in any language
+so getting off the grounds is a 10min job at most.</p>
+<p>I've always got redis container running locally, so I'm
+sticking with that, to get this running I do:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span>some-redis<span class="w"> </span>-p<span class="w"> </span><span class="m">6379</span>:6379<span class="w"> </span>-d<span class="w"> </span>redis
+</code></pre></div>
+
+<p>Since I am running traefik on docker-compose and I'll need
+it to connect to redis, I have to create a network and redis
+should be connected to this network:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>mynet
+docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>mynet<span class="w"> </span>some-redis
+</code></pre></div>
+
+<p>The next step is the compose file for traefik:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># docker-compose.yml</span>
+<span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">maunet</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">services</span><span class="p">:</span>
+
+<span class="w">  </span><span class="nt">reverse-proxy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">traefik:v2.5</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--api.insecure=true&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;--providers.redis.endpoints=some-redis:6379&quot;</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="c1"># HTTP</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;80:80&quot;</span>
+<span class="w">      </span><span class="c1"># Web UI</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8080:8080&quot;</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">maunet</span>
+</code></pre></div>
+
+<p>And up:</p>
+<div class="highlight"><pre><span></span><code>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+
+<p>The traefik frontend should be accessible at
+<a href="http://127.0.0.1:8080">127.0.0.1:8080</a>.</p>
+<h2>Configuration</h2>
+<p>A few of the traefik concepts didn't make sense at first,
+but it didn't take long to understand what they're talking
+about.</p>
+<ul>
+<li>
+<p>I have another container running a simple rest server,
+   it's serving on port 3000 which is exposed at port 53782
+   this container is called <code>'some-server'</code>.</p>
+</li>
+<li>
+<p>A hurdle that took me a while to figure out was to also
+   connect this container to the network we have
+   traefik and redis running on:</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nv">docker</span><span class="w"> </span><span class="nv">network</span><span class="w"> </span><span class="k">connect</span><span class="w"> </span><span class="nv">mynet</span><span class="w"> </span><span class="nv">some</span><span class="o">-</span><span class="nv">server</span>
+</code></pre></div>
+
+<ul>
+<li>I need to tell traefik a service (server) exists:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">set</span><span class="w"> </span><span class="n">traefik</span><span class="o">/</span><span class="n">http</span><span class="o">/</span><span class="n">services</span><span class="o">/&lt;</span><span class="n">service</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;/</span><span class="n">loadbalancer</span><span class="o">/</span><span class="n">servers</span><span class="o">/</span><span class="mi">0</span><span class="o">/</span><span class="n">url</span><span class="w"> </span><span class="s2">&quot;http://some-server:3000&quot;</span>
+</code></pre></div>
+
+<ul>
+<li>Now assign this service to a router:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/service some-server
+</code></pre></div>
+
+<ul>
+<li>Lastly give the router a rule: (Note those are backticks
+  around the forward slash.)</li>
+</ul>
+<div class="highlight"><pre><span></span><code>set traefik/http/routers/newroute/rule &quot;Path(`/`)&quot;
+</code></pre></div>
+
+<p>Now hitting <a href="http://127.0.0.1:80">127.0.0.1:80</a> will forward the
+request to your server. You can also do all the other
+interesting things that traefik provides like loadbalancing
+and stripping path prefixes.</p>
+<h3>References</h3>
+<ul>
+<li>https://doc.traefik.io/traefik/routing/providers/kv/</li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:27 | </font>
+                    <a href="configuring-traefik-with-redis.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 31 August 2020</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -612,100 +745,6 @@ its underlying representations.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Wed 10 October 2018</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Random VM Name</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Something I found to be cute about the docker
-engine is it's feature to create a random name for
-your containers, when one is not specified.</p>
-<p>I've had some good ones e.g:</p>
-<div class="highlight"><pre><span></span><code>objective_galileo
-distracted_euclid
-</code></pre></div>
-
-<p>Occasionally I'd be spinning up the odd VM and
-have to provide some generic name like
-<code>dev-sebastien</code>. So instead I thought my own
-arbitrary name generation could save some time
-here.</p>
-<h3>Random names</h3>
-<p>The idea was to combine <code>&lt;adjective&gt;-&lt;pokemon&gt;</code>
-and use this as the VM parameter.</p>
-<p>Thus defining the following in <code>.create_name.sh</code></p>
-<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>gen_name<span class="o">()</span>
-<span class="o">{</span>
-<span class="w">    </span><span class="nv">pokemon</span><span class="o">=(</span>
-<span class="w">        </span><span class="s2">&quot;pidgey&quot;</span>
-<span class="w">        </span><span class="s2">&quot;pikachu&quot;</span>
-<span class="w">        </span><span class="s2">&quot;cubone&quot;</span>
-<span class="w">    </span><span class="o">)</span>
-<span class="w">    </span><span class="nv">adjectives</span><span class="o">=(</span>
-<span class="w">        </span><span class="s2">&quot;hungry&quot;</span>
-<span class="w">        </span><span class="s2">&quot;adorable&quot;</span>
-<span class="w">        </span><span class="s2">&quot;jittery&quot;</span>
-<span class="w">    </span><span class="o">)</span>
-
-<span class="w">    </span><span class="nv">select_pokemon</span><span class="o">=</span><span class="si">${</span><span class="nv">pokemon</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#pokemon[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
-<span class="w">    </span><span class="nv">select_desc</span><span class="o">=</span><span class="si">${</span><span class="nv">adjectives</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#adjectives[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
-
-<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">result</span><span class="o">=</span>sebastien-<span class="nv">$select_desc</span>-<span class="nv">$select_pokemon</span>
-<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$result</span><span class="s2">&quot;</span>
-<span class="o">}</span>
-</code></pre></div>
-
-<p>Call this in your <code>.bash_aliases</code> file.</p>
-<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.create_name.sh
-</code></pre></div>
-
-<p>And every time you run <code>gen_name</code> in your command
-line, you'll get a new "vm" name.</p>
-<p>I've coupled this with:</p>
-<div class="highlight"><pre><span></span><code>create_instance<span class="o">(){</span>
-<span class="w">    </span>gcloud<span class="w"> </span>compute<span class="w"> </span>instances<span class="w"> </span>create<span class="w"> </span><span class="k">$(</span>gen_name<span class="k">)</span><span class="p">;</span>
-<span class="o">}</span>
-</code></pre></div>
-
-<p>Here are some of the names of my machines:</p>
-<div class="highlight"><pre><span></span><code>sebastien-livid-quagsire
-sebastien-lonely-metapod
-sebastien-gentle-rattata
-</code></pre></div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:19 | </font>
-                    <a href="random-vm-name.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn6.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn4.html" class="previous-page">Newer ⮕</a>
@@ -834,6 +873,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/software-is-planning.html">
+                        <span>Software Is Planning</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/strategic-testing.html">
                         <span>Strategic Testing</span>
@@ -1041,6 +1085,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/cpu.html">cpu</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/creation.html">creation</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -1096,6 +1143,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/product.html">product</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/programming.html">programming</a>
