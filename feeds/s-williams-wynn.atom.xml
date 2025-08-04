@@ -1,5 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-07-28T12:05:00+01:00</updated><entry><title>Software Is Planning</title><link href="https://s3bw.github.io/writes/software-is-planning.html" rel="alternate"/><published>2025-07-28T12:05:00+01:00</published><updated>2025-07-28T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-28:/writes/software-is-planning.html</id><summary type="html">&lt;p&gt;Everyone likes the story of the programmer that
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-08-04T12:04:00+01:00</updated><entry><title>How the Blog Works</title><link href="https://s3bw.github.io/writes/how-the-blog-works.html" rel="alternate"/><published>2025-08-04T12:04:00+01:00</published><updated>2025-08-04T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-08-04:/writes/how-the-blog-works.html</id><summary type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
+generator, the API and the repo that hosts all the HTML.
+This article provides an overview of the pieces that compose
+the final site.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
+generator, the API and the repo that hosts all the HTML.
+This article provides an overview of these pieces and how
+they're all brought together to create the website.&lt;/p&gt;
+&lt;h3&gt;Framework&lt;/h3&gt;
+&lt;p&gt;The framework is called &lt;a href="https://getpelican.com/"&gt;Pelican&lt;/a&gt; a
+python based static site generator. Each post is written in
+markdown which starts with meta tags such as &lt;code&gt;Title&lt;/code&gt; and
+&lt;code&gt;Category&lt;/code&gt;. Pelican then uses this and a custom theme
+template to create HTML. The theme uses jinja templating to
+construct template HTML pages.&lt;/p&gt;
+&lt;p&gt;Pelican also provides a config file which I have used for
+feature flags and to enable extensions. The extensions I've enabled
+include footnotes and code-highlighting. Additionally
+Pelican hosts a local version of my blog which it recompiles
+whenever it detects a change to any of the files.&lt;/p&gt;
+&lt;p&gt;In the config there's a list which contains all the links
+rendered in the sidebar. Extending or updating these links
+is only a matter of making changes to this list.&lt;/p&gt;
+&lt;p&gt;There are two directories &lt;code&gt;inprogress/&lt;/code&gt; and &lt;code&gt;content/&lt;/code&gt;.
+&lt;code&gt;inprogress/&lt;/code&gt; stores drafts that are half complete,
+completed or minor thoughts for potential blog posts. When
+these are ready to be published they are moved over to
+&lt;code&gt;content/&lt;/code&gt; and when these are pushed to the repo, using a
+github action, pelican automatically renders the entire blog
+into HTML. The action then creates a commit for any changes
+and pushes the changes to a public repo.&lt;/p&gt;
+&lt;p&gt;The public repo contains the entire rendering of the blog
+and theme. Relying on Github pages, this is then hosted.&lt;/p&gt;
+&lt;h3&gt;The CV&lt;/h3&gt;
+&lt;p&gt;Within the same repo as the drafts and published content
+there's a CV written in Latex. This latex file can be
+rendered to a PDF. I have a bash script which allows me to
+recompile this PDF whenever changes are made to the Latex
+script.&lt;/p&gt;
+&lt;h3&gt;The API&lt;/h3&gt;
+&lt;p&gt;There's an API that contains edge functions written in Go. These
+serve requests for the comment sections that sit below each blog post.
+There are three endpoints, one fetches the count of comments
+given a list of article URLs. This is used on index pages.&lt;/p&gt;
+&lt;p&gt;There's an endpoint to fetch comments given an article URL
+and an endpoint to post a comment to an article URL.
+The repo containing these endpoints has an action which
+deploys updates on each new commit.&lt;/p&gt;
+&lt;p&gt;Finally the API handles the mailing list. It handles
+registering new emails, verifying the email is valid and
+lastly triggers an edge function to look for new posts using
+the blog's RSS feed in order to send updates to recipients
+in the mailing list.&lt;/p&gt;</content><category term="software"/><category term="software"/></entry><entry><title>Software Is Planning</title><link href="https://s3bw.github.io/writes/software-is-planning.html" rel="alternate"/><published>2025-07-28T12:05:00+01:00</published><updated>2025-07-28T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-07-28:/writes/software-is-planning.html</id><summary type="html">&lt;p&gt;Everyone likes the story of the programmer that
 disappears and resurfaces after a week with some revolutionising
 software. We all enjoy a compelling narrative but in reality
 great software takes time, additionally for most great

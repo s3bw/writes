@@ -54,6 +54,233 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 14 April 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Engineering for Resilience</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Engineering velocity and delivery is strongly tied to how
+code is deployed to production. Having a certain level of
+safety and automation can enable teams to deliver and learn
+faster.</p>
+<p>Engineers that avoid failure don't learn and won't ever put
+anything significant into production. The quickest way to
+learn is to fail, some teams aim to avoid failure instead
+of trying to optimise recovery from failure. Forget about
+trying to avoid failure think of failure as inevitable. Like
+it or not, there will be a system failure and knowing how to
+thrive in this space will separate you from the average
+developer.</p>
+<p>Shorter feedback cycles and high confidence
+will distinguish your engineering team from any other, focus
+on a resilient system in production and short recovery time.
+Breaking things should become the norm as long as the
+repercussions are minimised.</p>
+<h3>Compartmentalisation</h3>
+<p>Stopping the ship from sinking. Bulkheads are used in the navel
+industry to avoid a ship from sinking. By compartmentalising
+the hull of the ship you allow it to sustain some level of
+damage before it sinks.</p>
+<p>The titanic had 16 bulk heads. It could stay afloat if 3
+flooded and in some cases it could maintain 4 flooded
+bulkheads. 5 or more would make the titanic meet its
+demise, when it sunk it had 6 compromised.</p>
+<p>We also do this with software systems, we have built-in
+levels of redundancy. If one of our servers decides that
+today is the day it kicks the bucket we have more than one
+server available to fill-in and pickup the slack.</p>
+<h3>Keeping a tight ship</h3>
+<p>The military also practices compartmentalisation in the form
+of modularity. Information is given out on a need to know
+basis. You don't want the entire army carrying state
+secrets and ideally make it difficult for information, that
+may compromise soldiers, to leak.</p>
+<p>It's also useful in hindsight to
+pinpoint where the leak occurred. If the information was
+privy to 4 individuals you can blacklist them and your
+overhead to discovering the snake is a lot smaller than had
+you provided the entire army with this knowledge.</p>
+<p>Software runs on a similar structure called the principle of
+least privilege. In a large system with multiple services,
+you're granting each service the minimum level of access in
+order for it to be able to perform its job. If it's got
+write access to the production database but it only ever
+needs to read from this database, then we should restrict
+it's permissions down to read-only. In the event that this
+service is compromised, your surface area of attack is
+decreased, you're much less vulnerable in this situation
+than one where where the attacker had permission to do
+everything.</p>
+<h3>He'll be long remembered</h3>
+<p>We've taken practices from 1907. Canaries were used in coal
+mines because they're more sensitive to the toxic gasses
+that miners were exposed to underground. Carbon monoxide is
+odorless, colorless and tasteless so as you'd imagine it's
+tough to detect, however because these birds were bricking
+it at the first hint of these gasses they were used as early
+warning signals underground, if the canary drops dead you'd
+better get yourself out of there.</p>
+<p>High velocity engineering teams that deploy multiple times a
+day at scale need their own canaries and luckily no one is
+going to die (industry dependent). We can do this in our
+deployment process, because we've got multiple servers, for
+redundancy. We can spin up a new server to receive a small
+percentage of the traffic and keep a close eye on its
+behaviour, if we notice errors or a reduction in performance
+we'd have an early signal that we've introduce something
+faulty in the new deployment and we can avoid risking
+rolling this out to the entire fleet.</p>
+<p>We can juxtapose this to the alternative, sometimes called a
+big bang deployment. You can switch all the traffic over to the
+new code and hope (fingers crossed) that nothing bad
+happens. In a big bang deployment you're committing 100% of
+your traffic to new code, if things go bad you're more exposed
+to the downside of failures in this scenario.</p>
+<p>Automation of these canary deployments brings a higher level
+of confidence to an engineering team as haywire metrics can
+automatically stop traffic to the wonky canary and your
+overall exposure to negative effects is greatly reduced.</p>
+<h3>Cutting the wires</h3>
+<p>A surge in electricity can cause damage to your home
+appliances. To prevent this homes will commonly have a switch
+board, this board is called a circuit breaker.</p>
+<p>We implement these in engineering too, dynamic feature flags
+that prevent a user from hammering a broken system and in
+some cases we prevent even showing the feature completely. The
+user might not even notice that we've hidden the feature and
+if they don't notice we don't have a problem.</p>
+<p>We can
+programmatically trip these flags on new features so that we
+can reliably fail over the weekend without much impact on
+our customers and engineers can follow up during work
+hours after the weekend to understand what caused the system
+to fail.</p>
+<p>These are typically used alongside new features which we'd
+like to turn off at the first sign of something not working
+as intended.</p>
+<h3>Can you hear me? How about now?.. And now?</h3>
+<p>Enterprise software is always going to rely on external systems.
+These systems are out of our control yet we are still
+responsible for designing around failure. These
+systems might be from another company or they might be from
+another team within our business.</p>
+<p>The more moving parts in our system the higher the likelihood
+of something failing. It's the same reason going on a trip
+with a large group of friends ends up being a practice of
+co-ordination and patience, the more things
+you bring into a system the higher the chance something
+fails or someone in the group doesn't want to eat at a
+particular restaurant or want's to wake up slightly later
+than the rest of the group.</p>
+<p>Unlike friends, if a server doesn't want to respond to your
+request you can kill it. If you don't have the ability to
+kill it you can try again 50ms later. Retrying requests are
+very common because of the multiple ways things can go wrong
+with a network. We also need to consider that sharks have a habit
+of chewing our undersea cables.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>If we fail a retried request we can keep trying however the
+server might be failing because it's overloaded, so having a
+request being continually retried isn't the most ideal use
+of the networks' time. Plus we know it's failing and perhaps
+nothing has changed since the last retry. So we introduce
+exponential backoff. Simply put, it's a growing delay
+between each retry. If it doesn't work now, try in 50ms,
+if that doesn't work try again in 100ms, 200ms, 400ms and so
+on and so on. Eventually we can give up trying maybe flag it
+and let the engineer inspect it on Monday.</p>
+<p>Retrying requests can be quite dangerous, especially if you've
+got a lot of clients and they're all retrying at the same
+time. This single explosion of requests can cause the server
+to burnout since it's already trying its hardest to recover.</p>
+<p>In order to avoid a herd of requests at the same time,
+we introduce what is called jitter. Pick a random number and
+add that to the retry delay. If we have a number of clients
+attempting to retry after 50ms they'll be offset by some
+random number of milliseconds which helps to space out each
+request.</p>
+<h3>Elements of resilient software</h3>
+<p>Retried requests aren't a silver bullet and they come with
+some considerations. In any kind of transactional
+environment, like banking for example, if you're deducting
+money from an account and the request fails because the
+connection to the server has been lost. Your phone or client
+won't know if the transaction was successful or not.
+Attempting to retry this request might cause a double
+payment.</p>
+<p>The solution to this is to introduce idempotent endpoints.
+The implementation of these endpoints often rely on having a
+header with an idempotency key, when you retry the request
+the server will check to see if it's handled this key
+previously, if it's already handled the server returns the
+original response, no matter how many times you send this
+key. If the key is new it will assume that this request is
+new and create a new transaction. With an idempotency key
+we can safely retry bank transactions in spotty environments.</p>
+<h3>So why are we doing this again</h3>
+<p>The feature that sits stuck in development doesn't face
+reality until its deployed. If we want to learn fast we
+should deploy fast, how can we build a system
+that allows developers to have high confidence that they're
+not going to collapse the business if they make a
+deployment.</p>
+<p>There are patterns in engineering that enable high
+confidence, otherwise we are stuck with slower deployment
+cycles when the true learning comes from releasing software.
+You can theorise as much as you'd like about the impact you
+will have, but until your code is in front of users and
+used you don't have a benchmark to grow or improve.</p>
+<p>Not having a robust system to handling failures is often
+the anxiety that slows down development. Slower development
+cycles can cause this problem to worsen if the code that is
+stuck in development grows, your certainty about how it
+behaves in production drops. Which lowers your confidence
+of actually shipping.</p>
+<p>Developing in an environment with high resilience leads to
+higher confidence and higher velocity. Instead of focusing
+on avoiding failure focus on how you can grow from failure.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><a href="https://www.business-reporter.co.uk/management/sharks-ate-our-data">Sharks ate our
+  data</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:18 | </font>
+                    <a href="engineering-for-resilience.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 07 April 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -790,229 +1017,6 @@ toolbelt.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 10 March 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Flash Cards</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>A while back I found out that Jnr. Doctors are keen on using
-flash cards to help them revise for exams. It occurred to me
-that I could also use flash cards to drill some of the concepts
-that would come up in discussions about software systems
-and system design.</p>
-<p>At the time I was developing on a raspberry-pi with a 7-inch
-screen and I was limited to how much I could install on the
-little SD card. At first I tried to use a browser based
-flash card tool, but I was in the mood for doing some deep
-dives to understanding how these actually work under the
-hood.</p>
-<p>This led me to develop
-<a href="https://github.com/s3bw/kanki">Kanki</a> a bespoke flash card
-tool for the command line. In this blog post I break down the
-process I typically use to undertake a software project of
-this scale (i.e tiny scale).</p>
-<h3>Requirements</h3>
-<p>Like all good software projects we start with the high level
-expectations. What do we want this system to do? (Some of
-these are quoted straight out of my notebook.</p>
-<ol>
-<li>I want to have 1000+ flashcards based on software and
-system design</li>
-<li>I should be able to hide the answer, I should be able to
-   reveal the answer.</li>
-<li>Can I input <em>"correct"</em>, <em>"close"</em>, <em>"wrong"</em> etc and
-   update an SR algorithm to handle recall.</li>
-<li>Nice to have, filtering by topic.</li>
-</ol>
-<p>In order to understand how flash cards operate you'd need to
-dig into figuring how the SR works:</p>
-<blockquote>
-<p><strong>Spaced Repetition</strong>: Newly introduced and more difficult
-flashcards are shown more frequently, while older and
-less difficult flashcards are shown less frequently in
-order to exploit the psychological spacing effect.
-The use of spaced repetition has been proven to increase
-the rate of learning. -
-<a href="https://en.wikipedia.org/wiki/Spaced_repetition">Wikipedia</a></p>
-</blockquote>
-<h3>Entities</h3>
-<p>We need to know what things we will be working with:</p>
-<table>
-<thead>
-<tr>
-<th>Card</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>- Question (string)</td>
-</tr>
-<tr>
-<td>- Answer (string)</td>
-</tr>
-<tr>
-<td>- Topic (string)</td>
-</tr>
-<tr>
-<td>- DeckID (int)</td>
-</tr>
-</tbody>
-</table>
-<p>The card is the question and answer entity which I might
-have 1000 of (In the end I think I had about 60).</p>
-<table>
-<thead>
-<tr>
-<th>Deck</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>- Id (int)</td>
-</tr>
-<tr>
-<td>- Name (string</td>
-</tr>
-</tbody>
-</table>
-<p>The deck is the entity which groups cards, so a card belongs
-to a deck and this allows me to have cards around separate
-topics.</p>
-<hr />
-<h3>Interface</h3>
-<p>This isn't far off from what I drew in the notebook
-but clearly I had a vision and the following sort of
-captures it at the time:</p>
-<p>I want to have a view which allows me to load a specified
-deck. Create a new deck or add cards to an existing deck.</p>
-<div class="highlight"><pre><span></span><code><span class="kr">Load</span><span class="o">:</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">deck_a</span><span class="p">,</span><span class="w"> </span><span class="n">deck_b</span>
-<span class="n">New</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>
-<span class="n">Add</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
-</code></pre></div>
-
-<p>I want to display the different inputs I can provide as
-answers to each card.</p>
-<div class="highlight"><pre><span></span><code>Again,  Hard,    Good,    Easy
-&lt; 1min  &lt; 6min   &lt; 10min  4 days
-</code></pre></div>
-
-<p>These are some of the settings I'd like to fine tune as I
-get used to playing with the flashcard system.</p>
-<div class="highlight"><pre><span></span><code><span class="n">config</span><span class="o">:</span>
-<span class="k">new</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
-<span class="n">review</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
-</code></pre></div>
-
-<h3>Spaced Repetition Algorithm</h3>
-<p>This is where things get slightly more involved since I had
-to understand how Anki and other flash card apps applied
-repetition. It was mostly finding the one that suited me
-best and felt the most natural to play with.</p>
-<p>This is the algorithm I went for:</p>
-<p><strong>step 1</strong>: Cards have a <code>queue</code> field (set to 1 for 'learning') and a
-<code>due</code> field (in minutes) determining when a card should be shown again.</p>
-<p><strong>step 2</strong>: review cards, already studied but are now due to
-be relearnt. <code>queue</code> field set to (2) and due less than or
-equal to today.</p>
-<p><strong>step 3</strong>: 'new', queue is set to (0), these new cards are capped.</p>
-<p>Essentially this determines how we populate the flash cards
-during a session. Using the three queue types:</p>
-<ul>
-<li>0: <code>new</code></li>
-<li>1: <code>learning</code></li>
-<li>2: <code>review</code></li>
-<li>3: <code>relearning</code> (This is essentially a card deemed as
-    "learnt" but you've forgotten it and now it needs to be relearnt).</li>
-</ul>
-<p>Properties of a card.</p>
-<ul>
-<li><strong>due</strong>: the timestamp for when the card should be shown again.</li>
-<li><strong>left</strong>: how many learning steps before the card graduates to review.</li>
-<li><strong>reps</strong>: how many times the card has been shown.</li>
-<li><strong>ivl</strong>: tracking the card interval (time to add when recalculating <strong>due</strong>).</li>
-</ul>
-<h3>Input</h3>
-<p>When answering the flash cards there's four inputs you can
-provide, each of which will cause a different effect, these
-decide the cards position in one of two or three queues.
-The result of these inputs also depends on which queue the
-card is currently in.
-You can see <a href="https://github.com/s3bw/kanki/blob/main/models.py#L106-L134">this
-here</a></p>
-<ul>
-<li><code>Again</code>: Reset number of training reps</li>
-<li><code>Hard</code>: +1 rep, show again in 1 min</li>
-<li><code>Good</code>: +1 rep, show again in 5 min</li>
-<li><code>Easy</code>: +1 rep, show again in 1 day</li>
-</ul>
-<h3>Development</h3>
-<p>Up until this point I hadn't done a single line of code. The
-research done above was undertaken before I started writing
-any code. This helps me have a clear understanding of what
-I'm actually trying to do. It's far easier to scribble away
-in my notebook that it is to change code.</p>
-<p>There are a few things I needed, which I learnt after I'd
-written the tool. Things such as being able to edit a card,
-but these were not major features.</p>
-<p>The other thing that I find interesting (or obvious) is
-solution for the queue. During a learning session you need
-to have the card queues be dynamic since you're
-popping the earliest due card and then you're sorting them
-by when they are next due so the implementation fits using a
-heap quite well. You can see me <a href="https://github.com/s3bw/kanki/blob/main/queues.py">initialising the
-heap</a> here.</p>
-<h3>Conclusion</h3>
-<p>I really enjoyed reading up on some of the complexities
-involved in getting the spaced repetition working in a way
-that allows new topics to be slowly introduced while working
-on cementing topics that were in the progress of being
-learnt. It feels a little exciting when you encounter
-something new during the learning session. I used kanki
-to prepare on some topics and every so often add new cards
-to system design.</p>
-<p>One thing I found quite useful is getting someone else to
-ask you the questions verbally and they make a judgement on
-how close you are to the answer. This can get you more
-comfortable with talking about these topics and the person
-reading the questions can help keep you honest about how
-well you know a topic.</p>
-<p>Lastly it's also interesting that learning is effectively
-broken down into three separate speeds. 1. This is new. 2.
-I'm actively learning this. 3. I should know this.</p>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:38 | </font>
-                    <a href="flash-cards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn5.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn3.html" class="previous-page">Newer ⮕</a>
@@ -1141,6 +1145,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/how-the-blog-works.html">
+                        <span>How the Blog Works</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/software-is-planning.html">
                         <span>Software Is Planning</span>

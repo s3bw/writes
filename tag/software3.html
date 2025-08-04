@@ -53,6 +53,72 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 04 August 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">How the Blog Works</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>There are a few parts that make up the blog, the static site
+generator, the API and the repo that hosts all the HTML.
+This article provides an overview of these pieces and how
+they're all brought together to create the website.</p>
+<h3>Framework</h3>
+<p>The framework is called <a href="https://getpelican.com/">Pelican</a> a
+python based static site generator. Each post is written in
+markdown which starts with meta tags such as <code>Title</code> and
+<code>Category</code>. Pelican then uses this and a custom theme
+template to create HTML. The theme uses jinja templating to
+construct template HTML pages.</p>
+<p>Pelican also provides a config file which I have used for
+feature flags and to enable extensions. The extensions I've enabled
+include footnotes and code-highlighting. Additionally
+Pelican hosts a local version of my blog which it recompiles
+whenever it detects a change to any of the files.</p>
+<p>In the config there's a list which contains all the links
+rendered in the sidebar. Extending or updating these links
+is only a matter of making changes to this list.</p>
+<p>There are two directories <code>inprogress/</code> and <code>content/</code>.
+<code>inprogress/</code> stores drafts that are half complete,
+completed or minor thoughts for potential blog posts. When
+these are ready to be published they are moved over to
+<code>content/</code> and when these are pushed to the repo, using a
+github action, pelican automatically renders the entire blog
+into HTML. The action then creates a commit for any changes
+and pushes the changes to a public repo.</p>
+<p>The public repo contains the entire rendering of the blog
+and theme. Relying on Github pages, this is then hosted.</p>
+<h3>The CV</h3>
+<p>Within the same repo as the drafts and published content
+there's a CV written in Latex. This latex file can be
+rendered to a PDF. I have a bash script which allows me to
+recompile this PDF whenever changes are made to the Latex
+script.</p>
+<h3>The API</h3>
+<p>There's an API that contains edge functions written in Go. These
+serve requests for the comment sections that sit below each blog post.
+There are three endpoints, one fetches the count of comments
+given a list of article URLs. This is used on index pages.</p>
+<p>There's an endpoint to fetch comments given an article URL
+and an endpoint to post a comment to an article URL.
+The repo containing these endpoints has an action which
+deploys updates on each new commit.</p>
+<p>Finally the API handles the mailing list. It handles
+registering new emails, verifying the email is valid and
+lastly triggers an edge function to look for new posts using
+the blog's RSS feed in order to send updates to recipients
+in the mailing list.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 21 July 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -2148,6 +2214,11 @@ your dusty book of log tables.</p>
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/how-the-blog-works.html">
+                        <span>How the Blog Works</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/software-is-planning.html">
                         <span>Software Is Planning</span>
