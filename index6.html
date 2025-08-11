@@ -54,6 +54,174 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Thu 06 December 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Chain of Responsibility</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Easily one of my favourite patterns from the gang of four is the <em>chain of
+responsibility</em> pattern. It aims to avoid coupling the object that sends a
+request to the handlers of the request. This is especially useful if the
+structure to our handlers follows a sense of hierarchy.</p>
+<p>I've had very few opportunities to implement design patterns, but gaming
+has really helped me to envision a context where several designs can be
+applied as handy solutions to managing complexity.</p>
+<p>So we will apply the chain of responsibility to a situation where we have
+gathered four of the most powerful wizards in a room, each of whom will test
+their power by casting a spell.</p>
+<p>For this example we have our wizards as the objects which send requests.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Wizard</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a wizard.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">intelligence</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1">#: Identify the wizard by name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c1">#: Intelligence as a proxy of a wizard&#39;s power.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">=</span> <span class="n">intelligence</span>
+
+    <span class="k">def</span> <span class="nf">cast_spell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">:</span> <span class="n">Spell</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Have the wizard cast a spell.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> casts </span><span class="si">{</span><span class="n">spell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> spell.&quot;</span><span class="p">)</span>
+        <span class="n">spell</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</code></pre></div>
+
+<p>We will make each behaviour of the spell, which is determined by the power of
+the wizard casting it, as an object handling a request. If the wizard does not
+meet the handler's requirements it passes the request on, to it's successor.
+This is where we have applied a sense of hierarchy to the handler.</p>
+<p>To begin we have an Abstract Handler:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
+
+
+<span class="k">class</span> <span class="nc">AbstractHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">successor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span> <span class="o">=</span> <span class="n">successor</span>
+
+    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="n">reaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">reaction</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">create</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Must provide implementation in subclass.&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Now we can define our handler hierarchy:</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LowPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spell backfires.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">class</span> <span class="nc">MediumPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Small fire ball is cast.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">class</span> <span class="nc">HighPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A fire ball blazes across the room&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">class</span> <span class="nc">GodlikePowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Massive column of fire burns through the room!&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+
+<p>Finally a single object to identify the spell chain.</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Spell</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1">#: Identifying the spell by a name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="c1">#: How the spell behaves at differing levels of user&#39;s power</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">LowPowerFireSpell</span><span class="p">(</span>
+            <span class="n">MediumPowerFireSpell</span><span class="p">(</span>
+                <span class="n">HighPowerFireSpell</span><span class="p">(</span>
+                    <span class="n">GodlikePowerFireSpell</span><span class="p">()</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
+</code></pre></div>
+
+<p>To test their skill, we have a spell which casts a "Fire Ball".
+We have the following wizards present:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">fire_spell</span> <span class="o">=</span> <span class="n">Spell</span><span class="p">(</span><span class="s1">&#39;Fire Ball&#39;</span><span class="p">)</span>
+    <span class="n">merlin</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Merlin&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+    <span class="n">albus</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Albus&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+    <span class="n">howl</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Howl&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
+    <span class="n">gandalf</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Gandalf&quot;</span><span class="p">,</span> <span class="mi">38</span><span class="p">)</span>
+</code></pre></div>
+
+<p>They are all gathered in a room, and take turns casting the same spell.</p>
+<div class="highlight"><pre><span></span><code><span class="n">room</span> <span class="o">=</span> <span class="p">[</span><span class="n">merlin</span><span class="p">,</span> <span class="n">albus</span><span class="p">,</span> <span class="n">howl</span><span class="p">,</span> <span class="n">gandalf</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">wizard</span> <span class="ow">in</span> <span class="n">room</span><span class="p">:</span>
+    <span class="n">wizard</span><span class="o">.</span><span class="n">cast_spell</span><span class="p">(</span><span class="n">fire_spell</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>To which we should see the spell behave according to their intelligence:</p>
+<div class="highlight"><pre><span></span><code><span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>script.py
+Merlin<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
+Spell<span class="w"> </span>backfires.
+
+Albus<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
+Small<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>is<span class="w"> </span>cast.
+
+Howl<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
+A<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>blazes<span class="w"> </span>across<span class="w"> </span>the<span class="w"> </span>room
+
+Gandalf<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
+A<span class="w"> </span>Massive<span class="w"> </span>column<span class="w"> </span>of<span class="w"> </span>fire<span class="w"> </span>burns<span class="w"> </span>through<span class="w"> </span>the<span class="w"> </span>room!
+
+<span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$
+</code></pre></div>
+
+<p><a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py">Implementation can be found here</a></p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:40 | </font>
+                    <a href="chain-of-responsibility.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Thu 11 October 2018</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -692,6 +860,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/the-bleeding-edge.html">
+                        <span>The Bleeding Edge</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/how-the-blog-works.html">
                         <span>How the Blog Works</span>
                       </a>
@@ -995,10 +1168,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/speed.html">speed</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/startups.html">startups</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/talking.html">talking</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/teams.html">teams</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/technology.html">technology</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/testing.html">testing</a>

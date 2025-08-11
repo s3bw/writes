@@ -54,6 +54,208 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 17 March 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Chess Programming - Bitboards</font>
+                    </h3>
+                </div>
+
+<div class="series-container">
+    <p class="series-title">The "Chess Programming" series:</p>
+    <ol class="series-list">
+            <ol class="active">
+                1: (here) Chess Programming - Bitboards
+            </ol>
+    </ol>
+</div>
+
+                <div class="main">
+                    <p>While exploring an <a href="https://github.com/kitao/pyxel">interesting game
+engine</a> which
+compiles python code to WASM; I thought, there's no better
+way to have fun than to write a chess engine. This was the
+start of a one month long project which led me to create
+my own chess AI.</p>
+<p>Chess programming is a topic that has been written about
+extensively, it has been a proving ground for some of
+the first AI researchers and even today it is still used as
+a benchmark for techniques in <a href="https://github.com/google-deepmind/searchless_chess">applied research.
+</a></p>
+<p>This article is the first part in a series of three in which
+I attempt to distill some insight into the application of
+algorithms in software, namely chess programming. In the
+hopes that it may inspire how you approach solving similar
+problems in the future.</p>
+<h3>Bit Operations</h3>
+<p>If you've ever done some leetcoding or any other live
+algorithm style interview prep in software engineering you
+might have come across the odd question on bit operations
+and wondered if you'll ever need to actually do these in
+your day to day job. I'm not here to answer that, but I am
+here to show you how it applies to chess programming.</p>
+<p>Firstly what are bit operations:</p>
+<blockquote>
+<p>a bitwise operation operates on a bit string, a bit array
+or a binary numeral at the level of its individual bits.
+It is a fast and simple action, basic to the higher-level
+arithmetic operations and directly supported by the processor.</p>
+<p><a href="https://en.wikipedia.org/wiki/Bitwise_operation">Wikipedia</a></p>
+</blockquote>
+<p>Essentially bitwise operations are physical operations that
+are embedded into the processor, they consist of your logical
+AND, OR, XOR and bit shifts. The mathematical operations that
+you're familiar with (such as Add, Subtract etc.) are all
+built upon bitwise operations.</p>
+<p>Here's an example of a <code>NOT</code> operation:</p>
+<div class="highlight"><pre><span></span><code>NOT 0111  (decimal 7)
+  = 1000  (decimal 8)
+</code></pre></div>
+
+<p>And an example of an <code>AND</code> operation:</p>
+<div class="highlight"><pre><span></span><code>    1010 (decimal 5)
+AND 1100 (decimal 12)
+  = 1000 (decimal 8)
+</code></pre></div>
+
+<p>We can see these operations supported in python:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 0b1100 &amp; 0b1010
+8
+&gt;&gt;&gt; bin(0b1100 &amp; 0b1010)
+&#39;0b1000&#39;
+</code></pre></div>
+
+<p>There's two ways we can shift bits. (Left and right) Here's
+an example in python:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; # Left
+&gt;&gt;&gt; bin(0b0010 &lt;&lt; 1)
+&#39;0b100&#39;
+
+&gt;&gt;&gt; # Right
+&gt;&gt;&gt; bin(0b0010 &gt;&gt; 1)
+&#39;0b1&#39;
+</code></pre></div>
+
+<p>Explaining how the processor does addition is out of scope
+of this blog post, but put together some of these bit
+operators and you've got yourself a function that can do
+addition.</p>
+<h3>Bitboards</h3>
+<p>Back to the chess:</p>
+<p>We are doing all of this essentially to get as close to the
+processor as possible, since we want the most performance
+out of a computer as we can by avoiding any unnecessary
+operations.</p>
+<p>In chess programming we will use a single number to keep
+track of all the positions of pieces on the board. This is
+what we call a <em>"bitboard"</em>. We will have a few bitboards
+to maintain the game's state. The first one will be 'board'
+which tracks <strong>all</strong> the pieces. At the start of the game
+this number will be: <code>0xFFFF00000000FFFF</code>. Which is
+hexadecimal for <code>18446462598732906495</code>. If we print the
+binary form of this number and format it over 8 rows we get
+the following:</p>
+<div class="highlight"><pre><span></span><code> Bitboard:
+
+8  1 1 1 1 1 1 1 1
+7  1 1 1 1 1 1 1 1
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  1 1 1 1 1 1 1 1
+   a b c d e f g h
+</code></pre></div>
+
+<p>There are a few other bitboards to track during a game of
+chess. There will be 2 boards for each colour (white and
+black). And there will be a bitboard for each type (6).
+Which gives us a total of 9 bitboards, or 9 numbers to cover
+the entire game state of chess. Here's two more examples of
+bitboards, one for pawns and one for white pieces:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; pawns = 0x00FF00000000FF00
+&gt;&gt;&gt; white = 0x000000000000FFFF
+</code></pre></div>
+
+<p>Now we can uses these three numbers to give us the answer
+to some questions for example; Where are all the white pawns?</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; board &amp; pawns &amp; white
+65280
+
+ Bitboard (65280):
+
+8  0 0 0 0 0 0 0 0
+7  0 0 0 0 0 0 0 0
+6  0 0 0 0 0 0 0 0
+5  0 0 0 0 0 0 0 0
+4  0 0 0 0 0 0 0 0
+3  0 0 0 0 0 0 0 0
+2  1 1 1 1 1 1 1 1
+1  0 0 0 0 0 0 0 0
+   a b c d e f g h
+</code></pre></div>
+
+<p>During a game of chess you'll use these to calculate which
+pieces are under attack. (e.g. given:
+<code>knightsmove &amp; theirpieces</code> the result will be <code>0</code> if
+there's no piece under threat). We can also use these
+bitboards workout where the valid moves are with
+<code>moves &amp; ~board</code>. (Moves and not board).</p>
+<p>A chess AI that's looking 4 moves ahead will have ~5mil
+positions to consider, so having these operations done on a
+low level can help boost the performance of the software.
+The more you squeeze out of performance the more accurate
+your chess AI will be, because this improves it's ability to
+look into the future.</p>
+<h3>Beyond Chess</h3>
+<p>In summary learning about how bitboards are applied to chess
+programming has allowed me to understand how bit operations can
+be applied practically in software. Before I dived into
+learning how chess is programmed I had only imagined keeping
+track of the board state using several objects and an array,
+however I now see there's more than one way to crack an egg;
+the board state egg.</p>
+<p>I hope the article helps to providing insight into practical
+applications of bit operators and leaves them to be
+considered as valuable for solving technical problems or at
+least reminds software engineers that we have them in our
+toolbelt.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://github.com/official-stockfish/Stockfish">Stockfish</a></li>
+<li><a href="https://www.chessprogramming.org/Main_Page">Chess Programming</a></li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 21:34 | </font>
+                    <a href="chess-programming-bitboards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 10 March 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -679,174 +881,6 @@ directory. 🤷‍♂️</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Thu 06 December 2018</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Chain of Responsibility</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Easily one of my favourite patterns from the gang of four is the <em>chain of
-responsibility</em> pattern. It aims to avoid coupling the object that sends a
-request to the handlers of the request. This is especially useful if the
-structure to our handlers follows a sense of hierarchy.</p>
-<p>I've had very few opportunities to implement design patterns, but gaming
-has really helped me to envision a context where several designs can be
-applied as handy solutions to managing complexity.</p>
-<p>So we will apply the chain of responsibility to a situation where we have
-gathered four of the most powerful wizards in a room, each of whom will test
-their power by casting a spell.</p>
-<p>For this example we have our wizards as the objects which send requests.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Wizard</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a wizard.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">intelligence</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-        <span class="c1">#: Identify the wizard by name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1">#: Intelligence as a proxy of a wizard&#39;s power.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">=</span> <span class="n">intelligence</span>
-
-    <span class="k">def</span> <span class="nf">cast_spell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">:</span> <span class="n">Spell</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Have the wizard cast a spell.&quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> casts </span><span class="si">{</span><span class="n">spell</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> spell.&quot;</span><span class="p">)</span>
-        <span class="n">spell</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-</code></pre></div>
-
-<p>We will make each behaviour of the spell, which is determined by the power of
-the wizard casting it, as an object handling a request. If the wizard does not
-meet the handler's requirements it passes the request on, to it's successor.
-This is where we have applied a sense of hierarchy to the handler.</p>
-<p>To begin we have an Abstract Handler:</p>
-<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-
-
-<span class="k">class</span> <span class="nc">AbstractHandler</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">successor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span> <span class="o">=</span> <span class="n">successor</span>
-
-    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="n">reaction</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">reaction</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_successor</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">create</span><span class="p">)</span>
-
-    <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spell</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Must provide implementation in subclass.&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Now we can define our handler hierarchy:</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">LowPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spell backfires.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">MediumPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Small fire ball is cast.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">HighPowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">creature</span><span class="o">.</span><span class="n">intelligence</span> <span class="o">&lt;</span> <span class="mi">30</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A fire ball blazes across the room&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">True</span>
-
-
-<span class="k">class</span> <span class="nc">GodlikePowerFireSpell</span><span class="p">(</span><span class="n">AbstractHandler</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">_handle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;A Massive column of fire burns through the room!&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">True</span>
-</code></pre></div>
-
-<p>Finally a single object to identify the spell chain.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Spell</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="c1">#: Identifying the spell by a name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="c1">#: How the spell behaves at differing levels of user&#39;s power</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span> <span class="o">=</span> <span class="n">LowPowerFireSpell</span><span class="p">(</span>
-            <span class="n">MediumPowerFireSpell</span><span class="p">(</span>
-                <span class="n">HighPowerFireSpell</span><span class="p">(</span>
-                    <span class="n">GodlikePowerFireSpell</span><span class="p">()</span>
-                <span class="p">)</span>
-            <span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">cast</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">creature</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">chain</span><span class="o">.</span><span class="n">handle</span><span class="p">(</span><span class="n">creature</span><span class="p">)</span>
-</code></pre></div>
-
-<p>To test their skill, we have a spell which casts a "Fire Ball".
-We have the following wizards present:</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">fire_spell</span> <span class="o">=</span> <span class="n">Spell</span><span class="p">(</span><span class="s1">&#39;Fire Ball&#39;</span><span class="p">)</span>
-    <span class="n">merlin</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Merlin&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
-    <span class="n">albus</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Albus&quot;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
-    <span class="n">howl</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Howl&quot;</span><span class="p">,</span> <span class="mi">28</span><span class="p">)</span>
-    <span class="n">gandalf</span> <span class="o">=</span> <span class="n">Wizard</span><span class="p">(</span><span class="s2">&quot;Gandalf&quot;</span><span class="p">,</span> <span class="mi">38</span><span class="p">)</span>
-</code></pre></div>
-
-<p>They are all gathered in a room, and take turns casting the same spell.</p>
-<div class="highlight"><pre><span></span><code><span class="n">room</span> <span class="o">=</span> <span class="p">[</span><span class="n">merlin</span><span class="p">,</span> <span class="n">albus</span><span class="p">,</span> <span class="n">howl</span><span class="p">,</span> <span class="n">gandalf</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">wizard</span> <span class="ow">in</span> <span class="n">room</span><span class="p">:</span>
-    <span class="n">wizard</span><span class="o">.</span><span class="n">cast_spell</span><span class="p">(</span><span class="n">fire_spell</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>To which we should see the spell behave according to their intelligence:</p>
-<div class="highlight"><pre><span></span><code><span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$<span class="w"> </span>python<span class="w"> </span>script.py
-Merlin<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-Spell<span class="w"> </span>backfires.
-
-Albus<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-Small<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>is<span class="w"> </span>cast.
-
-Howl<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-A<span class="w"> </span>fire<span class="w"> </span>ball<span class="w"> </span>blazes<span class="w"> </span>across<span class="w"> </span>the<span class="w"> </span>room
-
-Gandalf<span class="w"> </span>casts<span class="w"> </span>Fire<span class="w"> </span>Ball<span class="w"> </span>spell.
-A<span class="w"> </span>Massive<span class="w"> </span>column<span class="w"> </span>of<span class="w"> </span>fire<span class="w"> </span>burns<span class="w"> </span>through<span class="w"> </span>the<span class="w"> </span>room!
-
-<span class="o">(</span>myenv<span class="o">)</span><span class="w"> </span>pc-name<span class="w"> </span>~<span class="w"> </span>$
-</code></pre></div>
-
-<p><a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/chain_of_responsibility.py">Implementation can be found here</a></p>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 00:40 | </font>
-                    <a href="chain-of-responsibility.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/index6.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/index4.html" class="previous-page">Newer ⮕</a>
@@ -975,6 +1009,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/the-bleeding-edge.html">
+                        <span>The Bleeding Edge</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/how-the-blog-works.html">
                         <span>How the Blog Works</span>
@@ -1279,10 +1318,16 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/speed.html">speed</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/startups.html">startups</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/talking.html">talking</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/teams.html">teams</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/technology.html">technology</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/testing.html">testing</a>

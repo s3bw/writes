@@ -1,5 +1,168 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-08-04T12:04:00+01:00</updated><entry><title>How the Blog Works</title><link href="https://s3bw.github.io/writes/how-the-blog-works.html" rel="alternate"/><published>2025-08-04T12:04:00+01:00</published><updated>2025-08-04T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-08-04:/writes/how-the-blog-works.html</id><summary type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-08-11T12:05:00+01:00</updated><entry><title>The Bleeding Edge</title><link href="https://s3bw.github.io/writes/the-bleeding-edge.html" rel="alternate"/><published>2025-08-11T12:05:00+01:00</published><updated>2025-08-11T12:05:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-08-11:/writes/the-bleeding-edge.html</id><summary type="html">&lt;p&gt;A tech stack is more often inherited than it is chosen. On
+the rare occasion someone gets the chance to decide which tech
+the company gets to use for the next decade. I've seen this go
+well and I've seen this go belly up.&lt;/p&gt;</summary><content type="html">&lt;p&gt;A tech stack is more often inherited than it is chosen. On
+the rare occasion someone gets the chance to decide which tech
+the company gets to use for the next decade. I've seen this go
+well and I've seen this go belly up.&lt;/p&gt;
+&lt;p&gt;If you're in the right club, you know the answer; &lt;a href="https://boringtechnology.club/"&gt;stick
+with boring.&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;The Postgres Paradox&lt;/h3&gt;
+&lt;p&gt;When thinking about how long a technology will last I often
+use the current age of the software to determine how much
+longer it will be around. So if it's 2 years old, it might
+be around 2 more years. Postgres dates back 35 years, so
+it will probably be around for 35 more years.&lt;/p&gt;
+&lt;p&gt;We can view this in terms of experienced employees; we are
+more likely to find someone with 20 years of Postgres
+experience than we are to find someone with 20 years in
+a tech that's only existed for 2 years.&lt;/p&gt;
+&lt;p&gt;Taking the age of the tech into consideration allows us to
+earmark the hiring pool and the likelihood that fixes or
+workarounds exist for problems we might run into. Diving
+into newer tech increases the chance we are the first
+to come across certain problems.&lt;/p&gt;
+&lt;p&gt;The bleeding edge might appear shiny and new but we aren't
+here to ship blog posts we are here to ship features and
+delight customers.&lt;/p&gt;
+&lt;p&gt;These avoidable issues are hard to solve because of two
+reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;They're novel, we're the first to run into them.&lt;/li&gt;
+&lt;li&gt;The people that have faced this issue are expensive,
+because not many of them exist.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Make a Difference&lt;/h3&gt;
+&lt;p&gt;Starting a business is a risk, picking fancy new tech is a
+risk. These risks add up. Where you decide to take the
+risk depends on where you are trying to drive innovation.&lt;/p&gt;
+&lt;p&gt;In 2015, London, two &lt;a href="https://en.wikipedia.org/wiki/Neobank"&gt;neobanks&lt;/a&gt;
+were founded; this is the tech they are built on and the tech's
+age at the time. Revolut is built on Postgres (25yo) and Java (19yo),
+the other is built on Cassandra (7yo) and Golang (6yo).
+The former has 50million customers, the later has 10million.&lt;/p&gt;
+&lt;p&gt;Risks are allowed to be taken, but we should limit the
+number of unknowns and not make things harder than they need
+to be. If we pick our entire stack on the principle of shiny
+and new we are going to be fighting our tech more often that
+we are solving customer use-cases.&lt;/p&gt;
+&lt;p&gt;Get excited about delighting users, not the fancy tech.&lt;/p&gt;
+&lt;h3&gt;Don't be First, Be Fast&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Early market leaders have much greater long-term success
+and enter an average of 13 years after pioneers.&lt;/p&gt;
+&lt;p&gt;Golder and Tellis (1993)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;People make the assumption that if they're not using the
+latest technology they're not staying competitive, when they
+are instead just becoming a case-study for the industry.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;The study by Golder and Tellis tells us that first movers
+have a failure rate that is 6 times higher than fast
+followers.&lt;/p&gt;
+&lt;p&gt;If the tech stack mattered, you'd see it in advertising,
+but you don't, because the customer doesn't care. Your tech
+stack doesn't determine your product market fit&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Your investors might care (🤷).&lt;/p&gt;
+&lt;p&gt;If I had to choose between customers and investors I'd
+pick customers.&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;The Right Tool for The Job&lt;/h3&gt;
+&lt;p&gt;Ask a graduate what tool or language they would use for
+their next project and they'll give you a political answer:
+&lt;em&gt;"I would pick the best tool for the job"&lt;/em&gt;. Here's a list of
+&lt;a href="https://en.wikipedia.org/wiki/List_of_programming_languages"&gt;programming
+languages&lt;/a&gt;.
+There are 50 that start with the letter A. Let me know when
+you've found the one that's best suited for the job.&lt;/p&gt;
+&lt;p&gt;Perhaps we should define what &lt;em&gt;"best for the job"&lt;/em&gt;, means. If
+we are in a team of 12 engineers that are maintaining 2
+Postgres databases; introducing a MySQL database on the
+basis that it addresses a specific use-case better than
+postgres is not a good idea.&lt;/p&gt;
+&lt;p&gt;If we hire a DB expert in the future are we going
+to ensure they're versed in both Postgres and MySQL? It's
+niche but we could find them at a price.&lt;/p&gt;
+&lt;p&gt;We
+don't have to hire this DB expert, our team has built up
+experience with Postgres, now they'll need to familiarise
+themselves with the maintenance process of a new db.
+Just bumping your database version is now slightly
+tricker and you're monitoring news and bug fixes for both
+releases.&lt;/p&gt;
+&lt;p&gt;We could define &lt;em&gt;"best for the job"&lt;/em&gt; as perhaps
+the one we are most familiar with, and this is often the
+best choice. If you can skip learning a new language or
+learning the framework step, you're going to get to market
+faster than others. Don't let learning the tech be the
+procrastination for learning the market.&lt;/p&gt;
+&lt;p&gt;In a startup we are testing our market assumptions, this is the
+largest risk to the company, we shouldn't slow down the
+speed we get to market. It's better to know we are wrong
+sooner rather than later.&lt;/p&gt;
+&lt;h3&gt;Getting Experience&lt;/h3&gt;
+&lt;p&gt;Engineers at startups might use the job as an opportunity to
+focus on CV driven develop instead of focusing on the needs
+of the business.&lt;/p&gt;
+&lt;p&gt;I've seen a graduate write every new project in a new
+programming language.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Anyone know Elixir? We're trying to fix a bug in
+production and the developer that wrote this is no longer
+at the company.&lt;/p&gt;
+&lt;p&gt;From a slack thread.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Starting every new project in a new language isn't a fast
+way to learn how to deliver. It's a fast-way to get 3 months
+of experience 5 times. Learn how to deal with a language's
+pain points and how to solve issues with a specific
+framework is what makes you valuable. If you're looking to
+stretch yourself, then use the same language and framework
+for larger projects.&lt;/p&gt;
+&lt;p&gt;If you've only got 3 months of experience in a language and
+framework you're probably not that hard to replace.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The new thing won’t be better, you just aren’t aware of
+all of the ways it will be terrible yet&lt;/p&gt;
+&lt;p&gt;&lt;a href="https://boringtechnology.club/#84"&gt;Slide 84&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3&gt;Propaganda&lt;/h3&gt;
+&lt;p&gt;Propaganda doesn't just occur in war or between competing
+states, corporate propaganda is a well established strategy
+available to large technical institutions.&lt;/p&gt;
+&lt;p&gt;Let's say
+you are working on an internal framework that holds up your
+billion dollar social media platform, you wish to hire more
+engineers to maintain and build the project. Training new
+hires on this framework is time consuming, wouldn't it be
+great if the engineers we hired were already familiar with
+the framework?&lt;/p&gt;
+&lt;p&gt;They can also hire developer advocates, these are the
+influencers of the software engineering world, corporate
+mercenaric missonaries that are very good at making the
+work they're doing exciting.&lt;/p&gt;
+&lt;p&gt;Ignore the hype, your job is to keep things simple.&lt;/p&gt;
+&lt;h3&gt;Bleeding Edge&lt;/h3&gt;
+&lt;p&gt;One reason you might wish to be in the bleeding edge of tech
+is to gain the expertise and then build around some of the
+fundamentals you've learnt. Perhaps your customers are
+others trying to enter the market, this is perhaps a
+safety-net for the risk you take, but the market can also
+flatten out and you're left holding a bag of air.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Your competitors will thank you for your sacrifice.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;&lt;a href="https://www.sqlite.ai/"&gt;Unless your tech stack is your product&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:3"&gt;
+&lt;p&gt;A blog post on capital allocation and the VC world
+  might happen in the future.&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"/><category term="software"/><category term="startups"/><category term="technology"/></entry><entry><title>How the Blog Works</title><link href="https://s3bw.github.io/writes/how-the-blog-works.html" rel="alternate"/><published>2025-08-04T12:04:00+01:00</published><updated>2025-08-04T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-08-04:/writes/how-the-blog-works.html</id><summary type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
 generator, the API and the repo that hosts all the HTML.
 This article provides an overview of the pieces that compose
 the final site.&lt;/p&gt;</summary><content type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
