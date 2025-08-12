@@ -13,7 +13,7 @@ with boring.&lt;/a&gt;&lt;/p&gt;
 use the current age of the software to determine how much
 longer it will be around. So if it's 2 years old, it might
 be around 2 more years. Postgres dates back 35 years, so
-it will probably be around for 35 more years.&lt;/p&gt;
+it will probably be around for 35 more years.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;We can view this in terms of experienced employees; we are
 more likely to find someone with 20 years of Postgres
 experience than we are to find someone with 20 years in
@@ -56,16 +56,16 @@ and enter an average of 13 years after pioneers.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;People make the assumption that if they're not using the
 latest technology they're not staying competitive, when they
-are instead just becoming a case-study for the industry.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+are instead just becoming a case-study for the industry.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;The study by Golder and Tellis tells us that first movers
 have a failure rate that is 6 times higher than fast
 followers.&lt;/p&gt;
 &lt;p&gt;If the tech stack mattered, you'd see it in advertising,
 but you don't, because the customer doesn't care. Your tech
-stack doesn't determine your product market fit&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+stack doesn't determine your product market fit&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;Your investors might care (🤷).&lt;/p&gt;
 &lt;p&gt;If I had to choose between customers and investors I'd
-pick customers.&lt;sup id="fnref:3"&gt;&lt;a class="footnote-ref" href="#fn:3"&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+pick customers.&lt;sup id="fnref:4"&gt;&lt;a class="footnote-ref" href="#fn:4"&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;h3&gt;The Right Tool for The Job&lt;/h3&gt;
 &lt;p&gt;Ask a graduate what tool or language they would use for
 their next project and they'll give you a political answer:
@@ -152,14 +152,17 @@ flatten out and you're left holding a bag of air.&lt;/p&gt;
 &lt;hr /&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
-&lt;p&gt;Your competitors will thank you for your sacrifice.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;This is known as the &lt;a href="https://en.wikipedia.org/wiki/Lindy_effect"&gt;Lindy Effect&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:2"&gt;
-&lt;p&gt;&lt;a href="https://www.sqlite.ai/"&gt;Unless your tech stack is your product&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Your competitors will thank you for your sacrifice.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id="fn:3"&gt;
+&lt;p&gt;&lt;a href="https://www.sqlite.ai/"&gt;Unless your tech stack is your product&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:4"&gt;
 &lt;p&gt;A blog post on capital allocation and the VC world
-  might happen in the future.&amp;#160;&lt;a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+  might happen in the future.&amp;#160;&lt;a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</content><category term="software"/><category term="software"/><category term="startups"/><category term="technology"/></entry><entry><title>How the Blog Works</title><link href="https://s3bw.github.io/writes/how-the-blog-works.html" rel="alternate"/><published>2025-08-04T12:04:00+01:00</published><updated>2025-08-04T12:04:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-08-04:/writes/how-the-blog-works.html</id><summary type="html">&lt;p&gt;There are a few parts that make up the blog, the static site
