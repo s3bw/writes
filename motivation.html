@@ -14,12 +14,12 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Chess Programming - Bitboards</title>
+        <title>s3bw : Motivation</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Chess Programming - Bitboards"/>
+        <meta property='og:title' content="s3bw : Motivation"/>
         <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>An explanation of bitboard in chess programming</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : chess-programming-bitboards.html"/>
+        <meta property='og:description' content=" : <p>Over 43 years Edsger W. Dijkstra wrote 1318 essay papers.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : motivation.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -55,182 +55,135 @@
 
 <div class="fullbody">
     <div class="datebody">
-        <h2 class="date">Mon 17 March 2025</h2>
+        <h2 class="date">Mon 08 September 2025</h2>
     </div>
     <div class="blogbodytop"></div>
     <div class="blogbody">
         <div class="titlebody">
             <h3 class="title">
-                <font style="vertical-align: inherit;">Chess Programming - Bitboards</font>
+                <font style="vertical-align: inherit;">Motivation</font>
             </h3>
         </div>
         <div class="main">
-            <p>While exploring an <a href="https://github.com/kitao/pyxel">interesting game
-engine</a> which
-compiles python code to WASM; I thought, there's no better
-way to have fun than to write a chess engine. This was the
-start of a one month long project which led me to create
-my own chess AI.</p>
-<p>Chess programming is a topic that has been written about
-extensively, it has been a proving ground for some of
-the first AI researchers and even today it is still used as
-a benchmark for techniques in <a href="https://github.com/google-deepmind/searchless_chess">applied research.
-</a></p>
-<p>This article is the first part in a series of three in which
-I attempt to distill some insight into the application of
-algorithms in software, namely chess programming. In the
-hopes that it may inspire how you approach solving similar
-problems in the future.</p>
-<h3>Bit Operations</h3>
-<p>If you've ever done some leetcoding or any other live
-algorithm style interview prep in software engineering you
-might have come across the odd question on bit operations
-and wondered if you'll ever need to actually do these in
-your day to day job. I'm not here to answer that, but I am
-here to show you how it applies to chess programming.</p>
-<p>Firstly what are bit operations:</p>
-<blockquote>
-<p>a bitwise operation operates on a bit string, a bit array
-or a binary numeral at the level of its individual bits.
-It is a fast and simple action, basic to the higher-level
-arithmetic operations and directly supported by the processor.</p>
-<p><a href="https://en.wikipedia.org/wiki/Bitwise_operation">Wikipedia</a></p>
-</blockquote>
-<p>Essentially bitwise operations are physical operations that
-are embedded into the processor, they consist of your logical
-AND, OR, XOR and bit shifts. The mathematical operations that
-you're familiar with (such as Add, Subtract etc.) are all
-built upon bitwise operations.</p>
-<p>Here's an example of a <code>NOT</code> operation:</p>
-<div class="highlight"><pre><span></span><code>NOT 0111  (decimal 7)
-  = 1000  (decimal 8)
-</code></pre></div>
-
-<p>And an example of an <code>AND</code> operation:</p>
-<div class="highlight"><pre><span></span><code>    1010 (decimal 5)
-AND 1100 (decimal 12)
-  = 1000 (decimal 8)
-</code></pre></div>
-
-<p>We can see these operations supported in python:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 0b1100 &amp; 0b1010
-8
-&gt;&gt;&gt; bin(0b1100 &amp; 0b1010)
-&#39;0b1000&#39;
-</code></pre></div>
-
-<p>There's two ways we can shift bits. (Left and right) Here's
-an example in python:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; # Left
-&gt;&gt;&gt; bin(0b0010 &lt;&lt; 1)
-&#39;0b100&#39;
-
-&gt;&gt;&gt; # Right
-&gt;&gt;&gt; bin(0b0010 &gt;&gt; 1)
-&#39;0b1&#39;
-</code></pre></div>
-
-<p>Explaining how the processor does addition is out of scope
-of this blog post, but put together some of these bit
-operators and you've got yourself a function that can do
-addition.</p>
-<h3>Bitboards</h3>
-<p>Back to the chess:</p>
-<p>We are doing all of this essentially to get as close to the
-processor as possible, since we want the most performance
-out of a computer as we can by avoiding any unnecessary
-operations.</p>
-<p>In chess programming we will use a single number to keep
-track of all the positions of pieces on the board. This is
-what we call a <em>"bitboard"</em>. We will have a few bitboards
-to maintain the game's state. The first one will be 'board'
-which tracks <strong>all</strong> the pieces. At the start of the game
-this number will be: <code>0xFFFF00000000FFFF</code>. Which is
-hexadecimal for <code>18446462598732906495</code>. If we print the
-binary form of this number and format it over 8 rows we get
-the following:</p>
-<div class="highlight"><pre><span></span><code> Bitboard:
-
-8  1 1 1 1 1 1 1 1
-7  1 1 1 1 1 1 1 1
-6  0 0 0 0 0 0 0 0
-5  0 0 0 0 0 0 0 0
-4  0 0 0 0 0 0 0 0
-3  0 0 0 0 0 0 0 0
-2  1 1 1 1 1 1 1 1
-1  1 1 1 1 1 1 1 1
-   a b c d e f g h
-</code></pre></div>
-
-<p>There are a few other bitboards to track during a game of
-chess. There will be 2 boards for each colour (white and
-black). And there will be a bitboard for each type (6).
-Which gives us a total of 9 bitboards, or 9 numbers to cover
-the entire game state of chess. Here's two more examples of
-bitboards, one for pawns and one for white pieces:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; pawns = 0x00FF00000000FF00
-&gt;&gt;&gt; white = 0x000000000000FFFF
-</code></pre></div>
-
-<p>Now we can uses these three numbers to give us the answer
-to some questions for example; Where are all the white pawns?</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; board &amp; pawns &amp; white
-65280
-
- Bitboard (65280):
-
-8  0 0 0 0 0 0 0 0
-7  0 0 0 0 0 0 0 0
-6  0 0 0 0 0 0 0 0
-5  0 0 0 0 0 0 0 0
-4  0 0 0 0 0 0 0 0
-3  0 0 0 0 0 0 0 0
-2  1 1 1 1 1 1 1 1
-1  0 0 0 0 0 0 0 0
-   a b c d e f g h
-</code></pre></div>
-
-<p>During a game of chess you'll use these to calculate which
-pieces are under attack. (e.g. given:
-<code>knightsmove &amp; theirpieces</code> the result will be <code>0</code> if
-there's no piece under threat). We can also use these
-bitboards workout where the valid moves are with
-<code>moves &amp; ~board</code>. (Moves and not board).</p>
-<p>A chess AI that's looking 4 moves ahead will have ~5mil
-positions to consider, so having these operations done on a
-low level can help boost the performance of the software.
-The more you squeeze out of performance the more accurate
-your chess AI will be, because this improves it's ability to
-look into the future.</p>
-<h3>Beyond Chess</h3>
-<p>In summary learning about how bitboards are applied to chess
-programming has allowed me to understand how bit operations can
-be applied practically in software. Before I dived into
-learning how chess is programmed I had only imagined keeping
-track of the board state using several objects and an array,
-however I now see there's more than one way to crack an egg;
-the board state egg.</p>
-<p>I hope the article helps to providing insight into practical
-applications of bit operators and leaves them to be
-considered as valuable for solving technical problems or at
-least reminds software engineers that we have them in our
-toolbelt.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://github.com/official-stockfish/Stockfish">Stockfish</a></li>
-<li><a href="https://www.chessprogramming.org/Main_Page">Chess Programming</a></li>
-</ul>
+            <p>At the rate I am writing blog posts I should overtake him in
+37 years. This is if I keep going at 1.5 weeks per blog
+post.</p>
+<p>Over 43 years Edsger W. Dijkstra wrote 1318 essay papers.
+At the rate I am writing blog posts I should overtake him in
+37 years. This is if I keep going at 1.5 weeks per blog
+post.</p>
+<p>An aspirational blog is typically one that has 1-4 essays all
+dated about 3-7 years in the past. We can further identify
+these blogs when they contain a post that says something
+along the lines of "Hey this is my blog, I hope to write in
+here frequently, stay tuned!" and we never hear from them
+again. So having a blog seems to be something that people
+wish to have, but not something they ever get around to
+publish content on.</p>
+<p>Then there are blogs that are full of content and insight.
+When I've come across these you tend to leave with a strong
+opinion of the writer and you might even think, "damn, I
+want a blog like this".</p>
+<p>So what makes the difference?</p>
+<h3>Motivate Yourself</h3>
+<p>A number of people have asked "How do you motivate yourself
+to keep writing your blog" and after putting thought
+to the question I've realised that <em>all</em> motivation can be
+broken down into 3 steps.</p>
+<p>The first step is defining your goal, and in this case we
+can say the goal is "Create a blog, or a blog post." Goal
+setting is shallow. Often there's nothing unique about
+anyone's goal, as with aspirational blogs, showing one's
+thoughts and personality seems to be something everyone wants to do.</p>
+<p>The second step is where we attach meaning to our goal. Try
+to get deeper than the six year old that want's to be
+president. Why do you want a blog? Why do you want
+to be president? The six year old might wish to give their
+class mates chocolate every Friday maybe they want to make a
+positive difference in people's lives, on these two reasons
+alone which six year old do you think is most likely to become
+a president.</p>
+<p>So why do you want to write a blog? Some of my reasons
+include; I want to receive feedback on certain topics. I
+want to use it to connect with colleagues, friends and
+others interested in the same thing as me. I want to build
+credibility and become a source of insight. I want to get
+better at writing. Now we've defined <em>Why</em>.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<h3>Throw Away Your Goal</h3>
+<p>At this point we can get rid of our goal of "Create a blog,
+or a blog post" because the next step is to figure out
+"How".</p>
+<p>How can I receive feedback? How can I connect with
+colleagues? We need to make assumptions and list all
+the possible ways we can get feedback or develop
+connection. It's important to highlight that we are out to
+prove or disprove these assumptions. If we write a blog and
+don't get feedback or we end up without creating connections
+then we should be happy to throw it away. At the end of
+the day our goal is not to have a blog, it's to create
+connection and the blog isn't working.</p>
+<p>We can apply this to other goals that people typically have
+such as "Get a Job". If we aren't able to find work
+then we need to think about <em>Why</em> we want a job. It might
+be money, it might be being part of something greater than
+yourself. Well there are ways of making money and being part
+of greater things that are not contingent on getting a job.
+If we are too attached to the goal we might be blind to
+opportunities which will help us achieve the underlying
+driver that's causing us to want a job.</p>
+<h3>Recession Proof</h3>
+<p>Knowing the <em>Why</em> is an important part of the motivation. If
+you can't get yourself to sit down and write on a Sunday,
+one of the easiest ways to get yourself into gear is to
+reflect on why you want something. I'm doing this to get
+better, I'm doing this to build credibility. These reasons
+are often bigger than your current self and bigger than the
+dilly-dally of your procrastination session.</p>
+<p>Where else are your ideas going to go? There's no point in
+collecting and holding onto your ideas for the slim chance
+that you get the right moment to apply the nugget of wisdom.
+You're more likely to get these moments if you are writing
+about them. Prove you know something by writing it, and
+avoid forgetting things by having it written. Finally; write
+for yourself - not for others.</p>
+<h3>Getting Started</h3>
+<p>Beyond trying to motivate yourself, you can make writing
+easier by making small notes of the thoughts you have
+throughout the day that you think make an interesting tidbit
+to tell someone else. Having one place to gather these notes
+is helpful as you have a flock of thoughts you can collate
+and group into some coherent essay. That way when you sit
+down you're not starting with the blank page, you've got a
+jumping-off point.</p>
+<p>Once you are in the habit of doing this you'll tend to be
+eager to find things that bring you inspiration. It is
+important that we motivate ourselves to <em>seek</em> inspiration
+and we are not sitting and waiting for things to come to
+mind. Being active in sparking inspiration will change how
+you approach how you consume content and the conversations
+you're having with others.</p>
+<p>Through the process of creating my blog I've found that I've
+started to engage more with others on topics that I wish to
+find out more about. I'm fleshing out my own ideas through
+conversation. I'm trying to find books that touch on topics
+that I'd like to explore and write about. There's now a loop
+of being eager to write which is making me eager to learn
+which is making me eager to write. Which is funny, because
+I've found that the process of writing a blog post is
+fulfilling my underlying motivations more so than just
+having the blog.</p>
+<p>Giving yourself a deadline helps too.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Try this in your next job application to a startup,
+  see how strong their motivations are.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
         </div>
 
-          <span class="series-footer"></span>
-<div class="series-container">
-    <p class="series-title">The "Chess Programming" series:</p>
-    <ol class="series-list">
-            <ol class="active">
-                1: (here) Chess Programming - Bitboards
-            </ol>
-    </ol>
-</div>
     </div>
 
     <div id="comments"></div>
@@ -238,7 +191,7 @@ toolbelt.</p>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'chess-programming-bitboards.html');
+    loadComments('client_fBaxnE6w', '#comments', 'motivation.html');
   });
 </script>
 

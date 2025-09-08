@@ -60,6 +60,124 @@
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
+                        <font style="vertical-align: inherit;">Foolscap List Ordering</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p><a href="https://github.com/foxyblue/foolscap">Foolscap</a>
+was my answer to losing all my notes and
+forgetting the exact file I saved it.</p>
+<blockquote>
+<p>Was it on Desktop or next to the project?</p>
+</blockquote>
+<p>Thus I decided to write an application that took
+care of the saving and finding of my notes.</p>
+<h3>Unordered Lists</h3>
+<p>One thing I have taken for granted is the ordering
+of my files in any file system. I only realised
+how important it was after unordered dictionaries
+in python allocated my notes random positions on
+the list.</p>
+<p>The random ordering meant if I have note "M" in
+mind, it could appear anywhere on the list. So my
+eyes would track down <code>n</code> positions in the list to
+find "M". An <code>O(n)</code> operation for my eyes.</p>
+<p>After growing tired (a whole day of <code>O(n)</code> eye
+operations), I wrote the rule to provide me the
+list in alphabetical order. This was great my
+brain automatically switched to doing a binary
+search for note "M". <code>O(log n)</code></p>
+<h3>Ordered Lists</h3>
+<p>Now that finding note "M" was optimised for my
+eyes, my finger had to press the down key until
+my cursor was on the note of choice. This wasn't
+good enough, I was referring to note "M" several
+times a day and the other notes I'd reference once
+a month were adding computation time to my finger.</p>
+<p>This is where I introduced two of the most
+powerful rules of Foolscap. Since I tracked the
+number of views, and time it was last viewed or
+modified I could implement the following ordering:</p>
+<div class="highlight"><pre><span></span><code><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">LastView</span><span class="sr">/Modified/</span><span class="n">RecentlyCreated</span>
+<span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="n">MostViewed</span>
+<span class="mi">3</span><span class="o">:</span><span class="w"> </span><span class="mi">2</span><span class="n">ndMostViewed</span>
+<span class="mi">4</span><span class="o">:</span><span class="w"> </span><span class="mi">3</span><span class="n">rdMostViewed</span>
+<span class="mi">5</span><span class="o">:</span><span class="w"> </span><span class="n">A</span>
+<span class="mi">6</span><span class="o">:</span><span class="w"> </span><span class="n">Z</span>
+</code></pre></div>
+
+<p>This was neat!</p>
+<p>I had significantly cut down the amount of time it
+took for me to get to the notes I was using most
+frequently.</p>
+<h3>Search Lists</h3>
+<p>Searching needed a slightly different ordering
+since applying the rules above to your search
+results will likely be meaningless. The
+meaningless will come from your inability to
+predict what will appear in the list to begin
+with.</p>
+<p>Python has a neat method for it's strings.</p>
+<div class="highlight"><pre><span></span><code><span class="n">note_title</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Which I used as the initial search feature. A
+search by the prefix of my note title. To me this
+made sense since my notes are titled by their
+subject matter, e.g. <code>"linux", "elastic"</code>.</p>
+<p>The iteration to this search functionality was to
+include the conditional:</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">note_title</span><span class="p">:</span>
+</code></pre></div>
+
+<p>I still wanted to provide the user with the result
+of the initial prefix search as the first result
+in the list.</p>
+<p>This is when I fathomed this solution:</p>
+<div class="highlight"><pre><span></span><code><span class="n">search</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span> <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">notes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+          <span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">title</span><span class="p">]</span>
+
+<span class="c1"># Sort by the position the query appears in the title</span>
+<span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+</code></pre></div>
+
+<p>Pretty
+<a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74">neat!</a></p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 22:37 | </font>
+                    <a href="foolscap-list-ordering.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Tue 09 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
                         <font style="vertical-align: inherit;">Procedural Villages</font>
                     </h3>
                 </div>
@@ -359,6 +477,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/motivation.html">
+                        <span>Motivation</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/feedback.html">
                         <span>Feedback</span>
                       </a>
@@ -630,6 +753,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/localisation.html">localisation</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/motivation.html">motivation</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/naming.html">naming</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -652,6 +778,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/programming.html">programming</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/projects.html">projects</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/python.html">python</a>
