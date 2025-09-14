@@ -54,6 +54,264 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 12 May 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Software Localisation</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>American websites format the date as <code>MM/DD/YYYY</code> and this
+can be confusing for Europeans. If I see the date <code>05/03/2025</code>,
+I can't be sure if we're dealing with March or May.</p>
+<p>Localisation extends further than just the format of dates. There
+are many things that <a href="https://www.mediawiki.org/wiki/Manual:Language#What_can_be_localised">require
+localisation</a>
+the most obvious is language. If your site does not support the
+dominant language within a geography you're creating a language
+barrier between you and your customers. In
+<a href="https://help.typeform.com/hc/en-us/articles/23541138531732-Create-multi-language-forms">Typeform's</a>
+case, their customer's customer.</p>
+<p>Translating and localising your software opens your business
+to new markets where relying on English won't cut it.
+Providing your system in a locale that's familiar to the user
+allows your system to feel natural and trustworthy.
+Luckily for us the internet has been around for more than 40 years
+and this, is sort of an old problem. There's been a good effort
+put towards enabling multilingual support.</p>
+<h3>ID or string?</h3>
+<p>When translating software, the first thing you'll need to
+determine is how to identify text that requires translation.</p>
+<p>There's two ways you can do this:</p>
+<ol>
+<li>
+<p>Mapping a key to the text. This key will be used to
+   lookup the correct message given the user's preferred
+   language. Something like this:</p>
+<p>message_key: "MISSING_NAME_TEXT"</p>
+</li>
+<li>
+<p>Alternatively; provide the text as is and using that as the
+   message key:</p>
+<p>message: "You're missing your first name"</p>
+</li>
+</ol>
+<p>Systems have been written using both styles so there's no
+consensus on which one you should pick (I wish you luck in
+driving consensus in your own place of work). Here are some
+things to consider.</p>
+<p>Subtle punctuation can change the whole meaning of
+a sentence. This is why systems tend to
+favour the entire sentence as the key for translation.
+Updating the sentence, even if you're just adding
+punctuation, should invalidate the translation or at least
+flag the translation so that it can be double checked.</p>
+<p>It's also useful keeping the full text within the context
+of where it's being used. This way the developer or engineer
+can determine themselves if it makes sense. It is harder to
+determine if you're using the correct message if you're
+relying on message keys like: "missing.name_text" and
+"missing.text_name", the full text provides a clearer
+indication of the output.</p>
+<p>Scaling the message keys can also be tricky as you'll need to
+avoid name clashes. The best thing to do is use them with
+some sort of namespacing e.g. <code>"signup.error.missing_name"</code>
+and redefine the key for every use-case, even if the full
+text ends up being the same, this allows you to change each
+text independently.</p>
+<h3>Localisation built in</h3>
+<p>For those of us gifted enough to using a Unix based system
+you might have access to <code>gettext</code> and <code>xgettext</code> in the
+command line. These are tools used to translate
+"natural language messages into the user's language, by
+looking up the translation in a message catalog".<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Python has some built-in libraries which allow you to manage
+internationalisation and localisation. Unless you've dealt
+with localisation, I think very few people are aware of the
+existence of <code>gettext</code>.</p>
+<h3>Localization for Python Applications</h3>
+<p>The python <code>gettext</code> library provides an interface which
+allows you to define your program in a core language and
+uses a separate message catalog to look up message
+translation. As an example we can define a message that
+requires localisation like so:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gettext</span> <span class="kn">import</span> <span class="n">gettext</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="n">_</span><span class="p">(</span><span class="s2">&quot;Welcome!&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Using <code>xgettext</code> we can construct a <code>.pot</code> file. Which
+will be used as a template for our language catalogues.</p>
+<div class="highlight"><pre><span></span><code>xgettext<span class="w"> </span>-o<span class="w"> </span>messages.pot<span class="w"> </span>--language<span class="o">=</span>Python<span class="w"> </span>src/*.py
+</code></pre></div>
+
+<p>The pot file should look like this after running
+<code>xgettext</code>.</p>
+<div class="highlight"><pre><span></span><code>#: main.py:3
+msgid &quot;Welcome!&quot;
+msgstr &quot;&quot;
+</code></pre></div>
+
+<p>It's pretty neat that it has provided us the file name and
+the line number for the text, although more useful in larger
+codebases, we can use this to track redundant translation
+strings. You'll also notice that it's using the full string
+as the <code>msgid</code> instead of assigning it to a code or number.</p>
+<p>From this we create <code>.po</code> files (unrelated to the
+teletubby)<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>
+, these are the concrete
+versions of the <code>.pot</code> file which contain the translations,
+if we were to make a <code>.po</code> file for Norwegian this would look
+like:</p>
+<div class="highlight"><pre><span></span><code>#: main.py:4
+msgid &quot;Welcome!&quot;
+msgstr &quot;Velkomst&quot;
+</code></pre></div>
+
+<p>Now that we have a localised form of our language catalogue
+we can use <code>msgfmt</code> to compile a binary version of our <code>.po</code>
+file, like so:</p>
+<div class="highlight"><pre><span></span><code>msgfmt -o messages.mo no_NO/messages.po
+</code></pre></div>
+
+<p>This command takes our <code>no_NO</code> (Norwegian) messages and
+compiles a precomputed hash table of the msgid -&gt; msgstr and
+outputs it to the <code>.mo</code> file. These files are stored in
+binaries so they're not human readable, but are efficient to
+load into the application at start up.</p>
+<p>When you start accumulating a lot of these catalogues they
+might require their own system to manage. These systems
+are also useful interfaces for the person providing the
+translation. As an example you can see
+<a href="https://poeditor.com/">PoEditor</a> or
+<a href="https://lokalise.com/">Lokalise</a></p>
+<p>People that work in localisation and translation will be
+familiar with <code>.po</code> files since they're often the file
+format used with translation software.</p>
+<h3>Translation within context</h3>
+<p>If our app supports more than one localisation we have to
+indicate which localisation should be returned to a user.
+For an API we can set the user's locale within the context
+of a request.</p>
+<p>Flask offers a library called <a href="https://python-babel.github.io/flask-babel/">Flask-Babel</a>
+which allows you to set this locale.
+So if a Norwegian was to hit our API we'd have the client set
+a header on the request: <code>Content-Language: no_NO</code><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>, on
+returning the response all the strings instantiated
+with <code>gettext</code> will be translated into Norwegian.</p>
+<p>There are some cases where you'll need to switch the locale
+context mid request or mid process, for example; a Norwegian
+user triggers an alert to an English user. We can
+instantiate a context manager with flask-babel, which will
+translate the strings to a specified locale:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
+    <span class="c1"># &lt;norwegian scope&gt;</span>
+    <span class="k">with</span> <span class="n">force_locale</span><span class="p">(</span><span class="n">to_user</span><span class="o">.</span><span class="n">locale</span><span class="p">):</span>
+        <span class="c1"># &lt;english scope&gt;</span>
+        <span class="n">send_email</span><span class="p">(</span><span class="n">to_user</span><span class="p">)</span>
+    <span class="c1"># &lt;norwegian scope&gt;</span>
+</code></pre></div>
+
+<h3>Plural Forms</h3>
+<p>Language is weird and there's nearly an edge-case for
+everything. One of these cases that <code>gettext</code> supports is
+defining rules for plural forms. For example in English we
+might say <em>"one apple"</em> and <em>"two apples"</em>. However in a
+language like Hebrew the plural form for two apples can't be
+used for three apples, so to account for this <code>gettext</code>
+provides <code>ngettext</code>. Which is used like so:</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gettext</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">ngettext</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">n_</span>
+
+<span class="n">n_</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apple&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">%(num)d</span><span class="s2"> apples&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="p">{</span><span class="s2">&quot;num&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">}</span>
+</code></pre></div>
+
+<p>This allows <code>gettext</code> to pull the correct plural form given
+the int <code>3</code> and then formats the returning string,
+replacing <code>%(num)d</code> with <code>3</code>.</p>
+<h3>Lazy strings</h3>
+<p>If you're reusing the same string across your application
+and defining it at module level this string will be translated
+as soon as the module is instantiated. The module will
+always fallback to your app's default locale and your
+strings will not be translated. To get around this we use
+something called <code>lazy_gettext</code>. This allows us to define
+the string and reuse it across the application as
+<code>lazy_gettext</code> will keep a reference to the <code>msgid</code> and
+defer translation until the text is needed.</p>
+<p>You can see support for lazy_gettext in the <a href="https://docs.djangoproject.com/en/5.2/topics/i18n/translation/">django
+documentation</a></p>
+<h3>Wikipedia</h3>
+<p>Wikipedia manages content in over 300 languages. There are
+numerous volunteers which help to translate wiki into other
+languages and they do this through an interface called
+<a href="https://translatewiki.net/">translatewiki.net</a>. There's
+an entire
+<a href="https://www.mediawiki.org/wiki/Wikimedia_Language_and_Product_Localization">team</a>
+managing the infra and tools used in localisation.</p>
+<p>Similar to Wikipedia, I've seen interfaces used to
+manage and update translation files as well as a process
+that can be triggered automatically or on a schedule to
+update the <code>.mo</code> files that a service references. After
+updating the <code>.mo</code> file you can automatically roll out a
+deployment. The new deployment should then load the new
+<code>.mo</code> files into memory when the service is instantiated.</p>
+<p>You don't need to be working on a system the scale of
+Wikipedia to include translations. You can rely on
+a user's system locale to translate CLI tools. My Fiancee's
+system is set to Norwegian, if I ever write a CLI for her I
+think it would be fun to provide a Norwegian interface.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p><code>$ man gettext</code>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>I'd like to draw attention that I stole this joke from
+  myself. I don't want to draw attention to the poorly
+  performed lightening talk I did. It was my first time and
+  I tried to fit this entire post into 5 minutes. <a href="https://youtu.be/chxsC2WYNTE?si=PI1u8Ei-o41RSZGS&amp;t=1357">Link
+  for
+  posterity</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Language">Mozilla:
+  Content-Language</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:03 | </font>
+                    <a href="software-localisation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 05 May 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -666,212 +924,6 @@ on avoiding failure focus on how you can grow from failure.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 07 April 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Assisted Development</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>76% of developers are either already using or plan to use ai
-assisted tools as part of their workflow, 82% of these developers
-cite an increase in productivity as the largest impact from using
-these tools<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>AI has integrated itself into our tooling, from search and
-planning to completely embedding
-itself into our development environment. There's a drive to
-apply LLMs into our workflow and it's important to see what
-works and what doesn't.</p>
-<p>There's no doubt that these tools will be adopted by
-developers and we should figure out how best to use them, or
-risk being left behind.</p>
-<h3>The great bot cloud in the sky</h3>
-<p>We will never stop imagining machines taking over our lives.
-It's been 43 years since the release of 'Blade Runner' and 26
-years for 'The Matrix'. However, more significantly, it's been 8
-years since I released my existential twitter bot <a href="https://x.com/CanDennisDream">Dennis</a>.</p>
-<p>Dennis was essentially a cronjob that ran every hour. He
-would read through ~100 comments on roughly 10 subreddits
-covering topics on existentialism and philosophy. Pulling
-this knowledge from the depth of Reddit he was able
-to spew 40.5k tweets of garbage for about 5 years.</p>
-<p>Dennis trains a Markov chain and would begin his sentences
-with a random starting word. So OpenAI and Github weren't
-the first to train language models using the data available
-to them on the internet. I get the feeling that I was onto
-something in 2017 and with enough funding I could have
-trained either a personal life coach or replicated teenage
-angst.</p>
-<p>YC &amp; a16z, you're missing out here.</p>
-<h3>Becoming a cyborg</h3>
-<p>We are now able to integrate these large probabilistic models
-directly into our code editors. Previously I've been using
-the tab key to autocomplete single words, with a copilot
-assistant I can write an in-line comment such as
-<em>"func provides post-order iteration of a tree given root"</em>
-and my copilot will suggest the entire function.</p>
-<p>The code can be wrong, but in the end the developer is
-responsible for the code that gets checked into the
-codebase. It's easy to say <em>"yup, looks good"</em> especially when
-under pressure to ship. Despite this I find it a massive
-boost to productivity since I only need to fill in some
-gaps or slightly modify the code-spit. On occasion I find
-myself feeling like I'm walking in mud when I hand write
-the code without this autocomplete feature. There are also
-occasions when I disable the feature altogether because it's
-context switching in its suggestions.</p>
-<p>Perhaps it's problematic not knowing where this code came
-from. At least with Dennis; I knew I could rely on his
-thoughts of existence due to having control over his
-training data, but the code that a copilot provides me...</p>
-<p>🤷 <a href="https://www.techzine.eu/news/privacy-compliance/122050/developers-lose-github-copilot-copyright-case-again/">who
-knows...</a></p>
-<h3>Is it a star sign or an LLM?</h3>
-<p>Search has been disrupted. The only people that were
-thinking more than Dennis about their own existence was
-the Google board when OpenAI released ChatGPT.
-Just kidding, Google came in second, first place goes to
-Stack Overflow.</p>
-<p>A big chunk of the job in software engineering is trying to
-discover if anyone else has faced a similar problem and if
-they've solved it. We are also tasked with
-understanding an API or how a library works or if it can
-be integrated in order to solve something or provide a new
-service.</p>
-<p>Google was good for this, but it's slowly being consumed by
-adverts and medium articles. Giving straight forward answers
-doesn't seem to be Googles' focus. Stack Overflow is
-an alternative, but you're not going to plug your homework
-into a question and get someone else to do it for you, nor
-will anyone provide free assistance so that you can earn
-a salary, but they're helpful in ways none the less.</p>
-<p>Claude, Copilot and ChatGPT are stark improvements in this
-area as you can do a bit of back and forth, provide
-clarity on what you're looking for and they'll
-happily bend it to your use-case, without referring
-their mate for the job because they get paid for ad-clicks.
-(Well not yet).<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
-<h3>The rocket is taking off 🚀</h3>
-<p>AI integrated environments for coding are certainly on
-trend and we are already rolling eyes at the phrase
-<em>"Vibe Coder"</em>.</p>
-<p>Entire classes of university students are
-scoring 100% on homework assignments, so professors are
-having to rethink how they assess their classes. I recall in
-high school a student questioned why we couldn't
-bring our calculators into an exam when we'd have access to
-this in the real world. There's a cohort of graduates coming
-into the workforce that's going to be more dependant or more
-adept at using AI tools so it's worth getting a sense for
-how these tools might be used.</p>
-<p>While having access to Cursor I have found that I can have a
-working solution to a small problem that I'm facing in about an
-hour. Before cursor I might have taken note of my idea and
-then forgotten about it or spent the whole weekend putting it
-together. It's even better when you have a clear vision of
-how you wish the solution to look. The models don't do very
-well if your ideas are vague and you're relying on them to
-apply their best guess. It's multiple times more beneficial
-when you know what a good result should look like.</p>
-<p>We will see more bespoke software. This could be a good
-thing,
-since we might find something better to match our preferences
-when it comes to tools. However due to the increase
-in productivity I've found myself leaning more towards, let
-me make that myself, instead of looking for existing
-solutions. This could be more pronounced in inexperienced
-software engineers as they will be less familiar with the
-tools that exist and they might power down their own path of
-reinventing the wheel.</p>
-<p>With more bespoke software comes fewer people familiar with
-said software and perhaps we will be running into problems
-that have already been solved in the past. This is certainly
-a cyclical part of learning, so we might see us enter a new
-cycle of how we manage our server deployment, but this time
-with a Gen Z finesse.</p>
-<h3>Just because you can</h3>
-<p>I've also found myself questioning how I should dedicate my
-time more, if I can spit something out in an hour I'm
-question my design and interface far more. Maybe it's because
-that's actually the fun part of programming and the coding
-is going to take less time so I've got more time to assess
-if I'm thinking about the problem correctly.</p>
-<p>I've found this not to be the case with less experienced
-developers, as they'd prefer to use this time to fit one
-more feature into their service without questioning if that
-feature makes holistic sense.</p>
-<h3>Are thing going badly?</h3>
-<p>There are weaknesses with AI tools in their current form,
-such as solving an entire problem from A-Z instead of using
-the library I wrote to solve A-M and focusing on N-Z. I've
-also found weaknesses when searching for things that are case
-sensitive. Seems like Google is still on top when I provide
-a search in quotations.</p>
-<p>Now that I've been using it for a while I have developed
-some intuition on the strengths and weaknesses, despite this
-I still find myself hand writing code line by line without
-any assistance. Mostly in more complicated areas of the code
-base, spaces I'd like be familiar in. Having an
-understanding of the system is valuable when you want to
-contribution to discussion, help stake holders and
-make decisions independently.</p>
-<p>It's still valuable to build intuition and understand how
-others might use these tools. Building on this knowledge
-could help create solutions that were previously out of
-reach, or just get you a seat at the table of decision
-making. In the end it's good be be familiar with the tools,
-it might help you avoid the odd looks when you bring out
-your dusty book of log tables.</p>
-<h3>Further Reading:</h3>
-<ul>
-<li><a href="https://martinfowler.com/articles/exploring-gen-ai.html">Martin Fowler: Exploring Gen
-    AI</a></li>
-</ul>
-<h3>Footnotes</h3>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p><a href="https://survey.stackoverflow.co/2024/ai#developer-tools-ai-ben-prof">Stack Overflow Developer's Survey
-  2024</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p><a href="https://help.netflix.com/en/node/126831">See Netflix</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:10 | </font>
-                    <a href="assisted-development.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn5.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn3.html" class="previous-page">Newer ⮕</a>
@@ -1000,6 +1052,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/heuristic-addiction.html">
+                        <span>Heuristic Addiction</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/motivation.html">
                         <span>Motivation</span>
@@ -1196,6 +1253,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/category/practice.html">practice</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/puzzles.html">puzzles</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/software.html">software</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -1277,6 +1337,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/localisation.html">localisation</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/logic.html">logic</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/motivation.html">motivation</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -1298,6 +1361,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/problemsolving.html">problemsolving</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/product.html">product</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -1305,6 +1371,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/projects.html">projects</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/puzzles.html">puzzles</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/python.html">python</a>

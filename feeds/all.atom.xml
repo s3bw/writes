@@ -1,5 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-09-08T12:03:00+01:00</updated><entry><title>Motivation</title><link href="https://s3bw.github.io/writes/motivation.html" rel="alternate"/><published>2025-09-08T12:03:00+01:00</published><updated>2025-09-08T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-09-08:/writes/motivation.html</id><summary type="html">&lt;p&gt;Over 43 years Edsger W. Dijkstra wrote 1318 essay papers.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-09-15T12:01:00+01:00</updated><entry><title>Heuristic Addiction</title><link href="https://s3bw.github.io/writes/heuristic-addiction.html" rel="alternate"/><published>2025-09-15T12:01:00+01:00</published><updated>2025-09-15T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-09-15:/writes/heuristic-addiction.html</id><summary type="html">&lt;p&gt;People love taking shortcuts and are addicted to spotting
+patterns if they allow us get to answers quicker and in
+the face of complexity.&lt;/p&gt;</summary><content type="html">&lt;p&gt;People love taking shortcuts and are addicted to spotting
+patterns if they allow us get to answers quicker and in
+the face of complexity.&lt;/p&gt;
+&lt;p&gt;To illustrate this I've written a &lt;a href="https://puzzle-break.com/"&gt;logic
+puzzle&lt;/a&gt; which
+provides new puzzles every day. After promoting this on my
+instagram it took two days to reach the same number of views
+that my blog got over the last three months.&lt;/p&gt;
+&lt;iframe src="https://puzzle-break.com/index.html" height=560 style="width:100%;"=&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Discovering heuristics is work but it's also fun. You might
+have noticed, depending on which puzzle is showing today,
+that once you've spotted a pattern it fills you with a
+little bit of joy as you move closer to the solution.&lt;/p&gt;
+&lt;p&gt;Heuristics show up in more places. Loan sharks come-up with
+guesses that determine if a business should be funded.
+Startup investors use the latest VC zeitgeist to purchase
+equity.&lt;/p&gt;
+&lt;h3&gt;Chess&lt;/h3&gt;
+&lt;p&gt;We are taught heuristics. In chess we learn
+how much each piece is worth; for
+example a pawn is worth 1, knight 3, rook 5 and queen 9.
+Using these numbers we can make calculated decisions in
+order to help analyse trade-offs. These values are
+made up, but they're an educated guess at the
+current board state and determine who has the advantage or
+which move might be favourable.&lt;/p&gt;
+&lt;p&gt;Chess engines also assign values to pieces. &lt;a href="https://github.com/official-stockfish/Stockfish/blob/master/src/types.h#L184-L188"&gt;Stockfish
+assigns&lt;/a&gt;
+pawns 208, knight 781, rook 1276 and the queen 2538. These
+are probably more in-line with what the pieces are actually
+worth but we can't get a human to do this maths during a
+game of blitz chess.&lt;/p&gt;
+&lt;p&gt;There is another way chess engines assign values to pieces
+and it can change through-out the game. Using a grid
+we assign values to the board positions and how much
+each piece will be worth in that position. As an example, a
+knight in the centre of the board is worth 3 more points
+than a knight in the corner. We know this intuitively
+because the knight will have more attacking opportunities in
+the centre than in the corner. A chess engine can have more
+precise numbers for the value of each board position given a
+large enough set of chess matches.&lt;/p&gt;
+&lt;h3&gt;Other Places&lt;/h3&gt;
+&lt;p&gt;Heuristics show up through-out life as they are
+synonymous with lessons learnt. However it is important
+that we assert these rules with some rigor as this is where
+bias can seep in, as with what might happen in naive
+underwriting.&lt;/p&gt;
+&lt;p&gt;We don't have to worry about this with logic puzzles or
+chess, these are just for the fun of it.&lt;/p&gt;</content><category term="puzzles"/><category term="software"/><category term="logic"/><category term="puzzles"/><category term="problemsolving"/></entry><entry><title>Motivation</title><link href="https://s3bw.github.io/writes/motivation.html" rel="alternate"/><published>2025-09-08T12:03:00+01:00</published><updated>2025-09-08T12:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-09-08:/writes/motivation.html</id><summary type="html">&lt;p&gt;Over 43 years Edsger W. Dijkstra wrote 1318 essay papers.
 At the rate I am writing blog posts I should overtake him in
 37 years. This is if I keep going at 1.5 weeks per blog
 post.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Over 43 years Edsger W. Dijkstra wrote 1318 essay papers.

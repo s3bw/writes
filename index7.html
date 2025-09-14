@@ -54,6 +54,100 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Wed 10 October 2018</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Random VM Name</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Something I found to be cute about the docker
+engine is it's feature to create a random name for
+your containers, when one is not specified.</p>
+<p>I've had some good ones e.g:</p>
+<div class="highlight"><pre><span></span><code>objective_galileo
+distracted_euclid
+</code></pre></div>
+
+<p>Occasionally I'd be spinning up the odd VM and
+have to provide some generic name like
+<code>dev-sebastien</code>. So instead I thought my own
+arbitrary name generation could save some time
+here.</p>
+<h3>Random names</h3>
+<p>The idea was to combine <code>&lt;adjective&gt;-&lt;pokemon&gt;</code>
+and use this as the VM parameter.</p>
+<p>Thus defining the following in <code>.create_name.sh</code></p>
+<div class="highlight"><pre><span></span><code><span class="k">function</span><span class="w"> </span>gen_name<span class="o">()</span>
+<span class="o">{</span>
+<span class="w">    </span><span class="nv">pokemon</span><span class="o">=(</span>
+<span class="w">        </span><span class="s2">&quot;pidgey&quot;</span>
+<span class="w">        </span><span class="s2">&quot;pikachu&quot;</span>
+<span class="w">        </span><span class="s2">&quot;cubone&quot;</span>
+<span class="w">    </span><span class="o">)</span>
+<span class="w">    </span><span class="nv">adjectives</span><span class="o">=(</span>
+<span class="w">        </span><span class="s2">&quot;hungry&quot;</span>
+<span class="w">        </span><span class="s2">&quot;adorable&quot;</span>
+<span class="w">        </span><span class="s2">&quot;jittery&quot;</span>
+<span class="w">    </span><span class="o">)</span>
+
+<span class="w">    </span><span class="nv">select_pokemon</span><span class="o">=</span><span class="si">${</span><span class="nv">pokemon</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#pokemon[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
+<span class="w">    </span><span class="nv">select_desc</span><span class="o">=</span><span class="si">${</span><span class="nv">adjectives</span><span class="p">[</span><span class="nv">$RANDOM</span><span class="p"> % {#adjectives[@]</span><span class="si">}</span><span class="o">]</span><span class="w"> </span><span class="o">}</span>
+
+<span class="w">    </span><span class="nb">local</span><span class="w"> </span><span class="nv">result</span><span class="o">=</span>sebastien-<span class="nv">$select_desc</span>-<span class="nv">$select_pokemon</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$result</span><span class="s2">&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Call this in your <code>.bash_aliases</code> file.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.create_name.sh
+</code></pre></div>
+
+<p>And every time you run <code>gen_name</code> in your command
+line, you'll get a new "vm" name.</p>
+<p>I've coupled this with:</p>
+<div class="highlight"><pre><span></span><code>create_instance<span class="o">(){</span>
+<span class="w">    </span>gcloud<span class="w"> </span>compute<span class="w"> </span>instances<span class="w"> </span>create<span class="w"> </span><span class="k">$(</span>gen_name<span class="k">)</span><span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+
+<p>Here are some of the names of my machines:</p>
+<div class="highlight"><pre><span></span><code>sebastien-livid-quagsire
+sebastien-lonely-metapod
+sebastien-gentle-rattata
+</code></pre></div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:19 | </font>
+                    <a href="random-vm-name.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Tue 09 October 2018</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -477,6 +571,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/heuristic-addiction.html">
+                        <span>Heuristic Addiction</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/motivation.html">
                         <span>Motivation</span>
                       </a>
@@ -672,6 +771,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/category/practice.html">practice</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/puzzles.html">puzzles</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/software.html">software</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -753,6 +855,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/localisation.html">localisation</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/logic.html">logic</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/motivation.html">motivation</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -774,6 +879,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/problemsolving.html">problemsolving</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/product.html">product</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -781,6 +889,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/projects.html">projects</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/puzzles.html">puzzles</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/python.html">python</a>
