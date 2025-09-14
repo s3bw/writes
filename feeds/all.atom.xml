@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-09-15T12:01:00+01:00</updated><entry><title>Heuristic Addiction</title><link href="https://s3bw.github.io/writes/heuristic-addiction.html" rel="alternate"/><published>2025-09-15T12:01:00+01:00</published><updated>2025-09-15T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-09-15:/writes/heuristic-addiction.html</id><summary type="html">&lt;p&gt;People love taking shortcuts and are addicted to spotting
-patterns if they allow us get to answers quicker and in
-the face of complexity.&lt;/p&gt;</summary><content type="html">&lt;p&gt;People love taking shortcuts and are addicted to spotting
-patterns if they allow us get to answers quicker and in
-the face of complexity.&lt;/p&gt;
+patterns. These patterns can enable us to get answers
+in the face of complexity.&lt;/p&gt;</summary><content type="html">&lt;p&gt;People love taking shortcuts and are addicted to spotting
+patterns. These patterns can enable us to get answers
+in the face of complexity.&lt;/p&gt;
 &lt;p&gt;To illustrate this I've written a &lt;a href="https://puzzle-break.com/"&gt;logic
 puzzle&lt;/a&gt; which
 provides new puzzles every day. After promoting this on my
