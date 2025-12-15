@@ -1,5 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-10-11T19:57:00+01:00</updated><entry><title>Style</title><link href="https://s3bw.github.io/writes/style.html" rel="alternate"/><published>2025-10-11T19:57:00+01:00</published><updated>2025-10-11T19:57:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-10-11:/writes/style.html</id><summary type="html">&lt;p&gt;Why do we wear what we wear.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In 2017 Google did a collaboration with
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-12-15T12:04:00+00:00</updated><entry><title>Power Users</title><link href="https://s3bw.github.io/writes/power-users.html" rel="alternate"/><published>2025-12-15T12:04:00+00:00</published><updated>2025-12-15T12:04:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-12-15:/writes/power-users.html</id><summary type="html">&lt;p&gt;AI is creating more power users&lt;/p&gt;</summary><content type="html">&lt;p&gt;Information workers can no longer build their career on
+asymmetric process knowledge. The person in the
+office that knew how to work the niche corporate workflow to
+get their way will be replaced by documentation and
+an MCP server.&lt;/p&gt;
+&lt;p&gt;A large overhead for new employees is understanding
+processes at a company or relying on someone to
+inform them how things are done. The archetype of that
+odd senior taking pride in the ability to recall the weird
+edge cases of the internal admin portal hasn't left yet.&lt;/p&gt;
+&lt;h3&gt;Products will change&lt;/h3&gt;
+&lt;p&gt;Products that avoid allowing their user to voice demand,
+intentions and needs; will soon feel like exploring a
+webpage built in the 90s, cute, quirky and stuck in the
+past.&lt;/p&gt;
+&lt;p&gt;The need for an experienced power user has been replaced by
+a Claude or a Gemini. If the LLM can't do it, should we
+deprioritise it and focus on the things it can do?
+We've never had time to explore product features and it
+doesn't help when the UI isn't sorting the buttons
+by their relevancy to the problem I am having,
+there's a gap here and your competitor might be offering me
+a quicker route to market.&lt;/p&gt;
+&lt;p&gt;UX design and effort is built around imitating
+interfaces that are already familiar to the audience, for
+example we still use keyboards optimised to
+avoid jamming the hammers in a typewriter, a
+problem modern keyboards no longer have. There's a
+learning curve that needs to be overcome when using systems,
+new and old.&lt;/p&gt;
+&lt;p&gt;The interface can create friction.&lt;/p&gt;
+&lt;p&gt;We are shifting our interactions with the product to be
+ask and you shall receive.&lt;/p&gt;
+&lt;p&gt;If you aren't empowering the ordinary to become power users
+over night you continue to have an under utilised
+product with features that customers need but can't find.
+Search is more relevant than ever.&lt;/p&gt;
+&lt;p&gt;Don't leave features on the table. Create the power customers.&lt;/p&gt;
+&lt;p&gt;As an aside my grandmother no longer needs me to teach her
+how to upload images to instagram. It would appear her
+ChatGPT assistant has taken my job.&lt;/p&gt;
+&lt;h3&gt;Learning will change&lt;/h3&gt;
+&lt;p&gt;Software has had the most prevalent increase in
+power users;
+here the iteration cycle for learning has diminished
+significantly. If you've built your career around building
+products through proof, developed learnings and iteration,
+that muscle now allows you to run micro tests 500 times a day.&lt;/p&gt;
+&lt;p&gt;The gap self learners and builders are creating will only
+increase as we've exposed them to a tutor with 24/7 office
+hours. Some might argue that the models are not deterministic
+but I'd lean more towards a computer that has read the entire
+corpus of human experience for references than a tutor that
+hit their Goodreads target of 12 books this year.&lt;/p&gt;
+&lt;p&gt;Anecdotally; the cycle time of learning to code used to be
+about 20mins of searching or syntax look ups. That has
+been cut down to seconds and if OpenAI is giving us garbage
+we can test if it works quicker than it can write. There are
+few industries that can give feedback on a decision as
+quick. In some industries you have retired by the time
+a decision unravels.&lt;/p&gt;
+&lt;p&gt;The speed at which adopters can
+upskill has sky rocketed but that's only if they're conducting
+a piecemeal development approach and not generating an
+entire slop product or forgetting why there are files
+in a folder called &lt;code&gt;src/&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;As with science there's no way to determine what change led
+to what outcome if we are changing everything all at once.
+Don't replace ceteris paribus with prompt-and-pray.&lt;/p&gt;</content><category term="ai"/><category term="ai"/><category term="software"/><category term="engineering"/><category term="development"/></entry><entry><title>Style</title><link href="https://s3bw.github.io/writes/style.html" rel="alternate"/><published>2025-10-11T19:57:00+01:00</published><updated>2025-10-11T19:57:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-10-11:/writes/style.html</id><summary type="html">&lt;p&gt;Why do we wear what we wear.&lt;/p&gt;</summary><content type="html">&lt;p&gt;In 2017 Google did a collaboration with
 &lt;a href="https://www.web-across.com/"&gt;ACROSS&lt;/a&gt;, a media research
 institute for fashion and culture. In the article they published;
 they correlated
