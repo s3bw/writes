@@ -53,237 +53,125 @@
 
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 21 July 2025</h2>
+                <h2 class="date">Mon 22 December 2025</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Strategic Testing</font>
+                        <font style="vertical-align: inherit;">Leadership Offloading</font>
                     </h3>
                 </div>
                 <div class="main">
-                    <p>Are our tests good? Are they bad? Do we have enough tests?</p>
-<p>Beyond writing isolated and targeted unit tests, there are
-methods that ensure our tests are appropriate. This
-article covers some strategies that answer these questions.
-Namely; using test coverage metrics, include mutation testing,
-applying fuzzy tests and finally test fixtures.</p>
-<h3>Test Coverage</h3>
-<p>We can measure the number of lines executed when running our
-tests. For example the following code snippet doesn't
-include the fourth line <code>'return False'</code> in the test suite.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_odd</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>
-    <span class="k">return</span> <span class="kc">False</span>
-
-<span class="k">def</span> <span class="nf">test_is_odd</span><span class="p">():</span>
-    <span class="k">assert</span> <span class="n">is_odd</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Using the ratio of lines tested to lines not tested gives us
-the <em>test coverage</em> metric.</p>
-<p>Along with context of how important each line of our
-code is; test coverage is helpful, however as a performance
-metric or as a blind target it's quite useless.</p>
-<p>If
-you've got a 20% coverage and the code is critical to your
-business then getting that to 80% is crucial. Trying
-to eek out the extra 0.1% coverage when you're at 98% is
-fruitless, or having a goal to go from 98% -&gt; 99% is a poor
-man's KPI.</p>
-<p>Unless they're easy to add you'll be trying to make very
-minor coverage gains for edge-cases that might be rarely
-hit. At this point there is likely something more impactful
-to focus on.</p>
-<p>It might be an interesting exercise to
-understand if the code you're not covering is reachable
-during the programs lifetime. If not, the dead code should
-just be removed instead of tested.</p>
-<h3>Mutation Testing</h3>
-<p>We rely on tests to ensure our code is correct and works as
-expected but how do we ensure our tests are correct and they
-work as expected. What tests our tests? Mutation testing aims
-to fill this gap.</p>
-<p>How often have you written a passing test and you purposely
-make it fail just to ensure that the test is catching the
-case you are intending it to catch? This forms the basis of
-mutation testing.</p>
-<p>When applied, it goes through your test suite and makes
-subtle changes to your tests. If we use the <code>test_is_odd</code>
-method as an example, it might bump 7 to 8. Sometimes it
-might take a string and remove a character. It will also
-change operators in your test such as changing <code>&lt;=</code> to <code>&lt;</code>.
-The test will then run as normal but under the expectations
-that it should fail with the mutations. If our example still
-passes when we pass 8 instead of 7 then something is wrong,
-the test isn't working as expected which might indicate that
-we are mocking too many dependencies, we aren't being specific
-enough or nothing is really being tested.</p>
-<h3>Fuzzy Tests</h3>
-<p>Some software may receive user inputted or malformed data,
-in these cases you might not want the system to behave
-irregularly. A developer might not know of all the funky
-data that could be provided to the method upfront, in these cases
-they may rely on writing fuzzy tests.</p>
-<p>As an example, if we had a method that expects a user
-provided string, we can define a fuzzy test which
-enumerates a data bank of known edge-cases for strings such
-as providing an emoji, an empty string or a large string of
-zero width characters.</p>
-<h3>Test Fixtures</h3>
-<p>As the code base grows you might notice that we are writing
-repeated lines of code in order to setup a user object or
-prepare data before passing it to the method we are testing.</p>
-<p>Large projects get around this by defining test fixtures.
-These can be passed as parameters to our tests so
-that we know the setup the test requires before it runs.
-The benefit of keeping the fixture separate to the test is
-that it reducing the amount of code that is duplicated
-across tests and if the setup for the user changes
-then only the fixture should require changing.</p>
-<p>Tests should be focused on asserting one thing and fewer
-lines in the test makes it easier to see what's going wrong
-when something breaks.</p>
-<h3>Finally</h3>
-<p>If you're printing it, maybe you should assert it.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://coverage.readthedocs.io/en/7.9.2/">Test Coverage</a></li>
-<li><a href="https://kodare.net/2016/12/01/mutmut-a-python-mutation-testing-system.html">Mutation
-    Tests</a></li>
-<li><a href="https://hypothesis.readthedocs.io/en/latest/">Fuzzy Tests</a></li>
-</ul>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 14 July 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Assert</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>Natural language is context dependant and ambiguous. Do you
-think you can one shot a solid business idea? It took twitch
-seven years to pivot into gaming. It
-wasn't seven years of accumulating stacks of code that
-helped them stick this landing.</p>
-<p>We are prompting a machine using an ambiguous and context
-dependent natural language to create precise and detailed
-machine instructions. It is no wonder we are finding
-those with experience with coding are at an
-advantage when it comes to commanding the machine. The vibe
-coder is overlooking the techniques and the vocabulary
-the profession has developed over several decades.</p>
-<p>We've learnt in order to generate the best response from an
-LLM we need more precision and less ambiguity from our
-prompts. If only we could develop a language that helps us
-achieve a precise way of creating machine instructions that
-eliminates ambiguity, perhaps we could call this a <em>programming
-language</em>?</p>
-<h3>Fingers crossed</h3>
-<blockquote>
-<p>Nothing is built on stone; all is built on sand, but we
-must build as if the sand were stone.</p>
-<p>Jorge Luis Borges (From "Software Engineering at
-Google")</p>
-</blockquote>
-<p>Most software is built on hope. I write a function that
-multiplies two integers together and hope that it works. We
-can also write a test to assert that these numbers will
-output the correct number, but are you going to write a test
-for every combination of all numbers?</p>
-<p>Once we put lines of code into production the function may
-or may not be run with the exact input that we expected when
-we wrote the code.</p>
-<p>We are required to create programs without knowledge of the
-concrete values that will be passed into it; to think of a
-result in terms of it's name.</p>
-<div class="highlight"><pre><span></span><code>double_n = add(n, n)
-</code></pre></div>
-
-<p>For every computation we rely on hope.</p>
-<blockquote>
-<p>Program testing can be used to show the presence of bugs,
-but never to show their absence!</p>
-<p>EWD-249 (1970)</p>
-</blockquote>
-<h3>Staying Organised</h3>
-<p>How we ensure our programs are correct also tends to relate
-to how we scale a project. We've recognised the limitations
-of a single mind to contain the details of an entire program</p>
-<p>It's the core responsibility of a software engineer to watch
-and manage this complexity.</p>
-<blockquote>
-<p>The art of programming is the art of organizing
-complexity, of mastering multitude and avoiding its bastard
-chaos as effectively as possible.</p>
-<p>EWD-249 (1970)</p>
-</blockquote>
-<p>Since then we've had multiple attempts at growing a project.
-There's a link between how we structure code and how we test
-it. Tests enables us to offload the checking of our
-functionality and well structured code tends to be easier to
-test.</p>
-<p>This line of thinking led to the practice of Test Driven
-Development (TDD) where it's thought that writing out the
-tests as a first step leads the programmer to write more
-cohesive and well structured code.</p>
-<h3>Describing Tests</h3>
-<p>If our tests are determining how we structure the code,
-what's determining how we structure the tests?</p>
-<p>First let's address one of the biggest issues in
-software engineering. The way we teach and introduce
-how-to-test is vague and ambiguous, using abstract
-examples of
-unrealistic classes and functions. The worse offending term
-being the "Unit Test" as the definitive boundary for
-a unit can always be argued.</p>
-<p>We have a better understanding of what is not a unit test,
-than what a unit test is.</p>
-<p>The second offender is the testing pyramid. Vehement
-advocates will disagree on the boundaries of each layer and
-these layers won't apply to all projects. Setting out to
-define these at the beginning of a project just waste our
-time. Often we can only determine where areas of a project
-will grow with hindsight and we are already building
-software on a foundation of hope so we should stick to just
-enough testing.</p>
-<p>We shouldn't let the question "Where should we test it"
-get in the way of testing it.</p>
-<h3>Managing Tests</h3>
-<p>We should start thinking more about how we manage tests.</p>
-<p>The first thing to address is test duplication. It is all
-too easy to see a test, make a copy and change it slightly.
-This can lead us to having the same thing tested across
-multiple tests. We can reduce the amount of code we are
-maintaining if we have tests that are targeted. If
-small changes lead to an unexpected amount of tests breaking
-we have too much assert duplication.</p>
-<p>I compare testing to a climber scaling a mountain with a
-limited number of pegs. If you are too cautious and nail a
-peg after every metre you'll find it tougher to make
-changes when you change direction as the climber's rope is
-limited by the distance between each peg. Each peg also
-requires removing when a direction needs to change larger
-than a metre. However if you nail a peg every 10 metres
-the climber is flexible to direction changes at the risk
-of taking a battering when they fall.</p>
-<p>Techniques that lead us to balance being defensive and
-flexible lead us to having a better test suite. Reducing
-test duplication is one example of this. If we are using 3
-pegs in the same location we aren't providing a greater
-level of safety and we risk requiring unnecessary changes
-in the future.</p>
+                    <p>How to scale leadership and accelerate business.</p>
+<p>Leadership should not stop at getting people to rally around
+a single cause. We can judge a leader
+not only on their ability to provide purpose but
+also on their ability to scale influence.</p>
+<h3>Cognitive Offloading</h3>
+<p>Cognitive offloading is the act of using tools and
+technology in order to reduce the amount of burden placed on
+our brains. We rely on taking notes and setting reminders so
+that we don't have to keep consciously telling ourselves or
+remembering what was said or what needs to be done.</p>
+<p>In the same manner this term inspired leadership offloading
+where we use our influence and actions in order to steer a
+business or team in the same direction without needing to be
+in every meeting and every room.</p>
+<h3>The influence of clarity</h3>
+<p>Great leaders tend to be clear and concise in how they give
+others a sense of purpose. Having a clear sense of
+purpose is the first step in offloading leadership if we
+provide team with clear expectations and trust
+them to perform in their role we leave ourselves free to
+focus on other critical parts of the business.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>Consistency in decision making is equally important when it
+comes to scaling your impact. It is through consistency that
+we can start to affect the decisions of others through
+influence. A measure of this effectiveness can come from
+how a colleague may get an answer to their issue from framing
+the question as if they were going to ask you. If
+they can get answers through the act of framing the question;
+then you've provided guidance through influence.</p>
+<p>Leaders that don't provide clarity or are wildly
+unpredictable create more work for themselves.
+If your cohort would be surprised or are not
+sure how you might respond then you will get more question
+and increase the burden of needing to be involved in most
+decision making.</p>
+<p>An area that leaders can practice being consistent is how
+they draw focus to specific tasks and identify distractions
+that steer us away from achievements. Informing others of
+the intent of our actions, as well as how and why something
+aligns with business objectives can inform others of how we
+are making decisions. Leaders that keep these reasons to
+themselves are often those that are afraid of their cohort's
+success and use opaque information to serve their own
+advantage.</p>
+<h3>The influence of action</h3>
+<p>The rumour mill is another surface of influence.
+Stories and tales about a leader's reaction to certain
+characters and how they express their expectations can circulate
+large organisations. Through mimicry this can create cohesion or
+division depending on the behaviours they target and expressed.</p>
+<p>Leaders must be on the look out for opportunities that present
+concrete examples what the business values. Through
+their own actions or through promoting the actions of
+others.</p>
+<p>We should not rely on demanding behaviours vocally
+or use bureaucratic checkboxes to identify talent. If you want
+people to behave in a certain manner, leaders must be the
+first to provide the examples of how others can do it.</p>
+<p>If new joiners and juniors are not asking enough questions
+perhaps it is because the leaders themselves are quiet.</p>
+<h3>The influence of knowledge</h3>
+<p>It is far better to offload knowledge than to restrict the
+team's capacity by becoming a bottleneck. Leaders should
+find all manners and ways of being useful without
+being present. One such way is by jotting down
+documentation and notes. Overcoming a challenging task is an
+experience that should be shared. We
+must hold the hope that the next person on a similar task
+can be provided with a smoother course. Instead of facing
+the problem again from step one.</p>
+<p>Additionally this helps us avoid repeating the same mistakes.
+We don't need to restrict this to technical process
+knowledge. We can learn from a negative experience
+from candidates during the hiring phase or how
+a sensitive topic was raised among the team.</p>
+<p>Leaders can encourage TDDs, post-mortem write-ups and even to
+make rough notes in places that are discoverable. Starting with
+a few pointers is better than starting from no-where and
+these all increase the impact one can have across a business.</p>
+<p>Those that play the game politically and keep their cards
+close do so to the company's and their own detriment as this
+hampers influence and the scale in which you can exert
+impact.</p>
+<p>Even if these notes haven't found an audience, showing the
+effort and having the intent can inspire others to share
+information.
+Sooner or later you will have an environment where
+colleagues can find context and knowledge far easier than
+before.</p>
+<p>The more context and awareness people have at work.
+The more valuable they can be. Leading to a higher chance
+of moving the company from maintenance to growth.</p>
+<h3>Nudge</h3>
+<p>Don't only be a consumer of the company's culture, actively
+contribute to it. A positive culture and leading through example
+will shift the business into one that shares knowledge and
+has open collaboration.</p>
+<p>It is through the subtle nudges of behaviour and habit
+that we can compound the impact of our teams and spread
+influence, all without being in the room.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Developing yourself can also be considered critical.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 </div>
             </div>
         </div>
