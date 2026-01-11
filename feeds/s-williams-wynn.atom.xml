@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-01-12T12:25:00+00:00</updated><entry><title>Seating Charts</title><link href="https://s3bw.github.io/writes/seating-charts.html" rel="alternate"/><published>2026-01-12T12:25:00+00:00</published><updated>2026-01-12T12:25:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-12:/writes/seating-charts.html</id><summary type="html">&lt;p&gt;Creating the seating chart at a wedding&lt;/p&gt;</summary><content type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-01-12T12:25:00+00:00</updated><entry><title>Seating Charts</title><link href="https://s3bw.github.io/writes/seating-charts.html" rel="alternate"/><published>2026-01-12T12:25:00+00:00</published><updated>2026-01-12T12:25:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-12:/writes/seating-charts.html</id><summary type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
+wedding and we have to figure out how they will be seated.
+Defining the seating chart tends to be the most enjoyable
+part of wedding planning.
+It dawned on me that this is a
+constraint satisfaction problem (CSP); and modeling CSPs is
+something I've been doing for the last year.&lt;/p&gt;</summary><content type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
 wedding and we have to figure out how they will be seated.
 Defining the seating chart tends to be the most enjoyable
 part of wedding planning&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
