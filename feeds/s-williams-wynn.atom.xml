@@ -1,5 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2025-12-22T12:07:00+00:00</updated><entry><title>Leadership Offloading</title><link href="https://s3bw.github.io/writes/leadership-offloading.html" rel="alternate"/><published>2025-12-22T12:07:00+00:00</published><updated>2025-12-22T12:07:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-12-22:/writes/leadership-offloading.html</id><summary type="html">&lt;p&gt;How to scale leadership&lt;/p&gt;</summary><content type="html">&lt;p&gt;How to scale leadership and accelerate business.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-01-12T12:25:00+00:00</updated><entry><title>Seating Charts</title><link href="https://s3bw.github.io/writes/seating-charts.html" rel="alternate"/><published>2026-01-12T12:25:00+00:00</published><updated>2026-01-12T12:25:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-12:/writes/seating-charts.html</id><summary type="html">&lt;p&gt;Creating the seating chart at a wedding&lt;/p&gt;</summary><content type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
+wedding and we have to figure out how they will be seated.
+Defining the seating chart tends to be the most enjoyable
+part of wedding planning&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;After drawing circles for all the seats and guests in
+excalidraw.com, I began connecting the circles with
+colourful lines to map out specific relationships.
+As an example, a couple at the wedding
+should be seated together.&lt;/p&gt;
+&lt;p&gt;It dawned on me that this is a
+constraint satisfaction problem (CSP); and modeling CSPs is
+something I've been doing for the last year.&lt;/p&gt;
+&lt;h3&gt;Constraint Satisfaction Problems&lt;/h3&gt;
+&lt;p&gt;CSPs are a family of problems where you are required to find
+the value to a number of variables given certain constraints
+to those variables. There are many areas that such problems
+occur, one such area is packing optimisations.&lt;/p&gt;
+&lt;p&gt;There are software engineering roles that rely on solving
+these type of questions; typically these roles will include
+the term &lt;a href="https://en.wikipedia.org/wiki/Formal_methods"&gt;"Formal
+Methods"&lt;/a&gt;
+under their list of responsibilities.&lt;/p&gt;
+&lt;p&gt;To solve a CSP problem, we begin by modelling the
+problem mathematically. There are a few notations that allow
+us to define the variables and constraints for these kinds
+of problems, the one I am familiar with is called SMT-language.&lt;/p&gt;
+&lt;p&gt;Here is a simple example where we wish to find valid values
+for x and y:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;declare&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;declare&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;10&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;x&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;y&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;15&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;sat&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You may have noticed that this uses prefix notation, i.e.
+&lt;code&gt;(&amp;gt; x 0)&lt;/code&gt; which is equivalent to &lt;code&gt;(x &amp;gt; 0)&lt;/code&gt; in the familiar
+infix notation.&lt;/p&gt;
+&lt;p&gt;To find valid solutions we need a solver such as z3.
+If we provide z3
+with the file above it will give us a solution for x and
+y that fits the constraint. E.g &lt;code&gt;x = 15&lt;/code&gt; and &lt;code&gt;y = 0&lt;/code&gt;. There
+may be more than one valid solution. Sometimes there is not
+solution and it will return &lt;code&gt;unsat&lt;/code&gt;. Short for
+unsatisfiable.&lt;/p&gt;
+&lt;h3&gt;Knapsack problems&lt;/h3&gt;
+&lt;p&gt;We can use z3 and smt to model and solve a classic knapsack
+problem. Given the following products:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Product A has a size of 3 and value of 4.&lt;/li&gt;
+&lt;li&gt;Product B has a size of 5 and a value of 7.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Pack a bag with a capacity of 16. Maximizing the total
+value of the bag.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;declare&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productA_count&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;declare&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productB_count&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;declare&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="k"&gt;const&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;total_value&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Int&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productA_count&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productB_count&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Product&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;A&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Product&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;B&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;size&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;value&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;
+&lt;span class="p"&gt;;&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;Bag&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;capacity&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;3&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productA_count&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productB_count&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;16&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nb"&gt;assert&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;total_value&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;+&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;4&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productA_count&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;7&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;productB_count&lt;/span&gt;&lt;span class="p"&gt;))))&lt;/span&gt;
+
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;maximize&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;total_value&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;sat&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;get&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Solving this tells us that if we pack two of each product
+we maximize the total value of the bag; this being 22.&lt;/p&gt;
+&lt;h3&gt;Seating&lt;/h3&gt;
+&lt;p&gt;Getting back into the seating chart. I wrote (vibed) a
+program that allowed me to draw different connections
+between each of my guests. These connections account for
+the different constraints we wanted to map onto the guests.
+So if A and B are a couple, ensuring they sit next to each other
+is a constraint.&lt;/p&gt;
+&lt;p&gt;Here is a complete list of the constraints that were modeled:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Sit next to each other.&lt;/li&gt;
+&lt;li&gt;Sit opposite each other. Or constraint 1.&lt;/li&gt;
+&lt;li&gt;Sit diagonally across from each other. Or constraint 2.&lt;/li&gt;
+&lt;li&gt;Not next to, not opposite and not diagonal from each
+   other.&lt;/li&gt;
+&lt;li&gt;A should be next to B &lt;em&gt;OR&lt;/em&gt; C.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;After drawing all these constraints between our guests this
+is how the wedding looks:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Initial Grouping" src="static/seating-charts/initial-grouping.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Green is constraint 1, yellow 2, orange 3, dashed red 4 and
+dashed purple is constraint 5.&lt;/p&gt;
+&lt;p&gt;We are seating everyone at two large tables. As would
+have been done in a classic viking longhouse. In order
+to model the guests at these tables each guest will need a
+variable for the position, the side and the table.&lt;/p&gt;
+&lt;p&gt;The groom will have an assigned seat, in the middle of the
+first table facing inward, towards the guests. As guest
+number 1 he would have the following variables:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;#&lt;/span&gt; table_1: int = 0
+&lt;span class="gh"&gt;#&lt;/span&gt; pos_1: int = 12
+&lt;span class="gh"&gt;#&lt;/span&gt; side_1: bool = true
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This would seat me in the middle of the table looking out
+across the room. We then define these variables for all 100
+guests. We also need to include a constraint that all the
+&lt;code&gt;table_{n}&lt;/code&gt; variables must be 0 or 1, since there are only
+two tables. Additionally the &lt;code&gt;pos_{n}&lt;/code&gt; variables have to be
+between [0 and 25) since there are only 25 seats on each side
+of the tables.&lt;/p&gt;
+&lt;h3&gt;Constraints&lt;/h3&gt;
+&lt;p&gt;Now we model each constraint listed above. The first
+constraint states that guest A and B must be next to each other.
+If we take guests 11 and 12 this would look like the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;(assert (= table_11 table_12))
+(assert (= side_11 side_12))
+(assert (or (= pos_11 (+ pos_12 1) (= pos_12 (+ pos_11 1)))))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I.e. Same table, same side but their positions are offset by
+1 or -1.&lt;/p&gt;
+&lt;p&gt;The next constraint allows the guest to
+not only sit next to someone but as an alternative they can be
+opposite each other. To do this we assign the above
+constraint to &lt;code&gt;same_side_const&lt;/code&gt; and define a new constraint
+assign it to &lt;code&gt;opposite_const&lt;/code&gt; and in order to satisfy either of
+them we say. &lt;code&gt;(assert (or same_side_const opposite_const))&lt;/code&gt;.
+Here's the definition of &lt;code&gt;opposite_const&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;(assert (= table_11 table_12))
+(assert (distinct side_11 side_12))
+(assert (= pos_11 pos_12))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I.e. Same table, different sides but same position.&lt;/p&gt;
+&lt;p&gt;For the 3rd constraint we merge constraint 1 and 2 together.
+B needs to have a different side to A and the position needs
+to be offset by 1 or -1.&lt;/p&gt;
+&lt;p&gt;Using the tool above to define the graph constraints I could
+then export the constraints to be passed into a script that
+generates the smt file for z3. It then provided a solution
+that I could import into the same tool to see a visual
+representation of how it would seat all the guests. You can
+see that below:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Programming Output" src="static/seating-charts/programming-output.png" /&gt;&lt;/p&gt;
+&lt;p&gt;As you'll notice from the colour of each line, all the
+constraints are satisfied.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;Results&lt;/h3&gt;
+&lt;p&gt;So after 5 hours was this seating chart useful? Not
+really...&lt;/p&gt;
+&lt;p&gt;The guests that are on the edge of each of the clusters
+weren't really people we wanted to sit together. However the
+arrangement within each cluster was great.&lt;/p&gt;
+&lt;p&gt;Was this fun? Totally!&lt;/p&gt;
+&lt;p&gt;I'm not going to do this again, because I'm not going to be
+married again, but in the event that I have to create a
+seating chart for 100 people in the future there are certain
+things that might provide a better outcome.&lt;/p&gt;
+&lt;p&gt;Perhaps it would be better to rely on more flexible
+constraints, as an example instead of saying A and B &lt;em&gt;need&lt;/em&gt;
+to be in close vicinity I would instead say A should sit
+next to at least B, C or D. Giving more flexibility to who A
+can be sat next to.&lt;/p&gt;
+&lt;p&gt;After presenting this analysis to my future wife she showed
+me how she had laid out the tables. You can see this below.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Final Output" src="static/seating-charts/final-output.png" /&gt;&lt;/p&gt;
+&lt;p&gt;Since the constraints are already linking the guests, I
+was able to spot some improvements to the chart and get some
+value from this effort.&lt;/p&gt;
+&lt;p&gt;There was another improvement to the modelling I
+could have made when looking at the final chart.&lt;/p&gt;
+&lt;p&gt;If we wanted A to sit next to C and A was in a couple with
+B. I had not considered that it was probably fine for B to
+sit next to C instead of A. If C would get on with A there's
+a chance they would also get on with their partner B. So I
+could have relaxed this constraint and had C sit next to
+either A or B.&lt;/p&gt;
+&lt;p&gt;Creating a seating chart is not a recurring problem of
+mine, so sadly there's no need for me to refine this
+solution further.&lt;/p&gt;
+&lt;p&gt;Guests forgetting to tell me that they're coming has also
+caused me to pull some hair out, as with most math, when it
+attempts to model the real world.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;So they say; I don't want to build experience in getting
+married.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Right-click and open the image in a new tab if you
+need to zoom in.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"/><category term="software"/><category term="constraints"/></entry><entry><title>Leadership Offloading</title><link href="https://s3bw.github.io/writes/leadership-offloading.html" rel="alternate"/><published>2025-12-22T12:07:00+00:00</published><updated>2025-12-22T12:07:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2025-12-22:/writes/leadership-offloading.html</id><summary type="html">&lt;p&gt;How to scale leadership&lt;/p&gt;</summary><content type="html">&lt;p&gt;How to scale leadership and accelerate business.&lt;/p&gt;
 &lt;p&gt;Leadership should not stop at getting people to rally around
 a single cause. We can judge a leader
 not only on their ability to provide purpose but
@@ -169,7 +370,7 @@ few industries that can give feedback on a decision as
 quick. In some industries you have retired by the time
 a decision unravels.&lt;/p&gt;
 &lt;p&gt;The speed at which adopters can
-upskill has sky rocketed but that's only if they're conducting
+upskill has plummeted but that's only if they're conducting
 a piecemeal development approach and not generating an
 entire slop product or forgetting why there are files
 in a folder called &lt;code&gt;src/&lt;/code&gt;.&lt;/p&gt;

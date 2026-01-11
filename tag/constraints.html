@@ -53,85 +53,218 @@
 
         <div class="fullbody">
             <div class="datebody">
-                <h2 class="date">Mon 15 December 2025</h2>
+                <h2 class="date">Mon 12 January 2026</h2>
             </div>
             <div class="blogbodytop"></div>
             <div class="blogbody">
                 <div class="titlebody">
                     <h3 class="title">
-                        <font style="vertical-align: inherit;">Power Users</font>
+                        <font style="vertical-align: inherit;">Seating Charts</font>
                     </h3>
                 </div>
                 <div class="main">
-                    <p>Information workers can no longer build their career on
-asymmetric process knowledge. The person in the
-office that knew how to work the niche corporate workflow to
-get their way will be replaced by documentation and
-an MCP server.</p>
-<p>A large overhead for new employees is understanding
-processes at a company or relying on someone to
-inform them how things are done. The archetype of that
-odd senior taking pride in the ability to recall the weird
-edge cases of the internal admin portal hasn't left yet.</p>
-<h3>Products will change</h3>
-<p>Products that avoid allowing their user to voice demand,
-intentions and needs; will soon feel like exploring a
-webpage built in the 90s, cute, quirky and stuck in the
-past.</p>
-<p>The need for an experienced power user has been replaced by
-a Claude or a Gemini. If the LLM can't do it, should we
-deprioritise it and focus on the things it can do?
-We've never had time to explore product features and it
-doesn't help when the UI isn't sorting the buttons
-by their relevancy to the problem I am having,
-there's a gap here and your competitor might be offering me
-a quicker route to market.</p>
-<p>UX design and effort is built around imitating
-interfaces that are already familiar to the audience, for
-example we still use keyboards optimised to
-avoid jamming the hammers in a typewriter, a
-problem modern keyboards no longer have. There's a
-learning curve that needs to be overcome when using systems,
-new and old.</p>
-<p>The interface can create friction.</p>
-<p>We are shifting our interactions with the product to be
-ask and you shall receive.</p>
-<p>If you aren't empowering the ordinary to become power users
-over night you continue to have an under utilised
-product with features that customers need but can't find.
-Search is more relevant than ever.</p>
-<p>Don't leave features on the table. Create the power customers.</p>
-<p>As an aside my grandmother no longer needs me to teach her
-how to upload images to instagram. It would appear her
-ChatGPT assistant has taken my job.</p>
-<h3>Learning will change</h3>
-<p>Software has had the most prevalent increase in
-power users;
-here the iteration cycle for learning has diminished
-significantly. If you've built your career around building
-products through proof, developed learnings and iteration,
-that muscle now allows you to run micro tests 500 times a day.</p>
-<p>The gap self learners and builders are creating will only
-increase as we've exposed them to a tutor with 24/7 office
-hours. Some might argue that the models are not deterministic
-but I'd lean more towards a computer that has read the entire
-corpus of human experience for references than a tutor that
-hit their Goodreads target of 12 books this year.</p>
-<p>Anecdotally; the cycle time of learning to code used to be
-about 20mins of searching or syntax look ups. That has
-been cut down to seconds and if OpenAI is giving us garbage
-we can test if it works quicker than it can write. There are
-few industries that can give feedback on a decision as
-quick. In some industries you have retired by the time
-a decision unravels.</p>
-<p>The speed at which adopters can
-upskill has plummeted but that's only if they're conducting
-a piecemeal development approach and not generating an
-entire slop product or forgetting why there are files
-in a folder called <code>src/</code>.</p>
-<p>As with science there's no way to determine what change led
-to what outcome if we are changing everything all at once.
-Don't replace ceteris paribus with prompt-and-pray.</p>
+                    <p>We have two large tables and 100 guests coming to our
+wedding and we have to figure out how they will be seated.
+Defining the seating chart tends to be the most enjoyable
+part of wedding planning<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p>After drawing circles for all the seats and guests in
+excalidraw.com, I began connecting the circles with
+colourful lines to map out specific relationships.
+As an example, a couple at the wedding
+should be seated together.</p>
+<p>It dawned on me that this is a
+constraint satisfaction problem (CSP); and modeling CSPs is
+something I've been doing for the last year.</p>
+<h3>Constraint Satisfaction Problems</h3>
+<p>CSPs are a family of problems where you are required to find
+the value to a number of variables given certain constraints
+to those variables. There are many areas that such problems
+occur, one such area is packing optimisations.</p>
+<p>There are software engineering roles that rely on solving
+these type of questions; typically these roles will include
+the term <a href="https://en.wikipedia.org/wiki/Formal_methods">"Formal
+Methods"</a>
+under their list of responsibilities.</p>
+<p>To solve a CSP problem, we begin by modelling the
+problem mathematically. There are a few notations that allow
+us to define the variables and constraints for these kinds
+of problems, the one I am familiar with is called SMT-language.</p>
+<p>Here is a simple example where we wish to find valid values
+for x and y:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="mi">10</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="mi">15</span><span class="p">))</span>
+<span class="p">(</span><span class="n">check</span><span class="o">-</span><span class="n">sat</span><span class="p">)</span>
+<span class="p">(</span><span class="n">get</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+
+<p>You may have noticed that this uses prefix notation, i.e.
+<code>(&gt; x 0)</code> which is equivalent to <code>(x &gt; 0)</code> in the familiar
+infix notation.</p>
+<p>To find valid solutions we need a solver such as z3.
+If we provide z3
+with the file above it will give us a solution for x and
+y that fits the constraint. E.g <code>x = 15</code> and <code>y = 0</code>. There
+may be more than one valid solution. Sometimes there is not
+solution and it will return <code>unsat</code>. Short for
+unsatisfiable.</p>
+<h3>Knapsack problems</h3>
+<p>We can use z3 and smt to model and solve a classic knapsack
+problem. Given the following products:</p>
+<ul>
+<li>Product A has a size of 3 and value of 4.</li>
+<li>Product B has a size of 5 and a value of 7.</li>
+</ul>
+<p>Pack a bag with a capacity of 16. Maximizing the total
+value of the bag.</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">productA_count</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">productB_count</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">total_value</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;=</span><span class="w"> </span><span class="n">productA_count</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;=</span><span class="w"> </span><span class="n">productB_count</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+
+<span class="p">;</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">A</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">;</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">B</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="mi">7</span>
+<span class="p">;</span><span class="w"> </span><span class="n">Bag</span><span class="w"> </span><span class="n">capacity</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span>
+
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">productA_count</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">productB_count</span><span class="p">))</span><span class="w"> </span><span class="mi">16</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">=</span><span class="w"> </span><span class="n">total_value</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="n">productA_count</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="n">productB_count</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="n">maximize</span><span class="w"> </span><span class="n">total_value</span><span class="p">)</span>
+<span class="p">(</span><span class="n">check</span><span class="o">-</span><span class="n">sat</span><span class="p">)</span>
+<span class="p">(</span><span class="n">get</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Solving this tells us that if we pack two of each product
+we maximize the total value of the bag; this being 22.</p>
+<h3>Seating</h3>
+<p>Getting back into the seating chart. I wrote (vibed) a
+program that allowed me to draw different connections
+between each of my guests. These connections account for
+the different constraints we wanted to map onto the guests.
+So if A and B are a couple, ensuring they sit next to each other
+is a constraint.</p>
+<p>Here is a complete list of the constraints that were modeled:</p>
+<ol>
+<li>Sit next to each other.</li>
+<li>Sit opposite each other. Or constraint 1.</li>
+<li>Sit diagonally across from each other. Or constraint 2.</li>
+<li>Not next to, not opposite and not diagonal from each
+   other.</li>
+<li>A should be next to B <em>OR</em> C.</li>
+</ol>
+<p>After drawing all these constraints between our guests this
+is how the wedding looks:</p>
+<p><img alt="Initial Grouping" src="static/seating-charts/initial-grouping.png" /></p>
+<p>Green is constraint 1, yellow 2, orange 3, dashed red 4 and
+dashed purple is constraint 5.</p>
+<p>We are seating everyone at two large tables. As would
+have been done in a classic viking longhouse. In order
+to model the guests at these tables each guest will need a
+variable for the position, the side and the table.</p>
+<p>The groom will have an assigned seat, in the middle of the
+first table facing inward, towards the guests. As guest
+number 1 he would have the following variables:</p>
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> table_1: int = 0
+<span class="gh">#</span> pos_1: int = 12
+<span class="gh">#</span> side_1: bool = true
+</code></pre></div>
+
+<p>This would seat me in the middle of the table looking out
+across the room. We then define these variables for all 100
+guests. We also need to include a constraint that all the
+<code>table_{n}</code> variables must be 0 or 1, since there are only
+two tables. Additionally the <code>pos_{n}</code> variables have to be
+between [0 and 25) since there are only 25 seats on each side
+of the tables.</p>
+<h3>Constraints</h3>
+<p>Now we model each constraint listed above. The first
+constraint states that guest A and B must be next to each other.
+If we take guests 11 and 12 this would look like the following:</p>
+<div class="highlight"><pre><span></span><code>(assert (= table_11 table_12))
+(assert (= side_11 side_12))
+(assert (or (= pos_11 (+ pos_12 1) (= pos_12 (+ pos_11 1)))))
+</code></pre></div>
+
+<p>I.e. Same table, same side but their positions are offset by
+1 or -1.</p>
+<p>The next constraint allows the guest to
+not only sit next to someone but as an alternative they can be
+opposite each other. To do this we assign the above
+constraint to <code>same_side_const</code> and define a new constraint
+assign it to <code>opposite_const</code> and in order to satisfy either of
+them we say. <code>(assert (or same_side_const opposite_const))</code>.
+Here's the definition of <code>opposite_const</code>:</p>
+<div class="highlight"><pre><span></span><code>(assert (= table_11 table_12))
+(assert (distinct side_11 side_12))
+(assert (= pos_11 pos_12))
+</code></pre></div>
+
+<p>I.e. Same table, different sides but same position.</p>
+<p>For the 3rd constraint we merge constraint 1 and 2 together.
+B needs to have a different side to A and the position needs
+to be offset by 1 or -1.</p>
+<p>Using the tool above to define the graph constraints I could
+then export the constraints to be passed into a script that
+generates the smt file for z3. It then provided a solution
+that I could import into the same tool to see a visual
+representation of how it would seat all the guests. You can
+see that below:</p>
+<p><img alt="Programming Output" src="static/seating-charts/programming-output.png" /></p>
+<p>As you'll notice from the colour of each line, all the
+constraints are satisfied.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<h3>Results</h3>
+<p>So after 5 hours was this seating chart useful? Not
+really...</p>
+<p>The guests that are on the edge of each of the clusters
+weren't really people we wanted to sit together. However the
+arrangement within each cluster was great.</p>
+<p>Was this fun? Totally!</p>
+<p>I'm not going to do this again, because I'm not going to be
+married again, but in the event that I have to create a
+seating chart for 100 people in the future there are certain
+things that might provide a better outcome.</p>
+<p>Perhaps it would be better to rely on more flexible
+constraints, as an example instead of saying A and B <em>need</em>
+to be in close vicinity I would instead say A should sit
+next to at least B, C or D. Giving more flexibility to who A
+can be sat next to.</p>
+<p>After presenting this analysis to my future wife she showed
+me how she had laid out the tables. You can see this below.</p>
+<p><img alt="Final Output" src="static/seating-charts/final-output.png" /></p>
+<p>Since the constraints are already linking the guests, I
+was able to spot some improvements to the chart and get some
+value from this effort.</p>
+<p>There was another improvement to the modelling I
+could have made when looking at the final chart.</p>
+<p>If we wanted A to sit next to C and A was in a couple with
+B. I had not considered that it was probably fine for B to
+sit next to C instead of A. If C would get on with A there's
+a chance they would also get on with their partner B. So I
+could have relaxed this constraint and had C sit next to
+either A or B.</p>
+<p>Creating a seating chart is not a recurring problem of
+mine, so sadly there's no need for me to refine this
+solution further.</p>
+<p>Guests forgetting to tell me that they're coming has also
+caused me to pull some hair out, as with most math, when it
+attempts to model the real world.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>So they say; I don't want to build experience in getting
+married.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Right-click and open the image in a new tab if you
+need to zoom in.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
                 </div>
             </div>
         </div>

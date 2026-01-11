@@ -54,6 +54,247 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 12 January 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Seating Charts</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>We have two large tables and 100 guests coming to our
+wedding and we have to figure out how they will be seated.
+Defining the seating chart tends to be the most enjoyable
+part of wedding planning<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
+<p>After drawing circles for all the seats and guests in
+excalidraw.com, I began connecting the circles with
+colourful lines to map out specific relationships.
+As an example, a couple at the wedding
+should be seated together.</p>
+<p>It dawned on me that this is a
+constraint satisfaction problem (CSP); and modeling CSPs is
+something I've been doing for the last year.</p>
+<h3>Constraint Satisfaction Problems</h3>
+<p>CSPs are a family of problems where you are required to find
+the value to a number of variables given certain constraints
+to those variables. There are many areas that such problems
+occur, one such area is packing optimisations.</p>
+<p>There are software engineering roles that rely on solving
+these type of questions; typically these roles will include
+the term <a href="https://en.wikipedia.org/wiki/Formal_methods">"Formal
+Methods"</a>
+under their list of responsibilities.</p>
+<p>To solve a CSP problem, we begin by modelling the
+problem mathematically. There are a few notations that allow
+us to define the variables and constraints for these kinds
+of problems, the one I am familiar with is called SMT-language.</p>
+<p>Here is a simple example where we wish to find valid values
+for x and y:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="mi">10</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="mi">15</span><span class="p">))</span>
+<span class="p">(</span><span class="n">check</span><span class="o">-</span><span class="n">sat</span><span class="p">)</span>
+<span class="p">(</span><span class="n">get</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+
+<p>You may have noticed that this uses prefix notation, i.e.
+<code>(&gt; x 0)</code> which is equivalent to <code>(x &gt; 0)</code> in the familiar
+infix notation.</p>
+<p>To find valid solutions we need a solver such as z3.
+If we provide z3
+with the file above it will give us a solution for x and
+y that fits the constraint. E.g <code>x = 15</code> and <code>y = 0</code>. There
+may be more than one valid solution. Sometimes there is not
+solution and it will return <code>unsat</code>. Short for
+unsatisfiable.</p>
+<h3>Knapsack problems</h3>
+<p>We can use z3 and smt to model and solve a classic knapsack
+problem. Given the following products:</p>
+<ul>
+<li>Product A has a size of 3 and value of 4.</li>
+<li>Product B has a size of 5 and a value of 7.</li>
+</ul>
+<p>Pack a bag with a capacity of 16. Maximizing the total
+value of the bag.</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">productA_count</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">productB_count</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+<span class="p">(</span><span class="n">declare</span><span class="o">-</span><span class="k">const</span><span class="w"> </span><span class="n">total_value</span><span class="w"> </span><span class="n">Int</span><span class="p">)</span>
+
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;=</span><span class="w"> </span><span class="n">productA_count</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&gt;=</span><span class="w"> </span><span class="n">productB_count</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span>
+
+<span class="p">;</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">A</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="mi">4</span>
+<span class="p">;</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">B</span><span class="p">:</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="n">value</span><span class="o">=</span><span class="mi">7</span>
+<span class="p">;</span><span class="w"> </span><span class="n">Bag</span><span class="w"> </span><span class="n">capacity</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span>
+
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;=</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="n">productA_count</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="n">productB_count</span><span class="p">))</span><span class="w"> </span><span class="mi">16</span><span class="p">))</span>
+<span class="p">(</span><span class="nb">assert</span><span class="w"> </span><span class="p">(</span><span class="o">=</span><span class="w"> </span><span class="n">total_value</span><span class="w"> </span><span class="p">(</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="n">productA_count</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="w"> </span><span class="mi">7</span><span class="w"> </span><span class="n">productB_count</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="n">maximize</span><span class="w"> </span><span class="n">total_value</span><span class="p">)</span>
+<span class="p">(</span><span class="n">check</span><span class="o">-</span><span class="n">sat</span><span class="p">)</span>
+<span class="p">(</span><span class="n">get</span><span class="o">-</span><span class="n">model</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Solving this tells us that if we pack two of each product
+we maximize the total value of the bag; this being 22.</p>
+<h3>Seating</h3>
+<p>Getting back into the seating chart. I wrote (vibed) a
+program that allowed me to draw different connections
+between each of my guests. These connections account for
+the different constraints we wanted to map onto the guests.
+So if A and B are a couple, ensuring they sit next to each other
+is a constraint.</p>
+<p>Here is a complete list of the constraints that were modeled:</p>
+<ol>
+<li>Sit next to each other.</li>
+<li>Sit opposite each other. Or constraint 1.</li>
+<li>Sit diagonally across from each other. Or constraint 2.</li>
+<li>Not next to, not opposite and not diagonal from each
+   other.</li>
+<li>A should be next to B <em>OR</em> C.</li>
+</ol>
+<p>After drawing all these constraints between our guests this
+is how the wedding looks:</p>
+<p><img alt="Initial Grouping" src="static/seating-charts/initial-grouping.png" /></p>
+<p>Green is constraint 1, yellow 2, orange 3, dashed red 4 and
+dashed purple is constraint 5.</p>
+<p>We are seating everyone at two large tables. As would
+have been done in a classic viking longhouse. In order
+to model the guests at these tables each guest will need a
+variable for the position, the side and the table.</p>
+<p>The groom will have an assigned seat, in the middle of the
+first table facing inward, towards the guests. As guest
+number 1 he would have the following variables:</p>
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> table_1: int = 0
+<span class="gh">#</span> pos_1: int = 12
+<span class="gh">#</span> side_1: bool = true
+</code></pre></div>
+
+<p>This would seat me in the middle of the table looking out
+across the room. We then define these variables for all 100
+guests. We also need to include a constraint that all the
+<code>table_{n}</code> variables must be 0 or 1, since there are only
+two tables. Additionally the <code>pos_{n}</code> variables have to be
+between [0 and 25) since there are only 25 seats on each side
+of the tables.</p>
+<h3>Constraints</h3>
+<p>Now we model each constraint listed above. The first
+constraint states that guest A and B must be next to each other.
+If we take guests 11 and 12 this would look like the following:</p>
+<div class="highlight"><pre><span></span><code>(assert (= table_11 table_12))
+(assert (= side_11 side_12))
+(assert (or (= pos_11 (+ pos_12 1) (= pos_12 (+ pos_11 1)))))
+</code></pre></div>
+
+<p>I.e. Same table, same side but their positions are offset by
+1 or -1.</p>
+<p>The next constraint allows the guest to
+not only sit next to someone but as an alternative they can be
+opposite each other. To do this we assign the above
+constraint to <code>same_side_const</code> and define a new constraint
+assign it to <code>opposite_const</code> and in order to satisfy either of
+them we say. <code>(assert (or same_side_const opposite_const))</code>.
+Here's the definition of <code>opposite_const</code>:</p>
+<div class="highlight"><pre><span></span><code>(assert (= table_11 table_12))
+(assert (distinct side_11 side_12))
+(assert (= pos_11 pos_12))
+</code></pre></div>
+
+<p>I.e. Same table, different sides but same position.</p>
+<p>For the 3rd constraint we merge constraint 1 and 2 together.
+B needs to have a different side to A and the position needs
+to be offset by 1 or -1.</p>
+<p>Using the tool above to define the graph constraints I could
+then export the constraints to be passed into a script that
+generates the smt file for z3. It then provided a solution
+that I could import into the same tool to see a visual
+representation of how it would seat all the guests. You can
+see that below:</p>
+<p><img alt="Programming Output" src="static/seating-charts/programming-output.png" /></p>
+<p>As you'll notice from the colour of each line, all the
+constraints are satisfied.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<h3>Results</h3>
+<p>So after 5 hours was this seating chart useful? Not
+really...</p>
+<p>The guests that are on the edge of each of the clusters
+weren't really people we wanted to sit together. However the
+arrangement within each cluster was great.</p>
+<p>Was this fun? Totally!</p>
+<p>I'm not going to do this again, because I'm not going to be
+married again, but in the event that I have to create a
+seating chart for 100 people in the future there are certain
+things that might provide a better outcome.</p>
+<p>Perhaps it would be better to rely on more flexible
+constraints, as an example instead of saying A and B <em>need</em>
+to be in close vicinity I would instead say A should sit
+next to at least B, C or D. Giving more flexibility to who A
+can be sat next to.</p>
+<p>After presenting this analysis to my future wife she showed
+me how she had laid out the tables. You can see this below.</p>
+<p><img alt="Final Output" src="static/seating-charts/final-output.png" /></p>
+<p>Since the constraints are already linking the guests, I
+was able to spot some improvements to the chart and get some
+value from this effort.</p>
+<p>There was another improvement to the modelling I
+could have made when looking at the final chart.</p>
+<p>If we wanted A to sit next to C and A was in a couple with
+B. I had not considered that it was probably fine for B to
+sit next to C instead of A. If C would get on with A there's
+a chance they would also get on with their partner B. So I
+could have relaxed this constraint and had C sit next to
+either A or B.</p>
+<p>Creating a seating chart is not a recurring problem of
+mine, so sadly there's no need for me to refine this
+solution further.</p>
+<p>Guests forgetting to tell me that they're coming has also
+caused me to pull some hair out, as with most math, when it
+attempts to model the real world.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>So they say; I don't want to build experience in getting
+married.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Right-click and open the image in a new tab if you
+need to zoom in.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:25 | </font>
+                    <a href="seating-charts.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 11 August 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -730,183 +971,8 @@ rows between certain ranges.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 30 June 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Low Latency Computation</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Anything that loads faster than 200ms is instantaneous for
-humans, anything slower and we would perceive the delay.
-Some systems are built to respond quicker than this,
-business cost can be sensitive to latency and every ms can
-make a difference.</p>
-<p>How do we develop highly performant systems? I happened to
-share a train ride with Mark Shannon, who at the time was
-leading a team at Microsoft that had one goal: Make Python
-Fast.</p>
-<p>I asked him, how does one make code more performant? To
-which he responded.</p>
-<blockquote>
-<p>Make it do less.</p>
-</blockquote>
-<p>Here's what doing less looks like:</p>
-<h3>Loop Invariant</h3>
-<p>A simple example of doing less in order to achieve better
-performance is with loop invariant conditions.</p>
-<p>We loop over arrays while we code and make calls to other
-functions while looping. During a refactor or while we move
-code around we might not realise that some of the variables
-we are computing are constant.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>You'll notice in the example that I am looping over the list
-<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
-is computed with the integer <code>n</code> which is consistent within
-the scope of this function. If we move the computation of
-<code>beta</code> to a point before we've entered loop we avoid having
-to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Now <code>beta</code> is computed at most once within this method
-scope, we have essentially achieved doing less. If the
-<code>compute_beta</code> method incurs an expensive overhead and we
-are looking at a lengthy <code>trades</code> list this subtle oversight
-would have a significant impact on our latency.</p>
-<h3>Python</h3>
-<p>There are several layers of abstraction in Python and there
-are ways we can code that allow us to utilise computation in
-C more effectively. One such example of this: using list
-comprehension over a vanilla for-loop.</p>
-<p>If we wish to
-understand the number of steps the machine is doing
-for a method, Python allows us to disassemble bytecode using
-<code>import dis</code>. You might notice that there are additional
-<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
-to a list comprehension avoids this overhead and allows us
-to do less.</p>
-<h3>Databases</h3>
-<p>Relying on external systems can be expensive, in some
-cases we might query the same system several times in
-order to complete an operation. If we have a distributed system
-or intend to scale our server horizontally we are increasing
-the number of things that open and close connections to the
-database. Each time we open/close a connection the CPU has
-to process these instructions, this overhead can be
-significant when we are working in low latency environments.
-To get around this we introduce a connection pool between
-the database and our server, the connection pool manages
-long lived connections on the database and frees up the
-database to focus on database things.</p>
-<p>A common anti-pattern involving a database is having your
-ORM make N+1 queries. For this to occur we have a 1-many
-entity relationship. If we ask the database to return a
-group of n countries and then for each country we ask for
-all cities in that country we are making <code>N</code> (number of
-countries in our initial query) <code>+ 1</code> (the initial query)
-total requests to the database. These can be tricky to spot
-since the individual query could be performant, but the
-accumulative overhead and latency of all these queries can
-cause problems.</p>
-<p>We get around this by either asking for all countries and
-then ask for all cities given a set of country ids and
-perform the mapping in memory on the server, or we can
-increase the complexity of the query using a JOIN and allow
-the database to make the mapping. Either way we avoid the
-back and forth overhead of making <code>N+1</code> queries, effectively
-doing less.</p>
-<h3>When we can't do less</h3>
-<p>Sometimes we can't do less, but we can decide when work is
-done. There are situations that allow us to pre compute
-results and provide performant computation at the cost of a
-slower start time.</p>
-<p>Chess programming is an area which relies on high
-performance, the quick our program the further into the
-future we can look on each move during the game. One way we
-speed up a chess engine is by precomputing the movesets for
-every piece on the board for every possible position they
-might be in before the game starts. This allows us to look
-up all possible board positions for a piece during the game
-instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
-solver</a>
-he actually computes a pattern matrix for each word and
-saves it to a file in order to avoid having to incur the
-overhead on each execution of his wordle solver.</p>
-<h3>Constant Folding</h3>
-<p>Lastly there's an interesting optimisation that compilers
-make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
-Folding.</a></p>
-<p>When python is interpreted it parses the AST before
-executing. During this AST construction it finds expressions
-who's outcome is constant and computes the constant at this
-point instead of computing the expression every time it is
-referenced. As an example the variable <code>x = 24
-* 60</code> will be converted to <code>1440</code> before compiling the
-bytecode instructs for the machine.</p>
-<p>So in all cases, if we want a computer to be highly
-performant we just have to make it do less.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
-</ul>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>More on this will be explained when I write my second
-  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
-                    <a href="low-latency-computation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
+            <a href="https://s3bw.github.io/writes/category/software2.html" class="next-page">⬅ Older</a>
     </div>
 
 <script>
@@ -1032,6 +1098,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/seating-charts.html">
+                        <span>Seating Charts</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/leadership-offloading.html">
                         <span>Leadership Offloading</span>
@@ -1294,6 +1365,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/coding.html">coding</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/constraints.html">constraints</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/cpu.html">cpu</a>
