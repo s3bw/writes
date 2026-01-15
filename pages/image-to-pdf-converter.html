@@ -56,7 +56,6 @@
 <article>    
     
     <div class="container">
-        <h1>Image to PDF Converter</h1>
         <div class="subtitle">Convert your JPEG and PNG images into a single PDF file</div>
 
         <div class="upload-section">
@@ -64,9 +63,9 @@
             <input type="file" id="fileInput" accept="image/jpeg,image/png,image/jpg" multiple>
         </div>
 
-        <div class="file-list" id="fileList">
-            <div class="empty-state">No images selected</div>
-        </div>
+        <ol class="file-list" id="fileList">
+            <li style="list-style-type: none;" class="empty-state">No images selected</li>
+        </ol>
 
         <div class="button-group">
             <button class="convert-btn" id="convertBtn" disabled>Convert to PDF</button>
@@ -107,13 +106,14 @@
 
         function updateFileList() {
             if (selectedFiles.length === 0) {
-                fileList.innerHTML = '<div class="empty-state">No images selected</div>';
+                fileList.innerHTML = '<li style="list-style-type: none;" class="empty-state">No images selected</li>';
                 convertBtn.disabled = true;
             } else {
                 fileList.innerHTML = '';
                 selectedFiles.forEach((file, index) => {
-                    const fileItem = document.createElement('div');
+                    const fileItem = document.createElement('li');
                     fileItem.className = 'file-item';
+                    fileItem.style.cssText = 'list-style-type: none;';
                     fileItem.draggable = true;
                     fileItem.dataset.index = index;
                     fileItem.innerHTML = `
