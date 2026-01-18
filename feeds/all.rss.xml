@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/all.rss.xml" rel="self"/><lastBuildDate>Mon, 19 Jan 2026 12:03:00 +0000</lastBuildDate><item><title>Chess Programming - Moving</title><link>https://s3bw.github.io/writes/chess-programming-moving.html</link><description>&lt;p&gt;Optimising moving pieces in chess programming&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 19 Jan 2026 12:03:00 +0000</pubDate><guid>tag:s3bw.github.io,2026-01-19:/writes/chess-programming-moving.html</guid><category>chess, software</category><category>chess</category><category>software</category></item><item><title>Seating Charts</title><link>https://s3bw.github.io/writes/seating-charts.html</link><description>&lt;p&gt;We have two large tables and 100 guests coming to our
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/all.rss.xml" rel="self"/><lastBuildDate>Mon, 19 Jan 2026 12:03:00 +0000</lastBuildDate><item><title>Chess Programming - Moving</title><link>https://s3bw.github.io/writes/chess-programming-moving.html</link><description>&lt;p&gt;Attempts to create an automatic chess calculator
+date back to 1913. Chess engine software has had many
+optimisations and many minds involved in its evolution.
+Last year I wrote on how chess programs track the
+position of every piece. This article is a slice of the
+chess engine research I compiled when construct my own
+chess AI and covers how a chess engine resolves where a
+piece can move on the board.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Mon, 19 Jan 2026 12:03:00 +0000</pubDate><guid>tag:s3bw.github.io,2026-01-19:/writes/chess-programming-moving.html</guid><category>chess, software</category><category>chess</category><category>software</category></item><item><title>Seating Charts</title><link>https://s3bw.github.io/writes/seating-charts.html</link><description>&lt;p&gt;We have two large tables and 100 guests coming to our
 wedding and we have to figure out how they will be seated.
 Defining the seating chart tends to be the most enjoyable
 part of wedding planning.
