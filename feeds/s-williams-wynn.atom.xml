@@ -1,5 +1,208 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-01-12T12:25:00+00:00</updated><entry><title>Seating Charts</title><link href="https://s3bw.github.io/writes/seating-charts.html" rel="alternate"/><published>2026-01-12T12:25:00+00:00</published><updated>2026-01-12T12:25:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-12:/writes/seating-charts.html</id><summary type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-01-19T12:03:00+00:00</updated><entry><title>Chess Programming - Moving</title><link href="https://s3bw.github.io/writes/chess-programming-moving.html" rel="alternate"/><published>2026-01-19T12:03:00+00:00</published><updated>2026-01-19T12:03:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-19:/writes/chess-programming-moving.html</id><summary type="html">&lt;p&gt;Optimising moving pieces in chess programming&lt;/p&gt;</summary><content type="html">&lt;p&gt;Attempts to create an automatic chess calculator
+date back to 1913. Chess engine software has had many
+optimisations and many minds involved in its evolution.&lt;/p&gt;
+&lt;p&gt;Last year I wrote on how chess programs track the
+position of every piece. This article is a slice of the
+chess engine research I compiled when construct my own
+chess AI and covers how a chess engine resolves where a
+piece can move on the board.&lt;/p&gt;
+&lt;p&gt;You can&lt;a href="https://s3bw.github.io/seafish/"&gt;play against that chess engine here.&lt;/a&gt;&lt;/p&gt;
+&lt;h3&gt;Bit Operations&lt;/h3&gt;
+&lt;p&gt;So far we've covered how to use a 64 bit integer to track the
+positions of each piece and we've covered how to use bit
+operations to determine their type and colour.&lt;/p&gt;
+&lt;p&gt;Now the goal is to compute a 64 bit int that
+represents the potential positions that a piece can either
+move-to or attack. This number is called the "moveboard".&lt;/p&gt;
+&lt;p&gt;If we have a moveboard for a particular piece we can &lt;code&gt;&amp;amp;&lt;/code&gt; the
+positions of the opposing pieces in order to get attacking
+positions and we can subtract the positions of all pieces in
+order to avoid moving a piece to an occupied position.&lt;/p&gt;
+&lt;p&gt;If we simplify this to a single position on the board.
+Given that we are able to move to this position, i.e. the
+moveboard is &lt;code&gt;1&lt;/code&gt;, and if we consider it occupied by the
+opposition, i.e. having a variable called "theirs"
+being &lt;code&gt;1.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Computing the attacks is determined by doing the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; moveboard &amp;amp; theirs
+1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This tells us the position is a valid attack. If the
+opposition does not occupy that position (&lt;code&gt;theirs == 0&lt;/code&gt;).
+Computing for attacks would result in &lt;code&gt;0&lt;/code&gt;. There's nothing
+to attack.&lt;/p&gt;
+&lt;p&gt;To compute valid moves, if theirs is &lt;code&gt;0&lt;/code&gt; and ours is &lt;code&gt;1&lt;/code&gt;, we
+do the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; moveboard &amp;amp; ~(theirs | ours)
+0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This indicates that we can't move to this position. If the
+result was 1 then it would be empty and it would be a valid
+position for our piece to move. If we use 64 bit integer
+instead of a single bit, as shown in the example, the
+processor can determine the valid moves and attacks across
+the entire board in a single operation.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h3&gt;Pawns&lt;/h3&gt;
+&lt;p&gt;There's an edge case with pawns however, they do not use a
+&lt;code&gt;moveboard&lt;/code&gt; to determine the valid moves and attacks as
+the positions a pawn may attack are different to where it
+may move. Despite this they are still relatively simple.&lt;/p&gt;
+&lt;p&gt;Given a pawn in the middle of the board we only need to
+shift it up to determine its set of moves and after
+subtracting occupied positions we can determine if the
+pawn can move ahead or not.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;#&lt;/span&gt; Shifting up
+pawn_position &amp;gt;&amp;gt; 8
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img alt="Pawn Move" src="static/2026-01-19/moving-pawn.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;To determine if that pawn can attack we shift the pawn
+twice, "up and left" as well as "up and right". We then
+check to see if the opposition occupies these positions,
+this will determine valid attacks for the pawn.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="gh"&gt;#&lt;/span&gt; Shifting &amp;quot;up &amp;amp; left&amp;quot; as well as &amp;quot;up &amp;amp; right&amp;quot;
+pawn_position &amp;gt;&amp;gt; 7 &amp;amp;&amp;amp; pawn_position &amp;gt;&amp;gt; 9
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img alt="Pawn Attack" src="static/2026-01-19/attacking-pawn.gif" /&gt;&lt;/p&gt;
+&lt;h3&gt;Knights&lt;/h3&gt;
+&lt;p&gt;Things get more interesting when we compute valid moves
+and attacks for a knight, but how does a knight move?&lt;/p&gt;
+&lt;iframe src="https://www.youtube.com/embed/wfDCLEAU9hE?si=1DhNyzUjDv5RdI1_&amp;amp;start=14" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;The knight is interesting because it's the only piece that
+is unrestricted by the position of other pieces. I.e. it can jump
+over pieces to get to where it wants to go. A knight in the
+centre of the board can move to the following locations:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Knights Move" src="static/2026-01-19/knights-move.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;If we had a
+knight sitting on the &lt;code&gt;i&lt;/code&gt;th index represented by the "&lt;code&gt;bitboard&lt;/code&gt;"
+variable we can compute the moveboard for the knight by doing the
+following shifts:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;(
+    ((bitboard &amp;amp; NOT_H_FILE) &amp;gt;&amp;gt; 15)
+    | ((bitboard &amp;amp; NOT_A_FILE) &amp;gt;&amp;gt; 17)
+    | ((bitboard &amp;amp; NOT_GH_FILE) &amp;gt;&amp;gt; 6)
+    | ((bitboard &amp;amp; NOT_AB_FILE) &amp;gt;&amp;gt; 10)
+    | ((bitboard &amp;amp; NOT_H_FILE) &amp;lt;&amp;lt; 17)
+    | ((bitboard &amp;amp; NOT_A_FILE) &amp;lt;&amp;lt; 15)
+    | ((bitboard &amp;amp; NOT_GH_FILE) &amp;lt;&amp;lt; 10)
+    | ((bitboard &amp;amp; NOT_AB_FILE) &amp;lt;&amp;lt; 6)
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;There are four knights on a chess board, so this calculation
+would need to be done 4 times for every new board state.
+Since the performance of a chess engine is largely
+determined by how far into the future it can look, reducing
+the number of calculations on each board state can
+enable the engine to perform a deeper search.&lt;/p&gt;
+&lt;p&gt;To avoid these computations, we can simply pre-compute
+the moveboard for every square on the chess board before
+the game begins. We can then provide the engine with a
+lookup table, mapping all positions to their moveboard.
+Avoiding the overhead of computing them during the game.&lt;/p&gt;
+&lt;h3&gt;Sliding&lt;/h3&gt;
+&lt;p&gt;We also do this for the sliding pieces on a chess
+board. The rooks,
+bishops and queens move in a way that are considered
+as sliding.&lt;/p&gt;
+&lt;p&gt;Again we pre-compute all these positions and store
+the result in a map, however this isn't the final moveboard
+for sliding pieces.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sliding Moves" src="static/2026-01-19/sliding-moves.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;Pieces closer to a sliding piece block its path and unlike
+the knight sliding pieces can't jump over these
+obstructions. So the resulting bitmask can't be used to
+determine the valid moves and attacks on its own.&lt;/p&gt;
+&lt;p&gt;The bitmask is used to identify the potential blockers
+along a sliding piece's direction of movement. Indicated in
+orange below:&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Rook Attack" src="static/2026-01-19/rook-attacks.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;Once we have identified the potential blockers we use this
+value to map to the final moveboard. This allows us
+to look up any moveboard using all combinations of potential
+blockers during the game and avoids having to shift the
+piece's position along its sliding axis for every new board
+state.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sliding Hash" src="static/2026-01-19/sliding-hash.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;As explained we can use a moveboard to compute the
+attacking positions (&lt;code&gt;moveboard &amp;amp; theirs&lt;/code&gt;). As well as the
+valid positions for moving (&lt;code&gt;moveboard &amp;amp; ~(theirs|ours)&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;In summary the following steps are needed to find the
+attacking positions and moving positions for a rook:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Given the rook's position lookup the bitmask of an
+   unobstructed rook. &lt;code&gt;(index -&amp;gt; bitmask)&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use the unobstructed bitmask to find potential
+   blockers given all the pieces on the board. &lt;code&gt;(bitmask &amp;amp;
+   (theirs|ours))&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Using the locations of all the blockers lookup the final
+   moveboard for the rook. &lt;code&gt;(blockers -&amp;gt; moveboard)&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Computing potential blockers can be simplified as there
+are positions on the board that would never block a sliding
+piece. Such as positions on the edge of the board.&lt;/p&gt;
+&lt;p&gt;Given a rook in
+any of the positions indicated in red we can ignore
+positions in black as having "potential blockers".&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Sliding Edges" src="static/2026-01-19/sliding-edges.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;This reduces the overall number of potential blocker
+combinations we need to consider, improving the engine's
+start-up time and memory footprint.&lt;/p&gt;
+&lt;p&gt;We do the same for bishops, except these potential blockers
+are computed diagonally and finally we compute the moveboard
+for the queens by combining the outcomes of the rook and the
+bishop.&lt;/p&gt;
+&lt;h3&gt;Playing Chess&lt;/h3&gt;
+&lt;p&gt;Now that we are able to compute the set of possible moves
+and attacks for each piece on the chessboard. Picking a
+piece at random and picking one of the positions from it's
+set of move and set of attacks will allow a computer to play
+against us.&lt;/p&gt;
+&lt;p&gt;This chess engine would still make illegal moves. To play a
+&lt;em&gt;legal&lt;/em&gt; game of chess we would need to consider if the king
+is in check or if moving a piece might result in your own
+king being in check.&lt;/p&gt;
+&lt;p&gt;Finally; in-order-to implement all legal chess moves
+we would need to extend our move sets to include pushing the pawn
+twice when it is on its starting position, en passant and the
+ability to castle your king.&lt;/p&gt;
+&lt;p&gt;It might be more interesting, however, to dive into how a
+chess engine evaluates the board state so that it can make
+an informed decision when it moves a chess piece.&lt;/p&gt;
+&lt;!-- We can probably end it here?
+### Betweens
+
+There's one final hash map to pre-compute, and this one
+requires a little deeper knowledge of chess.
+
+In chess we have pieces that are considered _pinned_ when
+moving that piece will result in the king being under
+threat. You can imagine this if your pawn is sitting
+between your king and their rook. If you move your pawn out
+of the way this would leave their rook attacking your king,
+thus this is not a valid move.
+
+In order to discover that a piece is pinned we pre-compute
+the mask of all tiles between any two tiles on the board. We
+can then retrieve a bitboard representing the space between
+the rook and the king and determine if exactly a single
+piece is situated on this bitboard we say that it is pinned.
+
+--&gt;
+
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;Assuming you have a 64 bit processor.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="chess, software"/><category term="chess"/><category term="software"/></entry><entry><title>Seating Charts</title><link href="https://s3bw.github.io/writes/seating-charts.html" rel="alternate"/><published>2026-01-12T12:25:00+00:00</published><updated>2026-01-12T12:25:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-01-12:/writes/seating-charts.html</id><summary type="html">&lt;p&gt;We have two large tables and 100 guests coming to our
 wedding and we have to figure out how they will be seated.
 Defining the seating chart tends to be the most enjoyable
 part of wedding planning.

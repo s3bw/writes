@@ -54,6 +54,96 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 15 September 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Heuristic Addiction</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>People love taking shortcuts and are addicted to spotting
+patterns. These patterns can enable us to get answers
+in the face of complexity.</p>
+<p>To illustrate this I've written a <a href="https://puzzle-break.com/">logic
+puzzle</a> which
+provides new puzzles every day. After promoting this on my
+instagram it took two days to reach the same number of views
+that my blog got over the last three months.</p>
+<iframe src="https://puzzle-break.com/index.html" height=560 style="width:100%;"=></iframe>
+
+<p>Discovering heuristics is work but it's also fun. You might
+have noticed, depending on which puzzle is showing today,
+that once you've spotted a pattern it fills you with a
+little bit of joy as you move closer to the solution.</p>
+<p>Heuristics show up in more places. Loan sharks come-up with
+guesses that determine if a business should be funded.
+Startup investors use the latest VC zeitgeist to purchase
+equity.</p>
+<h3>Chess</h3>
+<p>We are taught heuristics. In chess we learn
+how much each piece is worth; for
+example a pawn is worth 1, knight 3, rook 5 and queen 9.
+Using these numbers we can make calculated decisions in
+order to help analyse trade-offs. These values are
+made up, but they're an educated guess at the
+current board state and determine who has the advantage or
+which move might be favourable.</p>
+<p>Chess engines also assign values to pieces. <a href="https://github.com/official-stockfish/Stockfish/blob/master/src/types.h#L184-L188">Stockfish
+assigns</a>
+pawns 208, knight 781, rook 1276 and the queen 2538. These
+are probably more in-line with what the pieces are actually
+worth but we can't get a human to do this maths during a
+game of blitz chess.</p>
+<p>There is another way chess engines assign values to pieces
+and it can change through-out the game. Using a grid
+we assign values to the board positions and how much
+each piece will be worth in that position. As an example, a
+knight in the centre of the board is worth 3 more points
+than a knight in the corner. We know this intuitively
+because the knight will have more attacking opportunities in
+the centre than in the corner. A chess engine can have more
+precise numbers for the value of each board position given a
+large enough set of chess matches.</p>
+<h3>Other Places</h3>
+<p>Heuristics show up through-out life as they are
+synonymous with lessons learnt. However it is important
+that we assert these rules with some rigor as this is where
+bias can seep in, as with what might happen in naive
+underwriting.</p>
+<p>We don't have to worry about this with logic puzzles or
+chess, these are just for the fun of it.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:01 | </font>
+                    <a href="heuristic-addiction.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 08 September 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -702,199 +792,6 @@ in the mailing list.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 28 July 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Software Is Planning</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Software is planning, and as the adage goes, failing to
-plan is planning to fail. This article goes into the
-development of Git and UNIX with the goal of dispelling the
-myth that the genius software engineer exists and when we hear
-something was written entirely over night there's key
-information being omitted.</p>
-<p>Everyone likes the story of the programmer that
-disappears and resurfaces after a week with some revolutionising
-software. We all enjoy a compelling narrative but in reality
-great software takes time, additionally for most great
-projects the code is actually the smallest part of the
-project.</p>
-<h3>Planning</h3>
-<blockquote>
-<p>Projects don't go wrong they start wrong</p>
-<p>How Big Things Get Done (2023)</p>
-</blockquote>
-<p>We shouldn't view software creation from the point when
-coding starts. The process should include the upfront planning.
-In 1975 Brooke advocated that the coding portion of a software
-project should amount to 17% of the overall time and it should
-be noted that in the 1970s the most dominant programming languages
-were FORTRAN and COBOL.</p>
-<blockquote>
-<p>If a software requirements error is detected
-and corrected during the plans and requirements phase,
-its correction is a relatively simple matter of updating
-the requirements specification.</p>
-<p>Software Engineering Economics (1981)</p>
-</blockquote>
-<p>When we think of planning we often think of planning
-permissions, regulation and endless bureaucracy. We don't
-have time for that, we are trying to move fast and break
-things. However, in software, the planning stage is usually when
-most of the thinking happens and the hard problems get
-ironed out. Thinking is hard and most people avoid it,
-make thinking easier and you can stand out from other
-developers.</p>
-<p>The planning phase of a project is also the point in time
-when large changes are the cheapest.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<h3>UNIX</h3>
-<p>One fable within software is that UNIX was developed over
-the weekend by Ken Thompson. Ken is quite the mythical
-figure in the software world, Brian Kernighan attests to
-this in multiple interviews.</p>
-<p>We must keep in mind though that Ken worked for three
-years on Multics which he carried many features forward to
-UNIX. Here's not saying Ken isn't a great programmer, but
-we shouldn't discount that his mind was focused on an operating
-system for quite an amount of time and probably made some
-contribution towards formulating a better system.</p>
-<p>Imagine your best programmer said to you, "sure let me work
-on the project for two to three years then we will scrap it;
-and start again. You are bound to have the best in class
-software." Instead businesses want every project to have a
-fabled programmer and to continue the trope.</p>
-<p>Ken Thompson developed UNIX over 3 weeks, there's a video
-where <a href="https://youtu.be/EY6q5dv_B-o?si=yyes5eYeowOCjWoJ&amp;t=1414">Brian
-Kernighan</a>
-remarks that modern software engineers aren't as
-productive<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.</p>
-<h3>Git</h3>
-<p>At this point Git is the most popular form of version
-control for software, it's also famously known to have been
-written in a fairly short amount of time. Linus states that
-he wrote Git in 10 days and we mostly assume the timeline
-for the project was - I have an idea and ten days later we
-have Git.</p>
-<p>However this is not the case. Linus wrote Git in 10 days but
-it took him <a href="https://github.blog/open-source/git/git-turns-20-a-qa-with-linus-torvalds/#:~:text=So%20by%20the%20time%20I,in%20the%20situation%20where%20Larry">4 month of
-thinking</a>
-about the problem until he
-had a solution that he was satisfied with. 10 days after
-that we had Git.</p>
-<h3>Being a Creator</h3>
-<p>When it comes to creation, sometimes we are too excited by
-the answer that we fail to think about the question. A lot
-of software gets written without getting to the root of the
-problem and thus fail to materialise any value.</p>
-<p>Large projects fail when creation comes first and planning
-comes never. Even after you have complete knowledge of the
-problem, solutions may have challenges which require
-addressing upfront, addressing them when you are midway
-through a project is going to cost both time and money.</p>
-<p>For some problems you can have an attitude of "we will work
-it out when we get there", but you don't want to have this
-attitude to all problems as when you get there you might be
-95% of the way through your time and budget and you have
-crossed the point of no return and getting over this hurdle
-requires going over budget.</p>
-<p>Use your planning to categorise problems into "it won't work
-unless we know this" and "we can figure this out when we get
-there".</p>
-<h3>Board Games</h3>
-<p>"Is it fun" is the most important question in board game
-design. Ideally you should find this out before you hire
-an artist, write storyboards or even print and design cards.
-In board game creation circles they advocate tearing up
-pieces of paper and scribbling out a prototype to answer
-this question. The same thing applies to software.</p>
-<p>Determine if the question you are answering is the correct
-one and determine if your software will actual solve the
-problem, do this; Wizard of Oz style, before putting a shovel
-into the ground.</p>
-<h3>Assumptions</h3>
-<p>All projects start with assumptions. These are typically the
-first things that need to be addressed before you start
-coding. Sometimes asking someone if a solution exists or how
-something works can knock off some unknowns
-and you'll be in a better position to start than had you
-remained silent.</p>
-<blockquote>
-<p>Design it Twice</p>
-<p>A Philosophy of Software Design (2018)</p>
-</blockquote>
-<p>John Ousterhout advocates that designing software once is
-not enough and when you are planning something out you
-should make multiple attempts at it before you move ahead.
-He's found this leads to better design.</p>
-<p>Every project comes with its unknowns and challenges,
-we are probably never going to rebuild the exact same
-solution twice. So packing in as much learning as you can
-upfront about the challenges ahead will leave you at least
-the most prepared you could have been.</p>
-<p>The beginning of project is the cheapest time to learn so we
-should maximise and front load learning. Learning midway
-through a project is an expensive way of learning. It's
-fine if we can afford these learnings but on big and
-critical projects you don't want to bring up the point that
-the work we've been doing for the last 6 months was all for
-nothing especially if we could have learnt this earlier on.</p>
-<p>Break things down, explore and figure out how each piece of
-the project will work and that we are actually providing the
-right answer to the correct question, this is the only way
-to deliver on time and on budget.</p>
-<p>If we jump straight into code our design strategy is hope.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Whenever I hear "prompt engineering" I roll my eyes, mainly
-because it's a term that offers zero value. If instead we
-referred to it as "prompt planning" I think we would get
-people onto the correct page. Having a clear idea of the
-answer, having thought about what you want to create and
-providing a clear unambiguous prompt is essentially doing
-the upfront planning, which I hope you're doing when writing
-your software.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>and I took that personally.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
-                    <a href="software-is-planning.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn3.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn.html" class="previous-page">Newer ⮕</a>
@@ -1023,6 +920,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/chess-programming-moving.html">
+                        <span>Chess Programming - Moving</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/seating-charts.html">
                         <span>Seating Charts</span>
@@ -1221,6 +1123,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/algorithms.html">algorithms</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/chess-software.html">chess, software</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/debugging.html">debugging</a>

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<script>
+    // Immediate theme detection and application
+    (function() {
+        const savedTheme = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+
+        // Only set the data-theme attribute, let CSS handle the styling
+        document.documentElement.setAttribute('data-theme', theme);
+    })();
+</script>
+<html lang="en" style="padding-bottom: 80px;">
+<head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+        <title>s3bw : Chess Programming - Moving</title>
+        <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
+        <meta property='og:title' content="s3bw : Chess Programming - Moving"/>
+        <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
+        <meta property='og:description' content=" : <p>Optimising moving pieces in chess programming</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : chess-programming-moving.html"/>
+        <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
+        <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
+        <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
+        <script src="https://s3bw.github.io/writes/theme/js/theme-toggle.js"></script>
+        <script src="https://s3bw.github.io/writes/theme/js/mobile-nav.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+        <script src="https://cdn.cosoft.uk/comet.js"></script>
+        <script src="https://cdn.cosoft.uk/mailinglist.js"></script>
+        <script defer src="https://cloud.umami.is/script.js" data-website-id="ba181fe2-ebff-4d3a-a223-3a5451b511ac"></script>
+</head>
+
+
+<body>
+    <div id="container">
+      <div id="banner">
+
+        <div class="blogtitle">
+          <a href="https://s3bw.github.io/writes/" title="title">s3bw</a>
+        </div>
+        <div class="description">
+            <span>An exploration of quirk and detail in software engineering and the internet, and sometimes trains. </span>
+        </div>
+
+      </div>
+	    <div id="blogcontainer">
+        <div id="wrapper">
+
+          <div id="content">
+            <div id="blog">
+<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
+
+<article>
+
+<div class="fullbody">
+    <div class="datebody">
+        <h2 class="date">Mon 19 January 2026</h2>
+    </div>
+    <div class="blogbodytop"></div>
+    <div class="blogbody">
+        <div class="titlebody">
+            <h3 class="title">
+                <font style="vertical-align: inherit;">Chess Programming - Moving</font>
+            </h3>
+        </div>
+        <div class="main">
+            <p>Attempts to create an automatic chess calculator
+date back to 1913. Chess engine software has had many
+optimisations and many minds involved in its evolution.</p>
+<p>Last year I wrote on how chess programs track the
+position of every piece. This article is a slice of the
+chess engine research I compiled when construct my own
+chess AI and covers how a chess engine resolves where a
+piece can move on the board.</p>
+<p>You can<a href="https://s3bw.github.io/seafish/">play against that chess engine here.</a></p>
+<h3>Bit Operations</h3>
+<p>So far we've covered how to use a 64 bit integer to track the
+positions of each piece and we've covered how to use bit
+operations to determine their type and colour.</p>
+<p>Now the goal is to compute a 64 bit int that
+represents the potential positions that a piece can either
+move-to or attack. This number is called the "moveboard".</p>
+<p>If we have a moveboard for a particular piece we can <code>&amp;</code> the
+positions of the opposing pieces in order to get attacking
+positions and we can subtract the positions of all pieces in
+order to avoid moving a piece to an occupied position.</p>
+<p>If we simplify this to a single position on the board.
+Given that we are able to move to this position, i.e. the
+moveboard is <code>1</code>, and if we consider it occupied by the
+opposition, i.e. having a variable called "theirs"
+being <code>1.</code></p>
+<p>Computing the attacks is determined by doing the following:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; moveboard &amp; theirs
+1
+</code></pre></div>
+
+<p>This tells us the position is a valid attack. If the
+opposition does not occupy that position (<code>theirs == 0</code>).
+Computing for attacks would result in <code>0</code>. There's nothing
+to attack.</p>
+<p>To compute valid moves, if theirs is <code>0</code> and ours is <code>1</code>, we
+do the following:</p>
+<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; moveboard &amp; ~(theirs | ours)
+0
+</code></pre></div>
+
+<p>This indicates that we can't move to this position. If the
+result was 1 then it would be empty and it would be a valid
+position for our piece to move. If we use 64 bit integer
+instead of a single bit, as shown in the example, the
+processor can determine the valid moves and attacks across
+the entire board in a single operation.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<h3>Pawns</h3>
+<p>There's an edge case with pawns however, they do not use a
+<code>moveboard</code> to determine the valid moves and attacks as
+the positions a pawn may attack are different to where it
+may move. Despite this they are still relatively simple.</p>
+<p>Given a pawn in the middle of the board we only need to
+shift it up to determine its set of moves and after
+subtracting occupied positions we can determine if the
+pawn can move ahead or not.</p>
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> Shifting up
+pawn_position &gt;&gt; 8
+</code></pre></div>
+
+<p><img alt="Pawn Move" src="static/2026-01-19/moving-pawn.gif" /></p>
+<p>To determine if that pawn can attack we shift the pawn
+twice, "up and left" as well as "up and right". We then
+check to see if the opposition occupies these positions,
+this will determine valid attacks for the pawn.</p>
+<div class="highlight"><pre><span></span><code><span class="gh">#</span> Shifting &quot;up &amp; left&quot; as well as &quot;up &amp; right&quot;
+pawn_position &gt;&gt; 7 &amp;&amp; pawn_position &gt;&gt; 9
+</code></pre></div>
+
+<p><img alt="Pawn Attack" src="static/2026-01-19/attacking-pawn.gif" /></p>
+<h3>Knights</h3>
+<p>Things get more interesting when we compute valid moves
+and attacks for a knight, but how does a knight move?</p>
+<iframe src="https://www.youtube.com/embed/wfDCLEAU9hE?si=1DhNyzUjDv5RdI1_&amp;start=14" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<p>The knight is interesting because it's the only piece that
+is unrestricted by the position of other pieces. I.e. it can jump
+over pieces to get to where it wants to go. A knight in the
+centre of the board can move to the following locations:</p>
+<p><img alt="Knights Move" src="static/2026-01-19/knights-move.gif" /></p>
+<p>If we had a
+knight sitting on the <code>i</code>th index represented by the "<code>bitboard</code>"
+variable we can compute the moveboard for the knight by doing the
+following shifts:</p>
+<div class="highlight"><pre><span></span><code>(
+    ((bitboard &amp; NOT_H_FILE) &gt;&gt; 15)
+    | ((bitboard &amp; NOT_A_FILE) &gt;&gt; 17)
+    | ((bitboard &amp; NOT_GH_FILE) &gt;&gt; 6)
+    | ((bitboard &amp; NOT_AB_FILE) &gt;&gt; 10)
+    | ((bitboard &amp; NOT_H_FILE) &lt;&lt; 17)
+    | ((bitboard &amp; NOT_A_FILE) &lt;&lt; 15)
+    | ((bitboard &amp; NOT_GH_FILE) &lt;&lt; 10)
+    | ((bitboard &amp; NOT_AB_FILE) &lt;&lt; 6)
+)
+</code></pre></div>
+
+<p>There are four knights on a chess board, so this calculation
+would need to be done 4 times for every new board state.
+Since the performance of a chess engine is largely
+determined by how far into the future it can look, reducing
+the number of calculations on each board state can
+enable the engine to perform a deeper search.</p>
+<p>To avoid these computations, we can simply pre-compute
+the moveboard for every square on the chess board before
+the game begins. We can then provide the engine with a
+lookup table, mapping all positions to their moveboard.
+Avoiding the overhead of computing them during the game.</p>
+<h3>Sliding</h3>
+<p>We also do this for the sliding pieces on a chess
+board. The rooks,
+bishops and queens move in a way that are considered
+as sliding.</p>
+<p>Again we pre-compute all these positions and store
+the result in a map, however this isn't the final moveboard
+for sliding pieces.</p>
+<p><img alt="Sliding Moves" src="static/2026-01-19/sliding-moves.gif" /></p>
+<p>Pieces closer to a sliding piece block its path and unlike
+the knight sliding pieces can't jump over these
+obstructions. So the resulting bitmask can't be used to
+determine the valid moves and attacks on its own.</p>
+<p>The bitmask is used to identify the potential blockers
+along a sliding piece's direction of movement. Indicated in
+orange below:</p>
+<p><img alt="Rook Attack" src="static/2026-01-19/rook-attacks.gif" /></p>
+<p>Once we have identified the potential blockers we use this
+value to map to the final moveboard. This allows us
+to look up any moveboard using all combinations of potential
+blockers during the game and avoids having to shift the
+piece's position along its sliding axis for every new board
+state.</p>
+<p><img alt="Sliding Hash" src="static/2026-01-19/sliding-hash.gif" /></p>
+<p>As explained we can use a moveboard to compute the
+attacking positions (<code>moveboard &amp; theirs</code>). As well as the
+valid positions for moving (<code>moveboard &amp; ~(theirs|ours)</code>).</p>
+<p>In summary the following steps are needed to find the
+attacking positions and moving positions for a rook:</p>
+<ol>
+<li>Given the rook's position lookup the bitmask of an
+   unobstructed rook. <code>(index -&gt; bitmask)</code></li>
+<li>Use the unobstructed bitmask to find potential
+   blockers given all the pieces on the board. <code>(bitmask &amp;
+   (theirs|ours))</code></li>
+<li>Using the locations of all the blockers lookup the final
+   moveboard for the rook. <code>(blockers -&gt; moveboard)</code>.</li>
+</ol>
+<p>Computing potential blockers can be simplified as there
+are positions on the board that would never block a sliding
+piece. Such as positions on the edge of the board.</p>
+<p>Given a rook in
+any of the positions indicated in red we can ignore
+positions in black as having "potential blockers".</p>
+<p><img alt="Sliding Edges" src="static/2026-01-19/sliding-edges.gif" /></p>
+<p>This reduces the overall number of potential blocker
+combinations we need to consider, improving the engine's
+start-up time and memory footprint.</p>
+<p>We do the same for bishops, except these potential blockers
+are computed diagonally and finally we compute the moveboard
+for the queens by combining the outcomes of the rook and the
+bishop.</p>
+<h3>Playing Chess</h3>
+<p>Now that we are able to compute the set of possible moves
+and attacks for each piece on the chessboard. Picking a
+piece at random and picking one of the positions from it's
+set of move and set of attacks will allow a computer to play
+against us.</p>
+<p>This chess engine would still make illegal moves. To play a
+<em>legal</em> game of chess we would need to consider if the king
+is in check or if moving a piece might result in your own
+king being in check.</p>
+<p>Finally; in-order-to implement all legal chess moves
+we would need to extend our move sets to include pushing the pawn
+twice when it is on its starting position, en passant and the
+ability to castle your king.</p>
+<p>It might be more interesting, however, to dive into how a
+chess engine evaluates the board state so that it can make
+an informed decision when it moves a chess piece.</p>
+<!-- We can probably end it here?
+### Betweens
+
+There's one final hash map to pre-compute, and this one
+requires a little deeper knowledge of chess.
+
+In chess we have pieces that are considered _pinned_ when
+moving that piece will result in the king being under
+threat. You can imagine this if your pawn is sitting
+between your king and their rook. If you move your pawn out
+of the way this would leave their rook attacking your king,
+thus this is not a valid move.
+
+In order to discover that a piece is pinned we pre-compute
+the mask of all tiles between any two tiles on the board. We
+can then retrieve a bitboard representing the space between
+the rook and the king and determine if exactly a single
+piece is situated on this bitboard we say that it is pinned.
+
+-->
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>Assuming you have a 64 bit processor.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+        </div>
+
+          <span class="series-footer"></span>
+<div class="series-container">
+    <p class="series-title">The "Chess Programming" series:</p>
+    <ol class="series-list">
+            <ol>
+                1: <a href="https://s3bw.github.io/writes/chess-programming-bitboards.html">Chess Programming - Bitboards</a>
+            </ol>
+            <ol class="active">
+                2: (here) Chess Programming - Moving
+            </ol>
+    </ol>
+</div>
+    </div>
+
+    <div id="comments"></div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    loadComments('client_fBaxnE6w', '#comments', 'chess-programming-moving.html');
+  });
+</script>
+
+
+</div>
+
+
+</article>
+            </div>
+          </div>
+
+          <div id="left">
+            <div id="leftbody">
+
+              <div class="sidetitlebody">
+                <div class="sidetitle">Socials</div>
+              </div>
+              <div class="side">
+                  <div class="sidebody">
+                    <a href="https://github.com/s3bw" target="_blank">Github</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://stackoverflow.com/users/3407256/s3bw" target="_blank">Stackoverflow</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://www.linkedin.com/in/williams-wynn/" target="_blank">Linkedin</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://www.goodreads.com/user/show/7725390-sebastien-williams-wynn" target="_blank">Goodreads</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://s3bw.github.io/writes//pdfs/vitae.pdf" target="_blank">Curriculum Vitae</a>
+                  </div>
+              </div>
+
+              <div class="sidetitlebody">
+                <div class="sidetitle">Friends</div>
+              </div>
+              <div class="side">
+                  <div class="sidebody">
+                    <a href="https://skailasa.github.io/" target="_blank">Skailasa</a>
+                  </div>
+                  <div class="sidebody">
+                    <a href="https://joseantunes.tech/" target="_blank">J. Antunes</a>
+                  </div>
+              </div>
+
+              <div class="sidewrapper">
+                <div class="sidetitlebody">
+                  <div class="sidetitle">Subscribe</div>
+                </div>
+                <div class="side">
+
+                  <div class="sidebody category-parent">
+                    <a href="https://s3bw.github.io/writes/feeds/all.rss.xml" title="RSS Feed" style="display: flex; align-items: end; gap: 4px;">
+                      <svg class="rss-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"/>
+                      </svg>
+                      RSS Feed
+                    </a>
+                  </div>
+
+                  <div class="sidebody category-parent">
+                    <button type="button" id="showFormButton" class="mailinglist">
+                      <svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                      </svg>
+                      Mailing List
+                    </button>
+                  </div>
+
+                <div class="side">
+                    <div id="subscribeForm" class="inline-subscribe-form">
+                      <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                          <input type="text" id="subscribeName" placeholder="Name" required>
+                          <input type="email" id="subscribeEmail" placeholder="Email" required>
+                          <button type="submit" class="mailinglist">
+                            submit
+                          </button>
+                      </form>
+                    </div>
+                  <script>
+                    const showFormButton = document.getElementById('showFormButton');
+                    const form = document.getElementById('subscribeForm');
+                    form.style.display = 'none';
+                    showFormButton.addEventListener('click', function() {
+                        // Toggle form visibility
+                        if (form.style.display === 'block') {
+                            form.style.display = 'none';
+                        } else {
+                            form.style.display = 'block';
+                        }
+                    });
+                  </script>
+                </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+
+      <div id="right">
+        <div id="rightbody">
+
+              <div class="sidewrapper">
+                <div class="sidetitlebody">
+                  <div class="sidetitle">Previous</div>
+                </div>
+                <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/chess-programming-moving.html">
+                        <span>Chess Programming - Moving</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/seating-charts.html">
+                        <span>Seating Charts</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/leadership-offloading.html">
+                        <span>Leadership Offloading</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/power-users.html">
+                        <span>Power Users</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/style.html">
+                        <span>Style</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/heuristic-addiction.html">
+                        <span>Heuristic Addiction</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/motivation.html">
+                        <span>Motivation</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/feedback.html">
+                        <span>Feedback</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/the-bleeding-edge.html">
+                        <span>The Bleeding Edge</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/how-the-blog-works.html">
+                        <span>How the Blog Works</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/software-is-planning.html">
+                        <span>Software Is Planning</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/strategic-testing.html">
+                        <span>Strategic Testing</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/assert.html">
+                        <span>Assert</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/database-indexes.html">
+                        <span>Database Indexes</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/low-latency-computation.html">
+                        <span>Low Latency Computation</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/leadership-patterns.html">
+                        <span>Leadership Patterns</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/reframe-binary-search.html">
+                        <span>Reframe Binary Search</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/understanding-time-and-space.html">
+                        <span>Understanding Time and Space</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/conventional-wisdom.html">
+                        <span>Conventional Wisdom</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/scaling-teams-with-cap-theorem.html">
+                        <span>Scaling teams with CAP theorem</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/software-localisation.html">
+                        <span>Software Localisation</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/a-piecemeal-approach.html">
+                        <span>A Piecemeal Approach</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/engineering-vibe.html">
+                        <span>Engineering Vibe</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/gray-code.html">
+                        <span>Gray Code</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/engineering-for-resilience.html">
+                        <span>Engineering for Resilience</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/assisted-development.html">
+                        <span>Assisted Development</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/being-a-lurker.html">
+                        <span>Being A Lurker</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/travel-planning.html">
+                        <span>Travel Planning</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/chess-programming-bitboards.html">
+                        <span>Chess Programming - Bitboards</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/flash-cards.html">
+                        <span>Flash Cards</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/configuring-traefik-with-redis.html">
+                        <span>Configuring Traefik with Redis</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/python-deque.html">
+                        <span>Python Deque</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/module-not-found-heroku.html">
+                        <span>Module not found Heroku</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/chain-of-responsibility.html">
+                        <span>Chain of Responsibility</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/iterator-design-pattern.html">
+                        <span>Iterator Design Pattern</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/random-vm-name.html">
+                        <span>Random VM Name</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">
+                        <span>Foolscap List Ordering</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/procedural-villages.html">
+                        <span>Procedural Villages</span>
+                      </a>
+                    </div>
+                </div>
+              </div>
+
+              <div class="sidewrapper">
+                <div class="sidetitlebody">
+                  <div class="sidetitle">Categories</div>
+                </div>
+                <div class="side">
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/ai.html">ai</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/algorithms.html">algorithms</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/chess-software.html">chess, software</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/debugging.html">debugging</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/design.html">design</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/engineering.html">engineering</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/fashion.html">fashion</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/leadership.html">leadership</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/leading.html">leading</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/miscellaneous.html">miscellaneous</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/organisation.html">organisation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/practice.html">practice</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/puzzles.html">puzzles</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/software.html">software</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/testing.html">testing</a>
+                    </div>
+                </div>
+              </div>
+
+            <!--
+              <div class="sidewrapper">
+                <div class="sidetitlebody">
+                  <div class="sidetitle">Tags</div>
+                </div>
+                <div class="side">
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/ai.html">ai</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/algorithms.html">algorithms</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/binary.html">binary</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/chess.html">chess</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/cli.html">cli</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/clothing.html">clothing</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/code.html">code</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/coding.html">coding</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/constraints.html">constraints</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/cpu.html">cpu</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/creation.html">creation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/design.html">design</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/designpatterns.html">DesignPatterns</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/development.html">development</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/docker.html">docker</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/dress.html">dress</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/efficiency.html">efficiency</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/engineering.html">engineering</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/game.html">game</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/gcp.html">gcp</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/go4.html">go4</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/heroku.html">heroku</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/interface.html">interface</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/leadership.html">leadership</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/leading.html">leading</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/localisation.html">localisation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/logic.html">logic</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/motivation.html">motivation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/naming.html">naming</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/networking.html">networking</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/organisation.html">organisation</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/patterns.html">patterns</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/people.html">people</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/problemsolving.html">problemsolving</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/product.html">product</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/programming.html">programming</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/projects.html">projects</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/puzzles.html">puzzles</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/python.html">python</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/redis.html">redis</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/roguelike.html">roguelike</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/scale.html">scale</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/search.html">search</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/software.html">software</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/speed.html">speed</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/startups.html">startups</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/style.html">style</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/talking.html">talking</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/team.html">team</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/teams.html">teams</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/technology.html">technology</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/testing.html">testing</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/theory.html">theory</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/travel.html">travel</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/utopia.html">utopia</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/vm.html">vm</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/web.html">web</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/wizard.html">wizard</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/workflow.html">workflow</a>
+                    </div>
+                </div>
+              </div>
+            -->
+
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+
+    <!-- Theme toggle button -->
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode"></button>
+</body>
+</html>
