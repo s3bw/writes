@@ -54,6 +54,201 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 07 July 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Database Indexes</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Often the most crucial part of a system is the database.
+Databases manage and handle the storage of our business
+data, an inefficient database can impact the overall
+performance of our system. There are, however, a few
+ways we can improve database performance, one such way
+is defining appropriate indexes.</p>
+<p>This article describes indexes in Postgres and some of the
+lesser known indexes it uses, such as GIN and BRIN indexes.</p>
+<h3>Why do we use indexes.</h3>
+<p>We use indexes in postgres to optimise how we scan the data
+we have stored in the database. Similar to how binary search
+can optimise how quickly we find things in a dictionary (see
+my post on <a href="/reframe-binary-search.html">binary search</a>).</p>
+<p>We can use an index to inform the
+database on how to structure data in a way that allows us
+to find what we are looking for effectively i.e. fewer
+operations, fewer i/o and fewer comparisons leading to lower
+CPU usage and better performance.</p>
+<h3>What is an index.</h3>
+<p>An index is a data structure which allows us to minimise the
+number of instructions performed by the database
+in order to lookup table rows or improve the speed at which
+a result is sorted.</p>
+<p>In the case of sorting if there's an
+index on a column that you require results to be
+<em>ordered by</em>, the query can scan the index to return the
+results in sorted order, if there is no index on the column
+the data must first be fetched and then sorted in a separate
+step.</p>
+<h3>Indexes aren't always good</h3>
+<p>Over doing the number of indexes on a table can lead to
+lower write performance as every update or insert into the
+table requires updating the index. Indexes also require
+disk space, so having unnecessary indexes will contribute to
+the rate at which your disk usage grows.</p>
+<h3>B-Tree</h3>
+<p>The default index type Postgres uses is a B-Tree. This
+data structure is similar to a binary tree except
+instead of having a node with only two pointers a node can
+contain many pointer. The number of pointers is determined
+by Postgres's default block size, which is 8kb. A single
+node will store as many sorted keys as it can until it
+reaches this size limit. Postgres refers to these nodes as
+pages.</p>
+<p>Having a smaller index keys can improve the performance of
+your index as you'll be able to store more keys within the
+page limit. Resulting in fewer i/o instructions as fewer
+pages are required to be read from disk.</p>
+<p><a href="https://www.postgresql.org/docs/current/btree.html#BTREE-STRUCTURE">In postgres</a>
+leaf nodes will point to the physical
+location of the row on disk and the intermediary nodes
+(or <em>internal pages</em>) will point to the nodes on
+the next level down the tree.</p>
+<p>There's a neat animation that can help visualise
+b-trees: <a href="https://btree.app/">https://btree.app/</a></p>
+<h3>Partial Indexes</h3>
+<p>We can optimise the indexes we create by understanding
+usage patterns and having some intuition about the
+system and the business. One such optimisation is the
+use of partial indexes, these are handy when you have
+a large table but only a subset of the data is used most
+frequently.</p>
+<p>As an example, we can imagine an online order system,
+it's quite likely that once an order is fulfilled
+the status transitions to "complete" and this order isn't
+likely to be accessed as frequently as the orders that are
+still in progress. We can partition our index so that it
+contains only unfulfilled orders which will be a
+significantly smaller portion of our overall orders.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_uncomplete_orders_customer</span><span class="w"> </span><span class="k">ON</span>
+<span class="n">orders</span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;complete&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<p>We also have to include this <em>WHERE</em> filter in our queries
+if we wish to make use of this index.</p>
+<h3>Covering Index</h3>
+<p>A covering index allows us to add columns to the index's
+leaf nodes and thus avoids the lookup and reading of the
+entire the table row from disk. Essentially everything that
+the query needs is available on the index, reducing the number
+of operations required to complete the query.</p>
+<p>As an example if we typically request a user's first name
+and last name with an email we can write an index on the
+email that includes the first and last name.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_email_include</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="n">INCLUDE</span><span class="w"> </span><span class="p">(</span><span class="n">firstname</span><span class="p">,</span><span class="w"> </span><span class="n">lastname</span><span class="p">);</span>
+</code></pre></div>
+
+<p>We have to bare in mind that we should only include columns
+which change as frequently or less frequently than the key
+we are indexes otherwise we are duplicating data and
+increasing the write overhead. This isn't an issue for
+columns that rarely change.</p>
+<p><a href="https://www.postgresql.org/docs/current/sql-createindex.html">More on covering
+indexes</a>
+see "INCLUDE".</p>
+<h3><a href="https://www.postgresql.org/docs/current/gin.html">Gin Index</a></h3>
+<p>GIN stands for Generalised Inverted Index, similar to the
+inverted index that Lucene is built on, the same Lucene that
+Elasticsearch is built on. The slight difference is that
+this inverted index is generalised so it expects items
+that are indexed to be composed of multiple values the same
+way a sentence is composed of multiple words, with the goal
+to <a href="http://www.sai.msu.su/~megera/wiki/Gin">support full-text
+search</a>.</p>
+<p>An index entry is created for each element in the composite
+column and the entry points to a list of matching locations.
+So as an example a row that has a column with the value
+"Here's is a blog post" will create an index entry for
+each word in the value, (e.g. "blog") and then each entry
+will point to the rows that contain "blog" inside the
+composite column.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">1</a></sup></p>
+<div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">blogposts</span>
+<span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">search_vector</span><span class="w"> </span><span class="n">tsvector</span><span class="p">;</span>
+
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_blogposts_search</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">blogposts</span>
+<span class="k">USING</span><span class="w"> </span><span class="n">GIN</span><span class="w"> </span><span class="p">(</span><span class="n">search_vector</span><span class="p">);</span>
+</code></pre></div>
+
+<p>GIN indexes aren't limited to just text, they are
+generalised so they can be used with any composite type,
+JSONB for example.</p>
+<h3><a href="https://www.postgresql.org/docs/current/brin.html">BRIN Index</a></h3>
+<p>BRIN stands for Block Range Index. These are indexes that
+specialise in handling very large tables in which certain
+columns have some natural correlation to their physical
+storage location. Essentially if each row in the table can
+be grouped in some manner to the blocks on disk then we have
+a potential use-case for the BRIN Index.</p>
+<p>GPS tracking points and log tables are good examples of data
+with this natural correlation, if you have a table that is
+small or data is updated or inserted out of chronological
+order then they won't form a good fit for BRIN indexes.</p>
+<p>Instead of storing pointers to entry locations in the B-Tree
+leaf nodes, BRIN indexes store summary information for the
+ranges that the blocks on disk are ordered. This allows for a
+smaller overhead compared to the default B-Tree which stores
+all entries and their corresponding locations.</p>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_transactions_created_at_brin</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">transactions</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">BRIN</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
+</code></pre></div>
+
+<p>This can be used to optimise queries that rely on fetching
+rows between certain ranges.</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span>
+<span class="n">created_at</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">&#39;2024-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">&#39;2024-12-31&#39;</span><span class="p">;</span>
+</code></pre></div>
+
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:2">
+<p>I'm describing a reverse index.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:32 | </font>
+                    <a href="database-indexes.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 30 June 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -765,265 +960,6 @@ for 25 years, without you realising it.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 26 May 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Conventional Wisdom</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>There are two things that are impressive when looking at a
-software project. 1. The simplicity and 2 the consistency.</p>
-<p>It can be overwhelming jumping into an organisation or project
-where the conventions are all over the place.
-Sometimes it's better if there's just one way to do things.</p>
-<p>You're going to be battling with product and business problems,
-on top of that you're now having to deal with a team
-expecting XML and another team expecting JSON.</p>
-<p>The more consistency and standardisation in a work place
-the easier it is to dive into a project and get familiar
-with the hard parts. Working across teams or on more than
-one code base can be a lot easier once the <em>ways of working</em>
-become familiar.</p>
-<p>We can compare this to picking up a new board game, there's
-an initial overhead of learning the instructions and how the
-game plays out. Moving to a new team should feel like you're
-changing the board but the rest plays out the same way. Going
-between teams shouldn't feel like jumping between Dune
-Imperium and Risk<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.</p>
-<p>There are many decisions that need to be made in software
-and not having a generally agreed set of
-conventions adds more overhead to decisions. The downside is
-that there's a bit of a cold start issue as we get familiar
-to new guidelines<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>, but the payoff is worth it.</p>
-<blockquote>
-<p>Having code that is consistent across the codebase
-improves comprehension for all of engineering</p>
-<p>Software Engineering at Google (pg 173)</p>
-</blockquote>
-<p>Having guidelines and rules help us lift the standard of
-engineering within an organisation and speeds up decision
-making on minor things like naming if we have defined our
-expectations.</p>
-<h3>How Stripe Builds APIs</h3>
-<p>When building APIs, internally or externally there are a few
-things it would be good to agree on upfront.</p>
-<p>The Stripe API is generally considered to be good; after all,
-their API is their business. Many documentation tools even
-use "stripe-like" in their marketing. Stripe has rules and
-guidelines, which they follow when constructing APIs and
-they're usually backed up by solid reasoning.</p>
-<p>Here are a few of their suggestions:</p>
-<h4>Avoid Jargon</h4>
-<p>The example they give is using an industry specific term for
-an API property like <code>card.pan</code> instead of <code>card.number</code>.
-Most people are familiar with a card "number" there are
-fewer people familiar with a card "pan".</p>
-<p>Accessible vocabulary can allow you to reach more users, you
-shouldn't gate keep your product and fence off your services to
-people that have insider knowledge.</p>
-<p>Abbreviations are another
-example of this and should be called out e.g. GTM, you
-probably thought of Go To Market but I could have been
-talking about Google Tags Manager.</p>
-<p>Your engineers might not come from the same industry and
-should ideally have diverse backgrounds. This can be played
-as a strength; if you notice someone asking for clarity on a
-phrase or word, perhaps you can find phrasing in your
-answer that is a more suitable term for the API.</p>
-<h4>Nested Structure</h4>
-<p>There will always be surprises with any integration.
-I've witnessed a <code>200</code> status code returning
-the message <code>"Server Error"</code>.</p>
-<p>Having properties such as <code>account_number</code> and
-<code>account_created_at</code> is another one I've seen. Stripe avoids this
-by opting for nested
-structures, so in this case they would be returning:</p>
-<div class="highlight"><pre><span></span><code>account: {
-    created_at: &lt;timestamp&gt;,
-    number: 10
-}
-</code></pre></div>
-
-<h4>Properties as Enums</h4>
-<p>This one prepares us for the future since having a
-property like <code>canceled</code> being either true or false can get
-in the way when you introduce more state. We can
-avoid filling up our objects with a myriad of redundant
-booleans by sticking to an enum from the beginning.</p>
-<h4>Express Changes with Verbs</h4>
-<p>Stripe also tends to use clear verbs if a state change will
-occur when you hit that endpoint for example:
-<code>/paymant/:id/capture</code>.</p>
-<h4>Timestamps</h4>
-<p>Having all properties that are related to timestamps
-suffixed with <code>*_at</code>. This allows you to distinguish the
-type, which is harder had you gone with "<code>created</code>" as
-this could be confused for a boolean.</p>
-<h4>Currencies</h4>
-<p>These should be represented in the lowest denomination, for
-example the pound is 100 pence, so we should be passing £10
-as the integer 1000. This also helps against pesky floating
-point arithmetic. When providing a monitary amount when
-should also provide an indication as to which currency it
-is. E.g. "GBP" or "USD".</p>
-<h3>Metrics</h3>
-<p>When you're only worried about a single service it seems like
-defining metric conventions is a wasted effort. Metrics are
-often an after thought and usually always end up in a mess.</p>
-<blockquote>
-<p>Defining a naming convention for your metrics, tags, and
-services is crucial to have a clean, readable, and
-maintainable telemetry data.</p>
-<p>DataDog</p>
-</blockquote>
-<p><a href="https://docs.datadoghq.com/developers/guide/what-best-practices-are-recommended-for-naming-metrics-and-tags/">DataDog</a>
-has some good insight into how to start providing guidelines
-for metric names.</p>
-<h4>Avoid abbreviations</h4>
-<p>For the same reason mentioned above, these might have multiple
-meanings and in the metric world you don't want to confuse
-things like Status Code and Service Charge.</p>
-<h4>Namespaces</h4>
-<blockquote>
-<p>Namespaces are one honking great idea -- let's do more of
-those!</p>
-<p><code>python -c 'import this'</code></p>
-</blockquote>
-<p>They recommend having the metrics prefixed with the service
-or application that's generating those metrics.</p>
-<h4>Unified Tagging</h4>
-<p>Using standard tags like <code>env</code>, <code>service</code> and <code>version</code> can
-help your new service get off the ground quicker with
-dashboards that are already written to aggregate your metrics
-around those tags.</p>
-<h4>Avoid Overly Specific Metrics</h4>
-<p>If you have a metric for the number of requests you can
-start tagging your metrics with "<code>method</code>" which can be either
-<code>POST</code>, <code>GET</code> et al. you shouldn't need to create a new metric
-called <code>post_requests</code> to specifically capture post
-requests.</p>
-<h4>Cardinality</h4>
-<p>The other thing to keep in mind when creating metrics, which
-is useful for a guideline doc, is reminding ourselves that
-each unique key-value pair represents a new time series,
-so we should ensure we don't have tags with high cardinality.
-Avoid using tags like <code>user_id</code> as you'll be storing
-<code>n</code> time series, having a bounded set is better; for example
-request methods have at most ~5 values.</p>
-<h3>Databases</h3>
-<p>Software engineers are often required to give names to tables
-and columns in databases. You can generally take a look at
-the other tables and columns to get an idea for existing
-naming conventions but I'd lean more cautiously here as all
-you need is a single column out of line and the conventions
-go to shit.</p>
-<h4>Naming Tables</h4>
-<p>Should they be plural or singular? Well according to
-<a href="https://stackoverflow.com/questions/7662/database-table-and-column-naming-conventions">stack
-overflow</a>
-the second answer with 388 votes says "Plural table names"
-and the first answer with 388 votes says "Singular names for
-tables". So it beats me... Just pick one.<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
-<h4>Naming Columns</h4>
-<p>Some people want to have the table name in the primary key,
-like <code>user.user_id</code> these people shouldn't write software.
-Having all tables with the convention of <code>id</code> as the primary
-key for that table I find makes most sense, having this in
-common across all tables keeps things simple.</p>
-<h4>Timestamps</h4>
-<p>Like with an API the tables are also going to contain
-timestamps and having a mix of column conventions to
-identify these can be a pain. Typically I've gone with the
-suffix of <code>*_at</code>. E.g. <code>created_at</code>, <code>completed_at</code>. I've
-also seen <code>created_date</code> or <code>date_completed</code>. Similar with
-foreign keys these should all be <code>tablename_id</code> where
-<code>tablename</code> is the other table you're referencing.</p>
-<p>Another convention that's typically followed with databases
-is ensuring all tables have a <code>created_at</code> and <code>updated_at</code>
-column from the start. Some people even push to having
-<code>deleted_at</code> as one of those default columns.</p>
-<h4>Indexes</h4>
-<p>I've noticed an unspoken convention of naming indexes like
-so: <code>user_account_id_idx</code> which would be an index on the
-<code>account_id</code> column in the <code>user</code> table. You can also suffix
-it with the type of index; <code>_include</code>, <code>_gin</code>, <code>_brin</code>.</p>
-<h3>Guidelines</h3>
-<p>Some of these can seem pretty straight forward if you've been
-writing code for a while, but you have to remember that not
-everyone would be exposed to these rules. There also exist
-engineers who believe they're better than any convention or
-guideline.</p>
-<p>At the outset code reviews are the place to help form these
-conventions, they're certainly not for architectural design
-changes, the time for that has long past.</p>
-<p>Setting out some initial guidelines can help you scale and
-onboard. Having to select <code>request.statusCode</code> and
-<code>request.status_code</code> because you're naming things different
-across services will only get worse as the company gets
-older (it doesn't even need to scale, we're battling with
-time).</p>
-<p>Some of these guidelines might follow just simple stylistic
-reasoning, but some of them allow you to get dashboards
-with very little effort or they help you avoid potential
-hurdles as the project grows.</p>
-<p>Guidelines aren't here to hold developers back from self
-expression they're in place to help us work together and
-grow organisational learnings as well as provide a baseline
-for engineering standards.</p>
-<p>How do you ensure your organisation is learning if you're
-not adding or molding your guidelines, does every new
-project start from zero?</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>The board game.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>With Dune: Imperium it took me around 2 or 3
-  playthroughs&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-<li id="fn:3">
-<p>I prefer singular since you're going to be writing
-  queries like <code>user.name</code> not <code>users.name</code> and what are you
-  going to do for <code>address</code>? <code>addresses</code> yuck!. How about
-  <code>person</code> and <code>people</code>, <code>people.name</code> lol.&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:08 | </font>
-                    <a href="conventional-wisdom.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn5.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn3.html" class="previous-page">Newer ⮕</a>
@@ -1152,6 +1088,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/get-more-out-of-11s.html">
+                        <span>Get more out of 1:1s</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/review-a-philosophy-of-software-design.html">
                         <span>Review: A Philosophy of Software Design</span>
