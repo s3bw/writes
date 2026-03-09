@@ -14,15 +14,15 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Understanding Time and Space</title>
+        <title>s3bw : The Moderate Take</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Understanding Time and Space"/>
-                <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>On May 24th 2000 the Clay Math Institute announced a
-$1,000,000 prize for solving one of 7 maths problems. Since
-then only 1 has been solved. The mathematician that solved
-the problem rejected the money.</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : understanding-time-and-space.html"/>
+        <meta property='og:title' content="s3bw : The Moderate Take"/>
+                <meta property='og:image' content='https://s3bw.github.io/writes/static/2026-03-09/goodwork.png'/>
+        <meta property='og:description' content=" : <p>Economics and politics are determined by the most compelling
+stories and occasionally it is hit by reality. This is one of
+the challenges when following reactionary discourses on
+platforms like Linkedin, Reddit and Twitter.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : the-moderate-take.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -58,137 +58,154 @@ the problem rejected the money.</p>"/>
 
 <div class="fullbody">
     <div class="datebody">
-        <h2 class="date">Mon 02 June 2025</h2>
+        <h2 class="date">Mon 09 March 2026</h2>
     </div>
     <div class="blogbodytop"></div>
     <div class="blogbody">
         <div class="titlebody">
             <h3 class="title">
-                <font style="vertical-align: inherit;">Understanding Time and Space</font>
+                <font style="vertical-align: inherit;">The Moderate Take</font>
             </h3>
         </div>
         <div class="main">
-            <p>On May 24th 2000 the Clay Math Institute announced a
-$1,000,000 prize for solving one of 7 maths problems. Since
-then only 1 has been solved. The mathematician that solved
-the problem rejected the money.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>One of those problems is the P vs NP question which relates
-to how we estimate time and space complexity for algorithms
-in computer science and software engineering.</p>
-<h3>Complexity</h3>
-<p>Complexity is an estimate of the growth in either time
-or space given an increase in the size of the input. Some
-algorithms have a linear relationship between time and input,
-we signify this complexity as <code>O(n)</code>.</p>
-<p>Constant complexity is signified as <code>O(1)</code> this means that
-as we increase <code>n</code> (the size of the input) the time and
-space is consistent, the algorithm doesn't take any longer
-and doesn't require more RAM.</p>
-<p>An example of an algorithm that take constant <code>O(1)</code> space is
-finding the largest number in an unordered list of <code>n</code>
-numbers. You'll notice below, as we move through the list
-there's only one element we need to keep track of. This
-element is the largest item we've seen up to that point.
-When we see a larger number we replace the tracked number
-with this new larger number.</p>
-<p><img alt="MaxAlgo" src="static/maxalgo.gif" /></p>
-<p>No matter how many items we include in this list we would
-still only need to track a single number, so the space
-complexity of this algorithm is <code>O(1)</code>. We might apply this
-algorithm to find the largest file on a computer.</p>
-<p>In terms of time complexity if we were to add more files or
-more items to this list the amount of time it takes would
-increase proportionally to the number of items we add. We
-therefore say this algorithm has an <code>O(n)</code> time complexity.</p>
-<p>If we wish to improve the time complexity of finding the
-largest file, we can do this by having something track the
-largest file in the systems and checks and updates this
-whenever a file is written. This would provide us with a
-constant time <code>O(1)</code> algorithm as we avoid having to check all
-the file sizes every time we request the largest file. The
-trade off here is added complexity when updating any file on
-our system. If we were to reduce the size of the largest
-file the second largest might now be the largest and we'd
-have to find which file that might be.</p>
-<p>We don't often require knowing what the largest
-file on the system might be so this added complexity is
-probably a waste of resource, additionally the overhead of
-creating, updating and deleting files has now increased.
-An <code>O(n)</code> search is probably enough for most machines.</p>
-<h3>Sorting</h3>
-<p>Sorting is often used to explain time complexity as there are
-a number of
-<a href="https://en.wikipedia.org/wiki/Sorting_algorithm#Comparison_sorts">ways to sort items</a>
-each with their own complexity. It's also useful because
-we can visualise sorting. Below I have provided an example of
-bubble sort, this has a time complexity of O(n<sup>2</sup>).</p>
-<p><img alt="Sorting" src="static/sortingn2.gif" /></p>
-<p>This isn't the most efficient way to sort a list of
-items, but it's a good representation of an O(n<sup>2</sup>)
-algorithm.</p>
-<h3>Categorising complexity</h3>
-<p>So far we've been discussing polynomial time algorithms,
-there exist algorithms which take exponential time to
-produce a solution. As an example in the case we have 2
-items this would take 4 operations, if we increase to 3
-items it would take us 8 operations. Such an algorithm
-is said to have O(2<sup>n</sup>) time complexity.</p>
-<p>An example of an exponential algorithmic problem is the
-<a href="https://leetcode.com/problems/n-queens-ii">N-Queens ii</a>
-problem. The time complexity for an algorithm to solve this
-problem is O(n!). So 3 items is 6 operations, 4 items is 24
-operations. These are algorithms which a computer would
-struggle to solve, in a sensible time, as n gets larger.</p>
-<p>Within the realm of these exponential algorithms exist
-problems which we can solve in <code>O(n!)</code> time but we can
-validate the solution in polynomial time. So even if n is
-exceptionally large, given a solution, we are able to
-validate the correctness relatively quickly.</p>
-<h3>P vs NP</h3>
-<p>This class of algorithms forms the basis for one of the
-millennium problems, known as P vs NP. The problem asks if
-there's a relationship between the complexity of validating
-the solution and complexity in solving the problem. If P =
-NP then problems that can be verified in polynomial time
-can also be solvable in polynomial time. However
-P ≠ NP implies that some problems are inherently harder
-to solve than they are to verify.</p>
-<p>There are a few problems which have no existing polynomial
-solution, which upon finding one will determine that P = NP.
-Problems such as <a href="https://en.wikipedia.org/wiki/Travelling_salesman_problem">the traveling salesman problem</a> (TSP),
-<a href="https://en.wikipedia.org/wiki/Boolean_satisfiability_problem">The boolean satisfiability problem</a>
-and the <a href="https://en.wikipedia.org/wiki/Vertex_cover">vertex cover
-problem</a>
-Proving that there exists a polynomial solution to these
-problems will net you $1 million.</p>
-<h3>In Practice</h3>
-<p>Solving these problems have practical applications. Solving
-TSP would provide us optimal solutions for delivery routing
-and vertex cover has an application in DNA sequencing. So
-how do we produce solutions in these areas when attempting
-to find the best solution can take a computer as long as the
-lifetime of the universe.</p>
-<p>We tend to rely on algorithms that are fast on average,
-these algorithms may involve backtracking with a large
-amount of pruning; this approach is used in chess.
-There are also approximation algorithms or heuristic based
-approaches such as
-<a href="https://github.com/jedrazb/python-tsp-simulated-annealing">simulated annealing</a>.</p>
-<h3>Trade Offs</h3>
-<p>Understanding time and space allows us to make trade offs
-between strategies. Certain algorithms can provide us
-an efficient approach to solving technical problems.
-There is a limit to how much we can do with
-algorithms and sometimes even problems that sound simple on
-the surface could have a $1 million bounty standing
-for 25 years, without you realising it.</p>
+            <p>Economics and politics are determined by the most compelling
+stories and occasionally it is hit by reality. This is one of
+the challenges when following reactionary discourses on
+platforms like Linkedin, Reddit and Twitter.</p>
+<p>When advise comes from board members and VCs I am reminded
+that they scroll the same threads on reddit that I do. Their
+opinion is often shaped by the highest voted comment in
+these forums.</p>
+<p>Unfortunately we aren't gripped by stories that are filled with
+the context and the caveats that exist in the real world and this
+has shifted us into more extreme political leanings. Why
+should we fill our content with details when this
+jeopardizes the opportunity of going viral.</p>
+<p><img alt="Good Work" src="static/2026-03-09/goodwork.png" /></p>
+<p>False narratives get the clicks and impact stocks
+because they're entertaining and persuading. We are
+willing to sit still and listen to the stories that are novel and
+gripping. 14 years ago <a href="https://youtu.be/IiPJsI8pl8Q?si=5435Ne_fRnxcigi9&amp;t=827">Elon said</a>
+we would land people on Mars in 10 years. (15-20 years in
+the worst-case).</p>
+<blockquote>
+<p>including caveats all the time makes articles too awkward to
+read and buries your actual point</p>
+<ul>
+<li><a href="https://www.seangoedecke.com/on-writing/#:~:text=including%20caveats%20all%20the%20time%20makes%20articles%20too%20awkward%20to%20read%20and%20buries%20your%20actual%20point">Sean
+  Goedecke</a></li>
+</ul>
+</blockquote>
+<p>No one finds being moderate sexy.</p>
+<h3>The boring parts of software</h3>
+<p>The engineers that have the largest impact are the
+ones that read the most documentation. Getting through
+software specs is tough, they're not filled with fluffy
+prose and they're often dense and technical, but nothing
+delivers value like saying: "We don't need to do that work,
+that feature already exists in the API".</p>
+<p>Similarly, the largest mistakes I've seen made in software
+come from conclusions being made too quickly after reading a
+single page of documentation. Engineers also avoid
+reading documentation by jumping on a band wagon of
+agreement without verification.</p>
+<p>This extends to how reactionary takes tend to mold their
+opinions. Life is easier when someone does the work for
+you. If things go belly up, hey that wasn't <em>my</em>
+misinterpretation.</p>
+<h3>Where's it shifting?</h3>
+<p>This doesn't just apply to engineer's, Steve Eisman had this
+to say about the finance industry in 2008, but this applies
+to everyone.</p>
+<blockquote>
+<p>I think one of the hardest things for all human beings, me
+too, to deal with our paradigm shifts. You know, you exist
+in a paradigm. It's been around from a very, very long time.
+Your whole career is based on that paradigm. you've made a
+lot of money in that paradigm and then it turns out that
+the paradigm is either changing because of technology or
+maybe the paradigm was actually wrong because it was based
+on continuously increasing leverage which is what the
+financial services industry's paradigm was based on human
+beings have tremendously difficult time dealing with paradigm
+shifts. Tremendous.</p>
+<p>It's like a nightmare. They don't want to deal with it.</p>
+<ul>
+<li><a href="https://youtu.be/kL7r0dRGip8?si=C5WJQOtju8-Nl-FT&amp;t=2850">Steve
+  Eisman</a>
+A.k.a Steve Carell in The Big Short</li>
+</ul>
+</blockquote>
+<p><a href="https://www.reddit.com/r/ExperiencedDevs/">r/ExperiencedDevs</a>
+is an echo chamber degrading Ai slop and crafting existential
+dread in the industry. They assert that Ai can never be as
+detailed or accurate as they are when it comes to writing
+code, at the same time they're shaking in their boots
+about the future of their industry.
+When there's commentary on the benefits of AI these comments
+tend to be downvoted or deleted and the blame is put on
+automated bots making up pro-ai agitprop.</p>
+<p>Software engineers tend to be defensive when it comes
+to generative code and state that most of their job wasn't
+code to begin with.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> These engineers aren't out of the
+"Ai makes mistakes" phase or they're moving goal post to
+take the target off their back.</p>
+<p>The latest cohort of uni students are winning hack-a-thons
+without knowing how their applications works.
+<em>r/ExperiencedDevs</em> needs to come to terms with the unknown
+and as long as this industry has been around we've
+never actually known how projects work in
+their entirety. We've never read every line of code in our
+dependencies, not knowing how something works and being able to
+make contributions is not a new phenomenon. Those that have
+succeeded in this industry can wade through the unknown and
+that will continue to be the case.</p>
+<p>It's normal to have strong feelings about the grads picking
+something up in a short amount of time that may have
+taken you longer to hone in on. It's the classic "back in
+my day" reaction.</p>
+<h3>Extremes</h3>
+<p>Unfortunately avoiding nuance leads us to extremes.</p>
+<p>The truth is; software engineering looks different and
+requires different skills at different stages of the
+business and stack. These complaints might just be a misalignment
+with the business.</p>
+<p>Ousterhout describes in his book "A Philosophy of Software
+Design" the difference between strategic coding and
+tactical coding. Where tactical coding relies on hacks to
+get the job done and strategic coding has a more long term
+view on the code base. He vouches that software should be
+done strategically but I believe we need to pick our
+battles.</p>
+<p>There are some entities and functions that are core to
+engineering companies, but they become core at different
+times and we should make an attempt to recognise when this
+change occurs.</p>
+<p>It is nice to pretend that your code is an integral part
+to the business's existence. The truth is a project is always
+initially an experiment and over time it is rewritten
+to more accurate specification as we learn and the business
+learns. Importance is discovered. Your first attempt will
+be done when you know the least about the topic.</p>
+<p>Eventually it might become a core service to many teams
+within the company and at that point it's worth getting
+serious about engineering practices. Front loading your
+engineering standards is making your experimentation more
+expensive.</p>
+<p>If you're treating every project like a personal flower
+garden you'll struggle to recognise when code is dead
+weight. Thank it for its cycles, praise it for the outage it
+caused, the war story and what you have learnt. Then delete it.</p>
+<p>Software is about discovery. Code generation enables us to
+prototype and discover how things work. Prototype for your
+own education not just for the customer. The pace of
+learning has increased and we can discover and experiment
+quicker than ever.</p>
 <div class="footnote">
 <hr />
 <ol>
 <li id="fn:1">
-<p>I wonder if this will ever be adjusted for inflation
-  otherwise the prize might not be that significant by the
-  time the problem is solved.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+<p>Like I did in "Software is planning"&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
@@ -201,7 +218,7 @@ for 25 years, without you realising it.</p>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'understanding-time-and-space.html');
+    loadComments('client_fBaxnE6w', '#comments', 'the-moderate-take.html');
   });
 </script>
 
