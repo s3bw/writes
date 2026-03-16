@@ -54,6 +54,115 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 31 August 2020</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Python Deque</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>This is now my third article on lists. As someone that uses the
+built-in python list on a fairly regular basis, I might have
+built up a false sense of security. I'm pretty
+familiar with these listy-boys. However, recently I found out
+that I was not thinking about them correctly. Readers might smack
+themselves if they're familiar with data-structures but
+don't know how lists are implemented internally.
+The built-in lists are <em>dynamic arrays</em>.</p>
+<p>How else could they optimise a sweet <code>O(1)</code> lookup time
+on indexing: <code>mylist[4]</code>. Especially when analysts are
+trying to avoid the built-in iterator and cursing their code
+with: <code>for i in len(mylist): mylist[i]</code>.</p>
+<p>Another trait an established data-structurer
+with be familiar with when it comes to dynamic arrays
+is that the <code>append</code> and <code>pop</code> methods are an amortised
+<code>O(1)</code>. Amortised; because occasionally you have to suffer
+a cost of realloc(ating) memory across larger arrays.</p>
+<p>Where the list starts to suffer is from <code>pop</code>ing and
+<code>insert</code>ing at arbitrary positions.</p>
+<h3>Linked-List</h3>
+<p>The data-structurer will have had the linked-list
+slammed into their head often enough that it will
+pain them to hear about it again. So theory aside,
+I'll give you that sweet <code>O(1)</code> <code>append</code> and last item <code>pop</code>
+that you expect from a performant <code>Stack</code>.</p>
+<p>Python <code>deque</code> provides a comparatively larger
+performance hit on initialisation to <code>list</code> and
+has poor <code>O(n)</code> performance when you want any arbitrary
+item somewhere in the middle. It does, however, have
+<code>O(1)</code>; <code>popleft</code>, <code>pop</code>, <code>append</code> and <code>appendleft</code>. Due
+to being a doubly-linked list (or double-ended queue to
+get the abbreviation <code>deque</code>)</p>
+<h3>Deque in the wild</h3>
+<p>I saw a nice little quote from an enginneer on Quora:</p>
+<blockquote>
+<p>In 8 years of getting paid to write computer programs,
+this post is the only time I’ve typed ‘deque.’</p>
+</blockquote>
+<p>There are <em>many</em> places <code>deque</code> is used in the stdlib, most
+commonly whenever someone needs a <code>queue</code> or <code>stack</code> such as
+constructing a traceback, parsing python's sytax tree and
+keeping track of context scope.</p>
+<p>My little run-in with <code>deque</code> was using it instead of a
+recursive function to avoid python's</p>
+<div class="highlight"><pre><span></span><code>maximum<span class="w"> </span>recursion<span class="w"> </span>depth<span class="w"> </span>exceeded
+</code></pre></div>
+
+<p>This limit happens to be set to <code>10^4</code>. The solution was
+to add child nodes to a <code>deque</code> and when you were done with
+analysing the current node, <code>popleft</code> the next node.</p>
+<h3>Python Queue</h3>
+<p>You might be tempted to ask, well if <code>deque</code> is for queues.
+What on earth is <code>from queue import Queue</code>.</p>
+<p>These queues are different (although, still using <code>deque</code> under
+the hood). They are optimised for communication across threads,
+which need to involve locking mechanisms and support methods like
+<code>put_nowait()</code> and <code>join()</code>. These are not intended to be used
+as a collective data-structure, hence the lack of support for
+the <code>in</code> operator.</p>
+<h3>More information</h3>
+<p>There is some neat documentation in the cpython repo which
+contains more data-structures and other alternatives to
+the standard built-in <code>list</code>. <a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists">Tools for working with
+lists</a></p>
+<h3>References</h3>
+<ul>
+<li><a href="https://docs.python.org/3.8/faq/design.html#how-are-lists-implemented-in-cpython"><strong>How are lists implemented:</strong></a></li>
+<li>https://stackoverflow.com/a/15121933/3407256</li>
+<li>https://stackoverflow.com/a/23487658/3407256</li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 14:30 | </font>
+                    <a href="python-deque.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Thu 16 April 2020</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -597,124 +706,6 @@ sebastien-gentle-rattata
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Tue 09 October 2018</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Foolscap List Ordering</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p><a href="https://github.com/foxyblue/foolscap">Foolscap</a>
-was my answer to losing all my notes and
-forgetting the exact file I saved it.</p>
-<blockquote>
-<p>Was it on Desktop or next to the project?</p>
-</blockquote>
-<p>Thus I decided to write an application that took
-care of the saving and finding of my notes.</p>
-<h3>Unordered Lists</h3>
-<p>One thing I have taken for granted is the ordering
-of my files in any file system. I only realised
-how important it was after unordered dictionaries
-in python allocated my notes random positions on
-the list.</p>
-<p>The random ordering meant if I have note "M" in
-mind, it could appear anywhere on the list. So my
-eyes would track down <code>n</code> positions in the list to
-find "M". An <code>O(n)</code> operation for my eyes.</p>
-<p>After growing tired (a whole day of <code>O(n)</code> eye
-operations), I wrote the rule to provide me the
-list in alphabetical order. This was great my
-brain automatically switched to doing a binary
-search for note "M". <code>O(log n)</code></p>
-<h3>Ordered Lists</h3>
-<p>Now that finding note "M" was optimised for my
-eyes, my finger had to press the down key until
-my cursor was on the note of choice. This wasn't
-good enough, I was referring to note "M" several
-times a day and the other notes I'd reference once
-a month were adding computation time to my finger.</p>
-<p>This is where I introduced two of the most
-powerful rules of Foolscap. Since I tracked the
-number of views, and time it was last viewed or
-modified I could implement the following ordering:</p>
-<div class="highlight"><pre><span></span><code><span class="mi">1</span><span class="o">:</span><span class="w"> </span><span class="n">LastView</span><span class="sr">/Modified/</span><span class="n">RecentlyCreated</span>
-<span class="mi">2</span><span class="o">:</span><span class="w"> </span><span class="n">MostViewed</span>
-<span class="mi">3</span><span class="o">:</span><span class="w"> </span><span class="mi">2</span><span class="n">ndMostViewed</span>
-<span class="mi">4</span><span class="o">:</span><span class="w"> </span><span class="mi">3</span><span class="n">rdMostViewed</span>
-<span class="mi">5</span><span class="o">:</span><span class="w"> </span><span class="n">A</span>
-<span class="mi">6</span><span class="o">:</span><span class="w"> </span><span class="n">Z</span>
-</code></pre></div>
-
-<p>This was neat!</p>
-<p>I had significantly cut down the amount of time it
-took for me to get to the notes I was using most
-frequently.</p>
-<h3>Search Lists</h3>
-<p>Searching needed a slightly different ordering
-since applying the rules above to your search
-results will likely be meaningless. The
-meaningless will come from your inability to
-predict what will appear in the list to begin
-with.</p>
-<p>Python has a neat method for it's strings.</p>
-<div class="highlight"><pre><span></span><code><span class="n">note_title</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Which I used as the initial search feature. A
-search by the prefix of my note title. To me this
-made sense since my notes are titled by their
-subject matter, e.g. <code>"linux", "elastic"</code>.</p>
-<p>The iteration to this search functionality was to
-include the conditional:</p>
-<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="s2">&quot;text&quot;</span> <span class="ow">in</span> <span class="n">note_title</span><span class="p">:</span>
-</code></pre></div>
-
-<p>I still wanted to provide the user with the result
-of the initial prefix search as the first result
-in the list.</p>
-<p>This is when I fathomed this solution:</p>
-<div class="highlight"><pre><span></span><code><span class="n">search</span> <span class="o">=</span> <span class="p">[</span><span class="n">title</span> <span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">notes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-          <span class="k">if</span> <span class="n">query</span> <span class="ow">in</span> <span class="n">title</span><span class="p">]</span>
-
-<span class="c1"># Sort by the position the query appears in the title</span>
-<span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">title</span><span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
-</code></pre></div>
-
-<p>Pretty
-<a href="https://github.com/foxyblue/foolscap/blob/master/foolscap/meta_data/models.py#L73-L74">neat!</a></p>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 22:37 | </font>
-                    <a href="foolscap-list-ordering.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn9.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn7.html" class="previous-page">Newer ⮕</a>
@@ -843,6 +834,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/learning-from-sales.html">
+                        <span>Learning from Sales</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/the-moderate-take.html">
                         <span>The Moderate Take</span>
@@ -1220,6 +1216,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/practice.html">practice</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/problemsolving.html">problemsolving</a>
