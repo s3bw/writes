@@ -14,12 +14,17 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Python Deque</title>
+        <title>s3bw : Setting up success</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Python Deque"/>
+        <meta property='og:title' content="s3bw : Setting up success"/>
                 <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>Exploring python deque and lists</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : python-deque.html"/>
+        <meta property='og:description' content=" : <p>I have a frightening memory of joining a company and my
+first Pull Request required me to SSH into a
+compute instance and do a <code>git pull</code> in order to release my
+change into production. On that occasion I found that I
+was also deploying more than just my change as the branch
+was not entirely up to date.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : setting-up-success.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -55,86 +60,172 @@
 
 <div class="fullbody">
     <div class="datebody">
-        <h2 class="date">Mon 31 August 2020</h2>
+        <h2 class="date">Mon 13 April 2026</h2>
     </div>
     <div class="blogbodytop"></div>
     <div class="blogbody">
         <div class="titlebody">
             <h3 class="title">
-                <font style="vertical-align: inherit;">Python Deque</font>
+                <font style="vertical-align: inherit;">Setting up success</font>
             </h3>
         </div>
         <div class="main">
-            <p>This is now my third article on lists. As someone that uses the
-built-in python list on a fairly regular basis, I might have
-built up a false sense of security. I'm pretty
-familiar with these listy-boys. However, recently I found out
-that I was not thinking about them correctly. Readers might smack
-themselves if they're familiar with data-structures but
-don't know how lists are implemented internally.
-The built-in lists are <em>dynamic arrays</em>.</p>
-<p>How else could they optimise a sweet <code>O(1)</code> lookup time
-on indexing: <code>mylist[4]</code>. Especially when analysts are
-trying to avoid the built-in iterator and cursing their code
-with: <code>for i in len(mylist): mylist[i]</code>.</p>
-<p>Another trait an established data-structurer
-with be familiar with when it comes to dynamic arrays
-is that the <code>append</code> and <code>pop</code> methods are an amortised
-<code>O(1)</code>. Amortised; because occasionally you have to suffer
-a cost of realloc(ating) memory across larger arrays.</p>
-<p>Where the list starts to suffer is from <code>pop</code>ing and
-<code>insert</code>ing at arbitrary positions.</p>
-<h3>Linked-List</h3>
-<p>The data-structurer will have had the linked-list
-slammed into their head often enough that it will
-pain them to hear about it again. So theory aside,
-I'll give you that sweet <code>O(1)</code> <code>append</code> and last item <code>pop</code>
-that you expect from a performant <code>Stack</code>.</p>
-<p>Python <code>deque</code> provides a comparatively larger
-performance hit on initialisation to <code>list</code> and
-has poor <code>O(n)</code> performance when you want any arbitrary
-item somewhere in the middle. It does, however, have
-<code>O(1)</code>; <code>popleft</code>, <code>pop</code>, <code>append</code> and <code>appendleft</code>. Due
-to being a doubly-linked list (or double-ended queue to
-get the abbreviation <code>deque</code>)</p>
-<h3>Deque in the wild</h3>
-<p>I saw a nice little quote from an enginneer on Quora:</p>
-<blockquote>
-<p>In 8 years of getting paid to write computer programs,
-this post is the only time I’ve typed ‘deque.’</p>
-</blockquote>
-<p>There are <em>many</em> places <code>deque</code> is used in the stdlib, most
-commonly whenever someone needs a <code>queue</code> or <code>stack</code> such as
-constructing a traceback, parsing python's sytax tree and
-keeping track of context scope.</p>
-<p>My little run-in with <code>deque</code> was using it instead of a
-recursive function to avoid python's</p>
-<div class="highlight"><pre><span></span><code>maximum<span class="w"> </span>recursion<span class="w"> </span>depth<span class="w"> </span>exceeded
-</code></pre></div>
-
-<p>This limit happens to be set to <code>10^4</code>. The solution was
-to add child nodes to a <code>deque</code> and when you were done with
-analysing the current node, <code>popleft</code> the next node.</p>
-<h3>Python Queue</h3>
-<p>You might be tempted to ask, well if <code>deque</code> is for queues.
-What on earth is <code>from queue import Queue</code>.</p>
-<p>These queues are different (although, still using <code>deque</code> under
-the hood). They are optimised for communication across threads,
-which need to involve locking mechanisms and support methods like
-<code>put_nowait()</code> and <code>join()</code>. These are not intended to be used
-as a collective data-structure, hence the lack of support for
-the <code>in</code> operator.</p>
-<h3>More information</h3>
-<p>There is some neat documentation in the cpython repo which
-contains more data-structures and other alternatives to
-the standard built-in <code>list</code>. <a href="https://github.com/python/cpython/blob/master/Doc/tutorial/stdlib2.rst#tools-for-working-with-lists">Tools for working with
-lists</a></p>
-<h3>References</h3>
-<ul>
-<li><a href="https://docs.python.org/3.8/faq/design.html#how-are-lists-implemented-in-cpython"><strong>How are lists implemented:</strong></a></li>
-<li>https://stackoverflow.com/a/15121933/3407256</li>
-<li>https://stackoverflow.com/a/23487658/3407256</li>
-</ul>
+            <p>I have a frightening memory of joining a company and my
+first Pull Request required me to SSH into a
+compute instance and do a <code>git pull</code> in order to release my
+change into production. On that occasion I found that I
+was also deploying more than just my change as the branch
+was not entirely up to date.</p>
+<p>There's a battle of trade-offs in software where
+things that sound good on paper are often placed in the
+backlog and forgotten about. Something about the process
+being good enough or being the way things have always been done
+that kicks valid improvements down the priority list.
+It is
+with luck that some are granted the privileged to determine what
+they get to work on and companies will give that chance to
+people that have agency and a strong conviction that
+they know better.</p>
+<h3>How it began</h3>
+<p>The other pattern I noticed at that company was a lack of dev and prod
+environments. Everyone with access to the project had access
+to everything. At this stage the company was on-boarding
+more engineers and data scientists and each of them were
+being granted full access to this monolithic environment.</p>
+<p>It was even more exciting to find legacy projects without
+owners and services being deployed into
+production using the developer's container orchestrator of choice.
+Docker-compose, Mesos, self-hosted kubernetes or GKS.</p>
+<p>The company was growing quickly and it felt like with every
+new developer there was a new way to release changes into
+production. Every fire I was pulled into appeared to
+be running on it's own tech stack and required learning how
+things operated from the ground up. Nothing seemed
+transferable from one project to the next.</p>
+<p>These were the problems I had determined to solve.</p>
+<h3>Taking on the problem</h3>
+<p>Over a week I mustered together a team to tackle this
+complexity. The first thing was a meeting with
+the CTO to propose setting up two new project environments;
+one for dev and one for prod.
+This was an easy request as the CTO was horrified to learn
+that things were being deployed straight to production.</p>
+<p>The next thing to setup was a CI/CD pipeline that is
+generic enough to be used across any service. This meant
+that if you wanted to use our new dev/prod environments your
+servers had to be deployed through our automated pipelines.
+To help the other teams we wrote a service template and helm
+chart that would play nice with CI/CD. This also meant that
+we restricted the deployments to a single hosted container
+orchestrator and allowed us to consolidate all the
+different styles of deployment. As a consequence we were able
+to help across more teams as they ran into issues due to us
+becoming more familiar with kubernetes and not having to
+understand an entirely new workflow or orchestrator.</p>
+<h3>The Fun Didn't Stop</h3>
+<p>We had an outage
+at around 2pm in the afternoon when the company
+lost connection to all the servers in the production
+environment. At this point we had around 5 teams deploying
+code on our stack. An urgent message in one of the
+slack channel asking if anyone had changed something
+revealed that someone had assigned their service a new IP
+range which masked our network bridge to the rest of the
+company.</p>
+<p>This is when we introduced terraform. Any network changes or
+changes to the infrastructure could now be reviewed, reverted
+and audited since it was defined in code.
+If something went wrong we could investigate the changes as
+well as having our infra committed to version control.
+We saw the introduction of terraform improve the adoption of
+our stack as new engineers were frightened to work in the
+other cow-boy projects that had existed on infra configured
+by hand through the web UI.</p>
+<p>We started to notice that other teams were adopting our tech
+stack as they no longer needed to spend time on defining the
+release process as we had a template that they could clone
+and get started almost immediately. Now they could tackle
+business problems instead of weighing up the trade-offs of
+each container orchestrator.</p>
+<p>Our helm chart also helped, we got rid of the mountains
+of bespoke yaml used for several k8s deployments.
+We could also serve engineers with features such as
+specifying cron jobs with very little
+configuration in their service spec.
+Most teams were data intensive and relied on scheduled batch
+processes, so in some cases they had only adopted these cronjobs.</p>
+<p>We also developed a library for new services that
+setup logging, sentry integration, trace IDs and database connections
+and introduced a standard for running database migrations in
+the service template. At this point is was
+quite important to encourage shared ownership of these
+codebases. The more open we were to changes from other teams
+the more likely they were to use it and benefit other
+teams from these changes. This broke down the silos that had
+existed previously, as improvements were no longer isolated to
+a single service but could now be utilised across the company.
+It also meant these libraries were improving without needing
+someone on my team working on it full-time.</p>
+<h3>Clear Sailing</h3>
+<p>My team of 5 was serving 80 engineers and
+data scientists across 12 teams. Upon reflection not everything
+went smoothly. There were people that wanted to
+maintain control over their entire stack, perhaps we were a
+bit stretched and couldn't focus on features they required
+at the time. They might have also had disagreements with
+choices we had made in the service template.</p>
+<p>There were also features we developed that didn't get adopted, which
+makes sense to me now. These were things that
+generally slowed people down for very little benefit.
+Contract testing is an example of
+this. On paper having clear contracts between services and
+having a means to define and test these contracts sounds like
+a great idea. The nature of the services at the time, being
+cronjobs or at most two endpoints meant that their interfaces
+weren't growing in complexity and introducing this step in
+the build process wasn't a big enough bang for their buck.</p>
+<p>Service to service authentication was another feature that
+we didn't need at that time. Our services were internal and in a VPC.
+Obviously if we were compromised not being able to send
+requests to the servers in that network would be a great
+thing to have, but I think it would have been better to sink
+time into features that would speed up the adoption of our
+workflow instead of features that added friction. Not to say
+we didn't need this auth layer but we could have potentially
+address this at a later point.</p>
+<h3>Improvements</h3>
+<p>There are improvements to the workflows that I
+would have enjoyed introducing. For example; using a
+CI/CD server that didn't rely on defining our workflows in
+Kotlin. I feel that Kotlin added a barrier to
+contributions and we didn't need this. There
+are other CI/CD tools like gocd.org and concourse-ci.org
+which have an easier way of defining workflows. Although
+now-a-days we can get a lot done with github workflows and
+reduce the reliance on having a CI server.</p>
+<p>We attempted introducing Istio, however, at the time this was an
+aspirational feature but if we had succeeded we would have
+allowed our teams to run canary deployments, which would
+allow them to divert a small amount of traffic to a new
+version of their service and if anything goes wrong, it
+avoids rolling out the broken version to all customers.</p>
+<p>I still seem to come across companies that only give
+leadership the ability to deploy to production and changes
+go out once mid week. When this is the practice many changes
+tend to accumulate and when they're released everything goes
+out as a big-bang deployment. When something breaks in these
+scenarios it's often harder to pinpoint what went wrong.
+Smaller frequent deployments grants autonomy and shortens
+the feedback loop which speeds up a developer finding out what
+went wrong, releases also tend to be less
+disruptive and engineer's have a higher confidence in the changes
+they release into the world.</p>
+<p>The biggest take away from my experience in leading an infra
+team is that we learn by making mistakes, so we shouldn't try
+reduce the number of mistakes we make. We must focus on
+reducing the cost of the mistake through incremental change,
+rollbacks and observability. Many companies and teams try to
+make no mistake at all and in doing so they cost themselves growth.</p>
         </div>
 
     </div>
@@ -144,7 +235,7 @@ lists</a></p>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'python-deque.html');
+    loadComments('client_fBaxnE6w', '#comments', 'setting-up-success.html');
   });
 </script>
 

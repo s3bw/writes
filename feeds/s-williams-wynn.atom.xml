@@ -1,5 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-03-16T12:05:00+00:00</updated><entry><title>Learning from Sales</title><link href="https://s3bw.github.io/writes/learning-from-sales.html" rel="alternate"/><published>2026-03-16T12:05:00+00:00</published><updated>2026-03-16T12:05:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-03-16:/writes/learning-from-sales.html</id><summary type="html">&lt;p&gt;What software engineers can learn from sales&lt;/p&gt;</summary><content type="html">&lt;p&gt;It is not the job of sales to find customers with problems
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-04-13T12:00:00+01:00</updated><entry><title>Setting up success</title><link href="https://s3bw.github.io/writes/setting-up-success.html" rel="alternate"/><published>2026-04-13T12:00:00+01:00</published><updated>2026-04-13T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-13:/writes/setting-up-success.html</id><summary type="html">&lt;p&gt;I have a frightening memory of joining a company and my
+first Pull Request required me to SSH into a
+compute instance and do a &lt;code&gt;git pull&lt;/code&gt; in order to release my
+change into production. On that occasion I found that I
+was also deploying more than just my change as the branch
+was not entirely up to date.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have a frightening memory of joining a company and my
+first Pull Request required me to SSH into a
+compute instance and do a &lt;code&gt;git pull&lt;/code&gt; in order to release my
+change into production. On that occasion I found that I
+was also deploying more than just my change as the branch
+was not entirely up to date.&lt;/p&gt;
+&lt;p&gt;There's a battle of trade-offs in software where
+things that sound good on paper are often placed in the
+backlog and forgotten about. Something about the process
+being good enough or being the way things have always been done
+that kicks valid improvements down the priority list.
+It is
+with luck that some are granted the privileged to determine what
+they get to work on and companies will give that chance to
+people that have agency and a strong conviction that
+they know better.&lt;/p&gt;
+&lt;h3&gt;How it began&lt;/h3&gt;
+&lt;p&gt;The other pattern I noticed at that company was a lack of dev and prod
+environments. Everyone with access to the project had access
+to everything. At this stage the company was on-boarding
+more engineers and data scientists and each of them were
+being granted full access to this monolithic environment.&lt;/p&gt;
+&lt;p&gt;It was even more exciting to find legacy projects without
+owners and services being deployed into
+production using the developer's container orchestrator of choice.
+Docker-compose, Mesos, self-hosted kubernetes or GKS.&lt;/p&gt;
+&lt;p&gt;The company was growing quickly and it felt like with every
+new developer there was a new way to release changes into
+production. Every fire I was pulled into appeared to
+be running on it's own tech stack and required learning how
+things operated from the ground up. Nothing seemed
+transferable from one project to the next.&lt;/p&gt;
+&lt;p&gt;These were the problems I had determined to solve.&lt;/p&gt;
+&lt;h3&gt;Taking on the problem&lt;/h3&gt;
+&lt;p&gt;Over a week I mustered together a team to tackle this
+complexity. The first thing was a meeting with
+the CTO to propose setting up two new project environments;
+one for dev and one for prod.
+This was an easy request as the CTO was horrified to learn
+that things were being deployed straight to production.&lt;/p&gt;
+&lt;p&gt;The next thing to setup was a CI/CD pipeline that is
+generic enough to be used across any service. This meant
+that if you wanted to use our new dev/prod environments your
+servers had to be deployed through our automated pipelines.
+To help the other teams we wrote a service template and helm
+chart that would play nice with CI/CD. This also meant that
+we restricted the deployments to a single hosted container
+orchestrator and allowed us to consolidate all the
+different styles of deployment. As a consequence we were able
+to help across more teams as they ran into issues due to us
+becoming more familiar with kubernetes and not having to
+understand an entirely new workflow or orchestrator.&lt;/p&gt;
+&lt;h3&gt;The Fun Didn't Stop&lt;/h3&gt;
+&lt;p&gt;We had an outage
+at around 2pm in the afternoon when the company
+lost connection to all the servers in the production
+environment. At this point we had around 5 teams deploying
+code on our stack. An urgent message in one of the
+slack channel asking if anyone had changed something
+revealed that someone had assigned their service a new IP
+range which masked our network bridge to the rest of the
+company.&lt;/p&gt;
+&lt;p&gt;This is when we introduced terraform. Any network changes or
+changes to the infrastructure could now be reviewed, reverted
+and audited since it was defined in code.
+If something went wrong we could investigate the changes as
+well as having our infra committed to version control.
+We saw the introduction of terraform improve the adoption of
+our stack as new engineers were frightened to work in the
+other cow-boy projects that had existed on infra configured
+by hand through the web UI.&lt;/p&gt;
+&lt;p&gt;We started to notice that other teams were adopting our tech
+stack as they no longer needed to spend time on defining the
+release process as we had a template that they could clone
+and get started almost immediately. Now they could tackle
+business problems instead of weighing up the trade-offs of
+each container orchestrator.&lt;/p&gt;
+&lt;p&gt;Our helm chart also helped, we got rid of the mountains
+of bespoke yaml used for several k8s deployments.
+We could also serve engineers with features such as
+specifying cron jobs with very little
+configuration in their service spec.
+Most teams were data intensive and relied on scheduled batch
+processes, so in some cases they had only adopted these cronjobs.&lt;/p&gt;
+&lt;p&gt;We also developed a library for new services that
+setup logging, sentry integration, trace IDs and database connections
+and introduced a standard for running database migrations in
+the service template. At this point is was
+quite important to encourage shared ownership of these
+codebases. The more open we were to changes from other teams
+the more likely they were to use it and benefit other
+teams from these changes. This broke down the silos that had
+existed previously, as improvements were no longer isolated to
+a single service but could now be utilised across the company.
+It also meant these libraries were improving without needing
+someone on my team working on it full-time.&lt;/p&gt;
+&lt;h3&gt;Clear Sailing&lt;/h3&gt;
+&lt;p&gt;My team of 5 was serving 80 engineers and
+data scientists across 12 teams. Upon reflection not everything
+went smoothly. There were people that wanted to
+maintain control over their entire stack, perhaps we were a
+bit stretched and couldn't focus on features they required
+at the time. They might have also had disagreements with
+choices we had made in the service template.&lt;/p&gt;
+&lt;p&gt;There were also features we developed that didn't get adopted, which
+makes sense to me now. These were things that
+generally slowed people down for very little benefit.
+Contract testing is an example of
+this. On paper having clear contracts between services and
+having a means to define and test these contracts sounds like
+a great idea. The nature of the services at the time, being
+cronjobs or at most two endpoints meant that their interfaces
+weren't growing in complexity and introducing this step in
+the build process wasn't a big enough bang for their buck.&lt;/p&gt;
+&lt;p&gt;Service to service authentication was another feature that
+we didn't need at that time. Our services were internal and in a VPC.
+Obviously if we were compromised not being able to send
+requests to the servers in that network would be a great
+thing to have, but I think it would have been better to sink
+time into features that would speed up the adoption of our
+workflow instead of features that added friction. Not to say
+we didn't need this auth layer but we could have potentially
+address this at a later point.&lt;/p&gt;
+&lt;h3&gt;Improvements&lt;/h3&gt;
+&lt;p&gt;There are improvements to the workflows that I
+would have enjoyed introducing. For example; using a
+CI/CD server that didn't rely on defining our workflows in
+Kotlin. I feel that Kotlin added a barrier to
+contributions and we didn't need this. There
+are other CI/CD tools like gocd.org and concourse-ci.org
+which have an easier way of defining workflows. Although
+now-a-days we can get a lot done with github workflows and
+reduce the reliance on having a CI server.&lt;/p&gt;
+&lt;p&gt;We attempted introducing Istio, however, at the time this was an
+aspirational feature but if we had succeeded we would have
+allowed our teams to run canary deployments, which would
+allow them to divert a small amount of traffic to a new
+version of their service and if anything goes wrong, it
+avoids rolling out the broken version to all customers.&lt;/p&gt;
+&lt;p&gt;I still seem to come across companies that only give
+leadership the ability to deploy to production and changes
+go out once mid week. When this is the practice many changes
+tend to accumulate and when they're released everything goes
+out as a big-bang deployment. When something breaks in these
+scenarios it's often harder to pinpoint what went wrong.
+Smaller frequent deployments grants autonomy and shortens
+the feedback loop which speeds up a developer finding out what
+went wrong, releases also tend to be less
+disruptive and engineer's have a higher confidence in the changes
+they release into the world.&lt;/p&gt;
+&lt;p&gt;The biggest take away from my experience in leading an infra
+team is that we learn by making mistakes, so we shouldn't try
+reduce the number of mistakes we make. We must focus on
+reducing the cost of the mistake through incremental change,
+rollbacks and observability. Many companies and teams try to
+make no mistake at all and in doing so they cost themselves growth.&lt;/p&gt;</content><category term="software"/><category term="software"/><category term="cicd"/></entry><entry><title>Learning from Sales</title><link href="https://s3bw.github.io/writes/learning-from-sales.html" rel="alternate"/><published>2026-03-16T12:05:00+00:00</published><updated>2026-03-16T12:05:00+00:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-03-16:/writes/learning-from-sales.html</id><summary type="html">&lt;p&gt;What software engineers can learn from sales&lt;/p&gt;</summary><content type="html">&lt;p&gt;It is not the job of sales to find customers with problems
 that we have solved, but also to find the problems that we can
 potentially solve. The role is one part customer relations
 and one part business development.&lt;/p&gt;
