@@ -54,6 +54,94 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 04 August 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">How the Blog Works</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>There are a few parts that make up the blog, the static site
+generator, the API and the repo that hosts all the HTML.
+This article provides an overview of these pieces and how
+they're all brought together to create the website.</p>
+<h3>Framework</h3>
+<p>The framework is called <a href="https://getpelican.com/">Pelican</a> a
+python based static site generator. Each post is written in
+markdown which starts with meta tags such as <code>Title</code> and
+<code>Category</code>. Pelican then uses this and a custom theme
+template to create HTML. The theme uses jinja templating to
+construct template HTML pages.</p>
+<p>Pelican also provides a config file which I have used for
+feature flags and to enable extensions. The extensions I've enabled
+include footnotes and code-highlighting. Additionally
+Pelican hosts a local version of my blog which it recompiles
+whenever it detects a change to any of the files.</p>
+<p>In the config there's a list which contains all the links
+rendered in the sidebar. Extending or updating these links
+is only a matter of making changes to this list.</p>
+<p>There are two directories <code>inprogress/</code> and <code>content/</code>.
+<code>inprogress/</code> stores drafts that are half complete,
+completed or minor thoughts for potential blog posts. When
+these are ready to be published they are moved over to
+<code>content/</code> and when these are pushed to the repo, using a
+github action, pelican automatically renders the entire blog
+into HTML. The action then creates a commit for any changes
+and pushes the changes to a public repo.</p>
+<p>The public repo contains the entire rendering of the blog
+and theme. Relying on Github pages, this is then hosted.</p>
+<h3>The CV</h3>
+<p>Within the same repo as the drafts and published content
+there's a CV written in Latex. This latex file can be
+rendered to a PDF. I have a bash script which allows me to
+recompile this PDF whenever changes are made to the Latex
+script.</p>
+<h3>The API</h3>
+<p>There's an API that contains edge functions written in Go. These
+serve requests for the comment sections that sit below each blog post.
+There are three endpoints, one fetches the count of comments
+given a list of article URLs. This is used on index pages.</p>
+<p>There's an endpoint to fetch comments given an article URL
+and an endpoint to post a comment to an article URL.
+The repo containing these endpoints has an action which
+deploys updates on each new commit.</p>
+<p>Finally the API handles the mailing list. It handles
+registering new emails, verifying the email is valid and
+lastly triggers an edge function to look for new posts using
+the blog's RSS feed in order to send updates to recipients
+in the mailing list.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:04 | </font>
+                    <a href="how-the-blog-works.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 28 July 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -743,182 +831,6 @@ rows between certain ranges.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 30 June 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Low Latency Computation</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Anything that loads faster than 200ms is instantaneous for
-humans, anything slower and we would perceive the delay.
-Some systems are built to respond quicker than this,
-business cost can be sensitive to latency and every ms can
-make a difference.</p>
-<p>How do we develop highly performant systems? I happened to
-share a train ride with Mark Shannon, who at the time was
-leading a team at Microsoft that had one goal: Make Python
-Fast.</p>
-<p>I asked him, how does one make code more performant? To
-which he responded.</p>
-<blockquote>
-<p>Make it do less.</p>
-</blockquote>
-<p>Here's what doing less looks like:</p>
-<h3>Loop Invariant</h3>
-<p>A simple example of doing less in order to achieve better
-performance is with loop invariant conditions.</p>
-<p>We loop over arrays while we code and make calls to other
-functions while looping. During a refactor or while we move
-code around we might not realise that some of the variables
-we are computing are constant.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>You'll notice in the example that I am looping over the list
-<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
-is computed with the integer <code>n</code> which is consistent within
-the scope of this function. If we move the computation of
-<code>beta</code> to a point before we've entered loop we avoid having
-to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Now <code>beta</code> is computed at most once within this method
-scope, we have essentially achieved doing less. If the
-<code>compute_beta</code> method incurs an expensive overhead and we
-are looking at a lengthy <code>trades</code> list this subtle oversight
-would have a significant impact on our latency.</p>
-<h3>Python</h3>
-<p>There are several layers of abstraction in Python and there
-are ways we can code that allow us to utilise computation in
-C more effectively. One such example of this: using list
-comprehension over a vanilla for-loop.</p>
-<p>If we wish to
-understand the number of steps the machine is doing
-for a method, Python allows us to disassemble bytecode using
-<code>import dis</code>. You might notice that there are additional
-<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
-to a list comprehension avoids this overhead and allows us
-to do less.</p>
-<h3>Databases</h3>
-<p>Relying on external systems can be expensive, in some
-cases we might query the same system several times in
-order to complete an operation. If we have a distributed system
-or intend to scale our server horizontally we are increasing
-the number of things that open and close connections to the
-database. Each time we open/close a connection the CPU has
-to process these instructions, this overhead can be
-significant when we are working in low latency environments.
-To get around this we introduce a connection pool between
-the database and our server, the connection pool manages
-long lived connections on the database and frees up the
-database to focus on database things.</p>
-<p>A common anti-pattern involving a database is having your
-ORM make N+1 queries. For this to occur we have a 1-many
-entity relationship. If we ask the database to return a
-group of n countries and then for each country we ask for
-all cities in that country we are making <code>N</code> (number of
-countries in our initial query) <code>+ 1</code> (the initial query)
-total requests to the database. These can be tricky to spot
-since the individual query could be performant, but the
-accumulative overhead and latency of all these queries can
-cause problems.</p>
-<p>We get around this by either asking for all countries and
-then ask for all cities given a set of country ids and
-perform the mapping in memory on the server, or we can
-increase the complexity of the query using a JOIN and allow
-the database to make the mapping. Either way we avoid the
-back and forth overhead of making <code>N+1</code> queries, effectively
-doing less.</p>
-<h3>When we can't do less</h3>
-<p>Sometimes we can't do less, but we can decide when work is
-done. There are situations that allow us to pre compute
-results and provide performant computation at the cost of a
-slower start time.</p>
-<p>Chess programming is an area which relies on high
-performance, the quick our program the further into the
-future we can look on each move during the game. One way we
-speed up a chess engine is by precomputing the movesets for
-every piece on the board for every possible position they
-might be in before the game starts. This allows us to look
-up all possible board positions for a piece during the game
-instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
-solver</a>
-he actually computes a pattern matrix for each word and
-saves it to a file in order to avoid having to incur the
-overhead on each execution of his wordle solver.</p>
-<h3>Constant Folding</h3>
-<p>Lastly there's an interesting optimisation that compilers
-make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
-Folding.</a></p>
-<p>When python is interpreted it parses the AST before
-executing. During this AST construction it finds expressions
-who's outcome is constant and computes the constant at this
-point instead of computing the expression every time it is
-referenced. As an example the variable <code>x = 24
-* 60</code> will be converted to <code>1440</code> before compiling the
-bytecode instructs for the machine.</p>
-<p>So in all cases, if we want a computer to be highly
-performant we just have to make it do less.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
-</ul>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>More on this will be explained when I write my second
-  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
-                    <a href="low-latency-computation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/index5.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/index3.html" class="previous-page">Newer ⮕</a>
@@ -1047,6 +959,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/probabilistic-data-structures.html">
+                        <span>Probabilistic Data Structures</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/setting-up-success.html">
                         <span>Setting up success</span>
@@ -1368,6 +1285,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/datastructures.html">datastructures</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/design.html">design</a>

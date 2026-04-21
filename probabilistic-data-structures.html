@@ -14,12 +14,18 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw</title>
+        <title>s3bw : Probabilistic Data Structures</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw"/>
+        <meta property='og:title' content="s3bw : Probabilistic Data Structures"/>
                 <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=""/>
-        <meta property='og:url' content="https://s3bw.github.io/writes"/>
+        <meta property='og:description' content=" : <p>Keeping track of a constant set of items is fairly straight
+forward, however when the number of items start to grow
+larger than the capacity of a single machine things
+get expensive. There's a way around this and it's to rely on
+approximations instead of concrete numbers. There are two
+probabilistic data structures I'd like to cover in this
+post; Bloom Filters and Count-Min Sketch.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : probabilistic-data-structures.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -49,162 +55,153 @@
 
           <div id="content">
             <div id="blog">
+<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
+<article>
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 30 June 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Low Latency Computation</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>Anything that loads faster than 200ms is instantaneous for
-humans, anything slower and we would perceive the delay.
-Some systems are built to respond quicker than this,
-business cost can be sensitive to latency and every ms can
-make a difference.</p>
-<p>How do we develop highly performant systems? I happened to
-share a train ride with Mark Shannon, who at the time was
-leading a team at Microsoft that had one goal: Make Python
-Fast.</p>
-<p>I asked him, how does one make code more performant? To
-which he responded.</p>
-<blockquote>
-<p>Make it do less.</p>
-</blockquote>
-<p>Here's what doing less looks like:</p>
-<h3>Loop Invariant</h3>
-<p>A simple example of doing less in order to achieve better
-performance is with loop invariant conditions.</p>
-<p>We loop over arrays while we code and make calls to other
-functions while looping. During a refactor or while we move
-code around we might not realise that some of the variables
-we are computing are constant.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>You'll notice in the example that I am looping over the list
-<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
-is computed with the integer <code>n</code> which is consistent within
-the scope of this function. If we move the computation of
-<code>beta</code> to a point before we've entered loop we avoid having
-to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
-        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
-
-    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
-</code></pre></div>
-
-<p>Now <code>beta</code> is computed at most once within this method
-scope, we have essentially achieved doing less. If the
-<code>compute_beta</code> method incurs an expensive overhead and we
-are looking at a lengthy <code>trades</code> list this subtle oversight
-would have a significant impact on our latency.</p>
-<h3>Python</h3>
-<p>There are several layers of abstraction in Python and there
-are ways we can code that allow us to utilise computation in
-C more effectively. One such example of this: using list
-comprehension over a vanilla for-loop.</p>
-<p>If we wish to
-understand the number of steps the machine is doing
-for a method, Python allows us to disassemble bytecode using
-<code>import dis</code>. You might notice that there are additional
-<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
-to a list comprehension avoids this overhead and allows us
-to do less.</p>
-<h3>Databases</h3>
-<p>Relying on external systems can be expensive, in some
-cases we might query the same system several times in
-order to complete an operation. If we have a distributed system
-or intend to scale our server horizontally we are increasing
-the number of things that open and close connections to the
-database. Each time we open/close a connection the CPU has
-to process these instructions, this overhead can be
-significant when we are working in low latency environments.
-To get around this we introduce a connection pool between
-the database and our server, the connection pool manages
-long lived connections on the database and frees up the
-database to focus on database things.</p>
-<p>A common anti-pattern involving a database is having your
-ORM make N+1 queries. For this to occur we have a 1-many
-entity relationship. If we ask the database to return a
-group of n countries and then for each country we ask for
-all cities in that country we are making <code>N</code> (number of
-countries in our initial query) <code>+ 1</code> (the initial query)
-total requests to the database. These can be tricky to spot
-since the individual query could be performant, but the
-accumulative overhead and latency of all these queries can
-cause problems.</p>
-<p>We get around this by either asking for all countries and
-then ask for all cities given a set of country ids and
-perform the mapping in memory on the server, or we can
-increase the complexity of the query using a JOIN and allow
-the database to make the mapping. Either way we avoid the
-back and forth overhead of making <code>N+1</code> queries, effectively
-doing less.</p>
-<h3>When we can't do less</h3>
-<p>Sometimes we can't do less, but we can decide when work is
-done. There are situations that allow us to pre compute
-results and provide performant computation at the cost of a
-slower start time.</p>
-<p>Chess programming is an area which relies on high
-performance, the quick our program the further into the
-future we can look on each move during the game. One way we
-speed up a chess engine is by precomputing the movesets for
-every piece on the board for every possible position they
-might be in before the game starts. This allows us to look
-up all possible board positions for a piece during the game
-instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
-solver</a>
-he actually computes a pattern matrix for each word and
-saves it to a file in order to avoid having to incur the
-overhead on each execution of his wordle solver.</p>
-<h3>Constant Folding</h3>
-<p>Lastly there's an interesting optimisation that compilers
-make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
-Folding.</a></p>
-<p>When python is interpreted it parses the AST before
-executing. During this AST construction it finds expressions
-who's outcome is constant and computes the constant at this
-point instead of computing the expression every time it is
-referenced. As an example the variable <code>x = 24
-* 60</code> will be converted to <code>1440</code> before compiling the
-bytecode instructs for the machine.</p>
-<p>So in all cases, if we want a computer to be highly
-performant we just have to make it do less.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
-</ul>
-<div class="footnote">
-<hr />
+<div class="fullbody">
+    <div class="datebody">
+        <h2 class="date">Tue 21 April 2026</h2>
+    </div>
+    <div class="blogbodytop"></div>
+    <div class="blogbody">
+        <div class="titlebody">
+            <h3 class="title">
+                <font style="vertical-align: inherit;">Probabilistic Data Structures</font>
+            </h3>
+        </div>
+        <div class="main">
+            <p>Keeping track of a constant set of items is fairly straight
+forward, however when the number of items start to grow
+larger than the capacity of a single machine things
+get expensive. There's a way around this and it's to rely on
+approximations instead of concrete numbers. There are two
+probabilistic data structures I'd like to cover in this
+post; Bloom Filters and Count-Min Sketch.</p>
+<p>Generally these are applied when space is a constraint and
+you need predictable and consistent size. If you're counting
+or caching at scale there might be a chance that your
+database is relying on probability instead of certainty.</p>
+<h3>Hash Tables</h3>
+<p>A fundamental data structure in computer science is the hash
+table, useful in caching and counting, as well as
+representing objects in software.</p>
+<p>A large hash table is often useful when you need a key value
+store such as one that would map user ID to a profile
+picture so that every request for a profile picture is
+speedy since hash tables operate in 0(1) for look ups.</p>
+<p>This is done by having a number of buckets and a function
+that consistently converts a key to the index of a bucket.
+This is called the hash function. A cache or a key
+value store only requires computing the hash to locate the
+data.</p>
+<p>If we were to hash the key "fox" (<code>hash("fox")</code>) and the
+resulting output was <code>5</code> we would know our data is in bucket
+<code>5</code>.</p>
+<p><img alt="Hash Tables" src="static/2026-04-21/hash_lookup.gif" /></p>
+<p>Hash functions won't compute unique hashes and occasionally
+they can collide with existing keys stored in the hash
+table. So both <code>hash("fox")</code> and <code>hash("cat")</code> might end up
+pointing to bucket <code>5</code>. They can reduce the chance of this
+happening by increasing the number of buckets. Having 10
+keys and 1 million buckets means the chance of collision
+becomes extremely small.</p>
+<p>In practice hash tables store linked lists in the bucket
+locations and when a collision occurs they iterate through
+the list until it finds the key. When storing a new key it
+appends to the end of the list if it's not there already.
+Redis uses this technique in addition to resizing the
+number of buckets dynamically
+in-order-to keep the length of these lists to a minimum.</p>
+<p>We can use hash tables to determine if we've seen something
+before, by storing keys as we see them, if the key exists in
+the hash table we know that this isn't the first time we've
+seen the item.</p>
+<h3>Bloom Filters</h3>
+<p>When we start dealing with data streams or billions of
+users, storing everything in memory can be expensive.
+Instead we can reduce the total
+memory consumed by using a probabilistic data
+structure; the bloom filter.</p>
+<p>Bloom filters rely on approximate set inclusion. So instead
+of yes this item is in the set or no it isn't; we get the
+following outcome:</p>
 <ol>
-<li id="fn:1">
-<p>More on this will be explained when I write my second
-  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
+<li>This item is not in the set.</li>
+<li>This item might be in the set.</li>
 </ol>
-</div>
-                </div>
-            </div>
+<p>This is done by having a consistent number of buckets and
+using more than one hash function. As you can see in the
+illustration below, the key is hashed three times and each
+resultant bucket is set to 1.</p>
+<p><img alt="Bloom Filters" src="static/2026-04-21/bloom_filter.gif" /></p>
+<p>When items are queried we will know for sure that we haven't
+seen it before if any of the buckets return a 0. However if
+all the buckets result in a collision then we know that we
+<em>might</em> have seen it before.</p>
+<p>Both the number of buckets and hashes can be configured
+which allows us to trade more space for a reduction in
+the probability that we return false negatives. (We might
+have seen it, when we haven't).</p>
+<p>The bloom filter is applied in situations where space is
+limited and keeping track of every element isn't an option.
+If we wish to avoid making expensive queries for data that
+doesn't exist; a bloom filter can help us reduce the number
+of expensive queries.</p>
+<p>Browsers have used bloom filters in the past by providing a
+preset filter of malicious URLs. When we visit a URL and
+it's not included in the filter we can proceed however if it
+<em>might</em> be in the filter we can query a server to
+help determine if it's safe or not. We avoid this query on
+the majority of URLs as most URLs are safe.</p>
+<h3>Count-Min Sketch</h3>
+<p>The last probabilistic data structure I'd like to cover is
+the Count-Min Sketch, like a bloom filter it has multiple
+hash functions, unlike the bloom filter it tracks the number
+of times a key lands in a bucket.</p>
+<p>When queried it hashes the key and returns the minimum from
+the counts stored in the corresponding buckets. This allows
+us to determine an upper bound estimate for the number of
+times we've seen a key.</p>
+<p><img alt="Count Min Sketch" src="static/2026-04-21/cm_sketch.gif" /></p>
+<p>Count-Min Sketch is useful in large scale data processing,
+for example if we are interested in tracking the top-k
+searches we can do this normally by using a heap. If we have
+size restrictions and need to use constant space instead of
+<code>O(n)</code> space we can put the sketch in front of the heap.</p>
+<p>Heap inserts are done in <code>log(n)</code> time which we can avoid
+doing if we know the item shouldn't be in the heap. Items
+that appear infrequently are then discarded before even
+making it to the heap. We do this by querying the sketch for
+an upper bound of the new item, for example 3, and if the kth
+item in our heap has 12 appearances then we can avoid adding
+the new item to the heap.</p>
+<p>I have found it interesting that at scale we can use
+probability to optimise our systems but it also requires an
+understanding of how the data is distributed. These data
+structures work well on long tail distributions but when
+all items are as frequent as each other these become less
+useful. It would be interesting to discover how systems can
+map to different distributions of data and how these
+structures are set up to solve the given problems.</p>
         </div>
 
+    </div>
 
+    <div id="comments"></div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    loadComments('client_fBaxnE6w', '#comments', 'probabilistic-data-structures.html');
+  });
+</script>
+
+
+</div>
+
+
+</article>
             </div>
           </div>
 

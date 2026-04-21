@@ -1,5 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-04-13T12:00:00+01:00</updated><entry><title>Setting up success</title><link href="https://s3bw.github.io/writes/setting-up-success.html" rel="alternate"/><published>2026-04-13T12:00:00+01:00</published><updated>2026-04-13T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-13:/writes/setting-up-success.html</id><summary type="html">&lt;p&gt;I have a frightening memory of joining a company and my
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-04-21T12:00:00+01:00</updated><entry><title>Probabilistic Data Structures</title><link href="https://s3bw.github.io/writes/probabilistic-data-structures.html" rel="alternate"/><published>2026-04-21T12:00:00+01:00</published><updated>2026-04-21T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-21:/writes/probabilistic-data-structures.html</id><summary type="html">&lt;p&gt;Keeping track of a constant set of items is fairly straight
+forward, however when the number of items start to grow
+larger than the capacity of a single machine things
+get expensive. There's a way around this and it's to rely on
+approximations instead of concrete numbers. There are two
+probabilistic data structures I'd like to cover in this
+post; Bloom Filters and Count-Min Sketch.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Keeping track of a constant set of items is fairly straight
+forward, however when the number of items start to grow
+larger than the capacity of a single machine things
+get expensive. There's a way around this and it's to rely on
+approximations instead of concrete numbers. There are two
+probabilistic data structures I'd like to cover in this
+post; Bloom Filters and Count-Min Sketch.&lt;/p&gt;
+&lt;p&gt;Generally these are applied when space is a constraint and
+you need predictable and consistent size. If you're counting
+or caching at scale there might be a chance that your
+database is relying on probability instead of certainty.&lt;/p&gt;
+&lt;h3&gt;Hash Tables&lt;/h3&gt;
+&lt;p&gt;A fundamental data structure in computer science is the hash
+table, useful in caching and counting, as well as
+representing objects in software.&lt;/p&gt;
+&lt;p&gt;A large hash table is often useful when you need a key value
+store such as one that would map user ID to a profile
+picture so that every request for a profile picture is
+speedy since hash tables operate in 0(1) for look ups.&lt;/p&gt;
+&lt;p&gt;This is done by having a number of buckets and a function
+that consistently converts a key to the index of a bucket.
+This is called the hash function. A cache or a key
+value store only requires computing the hash to locate the
+data.&lt;/p&gt;
+&lt;p&gt;If we were to hash the key "fox" (&lt;code&gt;hash("fox")&lt;/code&gt;) and the
+resulting output was &lt;code&gt;5&lt;/code&gt; we would know our data is in bucket
+&lt;code&gt;5&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Hash Tables" src="static/2026-04-21/hash_lookup.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;Hash functions won't compute unique hashes and occasionally
+they can collide with existing keys stored in the hash
+table. So both &lt;code&gt;hash("fox")&lt;/code&gt; and &lt;code&gt;hash("cat")&lt;/code&gt; might end up
+pointing to bucket &lt;code&gt;5&lt;/code&gt;. They can reduce the chance of this
+happening by increasing the number of buckets. Having 10
+keys and 1 million buckets means the chance of collision
+becomes extremely small.&lt;/p&gt;
+&lt;p&gt;In practice hash tables store linked lists in the bucket
+locations and when a collision occurs they iterate through
+the list until it finds the key. When storing a new key it
+appends to the end of the list if it's not there already.
+Redis uses this technique in addition to resizing the
+number of buckets dynamically
+in-order-to keep the length of these lists to a minimum.&lt;/p&gt;
+&lt;p&gt;We can use hash tables to determine if we've seen something
+before, by storing keys as we see them, if the key exists in
+the hash table we know that this isn't the first time we've
+seen the item.&lt;/p&gt;
+&lt;h3&gt;Bloom Filters&lt;/h3&gt;
+&lt;p&gt;When we start dealing with data streams or billions of
+users, storing everything in memory can be expensive.
+Instead we can reduce the total
+memory consumed by using a probabilistic data
+structure; the bloom filter.&lt;/p&gt;
+&lt;p&gt;Bloom filters rely on approximate set inclusion. So instead
+of yes this item is in the set or no it isn't; we get the
+following outcome:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;This item is not in the set.&lt;/li&gt;
+&lt;li&gt;This item might be in the set.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;This is done by having a consistent number of buckets and
+using more than one hash function. As you can see in the
+illustration below, the key is hashed three times and each
+resultant bucket is set to 1.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Bloom Filters" src="static/2026-04-21/bloom_filter.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;When items are queried we will know for sure that we haven't
+seen it before if any of the buckets return a 0. However if
+all the buckets result in a collision then we know that we
+&lt;em&gt;might&lt;/em&gt; have seen it before.&lt;/p&gt;
+&lt;p&gt;Both the number of buckets and hashes can be configured
+which allows us to trade more space for a reduction in
+the probability that we return false negatives. (We might
+have seen it, when we haven't).&lt;/p&gt;
+&lt;p&gt;The bloom filter is applied in situations where space is
+limited and keeping track of every element isn't an option.
+If we wish to avoid making expensive queries for data that
+doesn't exist; a bloom filter can help us reduce the number
+of expensive queries.&lt;/p&gt;
+&lt;p&gt;Browsers have used bloom filters in the past by providing a
+preset filter of malicious URLs. When we visit a URL and
+it's not included in the filter we can proceed however if it
+&lt;em&gt;might&lt;/em&gt; be in the filter we can query a server to
+help determine if it's safe or not. We avoid this query on
+the majority of URLs as most URLs are safe.&lt;/p&gt;
+&lt;h3&gt;Count-Min Sketch&lt;/h3&gt;
+&lt;p&gt;The last probabilistic data structure I'd like to cover is
+the Count-Min Sketch, like a bloom filter it has multiple
+hash functions, unlike the bloom filter it tracks the number
+of times a key lands in a bucket.&lt;/p&gt;
+&lt;p&gt;When queried it hashes the key and returns the minimum from
+the counts stored in the corresponding buckets. This allows
+us to determine an upper bound estimate for the number of
+times we've seen a key.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Count Min Sketch" src="static/2026-04-21/cm_sketch.gif" /&gt;&lt;/p&gt;
+&lt;p&gt;Count-Min Sketch is useful in large scale data processing,
+for example if we are interested in tracking the top-k
+searches we can do this normally by using a heap. If we have
+size restrictions and need to use constant space instead of
+&lt;code&gt;O(n)&lt;/code&gt; space we can put the sketch in front of the heap.&lt;/p&gt;
+&lt;p&gt;Heap inserts are done in &lt;code&gt;log(n)&lt;/code&gt; time which we can avoid
+doing if we know the item shouldn't be in the heap. Items
+that appear infrequently are then discarded before even
+making it to the heap. We do this by querying the sketch for
+an upper bound of the new item, for example 3, and if the kth
+item in our heap has 12 appearances then we can avoid adding
+the new item to the heap.&lt;/p&gt;
+&lt;p&gt;I have found it interesting that at scale we can use
+probability to optimise our systems but it also requires an
+understanding of how the data is distributed. These data
+structures work well on long tail distributions but when
+all items are as frequent as each other these become less
+useful. It would be interesting to discover how systems can
+map to different distributions of data and how these
+structures are set up to solve the given problems.&lt;/p&gt;</content><category term="software"/><category term="software"/><category term="datastructures"/></entry><entry><title>Setting up success</title><link href="https://s3bw.github.io/writes/setting-up-success.html" rel="alternate"/><published>2026-04-13T12:00:00+01:00</published><updated>2026-04-13T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-13:/writes/setting-up-success.html</id><summary type="html">&lt;p&gt;I have a frightening memory of joining a company and my
 first Pull Request required me to SSH into a
 compute instance and do a &lt;code&gt;git pull&lt;/code&gt; in order to release my
 change into production. On that occasion I found that I

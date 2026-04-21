@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.rss.xml" rel="self"/><lastBuildDate>Mon, 13 Apr 2026 12:00:00 +0100</lastBuildDate><item><title>Setting up success</title><link>https://s3bw.github.io/writes/setting-up-success.html</link><description>&lt;p&gt;I have a frightening memory of joining a company and my
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.rss.xml" rel="self"/><lastBuildDate>Tue, 21 Apr 2026 12:00:00 +0100</lastBuildDate><item><title>Probabilistic Data Structures</title><link>https://s3bw.github.io/writes/probabilistic-data-structures.html</link><description>&lt;p&gt;Keeping track of a constant set of items is fairly straight
+forward, however when the number of items start to grow
+larger than the capacity of a single machine things
+get expensive. There's a way around this and it's to rely on
+approximations instead of concrete numbers. There are two
+probabilistic data structures I'd like to cover in this
+post; Bloom Filters and Count-Min Sketch.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Tue, 21 Apr 2026 12:00:00 +0100</pubDate><guid>tag:s3bw.github.io,2026-04-21:/writes/probabilistic-data-structures.html</guid><category>software</category><category>software</category><category>datastructures</category></item><item><title>Setting up success</title><link>https://s3bw.github.io/writes/setting-up-success.html</link><description>&lt;p&gt;I have a frightening memory of joining a company and my
 first Pull Request required me to SSH into a
 compute instance and do a &lt;code&gt;git pull&lt;/code&gt; in order to release my
 change into production. On that occasion I found that I

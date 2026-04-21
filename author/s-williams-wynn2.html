@@ -54,6 +54,157 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 23 February 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Review: A Philosophy of Software Design</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Last year I read the book 'A Philosophy of Software Design'
+by Ousterhout. After finishing the book I wrote a review and
+reading it back I thought I should follow up with a
+reflection, the reflection is not yet written this is just
+the review.</p>
+<h3>The Review</h3>
+<p>The book offers an alternative perspective on existing
+approaches to software design in ways that are more
+pragmatic, with a strong focus on the core principle in
+software engineering; to tackle complexity.</p>
+<p>Ousterhout clearly understands the power of abstraction as a
+tool for managing complexity and he applies this himself by
+creating his own metaphor for how software should be
+designed. He describes systems as having interfaces that
+should be shallow and implementations that should be deep.
+A simpler interface will provide less cognitive load
+than one with a larger surface area and if the
+implementation is deep it will provide significant power to
+the user.</p>
+<p>Interestingly he also attempts to avoid jargon while
+describing things such as preferring to say "avoid duplication"
+instead of spelling out DRY. I believe he
+does this to allow the reader to grapple about how
+they are designing software instead of falling back on a
+adages like DRY as a core tenet without applying
+thought into what one is actually aiming to achieve. In other words I
+believe he wants the reader to make intentional
+choices when it comes to designing software.</p>
+<p>Some of the example he uses are obvious to those that
+have experience reading code, most notably his
+sections on code comments, however I think his assertion that people
+don't write documentation upfront because they view is as
+"drudge work" is true.</p>
+<p>He only starts mentioning <em>cognitive leverage</em> in concluding
+chapters of the book, I think it should be quite a core
+principle but perhaps a foundation is needed first to then
+understand how one can use leverage.</p>
+<p>A lot of the book I agree with but I'd perhaps want to
+provide an alternative view on some of the areas he
+mentions.</p>
+<p>The book makes a strong argument that we need to think more
+about software design than we are doing, I think
+there's also a balance to be made here. A good developer
+should be able to figure out if software should be done
+tactically or if it should be done strategically. Tactical
+coding does lead us to worst code in the long term and I've
+seen tactical more often than not, however I don't believe
+we should constantly be under strategic programming but as
+an industry and for early career developers we need more of
+it. Some software doesn't need design but that's an edge
+case and shouldn't ever be used as an excuse to avoid thinking
+through a problem.</p>
+<p>In my view where developers lack the most thought and tend
+to create shallowest interfaces are when creating modules.</p>
+<p>Shallow modules are a plague in the industry, I've seen very
+few examples where a developer has realised that modules are
+themselves an abstraction and a module's design should be
+considered. Too often we look at the method signature or
+class methods and believe this is where we create interfaces
+and abstraction. We must not forget the file or package is
+itself an abstraction and we should be thinking
+intentionally about its interface.</p>
+<p>I enjoyed his emphasis on thinking "about different pieces
+of knowledge that are needed to carry out the tasks of your
+application". Finding the correct balance is a developer
+skill that can only improve when you consider and make
+intentional decisions about how you lay out your code,
+often avoided (and now offloaded) by engineers as it
+requires us to put in more effort with thinking.</p>
+<blockquote>
+<p>One of the most important elements of software design is
+determining who needs to know what, and when</p>
+<p>Page 43.</p>
+</blockquote>
+<p>When solving a problem, it is far easier to rationalise and
+decide on your best course of action when that problem can
+fit in a paragraph. Isolating the relevant information in
+one space helps, having to go back and forth between pages
+or modules is a clear indication that the design has a flaw
+and my impression is that Ousterhout would agree with this.
+Further to this point, I believe an IDE can make finding all
+relevant parts of the code easier but doesn't address the
+core issue, and over reliance on the IDE will suppress
+issues and complexity creep.</p>
+<h3>TDD</h3>
+<p>I don't agree with his take on test-driven-development, in
+some cases it forces the developer to start thinking about
+the interface as a user. Writing the test gets you thinking
+about the module as a user of the module, since a simple
+interface would hopefully lead to simpler tests. Some of the
+key design flaws in an original design or even after the
+design has been done comes from actually using the module.</p>
+<h3>Leaving comments</h3>
+<p>I have come to realise that we have access to many tools that can
+be used in software design and focusing on using them to
+address complexity should be their main concern. Many of the
+examples with comments are in their usage, because we have
+access to comments doesn't mean we should use them for
+everything and we should be open to discovering more creative
+ways to leverage comments to tackle complexity.</p>
+<p>Reading the code of others helps us discover interesting
+ways these tools may be utilised and helps us improve in
+these areas of software engineering.</p>
+<p>One of the key points he makes is about determining the
+obviousness of the software which connects with how I've
+approached writing code and how I believe the design of
+software should be faced.</p>
+<blockquote>
+<p>Perfection is achieved, not when there is nothing more to
+add, but when there is nothing left to take away.</p>
+<p>Antoine de Saint-Exupéry</p>
+</blockquote>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:06 | </font>
+                    <a href="review-a-philosophy-of-software-design.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 19 January 2026</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -802,182 +953,6 @@ Don't replace ceteris paribus with prompt-and-pray.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Sat 11 October 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Style</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>In 2017 Google did a collaboration with
-<a href="https://www.web-across.com/">ACROSS</a>, a media research
-institute for fashion and culture. In the article they published;
-they correlated
-the style and clothing on the streets of Tokyo to the
-mood, economy and politics within Japan. At the
-height of the 1980s bubble economy; streetwear had a strong
-brand culture, it was important that the label was luxury
-and visible on clothing. After the economy slowed down there was a shift
-towards a more conservative style and any indication of
-brand was seen as unpopular.</p>
-<p>What decides the clothes we wear and what changes these
-decisions?</p>
-<h3>Signalling</h3>
-<p>As much as we would like to say that we use clothes to
-express our own individuality, I believe the choices we make
-our largely driven by others and how they perceive us. It is
-an estimate of other's perception that determines how we
-choose clothing otherwise a toga would be as normal as suit.
-We are also concerned with signals that might
-cause confrontation or alienation.</p>
-<p>If people are willing to go through the effort
-of changing their name or code switch in order to avoid bias,
-prejudice or create familiarity then this behaviour is undoubtedly represented in
-our presentation.</p>
-<p>When it comes to style I believe most people aim to avoid
-being controversial and often offload thinking about what they
-wear by relying on those around them.
-This is why we see groups, despite believing in their own
-personal uniqueness, wear the same thing. This is why if you
-are wearing sweatpants on Monday you can't sit with us.</p>
-<h3>The Generational Caveat</h3>
-<p>Before diving into observations on attire we should address
-that culture and economics form different groups of people
-and generalisations can't be drawn across these clusters. My
-Gen Z sister targets second-hand clothing which she has said
-is situated in the realm of 'ugly is cool' but not so ugly
-that it is <em>just</em> ugly. An essay on Gen Z would require some
-full-time research, beyond what I am capable of on a Sunday.</p>
-<p>My insight is probably very yuppie, very millennial.</p>
-<h3>London</h3>
-<p>Observing some of London's street style over the last
-three years I believe we can see a similar attachment of
-style to the economy and politics.
-Beyond the drive of person A is liked and wears B therefore
-B is going to catch on, I think the economy and mood of
-London contributed to a rise of the Carhatt style aesthetic
-due to a shift away from conservatism.</p>
-<p>The Carhartt's WIP label started in 1994, it's first store was
-opened in London in 1997. Traditionally a workwear brand
-they're a company that have grants for apprenticeships called
-the "Love of Labor Grant".
-So a shift away from pretentious conservatism towards a more
-labor focused worker label seems to fly.</p>
-<p>Perhaps wearing Carhartt signals you're fine with being
-associated with left leaning ideas and are
-against twelves years of Tory austerity.
-However Carhartt allows you to keep a level of conspicuous
-consumption since nothing says "I have disposable income" like
-a painter's jacket without paint or a welder's jacket without
-scuff.</p>
-<p>We can see this in the worker style jackets being released
-by a growing number of brands each winter.
-They're the modern day denims so I can assume we will
-start seeing them being sold with scuff and holes for
-twice the price if portraying a hardy character catches on.</p>
-<h3>The Outdoors</h3>
-<p>I made an observation that caught attention;
-stating "Nothing says 'cost of living crisis' like wearing your
-Arc'tyrx jacket to Lidl". This is funny for a few reasons;
-before the brand gained it's street cred it was a highly
-technical, high performance outdoor brand - typically these
-jackets go for £450-£1000 at retail. So this man is
-concerned about cost cutting food habits and doing a weekly shop
-at Lidl, but when it comes to his appearance let's not hold
-back. He's effectively wearing a tuxedo for the line at the
-soup kitchen.</p>
-<p>Arc'tyrx hasn't been the only outdoor brand that has gained
-popularity, The North Face had it's lime light in streetwear
-and Patagonia was used by people tied to their
-computers to indicate they have hobbies outside of the
-office.</p>
-<p>While I do think there's been a mood to shift toward a more
-labour focused work attire<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>.
-This is driven
-more by economics than political signaling. We've seen an
-interest in the traditional Barbour style jacket being hung
-up in Uniqlo and M&amp;S. While these may be affordable
-alternatives, Barbour is not typically associated with
-taking down drywall but shooting animals on an estate; the
-thing that the original Barbour jacket and the brands I've
-mentioned above have in common is their durability and
-quality.</p>
-<p>These brands are popularizing alongside the term
-'cost-per-wear' and perhaps others have found longevity in
-these garments.
-The weather being hotter and colder is also asking
-our garments to provide both style and function.</p>
-<p>Montbell a brand that's slogan is 'Function is Beauty'
-recently opened their first store in the UK and 14 of the
-jackets on their site are currently sold out, which shows there is
-still demand for functional outdoor clothing.</p>
-<h3>Durability Fights Inflation</h3>
-<p>Growing up I learnt that
-purchasing goods at a whole sale price not only
-offers a discount from buying one item at a time but shops
-that sell individual items can increase
-prices over time and having purchased all the loo paper you
-need for the year let's you fight those inflationary
-pressures while keeping your bum clean.</p>
-<p>It was the durability of jeans that caused their rise in
-popularity, more so than their representation among the
-miners.</p>
-<blockquote>
-<p>Thanks to their new near-indestructibility, Levi’s
-became the clothing of choice for the rugged,
-hodgepodge band of workers, outcasts, entrepreneurs
-and outlaws building America’s future.</p>
-<p>-
-<a href="https://www.levi.com/US/en_US/blog/article/lvc-a-riveting-story?srsltid=AfmBOoqX6g8ovyMb7ExFRJ02YWG5w_mWrx6GiwtHQI-VjQCtkm-4LkXL">Levi's - A RIVETING STORY</a></p>
-</blockquote>
-<p>If we were to contrast the clothes we wear today to the
-disposable paper dresses that were the peaked of style in
-the 1960s there's a clear shift towards the functional
-and durable. The alternative is second hand and upcycling which
-<a href="https://returbull.official.ec/">offers many hidden gems</a>
-and even among the 2nd hand market there's a higher bid for
-clothing that appears durable and long lasting.</p>
-<p>Could I be alone in wanting my clothes to last longer?</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Are we bound to see a resurgence of the double denim?&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 19:57 | </font>
-                    <a href="style.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn3.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn.html" class="previous-page">Newer ⮕</a>
@@ -1106,6 +1081,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/probabilistic-data-structures.html">
+                        <span>Probabilistic Data Structures</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/setting-up-success.html">
                         <span>Setting up success</span>
@@ -1427,6 +1407,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/data-structures.html">data-structures</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/datastructures.html">datastructures</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/design.html">design</a>
