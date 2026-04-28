@@ -1,5 +1,262 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-04-21T12:00:00+01:00</updated><entry><title>Probabilistic Data Structures</title><link href="https://s3bw.github.io/writes/probabilistic-data-structures.html" rel="alternate"/><published>2026-04-21T12:00:00+01:00</published><updated>2026-04-21T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-21:/writes/probabilistic-data-structures.html</id><summary type="html">&lt;p&gt;Keeping track of a constant set of items is fairly straight
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-04-28T13:20:00+01:00</updated><entry><title>Software Design Playbook</title><link href="https://s3bw.github.io/writes/software-design-playbook.html" rel="alternate"/><published>2026-04-28T13:20:00+01:00</published><updated>2026-04-28T13:20:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-28:/writes/software-design-playbook.html</id><summary type="html">&lt;p&gt;A PR should never be rejected for architectural decisions.
+When code is written the overall system should have already
+been planned and agreed upon.
+A checklist for constructing software design documents.&lt;/p&gt;</summary><content type="html">&lt;p&gt;A PR should never be rejected for architectural decisions.
+When code is written the overall system should have already
+been planned and agreed upon.&lt;/p&gt;
+&lt;p&gt;There are two common types of software documents, the
+architectural decision record [ADR] and the software design
+document [SDD]. Companies can combine both or do with only an SDD.
+There's no one size fit all and not all software needs much
+thought.&lt;/p&gt;
+&lt;p&gt;Planning software is &lt;a href="./software-is-planning.html"&gt;a recurring theme&lt;/a&gt;
+on my blog and this article attempts to provide the
+structure to how I plan and design.&lt;/p&gt;
+&lt;h3&gt;ADRs&lt;/h3&gt;
+&lt;p&gt;Architectural Decision Records are typically how decisions
+are expressed given the context and knowledge at the time.
+&lt;a href="https://martinfowler.com/bliki/ArchitectureDecisionRecord.html"&gt;Martin Fowler will&lt;/a&gt;
+cover the topic of ADRs better than I.&lt;/p&gt;
+&lt;h3&gt;SDDs&lt;/h3&gt;
+&lt;p&gt;A Software Design Document is the specification detailing
+the system and the system's intent before it is built in
+order to encourage feedback and catch plot holes early in
+the development cycle of software.&lt;/p&gt;
+&lt;p&gt;Other than allowing us to get feedback before commitment
+they are a useful practice for the following reasons:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Discovering knowledge gaps. The practice of planning the
+   system allows us to make an initial pass at realising an
+   idea. The practice can bring to light areas we hadn't
+   noticed and reveal that our logic doesn't make sense
+   on paper.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Reflection. We learn over the course of a project
+   and having a document that captures our assumptions at the
+   start provides us with a meaningful document that we may
+   reflect on and identify why we were initially wrong.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Prosperity. Systems are often forgotten, having a
+   document that outlines the project's initial stated aims
+   can provide an answer in the future when we ask "why did
+   we do this?" Or someone new to the company asks "why did
+   you build it like this?".&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Getting buy in. It is tough to convince others of an
+   idea in your head. As soon as it's on paper and
+   there's clear logic to your conviction there will be more
+   willingness of others to support. Projects that stand up
+   well to criticism are also more likely to be convincing
+   and picked up.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Template&lt;/h3&gt;
+&lt;p&gt;These documents depend on the problem they aim to address
+and typically include the following sections:&lt;/p&gt;
+&lt;h4&gt;Context&lt;/h4&gt;
+&lt;p&gt;Tell the audience the problem
+you aim to solve and why it is important to solve it.
+Generally I define the state of the system at the current
+point in time and expose the gaps it has.&lt;/p&gt;
+&lt;p&gt;E.g. users
+are wanting double the portion of donuts, we only have 1 donut
+machine,
+if we buy another donut machine we will be able to serve
+twice as many donuts and multiply our profit by a factor of
+2.&lt;/p&gt;
+&lt;h4&gt;Scope&lt;/h4&gt;
+&lt;p&gt;Make the limitations clear upfront. Tell the reader what the
+solution is not aiming to solve. The perfect software
+doesn't exist and if we tried to build it we would run out
+of time and runway. Setting boundaries allow us to focus on
+the core problem we aim to solve.&lt;/p&gt;
+&lt;p&gt;E.g. The donut machine will not address the users asking for
+apple juice.&lt;/p&gt;
+&lt;h4&gt;Proposal&lt;/h4&gt;
+&lt;p&gt;Start at a high level and break it down into its components
+in the subsequent sections. When communicating systems we
+must understand that individuals consume information
+differently, some are more visual than others. Knowing this
+we can enrich the document by providing more than a single
+representation of the point we are trying to make.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Representation&lt;/th&gt;
+&lt;th&gt;Good For&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Diagram&lt;/td&gt;
+&lt;td&gt;flows and relationships&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;List&lt;/td&gt;
+&lt;td&gt;overviews and sequences&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Prose&lt;/td&gt;
+&lt;td&gt;nuance&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Table&lt;/td&gt;
+&lt;td&gt;comparisons&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Even if a decision is minor the trade-offs should be tabulated.
+The choice can be obvious but the practice of
+assessing an alternative can reveal better solutions,
+and avoid falling into a Cargo Cult trap.&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h4&gt;Rejected Options&lt;/h4&gt;
+&lt;p&gt;Avoid designing once, by including the rejected
+options we make this practice clear. Our first idea will not
+always be our best idea&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;2&lt;/a&gt;&lt;/sup&gt;.
+Understanding the weaknesses of our rejected options
+can also provide answers to the curious reader.&lt;/p&gt;
+&lt;p&gt;If we need to improve the
+system in the future; remembering why we rejected the other
+options may allow us to avoid them when we need to pivot.
+Unless something has changed, we might have a better
+understanding of options in the future and they'll become
+opportunities.&lt;/p&gt;
+&lt;h3&gt;Optional Sections&lt;/h3&gt;
+&lt;p&gt;These sections don't apply to all software designs, you
+might use all of them on a large document. Smaller changes
+to a system disregard them.&lt;/p&gt;
+&lt;h4&gt;Cost&lt;/h4&gt;
+&lt;p&gt;Money and time.&lt;/p&gt;
+&lt;p&gt;Provide cost and time estimates, these can give other departments
+a head start when considering pricing or capacity.
+Start with estimates or source price pages, something is
+better than nothing when it comes to informing the
+stakeholder of a go/no-go project.&lt;/p&gt;
+&lt;p&gt;Cost is not only found in raw compute. There's also the
+ongoing cost of upkeep; ensuring the system is up-to-date. Some systems
+require a member from support staff or an analyst for
+input on a regular basis, these are flagged as operational cost.&lt;/p&gt;
+&lt;h4&gt;Risk&lt;/h4&gt;
+&lt;p&gt;Address what can go wrong and cover how likely it is to
+happen. On large projects, some risks might not have a
+mitigation but we can address how to measure it and minimise
+it's impact by catching it as early as possible.&lt;/p&gt;
+&lt;p&gt;Determining the project's risk comes from experience.
+They range from technical risks like an overview of
+technical short cuts and their cons, to softer
+risks such as the introduction of friction affecting
+product adoption or the consequence of design affecting
+popular perception.&lt;/p&gt;
+&lt;!-- - Rationale --&gt;
+
+&lt;h4&gt;Goals&lt;/h4&gt;
+&lt;p&gt;Every system should have a goals otherwise it's literally
+pointless,
+without a clear purpose the systems is debt before it gets
+off the ground. This also helps to alleviate scope creep as
+clearly defined goals allows us to cut any work that does
+not achieve the original stated purpose of the system.&lt;/p&gt;
+&lt;h4&gt;Milestones&lt;/h4&gt;
+&lt;p&gt;Through my experience I have found high level milestones can
+be useful, however if they are inflexible or significantly detailed
+they hold a project back.&lt;/p&gt;
+&lt;p&gt;The benefit of high level
+milestones is that it indicates a larger vision for the
+project and the potential long term impact it may have. We
+tend to learn over the course of the project so these should
+be flexible as we are bound to discover things up until the
+release of the first milestone that will impact our initial
+plan.&lt;/p&gt;
+&lt;p&gt;Getting feedback from the first users of your system can
+throw your roadmap and milestones in the bin.&lt;/p&gt;
+&lt;h3&gt;Deep Dives&lt;/h3&gt;
+&lt;p&gt;As a company scales the systems become more complex,
+complexity can also be introduced by regulation and some
+consideration needs to be made before bringing on 3rd party
+providers. To deal with this I have a shortlist to
+assess risks when designing software.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Certifications&lt;/strong&gt; may be required if you are operating in
+specific industries such as healthcare. It's best to know
+upfront that you're integrating with a HIPAA compliant party
+than after the integration has completed. Finding out too
+late can be a huge waste of time.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regionally locked data&lt;/strong&gt; might be a requirement,
+GDPR, for example, requires explicit consent from an individual
+if their data is going to be transferred across regional
+boundaries. If you are integrating with a 3rd party you may
+need to confirm what regions they are able to operate in.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Authentication and permissions&lt;/strong&gt; are commonly needed if we
+have to limit access to specific users or to subsets of
+users. Determining how permissions are granted
+and how users authenticate can impact the design of our
+systems.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Localisation&lt;/strong&gt; is required by most medium size software
+businesses as they'll operate in more than a single language
+or more than a single currency. Serving multiple geographies
+require these considerations.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Security audits and assessments&lt;/strong&gt; can be required before
+being able to use a provider's service. We should ensure the
+software we use is trustworthy if we are likely to send
+sensitive data.&lt;/p&gt;
+&lt;p&gt;These topics may be brought up under our section on risk,
+or during the discussion of trade-offs between solutions.&lt;/p&gt;
+&lt;h3&gt;FAQ&lt;/h3&gt;
+&lt;p&gt;There are questions that are asked more frequently than
+others, it's always helpful to include them. Even the
+off hand questions that were brought up in passing.
+Good questions can be more interesting than the answer.&lt;/p&gt;
+&lt;h3&gt;Feedback&lt;/h3&gt;
+&lt;p&gt;Feedback is often an opinion and can come from someone with
+lesser context but more experience. Figure out the quickest
+way to test an opinion. Don't get caught up on addressing
+everything but ensure you de-risk concerns by having a plan
+if their concern becomes a reality or making it easy to roll
+back or having circuit breakers or feature flags.&lt;/p&gt;
+&lt;p&gt;As an example a conversation around "this might not scale"
+could be countered with "this might not get a lot of traffic",
+systems don't need to be implemented with scale in mind, but
+they should have an answer that can address scaling if it
+becomes a concern unless you have some concrete evidence
+that it won't be a concern; such as; we don't think this
+will be used often by users but if it does we have a way to
+limit it's usage and have isolated it from the rest of the
+system so that if it starts getting attention it
+won't affect the performance of the whole system.&lt;/p&gt;
+&lt;p&gt;Do we always need an SDD?&lt;/p&gt;
+&lt;p&gt;One thing that has held true in software is that the earlier
+something is found in the process of developing software the
+easier it is to correct course. Software design documents
+are a way to map out the unknowns and identify blind spots
+in ideas. Not all ideas are complete, sometimes ideas come
+without a solution, we don't want to find ourselves a month
+into development to realise we don't know how the solution
+is actually meant to look.&lt;/p&gt;
+&lt;p&gt;Not all changes require deep thought or detailed
+specification. There should be room to explore and learn by
+hacking something together, but the exploration needs the
+bigger picture and the goal. Without purpose we are wasting
+time.&lt;/p&gt;
+&lt;p&gt;This article is longer than many of the design documents
+I've written.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;In the Richard Feynman sense of the phrase we
+fail to look at alternatives in pursuit of a preferred
+conclusion.&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;This is also brought up by Ousterhout in 'A Philosophy
+of Software Design'&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"/><category term="software"/><category term="design"/><category term="planning"/></entry><entry><title>Probabilistic Data Structures</title><link href="https://s3bw.github.io/writes/probabilistic-data-structures.html" rel="alternate"/><published>2026-04-21T12:00:00+01:00</published><updated>2026-04-21T12:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-04-21:/writes/probabilistic-data-structures.html</id><summary type="html">&lt;p&gt;Keeping track of a constant set of items is fairly straight
 forward, however when the number of items start to grow
 larger than the capacity of a single machine things
 get expensive. There's a way around this and it's to rely on

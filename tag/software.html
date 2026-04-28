@@ -53,6 +53,278 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Tue 28 April 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Software Design Playbook</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>A PR should never be rejected for architectural decisions.
+When code is written the overall system should have already
+been planned and agreed upon.</p>
+<p>There are two common types of software documents, the
+architectural decision record [ADR] and the software design
+document [SDD]. Companies can combine both or do with only an SDD.
+There's no one size fit all and not all software needs much
+thought.</p>
+<p>Planning software is <a href="./software-is-planning.html">a recurring theme</a>
+on my blog and this article attempts to provide the
+structure to how I plan and design.</p>
+<h3>ADRs</h3>
+<p>Architectural Decision Records are typically how decisions
+are expressed given the context and knowledge at the time.
+<a href="https://martinfowler.com/bliki/ArchitectureDecisionRecord.html">Martin Fowler will</a>
+cover the topic of ADRs better than I.</p>
+<h3>SDDs</h3>
+<p>A Software Design Document is the specification detailing
+the system and the system's intent before it is built in
+order to encourage feedback and catch plot holes early in
+the development cycle of software.</p>
+<p>Other than allowing us to get feedback before commitment
+they are a useful practice for the following reasons:</p>
+<ol>
+<li>
+<p>Discovering knowledge gaps. The practice of planning the
+   system allows us to make an initial pass at realising an
+   idea. The practice can bring to light areas we hadn't
+   noticed and reveal that our logic doesn't make sense
+   on paper.</p>
+</li>
+<li>
+<p>Reflection. We learn over the course of a project
+   and having a document that captures our assumptions at the
+   start provides us with a meaningful document that we may
+   reflect on and identify why we were initially wrong.</p>
+</li>
+<li>
+<p>Prosperity. Systems are often forgotten, having a
+   document that outlines the project's initial stated aims
+   can provide an answer in the future when we ask "why did
+   we do this?" Or someone new to the company asks "why did
+   you build it like this?".</p>
+</li>
+<li>
+<p>Getting buy in. It is tough to convince others of an
+   idea in your head. As soon as it's on paper and
+   there's clear logic to your conviction there will be more
+   willingness of others to support. Projects that stand up
+   well to criticism are also more likely to be convincing
+   and picked up.</p>
+</li>
+</ol>
+<h3>Template</h3>
+<p>These documents depend on the problem they aim to address
+and typically include the following sections:</p>
+<h4>Context</h4>
+<p>Tell the audience the problem
+you aim to solve and why it is important to solve it.
+Generally I define the state of the system at the current
+point in time and expose the gaps it has.</p>
+<p>E.g. users
+are wanting double the portion of donuts, we only have 1 donut
+machine,
+if we buy another donut machine we will be able to serve
+twice as many donuts and multiply our profit by a factor of
+2.</p>
+<h4>Scope</h4>
+<p>Make the limitations clear upfront. Tell the reader what the
+solution is not aiming to solve. The perfect software
+doesn't exist and if we tried to build it we would run out
+of time and runway. Setting boundaries allow us to focus on
+the core problem we aim to solve.</p>
+<p>E.g. The donut machine will not address the users asking for
+apple juice.</p>
+<h4>Proposal</h4>
+<p>Start at a high level and break it down into its components
+in the subsequent sections. When communicating systems we
+must understand that individuals consume information
+differently, some are more visual than others. Knowing this
+we can enrich the document by providing more than a single
+representation of the point we are trying to make.</p>
+<table>
+<thead>
+<tr>
+<th>Representation</th>
+<th>Good For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Diagram</td>
+<td>flows and relationships</td>
+</tr>
+<tr>
+<td>List</td>
+<td>overviews and sequences</td>
+</tr>
+<tr>
+<td>Prose</td>
+<td>nuance</td>
+</tr>
+<tr>
+<td>Table</td>
+<td>comparisons</td>
+</tr>
+</tbody>
+</table>
+<p>Even if a decision is minor the trade-offs should be tabulated.
+The choice can be obvious but the practice of
+assessing an alternative can reveal better solutions,
+and avoid falling into a Cargo Cult trap.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<h4>Rejected Options</h4>
+<p>Avoid designing once, by including the rejected
+options we make this practice clear. Our first idea will not
+always be our best idea<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup>.
+Understanding the weaknesses of our rejected options
+can also provide answers to the curious reader.</p>
+<p>If we need to improve the
+system in the future; remembering why we rejected the other
+options may allow us to avoid them when we need to pivot.
+Unless something has changed, we might have a better
+understanding of options in the future and they'll become
+opportunities.</p>
+<h3>Optional Sections</h3>
+<p>These sections don't apply to all software designs, you
+might use all of them on a large document. Smaller changes
+to a system disregard them.</p>
+<h4>Cost</h4>
+<p>Money and time.</p>
+<p>Provide cost and time estimates, these can give other departments
+a head start when considering pricing or capacity.
+Start with estimates or source price pages, something is
+better than nothing when it comes to informing the
+stakeholder of a go/no-go project.</p>
+<p>Cost is not only found in raw compute. There's also the
+ongoing cost of upkeep; ensuring the system is up-to-date. Some systems
+require a member from support staff or an analyst for
+input on a regular basis, these are flagged as operational cost.</p>
+<h4>Risk</h4>
+<p>Address what can go wrong and cover how likely it is to
+happen. On large projects, some risks might not have a
+mitigation but we can address how to measure it and minimise
+it's impact by catching it as early as possible.</p>
+<p>Determining the project's risk comes from experience.
+They range from technical risks like an overview of
+technical short cuts and their cons, to softer
+risks such as the introduction of friction affecting
+product adoption or the consequence of design affecting
+popular perception.</p>
+<!-- - Rationale -->
+
+<h4>Goals</h4>
+<p>Every system should have a goals otherwise it's literally
+pointless,
+without a clear purpose the systems is debt before it gets
+off the ground. This also helps to alleviate scope creep as
+clearly defined goals allows us to cut any work that does
+not achieve the original stated purpose of the system.</p>
+<h4>Milestones</h4>
+<p>Through my experience I have found high level milestones can
+be useful, however if they are inflexible or significantly detailed
+they hold a project back.</p>
+<p>The benefit of high level
+milestones is that it indicates a larger vision for the
+project and the potential long term impact it may have. We
+tend to learn over the course of the project so these should
+be flexible as we are bound to discover things up until the
+release of the first milestone that will impact our initial
+plan.</p>
+<p>Getting feedback from the first users of your system can
+throw your roadmap and milestones in the bin.</p>
+<h3>Deep Dives</h3>
+<p>As a company scales the systems become more complex,
+complexity can also be introduced by regulation and some
+consideration needs to be made before bringing on 3rd party
+providers. To deal with this I have a shortlist to
+assess risks when designing software.</p>
+<p><strong>Certifications</strong> may be required if you are operating in
+specific industries such as healthcare. It's best to know
+upfront that you're integrating with a HIPAA compliant party
+than after the integration has completed. Finding out too
+late can be a huge waste of time.</p>
+<p><strong>Regionally locked data</strong> might be a requirement,
+GDPR, for example, requires explicit consent from an individual
+if their data is going to be transferred across regional
+boundaries. If you are integrating with a 3rd party you may
+need to confirm what regions they are able to operate in.</p>
+<p><strong>Authentication and permissions</strong> are commonly needed if we
+have to limit access to specific users or to subsets of
+users. Determining how permissions are granted
+and how users authenticate can impact the design of our
+systems.</p>
+<p><strong>Localisation</strong> is required by most medium size software
+businesses as they'll operate in more than a single language
+or more than a single currency. Serving multiple geographies
+require these considerations.</p>
+<p><strong>Security audits and assessments</strong> can be required before
+being able to use a provider's service. We should ensure the
+software we use is trustworthy if we are likely to send
+sensitive data.</p>
+<p>These topics may be brought up under our section on risk,
+or during the discussion of trade-offs between solutions.</p>
+<h3>FAQ</h3>
+<p>There are questions that are asked more frequently than
+others, it's always helpful to include them. Even the
+off hand questions that were brought up in passing.
+Good questions can be more interesting than the answer.</p>
+<h3>Feedback</h3>
+<p>Feedback is often an opinion and can come from someone with
+lesser context but more experience. Figure out the quickest
+way to test an opinion. Don't get caught up on addressing
+everything but ensure you de-risk concerns by having a plan
+if their concern becomes a reality or making it easy to roll
+back or having circuit breakers or feature flags.</p>
+<p>As an example a conversation around "this might not scale"
+could be countered with "this might not get a lot of traffic",
+systems don't need to be implemented with scale in mind, but
+they should have an answer that can address scaling if it
+becomes a concern unless you have some concrete evidence
+that it won't be a concern; such as; we don't think this
+will be used often by users but if it does we have a way to
+limit it's usage and have isolated it from the rest of the
+system so that if it starts getting attention it
+won't affect the performance of the whole system.</p>
+<p>Do we always need an SDD?</p>
+<p>One thing that has held true in software is that the earlier
+something is found in the process of developing software the
+easier it is to correct course. Software design documents
+are a way to map out the unknowns and identify blind spots
+in ideas. Not all ideas are complete, sometimes ideas come
+without a solution, we don't want to find ourselves a month
+into development to realise we don't know how the solution
+is actually meant to look.</p>
+<p>Not all changes require deep thought or detailed
+specification. There should be room to explore and learn by
+hacking something together, but the exploration needs the
+bigger picture and the goal. Without purpose we are wasting
+time.</p>
+<p>This article is longer than many of the design documents
+I've written.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>In the Richard Feynman sense of the phrase we
+fail to look at alternatives in pursuit of a preferred
+conclusion.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>This is also brought up by Ousterhout in 'A Philosophy
+of Software Design'&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Tue 21 April 2026</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -3742,6 +4014,11 @@ your dusty book of log tables.</p>
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/software-design-playbook.html">
+                        <span>Software Design Playbook</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/probabilistic-data-structures.html">
                         <span>Probabilistic Data Structures</span>
                       </a>
@@ -4136,6 +4413,9 @@ your dusty book of log tables.</p>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/people.html">people</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/planning.html">planning</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>

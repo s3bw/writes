@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.rss.xml" rel="self"/><lastBuildDate>Tue, 21 Apr 2026 12:00:00 +0100</lastBuildDate><item><title>Probabilistic Data Structures</title><link>https://s3bw.github.io/writes/probabilistic-data-structures.html</link><description>&lt;p&gt;Keeping track of a constant set of items is fairly straight
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>s3bw - S Williams-Wynn</title><link>https://s3bw.github.io/writes/</link><description/><atom:link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.rss.xml" rel="self"/><lastBuildDate>Tue, 28 Apr 2026 13:20:00 +0100</lastBuildDate><item><title>Software Design Playbook</title><link>https://s3bw.github.io/writes/software-design-playbook.html</link><description>&lt;p&gt;A PR should never be rejected for architectural decisions.
+When code is written the overall system should have already
+been planned and agreed upon.
+A checklist for constructing software design documents.&lt;/p&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">S Williams-Wynn</dc:creator><pubDate>Tue, 28 Apr 2026 13:20:00 +0100</pubDate><guid>tag:s3bw.github.io,2026-04-28:/writes/software-design-playbook.html</guid><category>software</category><category>software</category><category>design</category><category>planning</category></item><item><title>Probabilistic Data Structures</title><link>https://s3bw.github.io/writes/probabilistic-data-structures.html</link><description>&lt;p&gt;Keeping track of a constant set of items is fairly straight
 forward, however when the number of items start to grow
 larger than the capacity of a single machine things
 get expensive. There's a way around this and it's to rely on

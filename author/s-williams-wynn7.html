@@ -54,6 +54,134 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 21 April 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Gray Code</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>A modern laptop can run ~3.8 billion cycles per second. The
+cycle is determined by oscillation frequency of the
+electrical signal that hits the CPU. Contemporary CPUs manage
+synchronisation using all sorts of error correction tricks.</p>
+<p>In mechanical systems, such as those used in medical
+equipment and robotics, the binary numbers that we are most
+familiar with can cause errors if they're read during state
+transition.</p>
+<h3>Decimal and Binary</h3>
+<p>We are most familiar with decimals, this is a base 10
+counting notation where each position in the number
+represents a different power of ten. E.g. 10, 100, 1000.</p>
+<p>The computer relies on binary as this takes advantage of
+the fundamental on/off state within an electronic circuit.
+Binary is base 2, so each position represents a power of 2.
+E.g. 2, 4, 8, 16.</p>
+<h3>Reading States</h3>
+<p>Binary numbers can cause errors if they're read during
+transitions. The more positions that require toggling,
+while switching between numbers, the higher the chance we introduce
+errors into the system. This is shown clearly as
+we transition between the numbers 3 and 4. Which requires
+changing three bit positions. <code>011</code> -&gt; <code>100</code>.</p>
+<p><img alt="BinaryCounting" src="static/counting.gif" /></p>
+<p>If these bits aren't switched instantly we can read any of the
+following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
+if you're working with a critical system and need precision.</p>
+<h3>Grey Code</h3>
+<p>To get around this we use an alternative ordering of the
+binary system in which successive numbers are separated
+by a single bit. Incrementing a number only relies on
+switching one position and removes the chance of reading
+the wrong number during state transitions.</p>
+<p>This ordering is called Gray code, and an animation of the
+bit positions, for an incrementing number, is shown below:</p>
+<p><img alt="GrayCounting" src="static/graycounting.gif" /></p>
+<table>
+<thead>
+<tr>
+<th>Decimal</th>
+<th>Binary</th>
+<th>Gray</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td><code>0000</code></td>
+<td><code>0000</code></td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td><code>0001</code></td>
+<td><code>0001</code></td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td><code>0010</code></td>
+<td><code>0011</code></td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td><code>0011</code></td>
+<td><code>0010</code></td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td><code>0100</code></td>
+<td><code>0110</code></td>
+</tr>
+</tbody>
+</table>
+<h3>The Application</h3>
+<p>In addition to reducing read errors, relying on only a
+single toggle to move up the number scale consumes less
+energy than traditional binary due the fewer toggled bits.</p>
+<p>Some systems require testing every position of multiple
+switches or toggles. Gray code can improve the efficiency of
+these tests. If we had to iterate through all 16 combinations
+of 4 switches. Using ordinary binary would need to flip 1,
+2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
+code allows us to only ever need to flip a single toggle to
+eventually test all switch combinations.</p>
+<p>One of the most common uses of gray code is in rotary
+encoders, also known as knobs. These convert angular
+position to an analog or digital signal. If we had to rely
+on a normal binary scale, when rotating the knob, it could
+end up sending the intermediary numbers between each angle,
+which would make it pretty useless.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:03 | </font>
+                    <a href="gray-code.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 14 April 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -815,211 +943,6 @@ don't worry about finding food."</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 17 March 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Chess Programming - Bitboards</font>
-                    </h3>
-                </div>
-
-<div class="series-container">
-    <p class="series-title">The "Chess Programming" series:</p>
-    <ol class="series-list">
-            <ol class="active">
-                1: (here) Chess Programming - Bitboards
-            </ol>
-            <ol>
-                2: <a href="https://s3bw.github.io/writes/chess-programming-moving.html">Chess Programming - Moving</a>
-            </ol>
-    </ol>
-</div>
-
-                <div class="main">
-                    <p>While exploring an <a href="https://github.com/kitao/pyxel">interesting game
-engine</a> which
-compiles python code to WASM; I thought, there's no better
-way to have fun than to write a chess engine. This was the
-start of a one month long project which led me to create
-my own chess AI.</p>
-<p>Chess programming is a topic that has been written about
-extensively, it has been a proving ground for some of
-the first AI researchers and even today it is still used as
-a benchmark for techniques in <a href="https://github.com/google-deepmind/searchless_chess">applied research.
-</a></p>
-<p>This article is the first part in a series of three in which
-I attempt to distill some insight into the application of
-algorithms in software, namely chess programming. In the
-hopes that it may inspire how you approach solving similar
-problems in the future.</p>
-<h3>Bit Operations</h3>
-<p>If you've ever done some leetcoding or any other live
-algorithm style interview prep in software engineering you
-might have come across the odd question on bit operations
-and wondered if you'll ever need to actually do these in
-your day to day job. I'm not here to answer that, but I am
-here to show you how it applies to chess programming.</p>
-<p>Firstly what are bit operations:</p>
-<blockquote>
-<p>a bitwise operation operates on a bit string, a bit array
-or a binary numeral at the level of its individual bits.
-It is a fast and simple action, basic to the higher-level
-arithmetic operations and directly supported by the processor.</p>
-<p><a href="https://en.wikipedia.org/wiki/Bitwise_operation">Wikipedia</a></p>
-</blockquote>
-<p>Essentially bitwise operations are physical operations that
-are embedded into the processor, they consist of your logical
-AND, OR, XOR and bit shifts. The mathematical operations that
-you're familiar with (such as Add, Subtract etc.) are all
-built upon bitwise operations.</p>
-<p>Here's an example of a <code>NOT</code> operation:</p>
-<div class="highlight"><pre><span></span><code>NOT 0111  (decimal 7)
-  = 1000  (decimal 8)
-</code></pre></div>
-
-<p>And an example of an <code>AND</code> operation:</p>
-<div class="highlight"><pre><span></span><code>    1010 (decimal 5)
-AND 1100 (decimal 12)
-  = 1000 (decimal 8)
-</code></pre></div>
-
-<p>We can see these operations supported in python:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; 0b1100 &amp; 0b1010
-8
-&gt;&gt;&gt; bin(0b1100 &amp; 0b1010)
-&#39;0b1000&#39;
-</code></pre></div>
-
-<p>There's two ways we can shift bits. (Left and right) Here's
-an example in python:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; # Left
-&gt;&gt;&gt; bin(0b0010 &lt;&lt; 1)
-&#39;0b100&#39;
-
-&gt;&gt;&gt; # Right
-&gt;&gt;&gt; bin(0b0010 &gt;&gt; 1)
-&#39;0b1&#39;
-</code></pre></div>
-
-<p>Explaining how the processor does addition is out of scope
-of this blog post, but put together some of these bit
-operators and you've got yourself a function that can do
-addition.</p>
-<h3>Bitboards</h3>
-<p>Back to the chess:</p>
-<p>We are doing all of this essentially to get as close to the
-processor as possible, since we want the most performance
-out of a computer as we can by avoiding any unnecessary
-operations.</p>
-<p>In chess programming we will use a single number to keep
-track of all the positions of pieces on the board. This is
-what we call a <em>"bitboard"</em>. We will have a few bitboards
-to maintain the game's state. The first one will be 'board'
-which tracks <strong>all</strong> the pieces. At the start of the game
-this number will be: <code>0xFFFF00000000FFFF</code>. Which is
-hexadecimal for <code>18446462598732906495</code>. If we print the
-binary form of this number and format it over 8 rows we get
-the following:</p>
-<div class="highlight"><pre><span></span><code> Bitboard:
-
-8  1 1 1 1 1 1 1 1
-7  1 1 1 1 1 1 1 1
-6  0 0 0 0 0 0 0 0
-5  0 0 0 0 0 0 0 0
-4  0 0 0 0 0 0 0 0
-3  0 0 0 0 0 0 0 0
-2  1 1 1 1 1 1 1 1
-1  1 1 1 1 1 1 1 1
-   a b c d e f g h
-</code></pre></div>
-
-<p>There are a few other bitboards to track during a game of
-chess. There will be 2 boards for each colour (white and
-black). And there will be a bitboard for each type (6).
-Which gives us a total of 9 bitboards, or 9 numbers to cover
-the entire game state of chess. Here's two more examples of
-bitboards, one for pawns and one for white pieces:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; pawns = 0x00FF00000000FF00
-&gt;&gt;&gt; white = 0x000000000000FFFF
-</code></pre></div>
-
-<p>Now we can uses these three numbers to give us the answer
-to some questions for example; Where are all the white pawns?</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; board &amp; pawns &amp; white
-65280
-
- Bitboard (65280):
-
-8  0 0 0 0 0 0 0 0
-7  0 0 0 0 0 0 0 0
-6  0 0 0 0 0 0 0 0
-5  0 0 0 0 0 0 0 0
-4  0 0 0 0 0 0 0 0
-3  0 0 0 0 0 0 0 0
-2  1 1 1 1 1 1 1 1
-1  0 0 0 0 0 0 0 0
-   a b c d e f g h
-</code></pre></div>
-
-<p>During a game of chess you'll use these to calculate which
-pieces are under attack. (e.g. given:
-<code>knightsmove &amp; theirpieces</code> the result will be <code>0</code> if
-there's no piece under threat). We can also use these
-bitboards workout where the valid moves are with
-<code>moves &amp; ~board</code>. (Moves and not board).</p>
-<p>A chess AI that's looking 4 moves ahead will have ~5mil
-positions to consider, so having these operations done on a
-low level can help boost the performance of the software.
-The more you squeeze out of performance the more accurate
-your chess AI will be, because this improves it's ability to
-look into the future.</p>
-<h3>Beyond Chess</h3>
-<p>In summary learning about how bitboards are applied to chess
-programming has allowed me to understand how bit operations can
-be applied practically in software. Before I dived into
-learning how chess is programmed I had only imagined keeping
-track of the board state using several objects and an array,
-however I now see there's more than one way to crack an egg;
-the board state egg.</p>
-<p>I hope the article helps to providing insight into practical
-applications of bit operators and leaves them to be
-considered as valuable for solving technical problems or at
-least reminds software engineers that we have them in our
-toolbelt.</p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://github.com/official-stockfish/Stockfish">Stockfish</a></li>
-<li><a href="https://www.chessprogramming.org/Main_Page">Chess Programming</a></li>
-</ul>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 21:34 | </font>
-                    <a href="chess-programming-bitboards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn8.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn6.html" class="previous-page">Newer ⮕</a>
@@ -1148,6 +1071,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/software-design-playbook.html">
+                        <span>Software Design Playbook</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/probabilistic-data-structures.html">
                         <span>Probabilistic Data Structures</span>
@@ -1543,6 +1471,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/people.html">people</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/planning.html">planning</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/postgres.html">postgres</a>
