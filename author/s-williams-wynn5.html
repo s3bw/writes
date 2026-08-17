@@ -54,6 +54,148 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 21 July 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Strategic Testing</font>
+                    </h3>
+                </div>
+
+<div class="series-container">
+    <p class="series-title">The "Software Testing" series:</p>
+    <ol class="series-list">
+            <ol>
+                1: <a href="https://s3bw.github.io/writes/assert.html">Assert</a>
+            </ol>
+            <ol class="active">
+                2: (here) Strategic Testing
+            </ol>
+    </ol>
+</div>
+
+                <div class="main">
+                    <p>Are our tests good? Are they bad? Do we have enough tests?</p>
+<p>Beyond writing isolated and targeted unit tests, there are
+methods that ensure our tests are appropriate. This
+article covers some strategies that answer these questions.
+Namely; using test coverage metrics, include mutation testing,
+applying fuzzy tests and finally test fixtures.</p>
+<h3>Test Coverage</h3>
+<p>We can measure the number of lines executed when running our
+tests. For example the following code snippet doesn't
+include the fourth line <code>'return False'</code> in the test suite.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">is_odd</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">%</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">def</span> <span class="nf">test_is_odd</span><span class="p">():</span>
+    <span class="k">assert</span> <span class="n">is_odd</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Using the ratio of lines tested to lines not tested gives us
+the <em>test coverage</em> metric.</p>
+<p>Along with context of how important each line of our
+code is; test coverage is helpful, however as a performance
+metric or as a blind target it's quite useless.</p>
+<p>If
+you've got a 20% coverage and the code is critical to your
+business then getting that to 80% is crucial. Trying
+to eek out the extra 0.1% coverage when you're at 98% is
+fruitless, or having a goal to go from 98% -&gt; 99% is a poor
+man's KPI.</p>
+<p>Unless they're easy to add you'll be trying to make very
+minor coverage gains for edge-cases that might be rarely
+hit. At this point there is likely something more impactful
+to focus on.</p>
+<p>It might be an interesting exercise to
+understand if the code you're not covering is reachable
+during the programs lifetime. If not, the dead code should
+just be removed instead of tested.</p>
+<h3>Mutation Testing</h3>
+<p>We rely on tests to ensure our code is correct and works as
+expected but how do we ensure our tests are correct and they
+work as expected. What tests our tests? Mutation testing aims
+to fill this gap.</p>
+<p>How often have you written a passing test and you purposely
+make it fail just to ensure that the test is catching the
+case you are intending it to catch? This forms the basis of
+mutation testing.</p>
+<p>When applied, it goes through your test suite and makes
+subtle changes to your tests. If we use the <code>test_is_odd</code>
+method as an example, it might bump 7 to 8. Sometimes it
+might take a string and remove a character. It will also
+change operators in your test such as changing <code>&lt;=</code> to <code>&lt;</code>.
+The test will then run as normal but under the expectations
+that it should fail with the mutations. If our example still
+passes when we pass 8 instead of 7 then something is wrong,
+the test isn't working as expected which might indicate that
+we are mocking too many dependencies, we aren't being specific
+enough or nothing is really being tested.</p>
+<h3>Fuzzy Tests</h3>
+<p>Some software may receive user inputted or malformed data,
+in these cases you might not want the system to behave
+irregularly. A developer might not know of all the funky
+data that could be provided to the method upfront, in these cases
+they may rely on writing fuzzy tests.</p>
+<p>As an example, if we had a method that expects a user
+provided string, we can define a fuzzy test which
+enumerates a data bank of known edge-cases for strings such
+as providing an emoji, an empty string or a large string of
+zero width characters.</p>
+<h3>Test Fixtures</h3>
+<p>As the code base grows you might notice that we are writing
+repeated lines of code in order to setup a user object or
+prepare data before passing it to the method we are testing.</p>
+<p>Large projects get around this by defining test fixtures.
+These can be passed as parameters to our tests so
+that we know the setup the test requires before it runs.
+The benefit of keeping the fixture separate to the test is
+that it reducing the amount of code that is duplicated
+across tests and if the setup for the user changes
+then only the fixture should require changing.</p>
+<p>Tests should be focused on asserting one thing and fewer
+lines in the test makes it easier to see what's going wrong
+when something breaks.</p>
+<h3>Finally</h3>
+<p>If you're printing it, maybe you should assert it.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://coverage.readthedocs.io/en/7.9.2/">Test Coverage</a></li>
+<li><a href="https://kodare.net/2016/12/01/mutmut-a-python-mutation-testing-system.html">Mutation
+    Tests</a></li>
+<li><a href="https://hypothesis.readthedocs.io/en/latest/">Fuzzy Tests</a></li>
+</ul>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:04 | </font>
+                    <a href="strategic-testing.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 14 July 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -757,208 +899,6 @@ ownership, just make sure you're awarding this behaviour.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 09 June 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Reframe Binary Search</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Binary search is quite a simple algorithm to explain and
-thus it is often one of the first algorithms computer
-scientists learn. It's also occasionally brought up in
-software engineering interviews as it can be applied when
-solving optimisation problems.</p>
-<p>The traditional explanation of binary search is
-flawed and acts as a barrier to its application. Binary
-search is not an algorithm that believes a set can be
-divided into three groups, e.g. these numbers are too cold,
-these number are too hot and this number is <em>just</em> right.</p>
-<p>This goldilocks framing of binary search forces us to look
-for situations where the problem contains an
-array of porridge ordered by temperature and we are in
-search of the one falls into our preferred consumption
-temperature.</p>
-<p>Binary search is an algorithm
-that is optimal at finding state transitions and framing
-it as such opens up the application of binary search as
-we no longer approach problems like goldilocks and
-instead; finding the best porridge becomes finding the point
-at which the ordered bowls of porridge transition from
-being tepid to scolding.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<h3>The Basics</h3>
-<p>Commonly, binary search is introduced with the example of
-finding a word in a dictionary. As an example say we are
-tasked to find the word <em>"Hippo"</em>:</p>
-<p>The brute force approach is to start at A, and flick through
-the pages until you get to the page that contains <em>"Hippo"</em>.
-This approach works, however the time complexity of this
-algorithm is <code>O(n)</code>; where <code>n</code> is the number of pages in the
-dictionary. So in the worst case, <em>"Zebra"</em> or
-something, You're looking at all <code>n</code> pages.</p>
-<p>Pretend <code>H</code> is <em>Hippo</em>:</p>
-<p><img alt="BruteForceSearch" src="static/bruteforce-search.gif" /></p>
-<p><code>n</code> operations is not inherently bad. If you have a list
-of 10 words. <code>n</code> operations isn't going to harm you. It
-starts to get a bit much when you have a billion words
-and it's not practical when you have <code>n</code> words to
-find among a billion words.</p>
-<p>Here's where we can apply binary search. If we want to find
-the word <em>"Hippo"</em>. We
-start by jumping to a random page, or we open the book in
-the middle.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup> If the dictionary is
-260 pages the middle will land us on 130 which will be <em>M</em>.
-We know that H is before <em>M</em> so we can throw away half the
-dictionary. <code>M</code>-&gt;<code>Z</code>, so from a single operation we've
-already chopped the worst case scenario to <code>n/2</code>. We
-don't stop here, now we go to page 65 (half of 130) which
-lands us somewhere between <code>F</code> and <code>G</code> we know <code>H</code> is after
-<code>G</code> so now we can pick something in between <code>G</code> -&gt; <code>M</code> =
-<code>J</code>. We continue doing this, narrowing down the pages, until
-we land on the page that contains <em>Hippo</em>.</p>
-<p><img alt="BinarySearch" src="static/binarysearch.gif" /></p>
-<p>In the worst-case scenario, when we are looking in a
-dictionary of 260 pages, we do <code>9</code> operations. If we relied
-on the previous algorithm we would do <code>260</code> operations in
-the worst-case.</p>
-<h3>The Weaknesses</h3>
-<p>This explanation does a good job to help us understand the
-algorithm but it overcomplicates binary search as it
-breaks down the operations that binary search is doing into
-three parts.</p>
-<ol>
-<li>Is the current word the word we are looking for?</li>
-<li>Is the word we are looking for ahead of the current word?</li>
-<li>Is the word we are looking for behind the current word?</li>
-</ol>
-<p>These questions may help inform us as to how the algorithm
-behaves, but we can simplify it to the single binary question.</p>
-<blockquote>
-<p>When does the word we are looking for no longer appear
-after our current word?</p>
-</blockquote>
-<p>Instead of imaging the sequence as the words that might appear
-on each page, we can picture the sequence as the outcome of the
-statement: The word I'm looking for is after the current
-word.</p>
-<p><img alt="StateTransition" src="static/state-transition.gif" /></p>
-<p>As a result this frames binary search as a solution to finding
-a state transition. It is at the point when our word not
-longer appears after the current word that we find the word
-we are looking for.</p>
-<h3>Git Bisect</h3>
-<p>Binary search is used to find bugs. If you're familiar with
-<code>git</code> then you might have heard of <code>git bisect</code>. For those
-unfamiliar with <code>git</code> imagine a timeline with each point in
-that timeline being a change to a file. So every time the
-file is saved it adds a new node to the timeline.</p>
-<p>Now instead of a single file, git works across a whole
-software project and each save is being noted down on the
-timeline. A change is what is being added and what is being
-removed, so the accumulated sum of all these changes is the
-current state of the project.</p>
-<p>On large teams and complex projects bugs can occur after
-several changes have been made to the code. If we
-know that the code is broken in its current state but
-aren't sure what change caused the bug we can use <code>git
-bisect</code> to figure out which change is the culprit.</p>
-<p>When we run <code>git bisect</code> we provide it with a point in time
-that we are certain no bug existed. <code>git bisect</code> will
-then present us a change between that time and now.</p>
-<ol>
-<li>No bug</li>
-<li>?</li>
-<li>?</li>
-<li>broken?</li>
-<li>?</li>
-<li>?</li>
-<li>Bug</li>
-</ol>
-<p>We then have to answer; is the software at point <code>4</code>
-broken? If yes, the bug was introduced between <code>1</code> and <code>4</code>.
-This rules out all points after <code>4</code>. Cutting the
-points we have to analyse down in half. <code>git bisect</code>
-continues, running a binary search over the changes in
-the project until we find the change on the timeline that
-introduced the bug.</p>
-<p>Essentially we are using binary search to answer the
-statement: The bug exists, because we are interested when the
-state transitions from "The bug doesn't exist" to "The bug
-exists".</p>
-<h3>The Boolean Function</h3>
-<p>We can now separate binary search into two
-distinct parts. The algorithm part, which moves a pointer
-either up or down the timeline and the function that
-computes a boolean response. With this we can ask more
-interesting questions for which binary search provides
-an answer, as an example; "When did spend increase?" or
-"When did the user go into debt?".</p>
-<p>We can even provide two arrays and find the answer for
-"When did trend A over take trend B", without computing the
-delta for all observations on the timeline.</p>
-<p><img alt="DeltaSearch" src="static/delta-search.gif" /></p>
-<p>The main underlining assumption taught with the
-traditional explanation is that the set you're operating on
-should already be sorted for the search to work. The example
-above shows that this isn't true.
-Binary search only requires the underlying data to be bisect-able.</p>
-<p>Binary search is an effective tool for these state
-transition problems. It is interesting that the
-algorithm on its own is easy to understand, the
-complexity and it's application seems to grow when you
-separate the algorithms <em>iterator</em> and the <em>statement</em>.</p>
-<p>I'd be interested in finding out if the application of other
-algorithms grows when they're decomposed in a similar way.</p>
-<h3>Further reading</h3>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Root-finding_algorithm">Root
-    Finding</a></li>
-</ul>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>I realise that using an analogy before explaining
-binary search might have lost some people.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>We assume that words are evenly distributed in a
-  dictionary to keep things simple.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:15 | </font>
-                    <a href="reframe-binary-search.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn6.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn4.html" class="previous-page">Newer ⮕</a>
@@ -1087,6 +1027,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/release-sooner-learn-faster.html">
+                        <span>Release sooner, Learn faster</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/accountability.html">
                         <span>Accountability</span>

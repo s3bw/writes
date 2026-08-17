@@ -1,5 +1,164 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-07-27T12:02:00+01:00</updated><entry><title>Accountability</title><link href="https://s3bw.github.io/writes/accountability.html" rel="alternate"/><published>2026-07-27T12:02:00+01:00</published><updated>2026-07-27T12:02:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-07-27:/writes/accountability.html</id><summary type="html">&lt;p&gt;There's no growth without accountability&lt;/p&gt;</summary><content type="html">&lt;p&gt;The strongest leaders aren't afraid to recognise failure.
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/all.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-08-17T12:01:00+01:00</updated><entry><title>Release sooner, Learn faster</title><link href="https://s3bw.github.io/writes/release-sooner-learn-faster.html" rel="alternate"/><published>2026-08-17T12:01:00+01:00</published><updated>2026-08-17T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-08-17:/writes/release-sooner-learn-faster.html</id><summary type="html">&lt;p&gt;The key to running a successful product team is to establish a
+culture that seeks to aggressively shorten the time it takes
+the team to make mistakes. Shipping the wrong thing in one
+week is better than shipping the wrong thing in 6 months.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Startups fail for the same reason you might. The typical
+failure case for startups include no market need and
+failing to pivot quick enough. These are also risks faced by
+larger companies but they're harder to notice. A typical
+solution from leadership is to remove processes and promote
+behaving "like a startup".&lt;/p&gt;
+&lt;p&gt;One does not throw process out the window in order to
+succeed. If this were the case; injecting chaos into a team
+would be the dominant strategy.&lt;/p&gt;
+&lt;p&gt;The key to running a successful product team is to establish a
+culture that seeks to aggressively shorten the time it takes
+for the team to make mistakes and learn. Shipping the wrong thing
+in one week is better than shipping the wrong thing in 6 months.&lt;/p&gt;
+&lt;!--
+
+Plan for later, build for now.[^1]
+
+[^1]: Caveats are often boring, but a caveat on plans. I
+    don't think they should be tossed out entirely, yet. If we
+    need to determine how we can have secure energy as a
+    nation we would need a notion of a plan, but we should
+    always be working from the perspective of what is the
+    most I can do today that will let us get there. Or the
+    plan could be "become our own energy source" but we
+    might need to break it down and learn somethings and
+    have benchmarks so we can measure that we are moving
+    forward. Always from the perspective of today. If I
+    could supply 1% of energy today, that's progress and who
+    would know what getting that second percent might look
+    like, but I have a better idea than I did when we were
+    sitting on 0%.
+
+Planning for something in 2 years is for the government. The
+further out into the future something is the higher level it
+should be. Ok we need to secure our energy for the future,
+but what are we capable of doing today.
+--&gt;
+
+&lt;h3&gt;Long Term Risks&lt;/h3&gt;
+&lt;p&gt;Long term plans lack the existence of genuine
+feedback, instead feedback is received on the idea in our
+head and how the idea is perceived in someone else's head.
+This misalignment is one of the risks we bake into the
+development cycle among others that aren't obvious when we
+have a long development horizon.&lt;/p&gt;
+&lt;p&gt;A plan is the route we take from the current state
+of the world A and the world we wish to exist B. When we
+commit to the plan we are hoping that this new world will be
+the place everyone wants to be. If 11/12 startups fail this
+indicates we are generally bad at envisioning futures.&lt;/p&gt;
+&lt;p&gt;Quarterly releases has the risk of assuming
+what is true today will still be still in three months and
+that everything will go according to plan during this time
+and not be derailed by something that takes priority.&lt;/p&gt;
+&lt;p&gt;If things do go &lt;em&gt;according to plan&lt;/em&gt; and we get to release,
+the best case scenario is that the vision is only three
+months old. However in reality one learns, ideas mature and the
+state of the real world can change in a short time.&lt;/p&gt;
+&lt;p&gt;Long on-going projects are hard to back out of. Admitting
+defeat is hard especially if a competitor fails finding
+product market fit for the very next thing you're waiting to
+release. There's the sunk cost fallacy, political stake, emotions
+and the missed opportunities from having to sit
+down and crunch in the last minutes of release. Even having
+your head in the problem can help you realise that it might
+not work out and we have to ask ourselves if we've reached
+the point of no return.&lt;/p&gt;
+&lt;p&gt;A project that is under an on-going and long product
+iteration cycle needs to constantly reassure stakeholder
+that everything is alright and will be alright. Additionally there's the
+pressure being applied from shiny new ideas that have
+novelty appeal and are more exciting to talk about than the
+thing we've been actively working on for the last two
+months.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;These are all systemic risks that are not built into the product
+but are built across the delivery process. A company that
+releases quarterly has a minimum reaction time of 3 months.&lt;/p&gt;
+&lt;h3&gt;What can we do?&lt;/h3&gt;
+&lt;p&gt;We have two goals. Find out what is valuable and minimize
+the time it takes to deliver that value. Ideas are cheap,
+customers pay you for what you release they don't pay for
+what you plan.&lt;/p&gt;
+&lt;p&gt;Learning comes from the user and you can skip
+discussions or second opinions. Getting something into the
+users hands is the opportunity to learn far more than you
+might from a peer. Spending 2 weeks to fail is far cheaper
+than spending 3 months and now you can take what you've
+learnt into the next cycle.&lt;/p&gt;
+&lt;p&gt;Successful startups are skipping advise from the experts and
+just seeing what works. Senior leadership can sometimes hold
+innovation back and a little naivety can go along way.
+We need maturity to say "I don't know" and bravery to say
+"Let just give it a go".&lt;/p&gt;
+&lt;p&gt;Identify the processes that are busy work, work that
+&lt;em&gt;feels&lt;/em&gt; productive but slows down your ability to
+release. This could be planning meetings with teams that
+have nothing to do with your project.&lt;/p&gt;
+&lt;p&gt;Focus on development that gets you signals instead of
+releasing fluff. You don't need to release the entire
+picture, if you have the opportunity to release only one
+thing and that thing helps you determine if your vision is
+wrong, you shouldn't be building anything else.&lt;/p&gt;
+&lt;h3&gt;Do some now&lt;/h3&gt;
+&lt;p&gt;Delivering something now is better than delivering it all at
+later.&lt;/p&gt;
+&lt;p&gt;Don't delay learning, if you release a product to the world
+after months of working on it, you're going to be doing a
+lot of &lt;em&gt;"learning"&lt;/em&gt; after that release. Only if it's
+not incredibly hard to separate that parts that are cruft and
+the parts that are valuable in this release - it is far easier
+to learn iteratively than it is to learn while you're putting
+out fires.&lt;/p&gt;
+&lt;p&gt;There are no rules, you are allowed to release something and
+have users find it by chance or selective introduction.
+&lt;em&gt;Releasing a feature&lt;/em&gt; is
+different from &lt;em&gt;announcing a feature&lt;/em&gt;. Some users might
+never come into contact with the feature, and those that
+find it  might ignore it since it doesn't fit their use
+case. It is fine for things to not be a fit for all
+customers, but the users that find it's useful have had
+value delivered to them without you needing to complete the
+entire project. To these customers you've done this quicker
+than expected and now you're being paid earlier than
+expected.&lt;/p&gt;
+&lt;p&gt;Value can be delivered even if it requires manual work.
+Managing to automate 40% of the workload while
+requiring the rest to be fine-tuned from the user will be
+seen from the determined customer as saving them 40% of the
+time, they won't see the job as half done. Their concern is
+getting to market, they have their own competitors and
+you've just given them a 40% head start. Had you not
+released early, they would have to do the 40% themselves
+anyway.&lt;/p&gt;
+&lt;p&gt;Waiting to serve all use cases delay some of your customers
+when they could be using that time to make their money.
+Doing 20% of the work might be 10% more than a competitor,
+and releasing sooner positions you better and can de-risk
+churn.&lt;/p&gt;
+&lt;p&gt;Are your customers even asking for it? You can get through
+releasing 10% of the plan and suddenly all your existing
+customers adopt the feature without you needing to sink time
+into the other 90% of the work that you had assumed would
+be needed to convince them. Ditch the plan, ask them what's
+next.&lt;/p&gt;
+&lt;p&gt;If there's one truth or take away from this post; it's that
+the importance of something being done diminishes over time
+so the sooner something is delivered the higher it's overall
+impact. No matter how small.&lt;/p&gt;
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;Often out leaders just need to be unconditional hype
+people, always gassed about the work we are doing.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="engineering"/><category term="software"/></entry><entry><title>Accountability</title><link href="https://s3bw.github.io/writes/accountability.html" rel="alternate"/><published>2026-07-27T12:02:00+01:00</published><updated>2026-07-27T12:02:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-07-27:/writes/accountability.html</id><summary type="html">&lt;p&gt;There's no growth without accountability&lt;/p&gt;</summary><content type="html">&lt;p&gt;The strongest leaders aren't afraid to recognise failure.
 Some are even demonised for shutting down parts of a
 business that aren't working but this is no different
 to removing a lazy member from the group project. All
