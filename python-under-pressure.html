@@ -14,12 +14,12 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw</title>
+        <title>s3bw : Python Under Pressure</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw"/>
+        <meta property='og:title' content="s3bw : Python Under Pressure"/>
                 <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=""/>
-        <meta property='og:url' content="https://s3bw.github.io/writes"/>
+        <meta property='og:description' content=" : <p>A few tricks for the python toolbox.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : python-under-pressure.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -49,490 +49,205 @@
 
           <div id="content">
             <div id="blog">
+<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
+<article>
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 16 March 2026</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Learning from Sales</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>It is not the job of sales to find customers with problems
-that we have solved, but also to find the problems that we can
-potentially solve. The role is one part customer relations
-and one part business development.</p>
-<p>The challenge with this role is that features fall on a
-spectrum from nice-to-have to critical-for-business; being
-able to tell the difference is a key skill for anyone in
-sales. If we filter all the nice-to-have functionality
-out of the developer's backlog what remains is the high
-value and impactful functions that allow us to sign more
-deals.</p>
-<p>Engineering teams often miss this business context
-and lack the skill to differentiate these features. Part of
-the problem stems from being a few steps removed from the
-customer and nice-to-have features can appear more
-exciting to work on but don't end up creating value.</p>
-<p>Engineers that wish to be highly autonomous and are
-charged with seeking impactful work need to exercise their
-inner salesperson. Those that don't embrace these skills are
-at risk of wasting their time and working on the wrong
-thing.</p>
-<h3>Buy Signals</h3>
-<p>Those in sales and business dev look for hints that
-inform them of the project's potential to get to the
-deal signing stage. Focusing on projects with high potential
-allows us to avoid chasing cases that won't move forward or
-are likely to end without being closed.</p>
-<p>If more than one customer is asking for a feature this can
-be an obvious indication that focusing on this can provide
-more impact. If you're working on internal software
-infrastructure, are you getting a feature request from more
-than one team, or is it from the esoteric data scientist
-that seems to have their own bespoke setup?</p>
-<p>Sales rely on buy signals. A buy signal can indicate
-when a client is excited enough by a solution that they are
-willing to consider a purchase. The most obvious way they
-signal this is by giving you money. If they're trying
-to give you money before the solution is built, you'll know the
-solution is somewhat important to them.</p>
-<p>We don't have to rely on the client putting down money for
-us to recognise a buy signal. Buy signals can appear from
-any skin a customer is willing to risk for a solution. If a
-customer is willing to vouch for the product to a superior
-this is a political stake. This allows us to move up
-the decision chain and provides a positive signal that
-a deal can make it to close. We also use this as a way of
-making progress in conversations without explicitly asking
-for money.</p>
-<p>Software engineers should want to get closer to the projects
-that have the largest impact. We can use buy signals to
-determine the projects with the most buy-in from leadership
-and create the most business.</p>
-<h3>Discovery Questions</h3>
-<p>Developers can find themselves working on the right project
-but can end up developing the wrong thing without an accurate
-idea of the pain-point. We need to peel back the layers that
-surround a customer's pain to determine how we may best
-deliver.</p>
-<p>Sales do this with discovery sessions or hearing it directly
-from the customer. Their goal is to avoid making incorrect
-assumptions about the problem which may lead to building the
-wrong solution. Software
-engineers could also benefit from this skill. If you're
-given a spec an engineer should ensure they're delivering the
-appropriate fix, otherwise they risk missing the target and
-have to do revisions or start again from scratch.</p>
-<p>Sales does this with open ended questions, the more space
-they provide a customer to explore the problem the higher
-the chance we expose insight. Getting them to dig deeper on
-specific points can expose issues they might be having and
-asking how a solution might affect their business can help
-sales qualify this lead.</p>
-<p>A classic technique of getting your customer to talk is
-called <em>Mirroring</em> covered in "Never Split the Difference"
-by Chris Voss.</p>
-<p>Are your developers asking enough questions to expose
-misaligned assumptions?</p>
-<h3>Touch Points</h3>
-<!--
-Sales qualifying attributes.
+<div class="fullbody">
+    <div class="datebody">
+        <h2 class="date">Mon 24 August 2026</h2>
+    </div>
+    <div class="blogbodytop"></div>
+    <div class="blogbody">
+        <div class="titlebody">
+            <h3 class="title">
+                <font style="vertical-align: inherit;">Python Under Pressure</font>
+            </h3>
+        </div>
+        <div class="main">
+            <p>The first software book I bought was <em>Effective Python</em> by
+Brett Slatkin. The book distills tips and tricks learnt
+by Brett over the course of his career. It was in this book
+I first encountered how to use the <code>enumerate</code> keyword. Over
+the course of my career a new hint like this one has sparked
+joy and I've experienced first hand how pulling one of these
+out of the back pocket during a live interview can intrigue
+an interviewer.</p>
+<p>One can speak a language their whole life and every so often
+come across a new word that you've not encountered before
+but it does a very good job of describing the current
+situation. The same happen in software.</p>
+<p>Python is a language with a large standard library that
+offers many tools, so much so that you can even <code>import antigravity</code>.
+Here's a shortlist of some of the tricks you can do when you
+have to write <em>python under pressure.</em></p>
+<h2>Modular Operator</h2>
+<p>Running into a situation where you need to cycle through
+indexes in an array the modular operator <code>%</code> is the tool of
+choice.</p>
+<p>Using it we can have x cycle from 0 -&gt; 5 and back to 0. It's
+application extends to explaining how hash look ups work in
+a key value store and providing an answer to a simple
+question like how much remains after dividing 5 by 3.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># x cycles from 0 -&gt; 5 and back to 0.</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">6</span>
+</code></pre></div>
 
-- Good cadence to responses, if they're driving the coms.
-    - Bought before.
-    - Not scared to purchase
-    - The money isn't theirs. Risk takers.
-    - Driving it from a compliance perspective.
-   - (Luxury purchases).
--->
+<div class="highlight"><pre><span></span><code><span class="c1"># How much remains after dividing 5 by 3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span> <span class="o">%</span> <span class="mi">3</span>
+<span class="mi">2</span>
+</code></pre></div>
 
-<p>Progress updates with customers allow you to show that you
-are keeping them in mind and their requests haven't been
-forgotten about. They also provide a heads up when new
-features are near release. They are used to build trust and
-allow the customer to feel like they are helping guide the
-process.</p>
-<p>If your wins are also their wins they will feel like they
-have more skin in the project's success and become an
-internal champion across the industry and in their own
-business.</p>
-<p>How often do you provide a task to a developer and
-only hear about it three months later when there's just two
-weeks until the deadline?</p>
-<p>Regular touch points don't just serve the relationship you
-are building with your customers but also allow you to
-validate the project closer to real-time. Ensuring that you
-are headed in the correct direction is critical for success.
-If you're heading down the wrong path you'll want to know as
-soon as possible.</p>
-<p>It's a shame that developers seem to be stereotyped as
-introverts lacking people skills that wish to be isolated
-from any call with the customer. The industry appears to
-lean into this idea by adding more barriers between the
-client and developer. The truth is the companies that have
-their developers closest to users and customers are
-the ones that succeed and the best way for an engineer to
-level up is to care more about the customer.</p>
-<h3>Determine Timelines</h3>
-<p>Software can rely on external processes and teams. Figure
-out what you're building and predict where you might need
-approvals or contracts, this will allow you to get the ball
-rolling in those departments. Sales already do this on their
-discovery calls by probing if the customer will need to
-bump other departments, bumping them now can lead to less
-delay.</p>
-<p>Within a company we might require a third party tool for the
-new feature we're developing, so the sooner we loop in
-finance or the security team the better. We can have them
-work on their specifics in the background while we work on
-the feature. We can probe our PM before we start the project
-that we might require looping in these other teams.</p>
-<p>We should also determine when something will be needed and
-understand the timeline. They could be aiming to deploy
-their MVP in a month which could affect how we prioritise
-building the solution. If the deadline is tight, perhaps we
-can determine if there's only a subset of features required
-for the MVP and avoid sinking time into the features that
-are expected at a later time.</p>
-<h3>Alignment</h3>
-<p>Developers can level themselves up by becoming more
-aligned with the business and not less. One way of doing
-this is by moving closer to the customer or learning how
-other roles operate. Software will continue to be a
-competitive industry and engineers can't afford to waste
-time on things that don't delight their users and/or provide
-impact.</p>
-                </div>
-            </div>
+<h2>Floor division</h2>
+<p>When we don't care about the remainder we can use a floor
+division to provide a nice round int. This answers the
+simple question, how many times can 4 fit into 11:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="mi">11</span> <span class="o">//</span> <span class="mi">4</span>
+<span class="mi">2</span>
+</code></pre></div>
+
+<h2>Divmod</h2>
+<p>When we can't remember if we should be using <code>%</code> or <code>//</code> in
+the middle of a live interview then we can use the builtin
+keyword <code>divmod</code> to give us both answers.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">divmod</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>dict.setdefault</h2>
+<p>There are some tricky problems that want you to set a key if
+it doesn't exist in a map but if it already exists then
+avoid updating the map but ensure the value being set is the
+same as the value that has already been set. Obviously you
+can do this without <code>setdefault</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="n">new_value</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">old_value</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">old_value</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">old_value</span> <span class="o">==</span> <span class="n">new_value</span><span class="p">:</span>
+        <span class="k">raise</span>
+</code></pre></div>
+
+<p>Here's how you can do it with <code>setdefault</code>.</p>
+<div class="highlight"><pre><span></span><code>x = {&quot;foo&quot;: 4}
+
+new_value = 10
+
+old_value = x.setdefault(&quot;foo&quot;, new_value)
+if old_value == new_value:
+    raise
+</code></pre></div>
+
+<p>Setdefault will insert the key with the new value if the key
+isn't already in the dictionary. When it is already in the
+dictionary it returns that value otherwise it sets the
+provided value and also returns that value.</p>
+<h2>Greatest common denominator</h2>
+<p>If you need to perfectly tile a 21x35 rectangle with squares, what
+is the size of largest square that will cover the area of this
+rectangle?</p>
+<p>The answer is the largest number that the two numbers, 21
+and 35,  can be divided by.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">math</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">)</span>
+<span class="mi">7</span>
+</code></pre></div>
+
+<p>Thus the largest size square is 7x7.</p>
+<h2>Prefix sum</h2>
+<p>Prefix sums is a common technique used to solve coding
+problems such as <a href="https://leetcode.com/problems/subarray-sum-equals-k/description/">"Subarray Sum Equals
+k"</a>.
+A prefix sum at index i represents the sum of all items from
+0 to i. We can create a prefix sum in python using
+itertools.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">accumulate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]))</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">]</span>
+</code></pre></div>
+
+<h2>Defaultdict</h2>
+<p>Defaultdict is a classic tool which allows you to specify
+the default instantiation for a key. If you need to track a
+list of elements for specific keys you can instantiate the
+default <code>dict</code> with <code>list</code>. To avoid checking if a key
+already exists and creating a new list if not.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">defaultdict</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span>
+<span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+</code></pre></div>
+
+<p>It also plays nicely with counting.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">defaultdict</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span>
+<span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+</code></pre></div>
+
+<h2>Heaps</h2>
+<p>Tracking key usage or needing a priority ordered queue will
+require using a min/max heap. Fortunately python offers
+methods that transforms lists into these heaps.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">heapq</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">heapify</span>
+
+<span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span>
+<span class="n">heapify</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Relying on <code>heappush</code> and <code>heappop</code> allow us to dequeue or
+enqueue items to our heap while maintaining priority order.</p>
+<h2>deque vs list</h2>
+<p>I've covered <a href="./python-deque.html">deque before</a>
+in essence we can't always rely on the builtin list as they
+are dynamic arrays, we need to remove from the front and pop
+from the back in constant time. The deque is a builtin
+solution for linked lists.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+<span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="mi">1</span>
+</code></pre></div>
+
+<h2>Bisect</h2>
+<p>Another one <a href="./reframe-binary-search.html">already covered</a>.
+This is Python's own implementation of binary search. If we
+are given a sorted array and wish to insert a new item while
+maintaining order we can use <code>bisect_left</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">bisect_left</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">bisect_left</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="mi">3</span>
+</code></pre></div>
         </div>
 
+    </div>
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 09 March 2026</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">The Moderate Take</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>Economics and politics are determined by the most compelling
-stories and occasionally it is hit by reality. This is one of
-the challenges when following reactionary discourses on
-platforms like Linkedin, Reddit and Twitter.</p>
-<p>When advice comes from board members and VCs I am reminded
-that they scroll the same threads on reddit that I do. Their
-opinion is often shaped by the highest voted comment in
-these forums.</p>
-<p>Unfortunately we aren't gripped by stories that are filled with
-the context and the caveats that exist in the real world and this
-has shifted us into more extreme political leanings. Why
-should we fill our content with details when this
-jeopardizes the opportunity of going viral.</p>
-<p><img alt="Good Work" src="static/2026-03-09/goodwork.png" /></p>
-<p>False narratives get the clicks and impact stocks
-because they're entertaining and persuading. We are
-willing to sit still and listen to the stories that are novel and
-gripping. 14 years ago <a href="https://youtu.be/IiPJsI8pl8Q?si=5435Ne_fRnxcigi9&amp;t=827">Elon said</a>
-we would land people on Mars in 10 years. (15-20 years in
-the worst-case).</p>
-<blockquote>
-<p>including caveats all the time makes articles too awkward to
-read and buries your actual point</p>
-<ul>
-<li><a href="https://www.seangoedecke.com/on-writing/#:~:text=including%20caveats%20all%20the%20time%20makes%20articles%20too%20awkward%20to%20read%20and%20buries%20your%20actual%20point">Sean
-  Goedecke</a></li>
-</ul>
-</blockquote>
-<p>No one finds being moderate sexy.</p>
-<h3>The boring parts of software</h3>
-<p>The engineers that have the largest impact are the
-ones that read the most documentation. Getting through
-software specs is tough, they're not filled with fluffy
-prose and they're often dense and technical, but nothing
-delivers value like saying: "We don't need to do that work,
-that feature already exists in the API".</p>
-<p>Similarly, the largest mistakes I've seen made in software
-come from conclusions being made too quickly after reading a
-single page of documentation. Engineers also avoid
-reading documentation by jumping on a band wagon of
-agreement without verification.</p>
-<p>This extends to how reactionary takes tend to mold their
-opinions. Life is easier when someone does the work for
-you. If things go belly up, hey that wasn't <em>my</em>
-misinterpretation.</p>
-<h3>Where's it shifting?</h3>
-<p>This doesn't just apply to engineer's, Steve Eisman had this
-to say about the finance industry in 2008, but this applies
-to everyone.</p>
-<blockquote>
-<p>I think one of the hardest things for all human beings, me
-too, to deal with our paradigm shifts. You know, you exist
-in a paradigm. It's been around from a very, very long time.
-Your whole career is based on that paradigm. you've made a
-lot of money in that paradigm and then it turns out that
-the paradigm is either changing because of technology or
-maybe the paradigm was actually wrong because it was based
-on continuously increasing leverage which is what the
-financial services industry's paradigm was based on human
-beings have tremendously difficult time dealing with paradigm
-shifts. Tremendous.</p>
-<p>It's like a nightmare. They don't want to deal with it.</p>
-<ul>
-<li><a href="https://youtu.be/kL7r0dRGip8?si=C5WJQOtju8-Nl-FT&amp;t=2850">Steve
-  Eisman</a>
-A.k.a Steve Carell in The Big Short</li>
-</ul>
-</blockquote>
-<p><a href="https://www.reddit.com/r/ExperiencedDevs/">r/ExperiencedDevs</a>
-is an echo chamber degrading Ai slop and crafting existential
-dread in the industry. They assert that Ai can never be as
-detailed or accurate as they are when it comes to writing
-code, at the same time they're shaking in their boots
-about the future of their industry.
-When there's commentary on the benefits of AI these comments
-tend to be downvoted or deleted and the blame is put on
-automated bots making up pro-ai agitprop.</p>
-<p>Software engineers tend to be defensive when it comes
-to generative code and state that most of their job wasn't
-code to begin with.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> These engineers aren't out of the
-"Ai makes mistakes" phase or they're moving goal post to
-take the target off their back.</p>
-<p>The latest cohort of uni students are winning hack-a-thons
-without knowing how their applications works.
-<em>r/ExperiencedDevs</em> needs to come to terms with the unknown
-and as long as this industry has been around we've
-never actually known how projects work in
-their entirety. We've never read every line of code in our
-dependencies, not knowing how something works and being able to
-make contributions is not a new phenomenon. Those that have
-succeeded in this industry can wade through the unknown and
-that will continue to be the case.</p>
-<p>It's normal to have strong feelings about the grads picking
-something up in a short amount of time that may have
-taken you longer to hone in on. It's the classic "back in
-my day" reaction.</p>
-<h3>Extremes</h3>
-<p>Unfortunately avoiding nuance leads us to extremes.</p>
-<p>The truth is; software engineering looks different and
-requires different skills at different stages of the
-business and stack. These complaints might just be a misalignment
-with the business.</p>
-<p>Ousterhout describes in his book "A Philosophy of Software
-Design" the difference between strategic coding and
-tactical coding. Where tactical coding relies on hacks to
-get the job done and strategic coding has a more long term
-view on the code base. He vouches that software should be
-done strategically but I believe we need to pick our
-battles.</p>
-<p>There are some entities and functions that are core to
-engineering companies, but they become core at different
-times and we should make an attempt to recognise when this
-change occurs.</p>
-<p>It is nice to pretend that your code is an integral part
-to the business's existence. The truth is a project is always
-initially an experiment and over time it is rewritten
-to more accurate specification as we learn and the business
-learns. Importance is discovered. Your first attempt will
-be done when you know the least about the topic.</p>
-<p>Eventually it might become a core service to many teams
-within the company and at that point it's worth getting
-serious about engineering practices. Front loading your
-engineering standards is making your experimentation more
-expensive.</p>
-<p>If you're treating every project like a personal flower
-garden you'll struggle to recognise when code is dead
-weight. Thank it for its cycles, praise it for the outage it
-caused, the war story and what you have learnt. Then delete it.</p>
-<p>Software is about discovery. Code generation enables us to
-prototype and discover how things work. Prototype for your
-own education not just for the customer. The pace of
-learning has increased and we can discover and experiment
-quicker than ever.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Like I did in "Software is planning"&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
+    <div id="comments"></div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    loadComments('client_fBaxnE6w', '#comments', 'python-under-pressure.html');
+  });
+</script>
+
+
 </div>
-                </div>
-            </div>
-        </div>
 
 
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 15 December 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Power Users</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>Information workers can no longer build their career on
-asymmetric process knowledge. The person in the
-office that knew how to work the niche corporate workflow to
-get their way will be replaced by documentation and
-an MCP server.</p>
-<p>A large overhead for new employees is understanding
-processes at a company or relying on someone to
-inform them how things are done. The archetype of that
-odd senior taking pride in the ability to recall the weird
-edge cases of the internal admin portal hasn't left yet.</p>
-<h3>Products will change</h3>
-<p>Products that avoid allowing their user to voice demand,
-intentions and needs; will soon feel like exploring a
-webpage built in the 90s, cute, quirky and stuck in the
-past.</p>
-<p>The need for an experienced power user has been replaced by
-a Claude or a Gemini. If the LLM can't do it, should we
-deprioritise it and focus on the things it can do?
-We've never had time to explore product features and it
-doesn't help when the UI isn't sorting the buttons
-by their relevancy to the problem I am having,
-there's a gap here and your competitor might be offering me
-a quicker route to market.</p>
-<p>UX design and effort is built around imitating
-interfaces that are already familiar to the audience, for
-example we still use keyboards optimised to
-avoid jamming the hammers in a typewriter, a
-problem modern keyboards no longer have. There's a
-learning curve that needs to be overcome when using systems,
-new and old.</p>
-<p>The interface can create friction.</p>
-<p>We are shifting our interactions with the product to be
-ask and you shall receive.</p>
-<p>If you aren't empowering the ordinary to become power users
-over night you continue to have an under utilised
-product with features that customers need but can't find.
-Search is more relevant than ever.</p>
-<p>Don't leave features on the table. Create the power customers.</p>
-<p>As an aside my grandmother no longer needs me to teach her
-how to upload images to instagram. It would appear her
-ChatGPT assistant has taken my job.</p>
-<h3>Learning will change</h3>
-<p>Software has had the most prevalent increase in
-power users;
-here the iteration cycle for learning has diminished
-significantly. If you've built your career around building
-products through proof, developed learnings and iteration,
-that muscle now allows you to run micro tests 500 times a day.</p>
-<p>The gap self learners and builders are creating will only
-increase as we've exposed them to a tutor with 24/7 office
-hours. Some might argue that the models are not deterministic
-but I'd lean more towards a computer that has read the entire
-corpus of human experience for references than a tutor that
-hit their Goodreads target of 12 books this year.</p>
-<p>Anecdotally; the cycle time of learning to code used to be
-about 20mins of searching or syntax look ups. That has
-been cut down to seconds and if OpenAI is giving us garbage
-we can test if it works quicker than it can write. There are
-few industries that can give feedback on a decision as
-quick. In some industries you have retired by the time
-a decision unravels.</p>
-<p>The speed at which adopters can
-upskill has plummeted but that's only if they're conducting
-a piecemeal development approach and not generating an
-entire slop product or forgetting why there are files
-in a folder called <code>src/</code>.</p>
-<p>As with science there's no way to determine what change led
-to what outcome if we are changing everything all at once.
-Don't replace ceteris paribus with prompt-and-pray.</p>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 28 April 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Engineering Vibe</font>
-                    </h3>
-                </div>
-                <div class="main">
-                    <p>Like it or not, vibe coders are the next software engineers.</p>
-<p>3 years ago I made a prediction that triggered a mixed
-response:</p>
-<blockquote>
-<p>Within our lifetime. We will see a
-YouTuber or streamer becoming head of a state.</p>
-<p>Me (March 4, 2022)</p>
-</blockquote>
-<p>Whilst I don't believe this prediction has come true there's
-been progress. In June 2024 a Cypriot YouTuber was voted
-to become a member of the European Parliament, he earned 19.4%
-of the vote and earned 40% of votes from the 18-24 age group.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<p>The interesting thing about my prediction is that it seems
-that it's actually gone the other way. More politicians are
-becoming <a href="https://www.youtube.com/@liambyrnemp">YouTubers</a> and
-<a href="https://www.theguardian.com/us-news/2024/oct/27/tim-walz-football-video-game-twitch">Streamers.</a></p>
-<p>Could the same thing happen with vibe coders?
-Perhaps software engineers are the next vibe coders.</p>
-<h3>We like to bash</h3>
-<p>We see software engineers being dismissive at the
-content aimed at vibe coders. There's
-a new wave of people being introduced to coding and managing
-complexity; so <a href="https://www.youtube.com/watch?v=BJjsfNO5JTo&amp;t=1s&amp;ab_channel=YCombinator">most of the
-content</a>
-is covering the basics. I.e. Write tests, compartmentalise
-and plan things out before you dive into the code.</p>
-<p>This wave of programmers haven't had the time to digest The
-Mythical Man-Month to learn; upfront planning in
-software leads to a huge reduction in downstream costs.
-They are however learning the hard way, by hitting these
-challenges head on. (For better or worse).</p>
-<h3>How did you get here?</h3>
-<p>It's all a journey and we're at different stages of the
-process. A large overhead to programming is building up the
-vocabulary, this is the struggle for both early stage
-developers and vibe coders.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
-<p>Experienced programmers have been exposed to more language
-and can therefore provide more specificity when commanding
-the computer, vibe coders will get there. Perhaps this
-specificity makes the experienced programmer a better vibe
-coder. Maybe it's <a href="https://stackoverflow.blog/2021/09/28/become-a-better-coder-with-this-one-weird-click/">their
-keyboard.</a></p>
-<p>No one was born with the knowledge of how the computer
-works, there's hurdles to overcome. It was
-only a decade ago we were cringing at someone stating
-they're full-time YouTubers or an Instagram influencer,
-and look, they've still got you glued to your screen.</p>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p><a href="https://www.bbc.co.uk/news/articles/c4nnrwr72dqo">Cypriot Fidias Panayiotou</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>What exactly is the difference between "an early stage
-  developer" and a "vibe coder"? This sums up my point.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-            </div>
-        </div>
-
-
+</article>
             </div>
           </div>
 

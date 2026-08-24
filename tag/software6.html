@@ -53,6 +53,188 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 24 August 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Python Under Pressure</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>The first software book I bought was <em>Effective Python</em> by
+Brett Slatkin. The book distills tips and tricks learnt
+by Brett over the course of his career. It was in this book
+I first encountered how to use the <code>enumerate</code> keyword. Over
+the course of my career a new hint like this one has sparked
+joy and I've experienced first hand how pulling one of these
+out of the back pocket during a live interview can intrigue
+an interviewer.</p>
+<p>One can speak a language their whole life and every so often
+come across a new word that you've not encountered before
+but it does a very good job of describing the current
+situation. The same happen in software.</p>
+<p>Python is a language with a large standard library that
+offers many tools, so much so that you can even <code>import antigravity</code>.
+Here's a shortlist of some of the tricks you can do when you
+have to write <em>python under pressure.</em></p>
+<h2>Modular Operator</h2>
+<p>Running into a situation where you need to cycle through
+indexes in an array the modular operator <code>%</code> is the tool of
+choice.</p>
+<p>Using it we can have x cycle from 0 -&gt; 5 and back to 0. It's
+application extends to explaining how hash look ups work in
+a key value store and providing an answer to a simple
+question like how much remains after dividing 5 by 3.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># x cycles from 0 -&gt; 5 and back to 0.</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">6</span>
+</code></pre></div>
+
+<div class="highlight"><pre><span></span><code><span class="c1"># How much remains after dividing 5 by 3</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="mi">5</span> <span class="o">%</span> <span class="mi">3</span>
+<span class="mi">2</span>
+</code></pre></div>
+
+<h2>Floor division</h2>
+<p>When we don't care about the remainder we can use a floor
+division to provide a nice round int. This answers the
+simple question, how many times can 4 fit into 11:</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="mi">11</span> <span class="o">//</span> <span class="mi">4</span>
+<span class="mi">2</span>
+</code></pre></div>
+
+<h2>Divmod</h2>
+<p>When we can't remember if we should be using <code>%</code> or <code>//</code> in
+the middle of a live interview then we can use the builtin
+keyword <code>divmod</code> to give us both answers.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="nb">divmod</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+
+<h2>dict.setdefault</h2>
+<p>There are some tricky problems that want you to set a key if
+it doesn't exist in a map but if it already exists then
+avoid updating the map but ensure the value being set is the
+same as the value that has already been set. Obviously you
+can do this without <code>setdefault</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="n">new_value</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">old_value</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;foo&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">old_value</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">old_value</span> <span class="o">==</span> <span class="n">new_value</span><span class="p">:</span>
+        <span class="k">raise</span>
+</code></pre></div>
+
+<p>Here's how you can do it with <code>setdefault</code>.</p>
+<div class="highlight"><pre><span></span><code>x = {&quot;foo&quot;: 4}
+
+new_value = 10
+
+old_value = x.setdefault(&quot;foo&quot;, new_value)
+if old_value == new_value:
+    raise
+</code></pre></div>
+
+<p>Setdefault will insert the key with the new value if the key
+isn't already in the dictionary. When it is already in the
+dictionary it returns that value otherwise it sets the
+provided value and also returns that value.</p>
+<h2>Greatest common denominator</h2>
+<p>If you need to perfectly tile a 21x35 rectangle with squares, what
+is the size of largest square that will cover the area of this
+rectangle?</p>
+<p>The answer is the largest number that the two numbers, 21
+and 35,  can be divided by.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">math</span><span class="o">.</span><span class="n">gcd</span><span class="p">(</span><span class="mi">21</span><span class="p">,</span><span class="w"> </span><span class="mi">35</span><span class="p">)</span>
+<span class="mi">7</span>
+</code></pre></div>
+
+<p>Thus the largest size square is 7x7.</p>
+<h2>Prefix sum</h2>
+<p>Prefix sums is a common technique used to solve coding
+problems such as <a href="https://leetcode.com/problems/subarray-sum-equals-k/description/">"Subarray Sum Equals
+k"</a>.
+A prefix sum at index i represents the sum of all items from
+0 to i. We can create a prefix sum in python using
+itertools.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="nb">list</span><span class="p">(</span><span class="n">itertools</span><span class="o">.</span><span class="n">accumulate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">]))</span>
+<span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">13</span><span class="p">]</span>
+</code></pre></div>
+
+<h2>Defaultdict</h2>
+<p>Defaultdict is a classic tool which allows you to specify
+the default instantiation for a key. If you need to track a
+list of elements for specific keys you can instantiate the
+default <code>dict</code> with <code>list</code>. To avoid checking if a key
+already exists and creating a new list if not.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">defaultdict</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span>
+<span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+</code></pre></div>
+
+<p>It also plays nicely with counting.</p>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">defaultdict</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">defaultdict</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+<span class="o">&gt;&gt;&gt;</span><span class="w"> </span><span class="n">tracking</span>
+<span class="p">{</span><span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+</code></pre></div>
+
+<h2>Heaps</h2>
+<p>Tracking key usage or needing a priority ordered queue will
+require using a min/max heap. Fortunately python offers
+methods that transforms lists into these heaps.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">heapq</span><span class="w"> </span><span class="kn">import</span><span class="w"> </span><span class="n">heapify</span>
+
+<span class="n">queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span>
+<span class="n">heapify</span><span class="p">(</span><span class="n">queue</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Relying on <code>heappush</code> and <code>heappop</code> allow us to dequeue or
+enqueue items to our heap while maintaining priority order.</p>
+<h2>deque vs list</h2>
+<p>I've covered <a href="./python-deque.html">deque before</a>
+in essence we can't always rely on the builtin list as they
+are dynamic arrays, we need to remove from the front and pop
+from the back in constant time. The deque is a builtin
+solution for linked lists.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">queue</span> <span class="kn">import</span> <span class="n">deque</span>
+
+<span class="n">q</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+<span class="n">q</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">appendleft</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">q</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+<span class="mi">1</span>
+</code></pre></div>
+
+<h2>Bisect</h2>
+<p>Another one <a href="./reframe-binary-search.html">already covered</a>.
+This is Python's own implementation of binary search. If we
+are given a sorted array and wish to insert a new item while
+maintaining order we can use <code>bisect_left</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">bisect</span> <span class="kn">import</span> <span class="n">bisect_left</span>
+
+<span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">bisect_left</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="mi">3</span>
+</code></pre></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 17 August 2026</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -4327,6 +4509,11 @@ your dusty book of log tables.</p>
                 </div>
                 <div class="side">
                     <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/python-under-pressure.html">
+                        <span>Python Under Pressure</span>
+                      </a>
+                    </div>
+                    <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/release-sooner-learn-faster.html">
                         <span>Release sooner, Learn faster</span>
                       </a>
@@ -4594,6 +4781,9 @@ your dusty book of log tables.</p>
                         <a href="https://s3bw.github.io/writes/category/fashion.html">fashion</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/interviews-python-tips.html">interviews, python, tips</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/leadership.html">leadership</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -4811,6 +5001,9 @@ your dusty book of log tables.</p>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/theory.html">theory</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/tips.html">tips</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>

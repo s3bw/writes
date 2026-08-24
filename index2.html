@@ -54,6 +54,201 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 13 April 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Setting up success</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>I have a frightening memory of joining a company and my
+first Pull Request required me to SSH into a
+compute instance and do a <code>git pull</code> in order to release my
+change into production. On that occasion I found that I
+was also deploying more than just my change as the branch
+was not entirely up to date.</p>
+<p>There's a battle of trade-offs in software where
+things that sound good on paper are often placed in the
+backlog and forgotten about. Something about the process
+being good enough or being the way things have always been done
+that kicks valid improvements down the priority list.
+It is
+with luck that some are granted the privileged to determine what
+they get to work on and companies will give that chance to
+people that have agency and a strong conviction that
+they know better.</p>
+<h3>How it began</h3>
+<p>The other pattern I noticed at that company was a lack of dev and prod
+environments. Everyone with access to the project had access
+to everything. At this stage the company was on-boarding
+more engineers and data scientists and each of them were
+being granted full access to this monolithic environment.</p>
+<p>It was even more exciting to find legacy projects without
+owners and services being deployed into
+production using the developer's container orchestrator of choice.
+Docker-compose, Mesos, self-hosted kubernetes or GKS.</p>
+<p>The company was growing quickly and it felt like with every
+new developer there was a new way to release changes into
+production. Every fire I was pulled into appeared to
+be running on it's own tech stack and required learning how
+things operated from the ground up. Nothing seemed
+transferable from one project to the next.</p>
+<p>These were the problems I had determined to solve.</p>
+<h3>Taking on the problem</h3>
+<p>Over a week I mustered together a team to tackle this
+complexity. The first thing was a meeting with
+the CTO to propose setting up two new project environments;
+one for dev and one for prod.
+This was an easy request as the CTO was horrified to learn
+that things were being deployed straight to production.</p>
+<p>The next thing to setup was a CI/CD pipeline that is
+generic enough to be used across any service. This meant
+that if you wanted to use our new dev/prod environments your
+servers had to be deployed through our automated pipelines.
+To help the other teams we wrote a service template and helm
+chart that would play nice with CI/CD. This also meant that
+we restricted the deployments to a single hosted container
+orchestrator and allowed us to consolidate all the
+different styles of deployment. As a consequence we were able
+to help across more teams as they ran into issues due to us
+becoming more familiar with kubernetes and not having to
+understand an entirely new workflow or orchestrator.</p>
+<h3>The Fun Didn't Stop</h3>
+<p>We had an outage
+at around 2pm in the afternoon when the company
+lost connection to all the servers in the production
+environment. At this point we had around 5 teams deploying
+code on our stack. An urgent message in one of the
+slack channel asking if anyone had changed something
+revealed that someone had assigned their service a new IP
+range which masked our network bridge to the rest of the
+company.</p>
+<p>This is when we introduced terraform. Any network changes or
+changes to the infrastructure could now be reviewed, reverted
+and audited since it was defined in code.
+If something went wrong we could investigate the changes as
+well as having our infra committed to version control.
+We saw the introduction of terraform improve the adoption of
+our stack as new engineers were frightened to work in the
+other cow-boy projects that had existed on infra configured
+by hand through the web UI.</p>
+<p>We started to notice that other teams were adopting our tech
+stack as they no longer needed to spend time on defining the
+release process as we had a template that they could clone
+and get started almost immediately. Now they could tackle
+business problems instead of weighing up the trade-offs of
+each container orchestrator.</p>
+<p>Our helm chart also helped, we got rid of the mountains
+of bespoke yaml used for several k8s deployments.
+We could also serve engineers with features such as
+specifying cron jobs with very little
+configuration in their service spec.
+Most teams were data intensive and relied on scheduled batch
+processes, so in some cases they had only adopted these cronjobs.</p>
+<p>We also developed a library for new services that
+setup logging, sentry integration, trace IDs and database connections
+and introduced a standard for running database migrations in
+the service template. At this point is was
+quite important to encourage shared ownership of these
+codebases. The more open we were to changes from other teams
+the more likely they were to use it and benefit other
+teams from these changes. This broke down the silos that had
+existed previously, as improvements were no longer isolated to
+a single service but could now be utilised across the company.
+It also meant these libraries were improving without needing
+someone on my team working on it full-time.</p>
+<h3>Clear Sailing</h3>
+<p>My team of 5 was serving 80 engineers and
+data scientists across 12 teams. Upon reflection not everything
+went smoothly. There were people that wanted to
+maintain control over their entire stack, perhaps we were a
+bit stretched and couldn't focus on features they required
+at the time. They might have also had disagreements with
+choices we had made in the service template.</p>
+<p>There were also features we developed that didn't get adopted, which
+makes sense to me now. These were things that
+generally slowed people down for very little benefit.
+Contract testing is an example of
+this. On paper having clear contracts between services and
+having a means to define and test these contracts sounds like
+a great idea. The nature of the services at the time, being
+cronjobs or at most two endpoints meant that their interfaces
+weren't growing in complexity and introducing this step in
+the build process wasn't a big enough bang for their buck.</p>
+<p>Service to service authentication was another feature that
+we didn't need at that time. Our services were internal and in a VPC.
+Obviously if we were compromised not being able to send
+requests to the servers in that network would be a great
+thing to have, but I think it would have been better to sink
+time into features that would speed up the adoption of our
+workflow instead of features that added friction. Not to say
+we didn't need this auth layer but we could have potentially
+address this at a later point.</p>
+<h3>Improvements</h3>
+<p>There are improvements to the workflows that I
+would have enjoyed introducing. For example; using a
+CI/CD server that didn't rely on defining our workflows in
+Kotlin. I feel that Kotlin added a barrier to
+contributions and we didn't need this. There
+are other CI/CD tools like gocd.org and concourse-ci.org
+which have an easier way of defining workflows. Although
+now-a-days we can get a lot done with github workflows and
+reduce the reliance on having a CI server.</p>
+<p>We attempted introducing Istio, however, at the time this was an
+aspirational feature but if we had succeeded we would have
+allowed our teams to run canary deployments, which would
+allow them to divert a small amount of traffic to a new
+version of their service and if anything goes wrong, it
+avoids rolling out the broken version to all customers.</p>
+<p>I still seem to come across companies that only give
+leadership the ability to deploy to production and changes
+go out once mid week. When this is the practice many changes
+tend to accumulate and when they're released everything goes
+out as a big-bang deployment. When something breaks in these
+scenarios it's often harder to pinpoint what went wrong.
+Smaller frequent deployments grants autonomy and shortens
+the feedback loop which speeds up a developer finding out what
+went wrong, releases also tend to be less
+disruptive and engineer's have a higher confidence in the changes
+they release into the world.</p>
+<p>The biggest take away from my experience in leading an infra
+team is that we learn by making mistakes, so we shouldn't try
+reduce the number of mistakes we make. We must focus on
+reducing the cost of the mistake through incremental change,
+rollbacks and observability. Many companies and teams try to
+make no mistake at all and in doing so they cost themselves growth.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:00 | </font>
+                    <a href="setting-up-success.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 16 March 2026</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -757,260 +952,6 @@ add, but when there is nothing left to take away.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 19 January 2026</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Chess Programming - Moving</font>
-                    </h3>
-                </div>
-
-<div class="series-container">
-    <p class="series-title">The "Chess Programming" series:</p>
-    <ol class="series-list">
-            <ol>
-                1: <a href="https://s3bw.github.io/writes/chess-programming-bitboards.html">Chess Programming - Bitboards</a>
-            </ol>
-            <ol class="active">
-                2: (here) Chess Programming - Moving
-            </ol>
-    </ol>
-</div>
-
-                <div class="main">
-                    <p>Attempts to create an automatic chess calculator
-date back to 1913. Chess engine software has had many
-optimisations and many minds involved in its evolution.</p>
-<p>Last year I wrote on how chess programs track the
-position of every piece. This article is a slice of the
-chess engine research I compiled when constructing my own
-chess AI and covers how a chess engine resolves where a
-piece can move on the board.</p>
-<p>You can<a href="https://s3bw.github.io/seafish/">play against that chess engine here.</a></p>
-<h3>Bit Operations</h3>
-<p>So far we've covered how to use a 64 bit integer to track the
-positions of each piece and we've covered how to use bit
-operations to determine their type and colour.</p>
-<p>Now the goal is to compute a 64 bit int that
-represents the potential positions that a piece can either
-move-to or attack. This number is called the "moveboard".</p>
-<p>If we have a moveboard for a particular piece we can <code>&amp;</code> the
-positions of the opposing pieces in order to get attacking
-positions and we can subtract the positions of all pieces in
-order to avoid moving a piece to an occupied position.</p>
-<p>If we simplify this to a single position on the board.
-Given that we are able to move to this position, i.e. the
-moveboard is <code>1</code>, and if we consider it occupied by the
-opposition, i.e. having a variable called "theirs"
-being <code>1.</code></p>
-<p>Computing the attacks is determined by doing the following:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; moveboard &amp; theirs
-1
-</code></pre></div>
-
-<p>This tells us the position is a valid attack. If the
-opposition does not occupy that position (<code>theirs == 0</code>).
-Computing for attacks would result in <code>0</code>. There's nothing
-to attack.</p>
-<p>To compute valid moves, if theirs is <code>0</code> and ours is <code>1</code>, we
-do the following:</p>
-<div class="highlight"><pre><span></span><code>&gt;&gt;&gt; moveboard &amp; ~(theirs | ours)
-0
-</code></pre></div>
-
-<p>This indicates that we can't move to this position. If the
-result was 1 then it would be empty and it would be a valid
-position for our piece to move. If we use 64 bit integer
-instead of a single bit, as shown in the example, the
-processor can determine the valid moves and attacks across
-the entire board in a single operation.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
-<h3>Pawns</h3>
-<p>There's an edge case with pawns however, they do not use a
-<code>moveboard</code> to determine the valid moves and attacks as
-the positions a pawn may attack are different to where it
-may move. Despite this they are still relatively simple.</p>
-<p>Given a pawn in the middle of the board we only need to
-shift it up to determine its set of moves and after
-subtracting occupied positions we can determine if the
-pawn can move ahead or not.</p>
-<div class="highlight"><pre><span></span><code><span class="gh">#</span> Shifting up
-pawn_position &gt;&gt; 8
-</code></pre></div>
-
-<p><img alt="Pawn Move" src="static/2026-01-19/moving-pawn.gif" /></p>
-<p>To determine if that pawn can attack we shift the pawn
-twice, "up and left" as well as "up and right". We then
-check to see if the opposition occupies these positions,
-this will determine valid attacks for the pawn.</p>
-<div class="highlight"><pre><span></span><code><span class="gh">#</span> Shifting &quot;up &amp; left&quot; as well as &quot;up &amp; right&quot;
-pawn_position &gt;&gt; 7 &amp;&amp; pawn_position &gt;&gt; 9
-</code></pre></div>
-
-<p><img alt="Pawn Attack" src="static/2026-01-19/attacking-pawn.gif" /></p>
-<h3>Knights</h3>
-<p>Things get more interesting when we compute valid moves
-and attacks for a knight, but how does a knight move?</p>
-<iframe src="https://www.youtube.com/embed/wfDCLEAU9hE?si=1DhNyzUjDv5RdI1_&amp;start=14" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-<p>The knight is interesting because it's the only piece that
-is unrestricted by the position of other pieces. I.e. it can jump
-over pieces to get to where it wants to go. A knight in the
-centre of the board can move to the following locations:</p>
-<p><img alt="Knights Move" src="static/2026-01-19/knights-move.gif" /></p>
-<p>If we had a
-knight sitting on the <code>i</code>th index represented by the "<code>bitboard</code>"
-variable we can compute the moveboard for the knight by doing the
-following shifts:</p>
-<div class="highlight"><pre><span></span><code>(
-    ((bitboard &amp; NOT_H_FILE) &gt;&gt; 15)
-    | ((bitboard &amp; NOT_A_FILE) &gt;&gt; 17)
-    | ((bitboard &amp; NOT_GH_FILE) &gt;&gt; 6)
-    | ((bitboard &amp; NOT_AB_FILE) &gt;&gt; 10)
-    | ((bitboard &amp; NOT_H_FILE) &lt;&lt; 17)
-    | ((bitboard &amp; NOT_A_FILE) &lt;&lt; 15)
-    | ((bitboard &amp; NOT_GH_FILE) &lt;&lt; 10)
-    | ((bitboard &amp; NOT_AB_FILE) &lt;&lt; 6)
-)
-</code></pre></div>
-
-<p>There are four knights on a chess board, so this calculation
-would need to be done 4 times for every new board state.
-Since the performance of a chess engine is largely
-determined by how far into the future it can look, reducing
-the number of calculations on each board state can
-enable the engine to perform a deeper search.</p>
-<p>To avoid these computations, we can simply pre-compute
-the moveboard for every square on the chess board before
-the game begins. We can then provide the engine with a
-lookup table, mapping all positions to their moveboard.
-Avoiding the overhead of computing them during the game.</p>
-<h3>Sliding</h3>
-<p>We also do this for the sliding pieces on a chess
-board. The rooks,
-bishops and queens move in a way that are considered
-as sliding.</p>
-<p>Again we pre-compute all these positions and store
-the result in a map, however this isn't the final moveboard
-for sliding pieces.</p>
-<p><img alt="Sliding Moves" src="static/2026-01-19/sliding-moves.gif" /></p>
-<p>Pieces closer to a sliding piece block its path and unlike
-the knight sliding pieces can't jump over these
-obstructions. So the resulting bitmask can't be used to
-determine the valid moves and attacks on its own.</p>
-<p>The bitmask is used to identify the potential blockers
-along a sliding piece's direction of movement. Indicated in
-orange below:</p>
-<p><img alt="Rook Attack" src="static/2026-01-19/rook-attacks.gif" /></p>
-<p>Once we have identified the potential blockers we use this
-value to map to the final moveboard. This allows us
-to look up any moveboard using all combinations of potential
-blockers during the game and avoids having to shift the
-piece's position along its sliding axis for every new board
-state.</p>
-<p><img alt="Sliding Hash" src="static/2026-01-19/sliding-hash.gif" /></p>
-<p>As explained we can use a moveboard to compute the
-attacking positions (<code>moveboard &amp; theirs</code>). As well as the
-valid positions for moving (<code>moveboard &amp; ~(theirs|ours)</code>).</p>
-<p>In summary the following steps are needed to find the
-attacking positions and moving positions for a rook:</p>
-<ol>
-<li>Given the rook's position lookup the bitmask of an
-   unobstructed rook. <code>(index -&gt; bitmask)</code></li>
-<li>Use the unobstructed bitmask to find potential
-   blockers given all the pieces on the board. <code>(bitmask &amp;
-   (theirs|ours))</code></li>
-<li>Using the locations of all the blockers lookup the final
-   moveboard for the rook. <code>(blockers -&gt; moveboard)</code>.</li>
-</ol>
-<p>Computing potential blockers can be simplified as there
-are positions on the board that would never block a sliding
-piece. Such as positions on the edge of the board.</p>
-<p>Given a rook in
-any of the positions indicated in red we can ignore
-positions in black as having "potential blockers".</p>
-<p><img alt="Sliding Edges" src="static/2026-01-19/sliding-edges.gif" /></p>
-<p>This reduces the overall number of potential blocker
-combinations we need to consider, improving the engine's
-start-up time and memory footprint.</p>
-<p>We do the same for bishops, except these potential blockers
-are computed diagonally and finally we compute the moveboard
-for the queens by combining the outcomes of the rook and the
-bishop.</p>
-<h3>Playing Chess</h3>
-<p>Now that we are able to compute the set of possible moves
-and attacks for each piece on the chessboard. Picking a
-piece at random and picking one of the positions from it's
-set of move and set of attacks will allow a computer to play
-against us.</p>
-<p>This chess engine would still make illegal moves. To play a
-<em>legal</em> game of chess we would need to consider if the king
-is in check or if moving a piece might result in your own
-king being in check.</p>
-<p>Finally; in-order-to implement all legal chess moves
-we would need to extend our move sets to include pushing the pawn
-twice when it is on its starting position, en passant and the
-ability to castle your king.</p>
-<p>It might be more interesting, however, to dive into how a
-chess engine evaluates the board state so that it can make
-an informed decision when it moves a chess piece.</p>
-<!-- We can probably end it here?
-### Betweens
-
-There's one final hash map to pre-compute, and this one
-requires a little deeper knowledge of chess.
-
-In chess we have pieces that are considered _pinned_ when
-moving that piece will result in the king being under
-threat. You can imagine this if your pawn is sitting
-between your king and their rook. If you move your pawn out
-of the way this would leave their rook attacking your king,
-thus this is not a valid move.
-
-In order to discover that a piece is pinned we pre-compute
-the mask of all tiles between any two tiles on the board. We
-can then retrieve a bitboard representing the space between
-the rook and the king and determine if exactly a single
-piece is situated on this bitboard we say that it is pinned.
-
--->
-
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Assuming you have a 64 bit processor.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:03 | </font>
-                    <a href="chess-programming-moving.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/index3.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/index.html" class="previous-page">Newer ⮕</a>
@@ -1139,6 +1080,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/python-under-pressure.html">
+                        <span>Python Under Pressure</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/release-sooner-learn-faster.html">
                         <span>Release sooner, Learn faster</span>
@@ -1407,6 +1353,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         <a href="https://s3bw.github.io/writes/category/fashion.html">fashion</a>
                     </div>
                     <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/category/interviews-python-tips.html">interviews, python, tips</a>
+                    </div>
+                    <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/category/leadership.html">leadership</a>
                     </div>
                     <div class="sidebody category-parent">
@@ -1624,6 +1573,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/theory.html">theory</a>
+                    </div>
+                    <div class="sidebody category-parent">
+                        <a href="https://s3bw.github.io/writes/tag/tips.html">tips</a>
                     </div>
                     <div class="sidebody category-parent">
                         <a href="https://s3bw.github.io/writes/tag/traefik.html">traefik</a>
