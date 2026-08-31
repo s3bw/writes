@@ -54,6 +54,229 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 10 March 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Flash Cards</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>A while back I found out that Jnr. Doctors are keen on using
+flash cards to help them revise for exams. It occurred to me
+that I could also use flash cards to drill some of the concepts
+that would come up in discussions about software systems
+and system design.</p>
+<p>At the time I was developing on a raspberry-pi with a 7-inch
+screen and I was limited to how much I could install on the
+little SD card. At first I tried to use a browser based
+flash card tool, but I was in the mood for doing some deep
+dives to understanding how these actually work under the
+hood.</p>
+<p>This led me to develop
+<a href="https://github.com/s3bw/kanki">Kanki</a> a bespoke flash card
+tool for the command line. In this blog post I break down the
+process I typically use to undertake a software project of
+this scale (i.e tiny scale).</p>
+<h3>Requirements</h3>
+<p>Like all good software projects we start with the high level
+expectations. What do we want this system to do? (Some of
+these are quoted straight out of my notebook.</p>
+<ol>
+<li>I want to have 1000+ flashcards based on software and
+system design</li>
+<li>I should be able to hide the answer, I should be able to
+   reveal the answer.</li>
+<li>Can I input <em>"correct"</em>, <em>"close"</em>, <em>"wrong"</em> etc and
+   update an SR algorithm to handle recall.</li>
+<li>Nice to have, filtering by topic.</li>
+</ol>
+<p>In order to understand how flash cards operate you'd need to
+dig into figuring how the SR works:</p>
+<blockquote>
+<p><strong>Spaced Repetition</strong>: Newly introduced and more difficult
+flashcards are shown more frequently, while older and
+less difficult flashcards are shown less frequently in
+order to exploit the psychological spacing effect.
+The use of spaced repetition has been proven to increase
+the rate of learning. -
+<a href="https://en.wikipedia.org/wiki/Spaced_repetition">Wikipedia</a></p>
+</blockquote>
+<h3>Entities</h3>
+<p>We need to know what things we will be working with:</p>
+<table>
+<thead>
+<tr>
+<th>Card</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Question (string)</td>
+</tr>
+<tr>
+<td>- Answer (string)</td>
+</tr>
+<tr>
+<td>- Topic (string)</td>
+</tr>
+<tr>
+<td>- DeckID (int)</td>
+</tr>
+</tbody>
+</table>
+<p>The card is the question and answer entity which I might
+have 1000 of (In the end I think I had about 60).</p>
+<table>
+<thead>
+<tr>
+<th>Deck</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>- Id (int)</td>
+</tr>
+<tr>
+<td>- Name (string</td>
+</tr>
+</tbody>
+</table>
+<p>The deck is the entity which groups cards, so a card belongs
+to a deck and this allows me to have cards around separate
+topics.</p>
+<hr />
+<h3>Interface</h3>
+<p>This isn't far off from what I drew in the notebook
+but clearly I had a vision and the following sort of
+captures it at the time:</p>
+<p>I want to have a view which allows me to load a specified
+deck. Create a new deck or add cards to an existing deck.</p>
+<div class="highlight"><pre><span></span><code><span class="kr">Load</span><span class="o">:</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">deck_a</span><span class="p">,</span><span class="w"> </span><span class="n">deck_b</span>
+<span class="n">New</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>
+<span class="n">Add</span><span class="o">:</span><span class="w"> </span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
+</code></pre></div>
+
+<p>I want to display the different inputs I can provide as
+answers to each card.</p>
+<div class="highlight"><pre><span></span><code>Again,  Hard,    Good,    Easy
+&lt; 1min  &lt; 6min   &lt; 10min  4 days
+</code></pre></div>
+
+<p>These are some of the settings I'd like to fine tune as I
+get used to playing with the flashcard system.</p>
+<div class="highlight"><pre><span></span><code><span class="n">config</span><span class="o">:</span>
+<span class="k">new</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+<span class="n">review</span><span class="w"> </span><span class="n">cards</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">day</span>
+</code></pre></div>
+
+<h3>Spaced Repetition Algorithm</h3>
+<p>This is where things get slightly more involved since I had
+to understand how Anki and other flash card apps applied
+repetition. It was mostly finding the one that suited me
+best and felt the most natural to play with.</p>
+<p>This is the algorithm I went for:</p>
+<p><strong>step 1</strong>: Cards have a <code>queue</code> field (set to 1 for 'learning') and a
+<code>due</code> field (in minutes) determining when a card should be shown again.</p>
+<p><strong>step 2</strong>: review cards, already studied but are now due to
+be relearnt. <code>queue</code> field set to (2) and due less than or
+equal to today.</p>
+<p><strong>step 3</strong>: 'new', queue is set to (0), these new cards are capped.</p>
+<p>Essentially this determines how we populate the flash cards
+during a session. Using the three queue types:</p>
+<ul>
+<li>0: <code>new</code></li>
+<li>1: <code>learning</code></li>
+<li>2: <code>review</code></li>
+<li>3: <code>relearning</code> (This is essentially a card deemed as
+    "learnt" but you've forgotten it and now it needs to be relearnt).</li>
+</ul>
+<p>Properties of a card.</p>
+<ul>
+<li><strong>due</strong>: the timestamp for when the card should be shown again.</li>
+<li><strong>left</strong>: how many learning steps before the card graduates to review.</li>
+<li><strong>reps</strong>: how many times the card has been shown.</li>
+<li><strong>ivl</strong>: tracking the card interval (time to add when recalculating <strong>due</strong>).</li>
+</ul>
+<h3>Input</h3>
+<p>When answering the flash cards there's four inputs you can
+provide, each of which will cause a different effect, these
+decide the cards position in one of two or three queues.
+The result of these inputs also depends on which queue the
+card is currently in.
+You can see <a href="https://github.com/s3bw/kanki/blob/main/models.py#L106-L134">this
+here</a></p>
+<ul>
+<li><code>Again</code>: Reset number of training reps</li>
+<li><code>Hard</code>: +1 rep, show again in 1 min</li>
+<li><code>Good</code>: +1 rep, show again in 5 min</li>
+<li><code>Easy</code>: +1 rep, show again in 1 day</li>
+</ul>
+<h3>Development</h3>
+<p>Up until this point I hadn't done a single line of code. The
+research done above was undertaken before I started writing
+any code. This helps me have a clear understanding of what
+I'm actually trying to do. It's far easier to scribble away
+in my notebook that it is to change code.</p>
+<p>There are a few things I needed, which I learnt after I'd
+written the tool. Things such as being able to edit a card,
+but these were not major features.</p>
+<p>The other thing that I find interesting (or obvious) is
+solution for the queue. During a learning session you need
+to have the card queues be dynamic since you're
+popping the earliest due card and then you're sorting them
+by when they are next due so the implementation fits using a
+heap quite well. You can see me <a href="https://github.com/s3bw/kanki/blob/main/queues.py">initialising the
+heap</a> here.</p>
+<h3>Conclusion</h3>
+<p>I really enjoyed reading up on some of the complexities
+involved in getting the spaced repetition working in a way
+that allows new topics to be slowly introduced while working
+on cementing topics that were in the progress of being
+learnt. It feels a little exciting when you encounter
+something new during the learning session. I used kanki
+to prepare on some topics and every so often add new cards
+to system design.</p>
+<p>One thing I found quite useful is getting someone else to
+ask you the questions verbally and they make a judgement on
+how close you are to the answer. This can get you more
+comfortable with talking about these topics and the person
+reading the questions can help keep you honest about how
+well you know a topic.</p>
+<p>Lastly it's also interesting that learning is effectively
+broken down into three separate speeds. 1. This is new. 2.
+I'm actively learning this. 3. I should know this.</p>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:38 | </font>
+                    <a href="flash-cards.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 24 January 2022</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -624,127 +847,6 @@ A<span class="w"> </span>Massive<span class="w"> </span>column<span class="w"> <
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Thu 11 October 2018</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Iterator Design Pattern</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Before I started reading <a href="https://en.wikipedia.org/wiki/Design_Patterns">the gang of
-4</a>
-["Go4"],
-I was convinced I would not need an
-<a href="https://en.wikipedia.org/wiki/Iterator_pattern">iterator</a>.
-After all, in python, they are already implemented:</p>
-<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
-
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-</code></pre></div>
-
-<p>In the frame of <em>python lists</em> as aggregate objects, the
-intent of an iterator is satisfied.</p>
-<blockquote>
-<p>Provide a way to access the elements of an
-aggregate object sequentially without exposing
-its underlying representations.</p>
-</blockquote>
-<h3>Displaying notes</h3>
-<p>Here I explain, how the iterator became my favourite design
-pattern.</p>
-<p>I have written about <a href="https://s3bw.github.io/writes/foolscap-list-ordering.html">representation
-of lists before</a>,
-and I don't think this will be my last time. When
-implementing the drop-downs in
-<a href="https://github.com/foxyblue/foolscap">foolscap</a>
-to allow a user to see sections contained in their note,
-I ran into an issue of complexity where I had blocks
-of conditionals dictating what should be displayed
-to a user. I wanted the user to have an indication
-that a note contains sections, and for them to be
-able to toggle a drop-down to see each section.
-Similar to:</p>
-<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="o">(</span>+<span class="o">)</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
-<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
-</code></pre></div>
-
-<p>Where my <code>"circleci"</code> note would contain sections
-and the <code>"docker"</code> note does not. Then expanding:</p>
-<div class="highlight"><pre><span></span><code><span class="w"> </span>&lt;-&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>circleci<span class="w">  </span><span class="p">|</span>
-<span class="w">  </span>└─<span class="w"> </span><span class="p">|</span><span class="w"> </span>-workflow<span class="w"> </span><span class="p">|</span>
-<span class="w">     </span><span class="p">|</span><span class="w"> </span>docker<span class="w">    </span><span class="p">|</span>
-</code></pre></div>
-
-<p>This is where I realised the abstraction power of an
-iterator, And I could hide the collapsed sections
-behind an <code>"if"</code> conditional in an iterator.</p>
-<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Menu</span><span class="p">:</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
-
-    <span class="k">def</span> <span class="nf">visible</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Yield the next appropriate item for display.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">item</span><span class="o">.</span><span class="n">title</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="s1">&#39;expand&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">expand</span><span class="p">:</span>
-                <span class="k">for</span> <span class="n">sub_item</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">sub_items</span><span class="p">:</span>
-                    <span class="k">yield</span> <span class="n">sub_item</span><span class="o">.</span><span class="n">title</span>
-</code></pre></div>
-
-<p>Supporting further traversal policies in my <code>Menu</code>
-class is straightforward, and
-drawing becomes absurdly simplified:</p>
-<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="n">menu</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw all viewable menu items.&quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">menu</span><span class="o">.</span><span class="n">visible</span><span class="p">():</span>
-        <span class="n">draw_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
-</code></pre></div>
-
-<p>After this I thought of a more complex <strong>aggregate</strong>
-structure that I could traverse, <a href="https://github.com/foxyblue/DesignPatterns/blob/master/design_patterns/behavioral/tree_iterator.py">like a tree depth
-first</a>.</p>
-<p>Realising the abstraction strength of the
-iterator, one finds its definition of intent far
-more compelling.</p>
-<blockquote>
-<p>Provide a way to access the elements of an
-aggregate object sequentially without exposing
-its underlying representations.</p>
-</blockquote>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 18:37 | </font>
-                    <a href="iterator-design-pattern.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn10.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn8.html" class="previous-page">Newer ⮕</a>
@@ -873,6 +975,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/random.html">
+                        <span>Random</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/python-under-pressure.html">
                         <span>Python Under Pressure</span>

@@ -14,12 +14,12 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Gray Code</title>
+        <title>s3bw - software</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Gray Code"/>
+        <meta property='og:title' content="s3bw"/>
                 <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>Error reduction with Gray code</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : gray-code.html"/>
+        <meta property='og:description' content=""/>
+        <meta property='og:url' content="https://s3bw.github.io/writes"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -49,129 +49,205 @@
 
           <div id="content">
             <div id="blog">
-<meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
 
-<article>
 
-<div class="fullbody">
-    <div class="datebody">
-        <h2 class="date">Mon 21 April 2025</h2>
-    </div>
-    <div class="blogbodytop"></div>
-    <div class="blogbody">
-        <div class="titlebody">
-            <h3 class="title">
-                <font style="vertical-align: inherit;">Gray Code</font>
-            </h3>
+
+        <div class="fullbody">
+            <div class="datebody">
+                <h2 class="date">Mon 30 June 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Low Latency Computation</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Anything that loads faster than 200ms is instantaneous for
+humans, anything slower and we would perceive the delay.
+Some systems are built to respond quicker than this,
+business cost can be sensitive to latency and every ms can
+make a difference.</p>
+<p>How do we develop highly performant systems? I happened to
+share a train ride with Mark Shannon, who at the time was
+leading a team at Microsoft that had one goal: Make Python
+Fast.</p>
+<p>I asked him, how does one make code more performant? To
+which he responded.</p>
+<blockquote>
+<p>Make it do less.</p>
+</blockquote>
+<p>Here's what doing less looks like:</p>
+<h3>Loop Invariant</h3>
+<p>A simple example of doing less in order to achieve better
+performance is with loop invariant conditions.</p>
+<p>We loop over arrays while we code and make calls to other
+functions while looping. During a refactor or while we move
+code around we might not realise that some of the variables
+we are computing are constant.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
+
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
+</code></pre></div>
+
+<p>You'll notice in the example that I am looping over the list
+<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
+is computed with the integer <code>n</code> which is consistent within
+the scope of this function. If we move the computation of
+<code>beta</code> to a point before we've entered loop we avoid having
+to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
+
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Now <code>beta</code> is computed at most once within this method
+scope, we have essentially achieved doing less. If the
+<code>compute_beta</code> method incurs an expensive overhead and we
+are looking at a lengthy <code>trades</code> list this subtle oversight
+would have a significant impact on our latency.</p>
+<h3>Python</h3>
+<p>There are several layers of abstraction in Python and there
+are ways we can code that allow us to utilise computation in
+C more effectively. One such example of this: using list
+comprehension over a vanilla for-loop.</p>
+<p>If we wish to
+understand the number of steps the machine is doing
+for a method, Python allows us to disassemble bytecode using
+<code>import dis</code>. You might notice that there are additional
+<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
+to a list comprehension avoids this overhead and allows us
+to do less.</p>
+<h3>Databases</h3>
+<p>Relying on external systems can be expensive, in some
+cases we might query the same system several times in
+order to complete an operation. If we have a distributed system
+or intend to scale our server horizontally we are increasing
+the number of things that open and close connections to the
+database. Each time we open/close a connection the CPU has
+to process these instructions, this overhead can be
+significant when we are working in low latency environments.
+To get around this we introduce a connection pool between
+the database and our server, the connection pool manages
+long lived connections on the database and frees up the
+database to focus on database things.</p>
+<p>A common anti-pattern involving a database is having your
+ORM make N+1 queries. For this to occur we have a 1-many
+entity relationship. If we ask the database to return a
+group of n countries and then for each country we ask for
+all cities in that country we are making <code>N</code> (number of
+countries in our initial query) <code>+ 1</code> (the initial query)
+total requests to the database. These can be tricky to spot
+since the individual query could be performant, but the
+accumulative overhead and latency of all these queries can
+cause problems.</p>
+<p>We get around this by either asking for all countries and
+then ask for all cities given a set of country ids and
+perform the mapping in memory on the server, or we can
+increase the complexity of the query using a JOIN and allow
+the database to make the mapping. Either way we avoid the
+back and forth overhead of making <code>N+1</code> queries, effectively
+doing less.</p>
+<h3>When we can't do less</h3>
+<p>Sometimes we can't do less, but we can decide when work is
+done. There are situations that allow us to pre compute
+results and provide performant computation at the cost of a
+slower start time.</p>
+<p>Chess programming is an area which relies on high
+performance, the quick our program the further into the
+future we can look on each move during the game. One way we
+speed up a chess engine is by precomputing the movesets for
+every piece on the board for every possible position they
+might be in before the game starts. This allows us to look
+up all possible board positions for a piece during the game
+instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
+solver</a>
+he actually computes a pattern matrix for each word and
+saves it to a file in order to avoid having to incur the
+overhead on each execution of his wordle solver.</p>
+<h3>Constant Folding</h3>
+<p>Lastly there's an interesting optimisation that compilers
+make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
+Folding.</a></p>
+<p>When python is interpreted it parses the AST before
+executing. During this AST construction it finds expressions
+who's outcome is constant and computes the constant at this
+point instead of computing the expression every time it is
+referenced. As an example the variable <code>x = 24
+* 60</code> will be converted to <code>1440</code> before compiling the
+bytecode instructs for the machine.</p>
+<p>So in all cases, if we want a computer to be highly
+performant we just have to make it do less.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>More on this will be explained when I write my second
+  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
+                    <a href="low-latency-computation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="main">
-            <p>A modern laptop can run ~3.8 billion cycles per second. The
-cycle is determined by oscillation frequency of the
-electrical signal that hits the CPU. Contemporary CPUs manage
-synchronisation using all sorts of error correction tricks.</p>
-<p>In mechanical systems, such as those used in medical
-equipment and robotics, the binary numbers that we are most
-familiar with can cause errors if they're read during state
-transition.</p>
-<h3>Decimal and Binary</h3>
-<p>We are most familiar with decimals, this is a base 10
-counting notation where each position in the number
-represents a different power of ten. E.g. 10, 100, 1000.</p>
-<p>The computer relies on binary as this takes advantage of
-the fundamental on/off state within an electronic circuit.
-Binary is base 2, so each position represents a power of 2.
-E.g. 2, 4, 8, 16.</p>
-<h3>Reading States</h3>
-<p>Binary numbers can cause errors if they're read during
-transitions. The more positions that require toggling,
-while switching between numbers, the higher the chance we introduce
-errors into the system. This is shown clearly as
-we transition between the numbers 3 and 4. Which requires
-changing three bit positions. <code>011</code> -&gt; <code>100</code>.</p>
-<p><img alt="BinaryCounting" src="static/counting.gif" /></p>
-<p>If these bits aren't switched instantly we can read any of the
-following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
-if you're working with a critical system and need precision.</p>
-<h3>Grey Code</h3>
-<p>To get around this we use an alternative ordering of the
-binary system in which successive numbers are separated
-by a single bit. Incrementing a number only relies on
-switching one position and removes the chance of reading
-the wrong number during state transitions.</p>
-<p>This ordering is called Gray code, and an animation of the
-bit positions, for an incrementing number, is shown below:</p>
-<p><img alt="GrayCounting" src="static/graycounting.gif" /></p>
-<table>
-<thead>
-<tr>
-<th>Decimal</th>
-<th>Binary</th>
-<th>Gray</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>0</code></td>
-<td><code>0000</code></td>
-<td><code>0000</code></td>
-</tr>
-<tr>
-<td><code>1</code></td>
-<td><code>0001</code></td>
-<td><code>0001</code></td>
-</tr>
-<tr>
-<td><code>2</code></td>
-<td><code>0010</code></td>
-<td><code>0011</code></td>
-</tr>
-<tr>
-<td><code>3</code></td>
-<td><code>0011</code></td>
-<td><code>0010</code></td>
-</tr>
-<tr>
-<td><code>4</code></td>
-<td><code>0100</code></td>
-<td><code>0110</code></td>
-</tr>
-</tbody>
-</table>
-<h3>The Application</h3>
-<p>In addition to reducing read errors, relying on only a
-single toggle to move up the number scale consumes less
-energy than traditional binary due the fewer toggled bits.</p>
-<p>Some systems require testing every position of multiple
-switches or toggles. Gray code can improve the efficiency of
-these tests. If we had to iterate through all 16 combinations
-of 4 switches. Using ordinary binary would need to flip 1,
-2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
-code allows us to only ever need to flip a single toggle to
-eventually test all switch combinations.</p>
-<p>One of the most common uses of gray code is in rotary
-encoders, also known as knobs. These convert angular
-position to an analog or digital signal. If we had to rely
-on a normal binary scale, when rotating the knob, it could
-end up sending the intermediary numbers between each angle,
-which would make it pretty useless.</p>
-        </div>
 
+    <div class="pagination">
+            <a href="https://s3bw.github.io/writes/category/software2.html" class="previous-page">Newer ⮕</a>
     </div>
-
-    <div id="comments"></div>
-
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'gray-code.html');
-  });
+document.addEventListener('DOMContentLoaded', function() {
+    const showFormButtons = document.querySelectorAll('.show-subscribe-form');
+
+    showFormButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const form = this.nextElementSibling;
+            if (form.style.display === 'block') {
+                form.style.display = 'none';
+            } else {
+                form.style.display = 'block';
+            }
+        });
+    });
+});
 </script>
-
-
-</div>
-
-
-</article>
             </div>
           </div>
 

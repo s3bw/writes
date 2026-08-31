@@ -14,12 +14,16 @@
 <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-        <title>s3bw : Gray Code</title>
+        <title>s3bw : Random</title>
         <link rel="icon" type="image/png" href="https://s3bw.github.io/writes/theme/images/favicon.png" />
-        <meta property='og:title' content="s3bw : Gray Code"/>
+        <meta property='og:title' content="s3bw : Random"/>
                 <meta property='og:image' content='https://s3bw.github.io/writes/theme/images/sebastien-at-laptop.jpeg'/>
-        <meta property='og:description' content=" : <p>Error reduction with Gray code</p>"/>
-        <meta property='og:url' content="https://s3bw.github.io/writes : gray-code.html"/>
+        <meta property='og:description' content=" : <p>Humans and computers are really bad at
+being random. An article recently published by
+the FT examined how people behaved under seemingly random situations
+and how efficient computers are at predicting our decisions
+even when we aim to act as randomly as we can.</p>"/>
+        <meta property='og:url' content="https://s3bw.github.io/writes : random.html"/>
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/main.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/dark-mode.css" type="text/css" />
         <link rel="stylesheet" href="https://s3bw.github.io/writes/theme/css/pygment.css" type="text/css" />
@@ -55,105 +59,114 @@
 
 <div class="fullbody">
     <div class="datebody">
-        <h2 class="date">Mon 21 April 2025</h2>
+        <h2 class="date">Tue 01 September 2026</h2>
     </div>
     <div class="blogbodytop"></div>
     <div class="blogbody">
         <div class="titlebody">
             <h3 class="title">
-                <font style="vertical-align: inherit;">Gray Code</font>
+                <font style="vertical-align: inherit;">Random</font>
             </h3>
         </div>
         <div class="main">
-            <p>A modern laptop can run ~3.8 billion cycles per second. The
-cycle is determined by oscillation frequency of the
-electrical signal that hits the CPU. Contemporary CPUs manage
-synchronisation using all sorts of error correction tricks.</p>
-<p>In mechanical systems, such as those used in medical
-equipment and robotics, the binary numbers that we are most
-familiar with can cause errors if they're read during state
-transition.</p>
-<h3>Decimal and Binary</h3>
-<p>We are most familiar with decimals, this is a base 10
-counting notation where each position in the number
-represents a different power of ten. E.g. 10, 100, 1000.</p>
-<p>The computer relies on binary as this takes advantage of
-the fundamental on/off state within an electronic circuit.
-Binary is base 2, so each position represents a power of 2.
-E.g. 2, 4, 8, 16.</p>
-<h3>Reading States</h3>
-<p>Binary numbers can cause errors if they're read during
-transitions. The more positions that require toggling,
-while switching between numbers, the higher the chance we introduce
-errors into the system. This is shown clearly as
-we transition between the numbers 3 and 4. Which requires
-changing three bit positions. <code>011</code> -&gt; <code>100</code>.</p>
-<p><img alt="BinaryCounting" src="static/counting.gif" /></p>
-<p>If these bits aren't switched instantly we can read any of the
-following numbers 1, 2, 5, 6 or 7 instead of 3 or 4. Not great
-if you're working with a critical system and need precision.</p>
-<h3>Grey Code</h3>
-<p>To get around this we use an alternative ordering of the
-binary system in which successive numbers are separated
-by a single bit. Incrementing a number only relies on
-switching one position and removes the chance of reading
-the wrong number during state transitions.</p>
-<p>This ordering is called Gray code, and an animation of the
-bit positions, for an incrementing number, is shown below:</p>
-<p><img alt="GrayCounting" src="static/graycounting.gif" /></p>
-<table>
-<thead>
-<tr>
-<th>Decimal</th>
-<th>Binary</th>
-<th>Gray</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>0</code></td>
-<td><code>0000</code></td>
-<td><code>0000</code></td>
-</tr>
-<tr>
-<td><code>1</code></td>
-<td><code>0001</code></td>
-<td><code>0001</code></td>
-</tr>
-<tr>
-<td><code>2</code></td>
-<td><code>0010</code></td>
-<td><code>0011</code></td>
-</tr>
-<tr>
-<td><code>3</code></td>
-<td><code>0011</code></td>
-<td><code>0010</code></td>
-</tr>
-<tr>
-<td><code>4</code></td>
-<td><code>0100</code></td>
-<td><code>0110</code></td>
-</tr>
-</tbody>
-</table>
-<h3>The Application</h3>
-<p>In addition to reducing read errors, relying on only a
-single toggle to move up the number scale consumes less
-energy than traditional binary due the fewer toggled bits.</p>
-<p>Some systems require testing every position of multiple
-switches or toggles. Gray code can improve the efficiency of
-these tests. If we had to iterate through all 16 combinations
-of 4 switches. Using ordinary binary would need to flip 1,
-2, 1, and then 3 toggles as we move from numbers 1 to 4, while gray
-code allows us to only ever need to flip a single toggle to
-eventually test all switch combinations.</p>
-<p>One of the most common uses of gray code is in rotary
-encoders, also known as knobs. These convert angular
-position to an analog or digital signal. If we had to rely
-on a normal binary scale, when rotating the knob, it could
-end up sending the intermediary numbers between each angle,
-which would make it pretty useless.</p>
+            <p>Humans and computers are really bad at
+being random. An article recently published by
+<a href="https://www.ft.com/content/8dda77e2-626f-49b8-9f18-c68162c454fc?syn-25a6b1a6">the
+FT</a>
+examined how people behaved under seemingly random situations
+and how efficient computers are at predicting our decisions
+even when we aim to act as <em>randomly</em> as we can.</p>
+<p>Computers are equally bad at acting randomly; yet this
+hasn't stopped us from attempting to develop algorithmic approaches
+to generating randomness. Random number generators have many
+applications, from <a href="https://dwarffortresswiki.org/index.php/World_generation">generating
+worlds</a>
+, <a href="https://www.ibm.com/think/topics/monte-carlo-simulation">running probabilistic
+simulations</a>
+to cryptography.</p>
+<p>Randomness can be split into two categories, True Randomness
+and Pseudo Randomness. True random may only appear in life
+and nature where it is impossible to predict the next state
+despite knowing the current state.
+On the other hand even though pseudo random appears unpredictable
+it can be replicated if all the starting conditions are known.</p>
+<h3>Quality of Randomness</h3>
+<p>There are several qualities to the algorithms that provide us
+randomness by which we can compare them.
+The first quality is the algorithm's "period", the number of time we can
+generate an output before the numbers start to repeat
+themselves. The second is the number of dimensions the
+algorithm can pass the spectral test.</p>
+<p>In the 1940s von Neumann presented the middle-square method
+for computing random numbers and it worked as follows:</p>
+<ol>
+<li>Take an n-digit number</li>
+<li>Square it</li>
+<li>Take the middle n digits from the result</li>
+</ol>
+<p>The alternative was to find a random <a href="https://www.goodreads.com/en/book/show/292147.A_Million_Random_Digits_with_100_000_Normal_Deviates">number from a
+book.</a>
+Whilst there's no set period for the middle square method it
+is often short and unpredictable which proves to be
+inconvenient in most applications.</p>
+<p>An improvement was made in the 1950s with the development of
+linear congruential generators. However these fall short on
+spectral tests which means they start to develop
+hyperplanes in larger dimensions (the English translation:
+you start to notice patterns in 3D).</p>
+<p>There are a number of tests that are used to measure the
+quality of a random algorithm which have become known as the
+<a href="https://en.wikipedia.org/wiki/Diehard_tests">Diehard
+tests</a>. Among
+them is a suite of tests called "Craps test" where the
+algorithm plays 200k games of craps and the count of wins and
+throws should follow a specific distribution.</p>
+<h3>Contemporary Randomness</h3>
+<p>All algorithms that generate random numbers start with what
+is known as a seed. The seed is a number that is used to
+provide an initial state that all future states are based
+on. This allows us to replicate random generation or
+seemingly random simulations when provided with the initial
+seed.</p>
+<p>There are some situations where a seed is not explicitly
+given when generating something random - however typically
+your computer will use the current time as a substitute for
+the lack of explicit seed.</p>
+<p>Most contemporary languages such as python use an algorithm
+known as the "Primitive Twisted Generalized Feedback Shift
+Register Sequence" which is a linear congruential generator
+and is known more commonly as the <a href="https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ename.html">Mersenne
+Twister</a>.
+Due to the existence of a Mersenne prime constant in the
+algorithm. You can read the C implementation of MT <a href="https://github.com/python/cpython/blob/main/Modules/_randommodule.c#L3-L7">in the python
+source</a>.</p>
+<p>A note on Mersenne primes: these are prime numbers that are
+(2^n) - 1. One less than a power of two. These primes happen
+to be the quickest to prove as prime and therefore make up
+all the largest known prime numbers.</p>
+<p>The period of the Mersenne Twister is (2^19937), which is a
+number I don't have time to type out. 19937 happens to be that
+Mersenne prime number in the algorithm and the algorithm passes
+spectral tests up to 623 dimensions.</p>
+<h3>Cryptography</h3>
+<p>The realm of cryptography relies on crypto-secure pseudo
+random number generators (CSPRNG). These are used when
+generating a password or private/public keys for encryption
+like RSA. They are required to be both random and
+unpredictable. Unfortunately the Mersenne Twister isn't safe
+for cryptography since with enough observations it becomes
+predictable. As evident in the blog series: <a href="https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html">Cracking Random
+Number
+Generators</a></p>
+<p>Over time we've seen the pseudo random algorithms required
+in cryptography being broken and methods discovered in order
+to predict the random number used in the system. Cloudflare
+proposed a solution to this, instead of having the CPU
+generate a number using a predetermined algorithm, have a
+wall of lava lamps and take a photo of the wall whenever you
+need a new number. This works because images are stored on a
+computer as numbers and there is naturally occurring
+randomness which is extremely hard to reverse engineer.</p>
         </div>
 
     </div>
@@ -163,7 +176,7 @@ which would make it pretty useless.</p>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    loadComments('client_fBaxnE6w', '#comments', 'gray-code.html');
+    loadComments('client_fBaxnE6w', '#comments', 'random.html');
   });
 </script>
 

@@ -1,5 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-08-24T12:01:00+01:00</updated><entry><title>Python Under Pressure</title><link href="https://s3bw.github.io/writes/python-under-pressure.html" rel="alternate"/><published>2026-08-24T12:01:00+01:00</published><updated>2026-08-24T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-08-24:/writes/python-under-pressure.html</id><summary type="html">&lt;p&gt;A few tricks for the python toolbox.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The first software book I bought was &lt;em&gt;Effective Python&lt;/em&gt; by
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-09-01T10:00:00+01:00</updated><entry><title>Random</title><link href="https://s3bw.github.io/writes/random.html" rel="alternate"/><published>2026-09-01T10:00:00+01:00</published><updated>2026-09-01T10:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-09-01:/writes/random.html</id><summary type="html">&lt;p&gt;Humans and computers are really bad at
+being random. An article recently published by
+the FT examined how people behaved under seemingly random situations
+and how efficient computers are at predicting our decisions
+even when we aim to act as randomly as we can.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Humans and computers are really bad at
+being random. An article recently published by
+&lt;a href="https://www.ft.com/content/8dda77e2-626f-49b8-9f18-c68162c454fc?syn-25a6b1a6"&gt;the
+FT&lt;/a&gt;
+examined how people behaved under seemingly random situations
+and how efficient computers are at predicting our decisions
+even when we aim to act as &lt;em&gt;randomly&lt;/em&gt; as we can.&lt;/p&gt;
+&lt;p&gt;Computers are equally bad at acting randomly; yet this
+hasn't stopped us from attempting to develop algorithmic approaches
+to generating randomness. Random number generators have many
+applications, from &lt;a href="https://dwarffortresswiki.org/index.php/World_generation"&gt;generating
+worlds&lt;/a&gt;
+, &lt;a href="https://www.ibm.com/think/topics/monte-carlo-simulation"&gt;running probabilistic
+simulations&lt;/a&gt;
+to cryptography.&lt;/p&gt;
+&lt;p&gt;Randomness can be split into two categories, True Randomness
+and Pseudo Randomness. True random may only appear in life
+and nature where it is impossible to predict the next state
+despite knowing the current state.
+On the other hand even though pseudo random appears unpredictable
+it can be replicated if all the starting conditions are known.&lt;/p&gt;
+&lt;h3&gt;Quality of Randomness&lt;/h3&gt;
+&lt;p&gt;There are several qualities to the algorithms that provide us
+randomness by which we can compare them.
+The first quality is the algorithm's "period", the number of time we can
+generate an output before the numbers start to repeat
+themselves. The second is the number of dimensions the
+algorithm can pass the spectral test.&lt;/p&gt;
+&lt;p&gt;In the 1940s von Neumann presented the middle-square method
+for computing random numbers and it worked as follows:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Take an n-digit number&lt;/li&gt;
+&lt;li&gt;Square it&lt;/li&gt;
+&lt;li&gt;Take the middle n digits from the result&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The alternative was to find a random &lt;a href="https://www.goodreads.com/en/book/show/292147.A_Million_Random_Digits_with_100_000_Normal_Deviates"&gt;number from a
+book.&lt;/a&gt;
+Whilst there's no set period for the middle square method it
+is often short and unpredictable which proves to be
+inconvenient in most applications.&lt;/p&gt;
+&lt;p&gt;An improvement was made in the 1950s with the development of
+linear congruential generators. However these fall short on
+spectral tests which means they start to develop
+hyperplanes in larger dimensions (the English translation:
+you start to notice patterns in 3D).&lt;/p&gt;
+&lt;p&gt;There are a number of tests that are used to measure the
+quality of a random algorithm which have become known as the
+&lt;a href="https://en.wikipedia.org/wiki/Diehard_tests"&gt;Diehard
+tests&lt;/a&gt;. Among
+them is a suite of tests called "Craps test" where the
+algorithm plays 200k games of craps and the count of wins and
+throws should follow a specific distribution.&lt;/p&gt;
+&lt;h3&gt;Contemporary Randomness&lt;/h3&gt;
+&lt;p&gt;All algorithms that generate random numbers start with what
+is known as a seed. The seed is a number that is used to
+provide an initial state that all future states are based
+on. This allows us to replicate random generation or
+seemingly random simulations when provided with the initial
+seed.&lt;/p&gt;
+&lt;p&gt;There are some situations where a seed is not explicitly
+given when generating something random - however typically
+your computer will use the current time as a substitute for
+the lack of explicit seed.&lt;/p&gt;
+&lt;p&gt;Most contemporary languages such as python use an algorithm
+known as the "Primitive Twisted Generalized Feedback Shift
+Register Sequence" which is a linear congruential generator
+and is known more commonly as the &lt;a href="https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ename.html"&gt;Mersenne
+Twister&lt;/a&gt;.
+Due to the existence of a Mersenne prime constant in the
+algorithm. You can read the C implementation of MT &lt;a href="https://github.com/python/cpython/blob/main/Modules/_randommodule.c#L3-L7"&gt;in the python
+source&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;A note on Mersenne primes: these are prime numbers that are
+(2^n) - 1. One less than a power of two. These primes happen
+to be the quickest to prove as prime and therefore make up
+all the largest known prime numbers.&lt;/p&gt;
+&lt;p&gt;The period of the Mersenne Twister is (2^19937), which is a
+number I don't have time to type out. 19937 happens to be that
+Mersenne prime number in the algorithm and the algorithm passes
+spectral tests up to 623 dimensions.&lt;/p&gt;
+&lt;h3&gt;Cryptography&lt;/h3&gt;
+&lt;p&gt;The realm of cryptography relies on crypto-secure pseudo
+random number generators (CSPRNG). These are used when
+generating a password or private/public keys for encryption
+like RSA. They are required to be both random and
+unpredictable. Unfortunately the Mersenne Twister isn't safe
+for cryptography since with enough observations it becomes
+predictable. As evident in the blog series: &lt;a href="https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html"&gt;Cracking Random
+Number
+Generators&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Over time we've seen the pseudo random algorithms required
+in cryptography being broken and methods discovered in order
+to predict the random number used in the system. Cloudflare
+proposed a solution to this, instead of having the CPU
+generate a number using a predetermined algorithm, have a
+wall of lava lamps and take a photo of the wall whenever you
+need a new number. This works because images are stored on a
+computer as numbers and there is naturally occurring
+randomness which is extremely hard to reverse engineer.&lt;/p&gt;</content><category term="software"/><category term="software"/><category term="algorithms"/><category term="engineering"/></entry><entry><title>Python Under Pressure</title><link href="https://s3bw.github.io/writes/python-under-pressure.html" rel="alternate"/><published>2026-08-24T12:01:00+01:00</published><updated>2026-08-24T12:01:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-08-24:/writes/python-under-pressure.html</id><summary type="html">&lt;p&gt;A few tricks for the python toolbox.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The first software book I bought was &lt;em&gt;Effective Python&lt;/em&gt; by
 Brett Slatkin. The book distills tips and tricks learnt
 by Brett over the course of his career. It was in this book
 I first encountered how to use the &lt;code&gt;enumerate&lt;/code&gt; keyword. Over

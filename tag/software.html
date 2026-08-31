@@ -53,6 +53,121 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Tue 01 September 2026</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Random</font>
+                    </h3>
+                </div>
+                <div class="main">
+                    <p>Humans and computers are really bad at
+being random. An article recently published by
+<a href="https://www.ft.com/content/8dda77e2-626f-49b8-9f18-c68162c454fc?syn-25a6b1a6">the
+FT</a>
+examined how people behaved under seemingly random situations
+and how efficient computers are at predicting our decisions
+even when we aim to act as <em>randomly</em> as we can.</p>
+<p>Computers are equally bad at acting randomly; yet this
+hasn't stopped us from attempting to develop algorithmic approaches
+to generating randomness. Random number generators have many
+applications, from <a href="https://dwarffortresswiki.org/index.php/World_generation">generating
+worlds</a>
+, <a href="https://www.ibm.com/think/topics/monte-carlo-simulation">running probabilistic
+simulations</a>
+to cryptography.</p>
+<p>Randomness can be split into two categories, True Randomness
+and Pseudo Randomness. True random may only appear in life
+and nature where it is impossible to predict the next state
+despite knowing the current state.
+On the other hand even though pseudo random appears unpredictable
+it can be replicated if all the starting conditions are known.</p>
+<h3>Quality of Randomness</h3>
+<p>There are several qualities to the algorithms that provide us
+randomness by which we can compare them.
+The first quality is the algorithm's "period", the number of time we can
+generate an output before the numbers start to repeat
+themselves. The second is the number of dimensions the
+algorithm can pass the spectral test.</p>
+<p>In the 1940s von Neumann presented the middle-square method
+for computing random numbers and it worked as follows:</p>
+<ol>
+<li>Take an n-digit number</li>
+<li>Square it</li>
+<li>Take the middle n digits from the result</li>
+</ol>
+<p>The alternative was to find a random <a href="https://www.goodreads.com/en/book/show/292147.A_Million_Random_Digits_with_100_000_Normal_Deviates">number from a
+book.</a>
+Whilst there's no set period for the middle square method it
+is often short and unpredictable which proves to be
+inconvenient in most applications.</p>
+<p>An improvement was made in the 1950s with the development of
+linear congruential generators. However these fall short on
+spectral tests which means they start to develop
+hyperplanes in larger dimensions (the English translation:
+you start to notice patterns in 3D).</p>
+<p>There are a number of tests that are used to measure the
+quality of a random algorithm which have become known as the
+<a href="https://en.wikipedia.org/wiki/Diehard_tests">Diehard
+tests</a>. Among
+them is a suite of tests called "Craps test" where the
+algorithm plays 200k games of craps and the count of wins and
+throws should follow a specific distribution.</p>
+<h3>Contemporary Randomness</h3>
+<p>All algorithms that generate random numbers start with what
+is known as a seed. The seed is a number that is used to
+provide an initial state that all future states are based
+on. This allows us to replicate random generation or
+seemingly random simulations when provided with the initial
+seed.</p>
+<p>There are some situations where a seed is not explicitly
+given when generating something random - however typically
+your computer will use the current time as a substitute for
+the lack of explicit seed.</p>
+<p>Most contemporary languages such as python use an algorithm
+known as the "Primitive Twisted Generalized Feedback Shift
+Register Sequence" which is a linear congruential generator
+and is known more commonly as the <a href="https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ename.html">Mersenne
+Twister</a>.
+Due to the existence of a Mersenne prime constant in the
+algorithm. You can read the C implementation of MT <a href="https://github.com/python/cpython/blob/main/Modules/_randommodule.c#L3-L7">in the python
+source</a>.</p>
+<p>A note on Mersenne primes: these are prime numbers that are
+(2^n) - 1. One less than a power of two. These primes happen
+to be the quickest to prove as prime and therefore make up
+all the largest known prime numbers.</p>
+<p>The period of the Mersenne Twister is (2^19937), which is a
+number I don't have time to type out. 19937 happens to be that
+Mersenne prime number in the algorithm and the algorithm passes
+spectral tests up to 623 dimensions.</p>
+<h3>Cryptography</h3>
+<p>The realm of cryptography relies on crypto-secure pseudo
+random number generators (CSPRNG). These are used when
+generating a password or private/public keys for encryption
+like RSA. They are required to be both random and
+unpredictable. Unfortunately the Mersenne Twister isn't safe
+for cryptography since with enough observations it becomes
+predictable. As evident in the blog series: <a href="https://jazzy.id.au/2010/09/25/cracking_random_number_generators_part_4.html">Cracking Random
+Number
+Generators</a></p>
+<p>Over time we've seen the pseudo random algorithms required
+in cryptography being broken and methods discovered in order
+to predict the random number used in the system. Cloudflare
+proposed a solution to this, instead of having the CPU
+generate a number using a predetermined algorithm, have a
+wall of lava lamps and take a photo of the wall whenever you
+need a new number. This works because images are stored on a
+computer as numbers and there is naturally occurring
+randomness which is extremely hard to reverse engineer.</p>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 24 August 2026</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -4508,6 +4623,11 @@ your dusty book of log tables.</p>
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/random.html">
+                        <span>Random</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/python-under-pressure.html">
                         <span>Python Under Pressure</span>

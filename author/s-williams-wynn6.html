@@ -54,6 +54,182 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 30 June 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">Low Latency Computation</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>Anything that loads faster than 200ms is instantaneous for
+humans, anything slower and we would perceive the delay.
+Some systems are built to respond quicker than this,
+business cost can be sensitive to latency and every ms can
+make a difference.</p>
+<p>How do we develop highly performant systems? I happened to
+share a train ride with Mark Shannon, who at the time was
+leading a team at Microsoft that had one goal: Make Python
+Fast.</p>
+<p>I asked him, how does one make code more performant? To
+which he responded.</p>
+<blockquote>
+<p>Make it do less.</p>
+</blockquote>
+<p>Here's what doing less looks like:</p>
+<h3>Loop Invariant</h3>
+<p>A simple example of doing less in order to achieve better
+performance is with loop invariant conditions.</p>
+<p>We loop over arrays while we code and make calls to other
+functions while looping. During a refactor or while we move
+code around we might not realise that some of the variables
+we are computing are constant.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
+
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
+</code></pre></div>
+
+<p>You'll notice in the example that I am looping over the list
+<code>trades</code> and computing a <code>beta</code> value, but this <code>beta</code> value
+is computed with the integer <code>n</code> which is consistent within
+the scope of this function. If we move the computation of
+<code>beta</code> to a point before we've entered loop we avoid having
+to compute <code>beta</code> for each <code>trade</code> in <code>trades</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">expensive</span><span class="p">(</span><span class="n">trades</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Trade</span><span class="p">],</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="n">rolling_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">compute_beta</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">trade</span> <span class="ow">in</span> <span class="n">trades</span><span class="p">:</span>
+        <span class="n">rolling_sum</span> <span class="o">+=</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">trade</span><span class="o">.</span><span class="n">risk</span>
+
+    <span class="k">return</span> <span class="n">rolling_sum</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">trades</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Now <code>beta</code> is computed at most once within this method
+scope, we have essentially achieved doing less. If the
+<code>compute_beta</code> method incurs an expensive overhead and we
+are looking at a lengthy <code>trades</code> list this subtle oversight
+would have a significant impact on our latency.</p>
+<h3>Python</h3>
+<p>There are several layers of abstraction in Python and there
+are ways we can code that allow us to utilise computation in
+C more effectively. One such example of this: using list
+comprehension over a vanilla for-loop.</p>
+<p>If we wish to
+understand the number of steps the machine is doing
+for a method, Python allows us to disassemble bytecode using
+<code>import dis</code>. You might notice that there are additional
+<code>LOAD_ATTR</code> instructions in a vanilla for-loop so defaulting
+to a list comprehension avoids this overhead and allows us
+to do less.</p>
+<h3>Databases</h3>
+<p>Relying on external systems can be expensive, in some
+cases we might query the same system several times in
+order to complete an operation. If we have a distributed system
+or intend to scale our server horizontally we are increasing
+the number of things that open and close connections to the
+database. Each time we open/close a connection the CPU has
+to process these instructions, this overhead can be
+significant when we are working in low latency environments.
+To get around this we introduce a connection pool between
+the database and our server, the connection pool manages
+long lived connections on the database and frees up the
+database to focus on database things.</p>
+<p>A common anti-pattern involving a database is having your
+ORM make N+1 queries. For this to occur we have a 1-many
+entity relationship. If we ask the database to return a
+group of n countries and then for each country we ask for
+all cities in that country we are making <code>N</code> (number of
+countries in our initial query) <code>+ 1</code> (the initial query)
+total requests to the database. These can be tricky to spot
+since the individual query could be performant, but the
+accumulative overhead and latency of all these queries can
+cause problems.</p>
+<p>We get around this by either asking for all countries and
+then ask for all cities given a set of country ids and
+perform the mapping in memory on the server, or we can
+increase the complexity of the query using a JOIN and allow
+the database to make the mapping. Either way we avoid the
+back and forth overhead of making <code>N+1</code> queries, effectively
+doing less.</p>
+<h3>When we can't do less</h3>
+<p>Sometimes we can't do less, but we can decide when work is
+done. There are situations that allow us to pre compute
+results and provide performant computation at the cost of a
+slower start time.</p>
+<p>Chess programming is an area which relies on high
+performance, the quick our program the further into the
+future we can look on each move during the game. One way we
+speed up a chess engine is by precomputing the movesets for
+every piece on the board for every possible position they
+might be in before the game starts. This allows us to look
+up all possible board positions for a piece during the game
+instead of computing only when we need it.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>In <a href="https://github.com/woctezuma/3b1b-wordle-solver/blob/main/src/pattern.py#L28-L46">3b1b's wordle
+solver</a>
+he actually computes a pattern matrix for each word and
+saves it to a file in order to avoid having to incur the
+overhead on each execution of his wordle solver.</p>
+<h3>Constant Folding</h3>
+<p>Lastly there's an interesting optimisation that compilers
+make which is also utilised in python called <a href="https://cran.r-project.org/web/packages/rco/vignettes/opt-constant-folding.html#:~:text=Constant%20folding%20is%20an%20optimization,variables%20whose%20values%20are%20constant">Constant
+Folding.</a></p>
+<p>When python is interpreted it parses the AST before
+executing. During this AST construction it finds expressions
+who's outcome is constant and computes the constant at this
+point instead of computing the expression every time it is
+referenced. As an example the variable <code>x = 24
+* 60</code> will be converted to <code>1440</code> before compiling the
+bytecode instructs for the machine.</p>
+<p>So in all cases, if we want a computer to be highly
+performant we just have to make it do less.</p>
+<h3>Further Reading</h3>
+<ul>
+<li><a href="https://github.com/tonybaloney/perflint/blob/main/perflint/for_loop_checker.py#L127">perflint</a> try running this on your python codebase to check for performance optimisations.</li>
+</ul>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>More on this will be explained when I write my second
+  post on chess programming.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
+                    <a href="low-latency-computation.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 23 June 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -848,291 +1024,6 @@ project start from zero?</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 19 May 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Scaling teams with CAP theorem</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>There's no hack to how you hold meetings, it all hinges on
-your organisation structure.</p>
-<p>If you've had enough time writing software you would have
-run into the smug lead developer that looks back on
-projects with the benefit of hind-sight and explains Conway's
-Law.</p>
-<blockquote>
-<p>Organizations which design systems are constrained to
-produce designs which are copies of the communication
-structures of these organizations.</p>
-<p>Mr Conway 1967</p>
-</blockquote>
-<p>This motivated me to look at the structure of an
-organisation as a system with it's own trade-offs and
-limitations. If we think about design and
-compartmentalisation in software shouldn't we also be
-applying this to how we structure the teams with-in an
-organisation.</p>
-<p>Time to bring out the neoclassical economist in
-me and start using maths as a metaphor in-order-to explain
-how learning CAP theorem will allow you to scale software
-teams. Most of the motivation has come from my observations
-while working at scaling startups where I've seen teams go
-from being one person to a department and in some cases a
-team staying as one person while the organisation grows
-around them.</p>
-<h3>The Theorem</h3>
-<p>Generally CAP theorem is brought up in interviews
-when discussing trade-offs within a distributed
-system. The idea simplifies a system into three attributes,
-of which you're constrained to pick only 2. After making
-your selection there's a follow up discussion of the pros
-and cons.</p>
-<p>We generalise that databases operate somewhere on these
-lines and understanding these trade-offs can help you decide
-the best solution to fit the system you're designing.</p>
-<h3>Partition tolerance</h3>
-<p>The first attribute is partition tolerance, which is
-typically a given, since you're trying to scale a system
-beyond a single computer or server or database and
-segmentation across multiple machines is needed. This is
-one of the choices that is made for you.
-Now it's up to you to decide between Consistency and
-Availability.</p>
-<h3>Consistency</h3>
-<p>Consistency boils down to all systems <em>"agree"</em> or <em>"see the
-same data"</em> even in the presence of concurrent updates. Among
-databases this involves using distributed transactions or a
-consensus algorithm to ensure a level of consistency.</p>
-<p>Without consistency the system will not be able to agree on
-the appropriate order of each update. If you're
-updating the profile image of a user, other users seeing an
-older profile image temporarily doesn't matter but if you're
-updating a bank balance you'd best be sure the system agrees
-on the order of each transaction, otherwise you might have
-parts of your systems computing different balances.</p>
-<h3>Availability</h3>
-<p>If a client is waiting to see the bank balance because it's
-in the process of being updated this wait time is a
-detriment to availability. In the example of fetching an old
-profile image this makes very little difference to the service
-you're providing so you can forgo consistency in favour of
-availability.</p>
-<p>Essentially availability gives the client access to some
-version of the data at all times, without wait. Ensuring
-every request to the system results in some positive
-response is a prioritisation of availability.</p>
-<h3>Modern CAP Theorem</h3>
-<p>In more contemporary software engineering and in practical
-terms there's more things we can talk about related to CAP.
-One can dig further into each attribute and get a slightly
-more technical discussion around <em>eventual consistency</em>.
-There's also some that argue against a discussion of CAP
-since databases have come far enough that they can deal with
-both availability and consistency in a manner that's good
-enough for most systems.</p>
-<p>I'm not here to get into these weeds, I'd like to offer a
-different application of CAP and apply it to teams.</p>
-<h3>Organisational CAP</h3>
-<p>Applying system thinking to teams isn't new, there's an entire
-book called Team Topologies<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> that defines
-team structural archetypes and how you can use these in an
-organisation to structure optimal output.</p>
-<p>The theory I go into below is more around how a team should
-consider scaling as workload increases and is required to become
-distributed, in a sense, instead of relying on a single person
-to handle operations.</p>
-<p>As with CAP, I use the same three attributes but we'll
-provide new definitions for them since they're being applied
-to the context of a team, remember we will need to pick only
-2 out of the 3.</p>
-<h3>Partition Tolerance</h3>
-<p>As in software this is a given. If we are scaling an
-organisation we can't rely on a single person or a single
-team to become a bottleneck to our production. There's a
-chance this person will become overloaded with work and will
-no longer be able to operate at max capacity. Much like a
-database under significant load.</p>
-<p>We can also consider this as The number of teams you can
-support and still produce output.</p>
-<h3>Availability</h3>
-<p>Much like a system being able to take requests and respond
-without waiting on prior work being completed, which is
-something you'd very much enjoy if this were work being
-given to a team.  Alternatively you can consider it as the
-number of things that can be worked on at one time, if
-you've got spare capacity then you have someone waiting to
-pick up new work as or when it comes in. This team would be
-considered highly available.</p>
-<p>In short this is when they can work (or how much work they
-can achieve).</p>
-<h3>Consistency</h3>
-<p>Consistency in a system is consensus between machines.
-Consistency in an organisation is an agreement on how things
-should be done, or why something should be done. In a one
-person team, one person makes this decision, in a small
-business it doesn't take much for everyone to get up to
-speed and chip in on how something should proceed. However
-things start to get tricky at scale. The more people/parts
-and teams you introduce into the organisation the harder it
-is to find agreement on direction or decisions.</p>
-<p>This is why we have meetings, and when we scale it is
-sometimes important to make sure that there's consensus at
-large, across multiple teams instead of just individuals.</p>
-<p>Everyone needs to have the same context, the same why.
-Unfortunately as you scale an organisation you also need to
-figure out how to propagate context. You can throw money at
-the problem by hiring a specialist for each team, however
-not all companies can afford to do this and so a
-specialist's time needs to be divided between teams in
-order for them to provide their insight.</p>
-<p>We can consider this specialist as a much larger machine,
-the best SSD drives on the market and maxed out memory
-limitations. In reality this could be someone with a ton of
-experience, knows what needs to get done and how to do it.
-We don't have this luxury in cutting edge tech with a lot of
-unknowns and usually you won't find someone that can cover
-many topics deeply which is why there's value in a diverse
-skill set within a team. In most cases we rule out the
-specialist per team.</p>
-<h3>The application of CAP</h3>
-<p>As with a software system we are limited to picking between
-Consistency and Availability, since we want to scale the
-organisation by bringing in more teams so we can ship
-more product out the door.</p>
-<p>Choosing between availability and consistency within a
-team is the same as choosing between workload and context.
-We can increase the context of the team by improving
-communication and introducing more meetings but this comes
-at a cost of availability which will reduce the amount of
-work they're able to output.</p>
-<p>The opposite is also true, you can increase the amount of
-workload they can get through but you sacrifice context.
-Which mean you're getting through a lot of work but the
-work lacks context, so we'd find ourselves doing
-more repeated work across teams and work that is misaligned or
-doesn't meet the requirement because the teams haven't a
-clue on why they're doing it.</p>
-<p>I've seen both extremes, work grinding to a halt as you
-spend more time in meetings than you have time for work and busy
-work being done for no purpose at all but to look busy.</p>
-<p>I understand there's a sentiment at large about not liking
-meetings, however meetings should serve a purpose. In order
-to deliver the best work possible you need context of the
-bigger picture, context of where the solution fits in,
-context of who the end user is and context of what everyone
-else is doing and lastly consensus with how work should be
-done.</p>
-<h3>Scaling an Organisation</h3>
-<p>Typically as a company scales you begin to notice that
-existing solutions or people become bottlenecks. If a single
-team owns or executes a solution they can become inundated
-with requests from other teams. This typically happens when
-context of executing a task is isolated to that one team and
-they've got no capacity to share context. Either that or the
-capability of solving the solution exists only within that
-team. What can happen, and what I've seen, is other teams
-get fed up with waiting for their request to be fulfilled
-and they decide to solve the problem on their own, leading
-to a second system which solves the same work.</p>
-<p><em>Team Topologies</em> defines four fundamental team types,
-however I think it can be simplified to just two. They
-mention Steam-Aligned teams, these are responsible for
-delivery and are generally high business context teams and
-Platform teams which act as an enabling service for the
-stream aligned teams.</p>
-<p>I believe you can have more than one platform team. These
-should be teams responsible for enabling how work gets done.
-To some extent all engineers that build internal tooling are
-actually defining how work gets done, they do their best job
-when they enable other teams to get things done faster,
-independently and without the need to grab context from this
-team or engineers.</p>
-<p>The best way I believe we can solve the Availability vs
-Consistency balance within teams is by shifting the purpose
-of the team from one that just does the work, to being
-responsible for defining how that work should be done.</p>
-<p>With proper instructions or with a self service system you
-enable other teams that are closer to the problem and thus
-have the most context to address the business requirements.</p>
-<p>If a single team is a bottleneck to other teams this might
-be an indication that they need to shift from doing the work
-to enabling the other teams to getting that work done.</p>
-<p>I believe this thinking requires having teams with clear
-purpose and clear context domains, when the domain starts
-getting blurred it's tricker to scale teams as no one person
-can hold the entire context of a large organisation, you need
-to define those context boundaries and define what the
-purpose of each team should be.</p>
-<h3>The Specialist</h3>
-<blockquote>
-<p>Expertises scales better</p>
-<p>Software Engineering at Google</p>
-</blockquote>
-<p>Instead of requiring a specialist per team we can have a team
-of specialists that focus on how our stream aligned teams
-serve themselves. This avoids having business focused
-product teams communicating their needs and their
-context to a team that is focused on serving an internal
-problem. If these specialists had to listen to all product
-teams they would quickly burn-out from all the meetings
-they're attending. This is why we'd need to draw the context
-boundaries around the specialists and have them focus on a self
-service system that's highly available to enable the product
-teams.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
-<h3>Further Reading</h3>
-<ul>
-<li><a href="https://d1wqtxts1xzle7.cloudfront.net/45478461/Brewers_Conjecture_Feasibility.pdf?1462800469=&amp;response-content-disposition=inline%3B+filename%3DBrewers_Conjecture_and_the_Feasibility_o.pdf&amp;Expires=1600706653&amp;Signature=fH93sySR0CDCI2JPsHRyG44-w6fNfUF0pOco18hM5zbYm1AtuzsG7fzFZwXTjJKkrAoElKh53uWi03ip2mS~0hzrew2MLufiBCOtzTfXyxuWJOmyaz-rcikND1fsukIKRS3VucnXewHweBISBqq1Ps-etUtbGJDBQe-xOfU24TguSO-Q218fgPek8UHkOY8LtlzCmGROaZF7jWK58m4j10Uky~QaLlqcvAg4qRy0HT8CBEbXE80XUdf8Ffjz1vnGdV-0mRKsJyAkjP0XGkxqg7BD2EU4UGFq8zKHz9Zdx71xLWdpcsnhDl16uaOxF0DpYtYSsVLDFKuTBbhL19tteA__&amp;Key-Pair-Id=APKAJLOHF5GGSLRBV4ZA">Brewers Conjecture and the Feasibility</a></li>
-<li><a href="https://mwhittaker.github.io/blog/an_illustrated_proof_of_the_cap_theorem">A summary of the proof of CAP</a></li>
-</ul>
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:1">
-<p>Which I've read.&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-<li id="fn:2">
-<p>I think businesses get team balance wrong all the time, most
-of the time this is caused by the assumption that the
-organic formation of the company will be most efficient but
-it takes a level of bravery to call out a larger structural
-issue in an org. It also take some buy in from the rest of
-the company&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:08 | </font>
-                    <a href="scaling-teams-with-cap-theorem.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn7.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/author/s-williams-wynn5.html" class="previous-page">Newer ⮕</a>
@@ -1261,6 +1152,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/random.html">
+                        <span>Random</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/python-under-pressure.html">
                         <span>Python Under Pressure</span>
