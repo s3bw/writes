@@ -67,9 +67,9 @@ given when generating something random - however typically
 your computer will use the current time as a substitute for
 the lack of explicit seed.&lt;/p&gt;
 &lt;p&gt;Most contemporary languages such as python use an algorithm
-known as the "Primitive Twisted Generalized Feedback Shift
-Register Sequence" which is a linear congruential generator
-and is known more commonly as the &lt;a href="https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ename.html"&gt;Mersenne
+called the "Primitive Twisted Generalized Feedback Shift
+Register Sequence"
+this is known more commonly as the &lt;a href="https://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/ename.html"&gt;Mersenne
 Twister&lt;/a&gt;.
 Due to the existence of a Mersenne prime constant in the
 algorithm. You can read the C implementation of MT &lt;a href="https://github.com/python/cpython/blob/main/Modules/_randommodule.c#L3-L7"&gt;in the python
