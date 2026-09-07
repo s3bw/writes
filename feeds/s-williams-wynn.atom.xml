@@ -1,5 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-09-01T10:00:00+01:00</updated><entry><title>Random</title><link href="https://s3bw.github.io/writes/random.html" rel="alternate"/><published>2026-09-01T10:00:00+01:00</published><updated>2026-09-01T10:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-09-01:/writes/random.html</id><summary type="html">&lt;p&gt;Humans and computers are really bad at
+<feed xmlns="http://www.w3.org/2005/Atom"><title>s3bw - S Williams-Wynn</title><link href="https://s3bw.github.io/writes/" rel="alternate"/><link href="https://s3bw.github.io/writes/feeds/s-williams-wynn.atom.xml" rel="self"/><id>https://s3bw.github.io/writes/</id><updated>2026-09-07T15:03:00+01:00</updated><entry><title>Solve the Right Problem</title><link href="https://s3bw.github.io/writes/solve-the-right-problem.html" rel="alternate"/><published>2026-09-07T15:03:00+01:00</published><updated>2026-09-07T15:03:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-09-07:/writes/solve-the-right-problem.html</id><summary type="html">&lt;p&gt;The interesting thing about the startup world is that progression is typically, 1. working on someone elses idea. 2. working on your own idea, 3 funding other people to come up with ideas.
+A common mistake for many of the YC college dropouts tend to be; build first, ask questions later. When you're YC and are hedging your bets for a slice in a few potentially great businesses paying for this education is cheap.&lt;/p&gt;</summary><content type="html">&lt;p&gt;The interesting thing about the startup world is that progression is typically, 1. working on someone elses idea. 2. working on your own idea, 3 funding other people to come up with ideas.
+A common mistake for many of the YC college dropouts tend to be; build first, ask questions later. When you're YC and are hedging your bets for a slice in a few potentially great businesses paying for this education is cheap.&lt;/p&gt;
+&lt;p&gt;It is common for startups to run head first through the phase: &lt;em&gt;build it and they will come.&lt;/em&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;we built a couple things that just no one wanted and then
+realized we're going about this the wrong way.&lt;/p&gt;
+&lt;p&gt;Christina Cacioppo (Vanta) 2025&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;This mistake isnt limited to the young cohort of YC startups. This is a fallacy that cause many Software projects to fail, it is a lesson that all creators have to learn.&lt;/p&gt;
+&lt;h3&gt;Software Engineers&lt;/h3&gt;
+&lt;p&gt;Software engineers hit a maturing point when they make the shift away from accidental engineering to intent driven decision making.&lt;/p&gt;
+&lt;p&gt;Early in their career they tend to enjoy the exploration of new ideas and the novelty of new software in business. Often referred to as CV driven development. They dive head first into developing features or solving problems.
+This characteristic isnt inherently a problem when guided by engineers that have their fair share of war stories, however as every engineer comes to learn; diving head first into the code will lead you down a painful path.&lt;/p&gt;
+&lt;p&gt;Established engineers approach a problem with a focus on what the user or customer intends to do and avoid relying on codified solutions.&lt;/p&gt;
+&lt;p&gt;It is still easy for experienced engineers to fall into the trap, blinded by excitement or neglicting to push back through fear or through finding it easier to go with the flow than challenge and presenting an alternative.&lt;sup id="fnref:2"&gt;&lt;a class="footnote-ref" href="#fn:2"&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Without establishing customer intentions we are building with hope as the dominant strategy and are leaving our product up to chance. Leading with intent helps to create things that have purpose.&lt;/p&gt;
+&lt;p&gt;The most noticable example that highlights this behavour is when an engineer manages to close out work without writing code or when they establish that work shouldnt be done until something fundamental is proven. This can be as simple as, "is anyone asking for this?".&lt;/p&gt;
+&lt;!--
+
+Who are your users? Sometimes your users are internal
+colleague, in this case talking to them is easy, they might
+be sat right next to you. We are trying to figure out their
+intentions with a new system or library, if we don't know
+how they aim to use what we are building how do we plan to
+build successful software?
+
+### Intent
+
+Lead with intent not requirements. Multiple systems can
+have the same requirements, but each system should
+have their own intent. Giving systems a purpose helps us
+identify when we have more than one system serving the same
+purpose. It also helps us make decisions about which systems
+should serve certain intentions.
+
+We can also throw out systems that don't serve any purpose
+or are serving the same purpose as another existing system.
+
+[NotSureAboutThisOne]
+People tend to either accept things without question or
+question things without reason. Ensuring systems have a
+purpose, ensure they have a reason and an intent.
+
+### Customers
+--&gt;
+
+&lt;h3&gt;The Users&lt;/h3&gt;
+&lt;p&gt;Companies place a heavy emphasis on valuing the customer as a means to avoid repeating their early mistake. The truth is we shouldn't be valuing what they say but we must try to cae about the same things they care about. We need to discover their intent.&lt;/p&gt;
+&lt;p&gt;Product market fit is about creating a product that serves the intention of a large enough market. Before we can create a product we need to figure out what the customer wants to do and then figure out how to serve them. We can't setup a pillow renting business before we have asked if anyone would actually rent a pillow.&lt;/p&gt;
+&lt;p&gt;The "Customer Obsession" mantra isn't just corporate shill and it is a common value among companies because it is easily forgotten.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If I'd asked customers what they wanted, they would have
+told me, 'A faster horse!&lt;/p&gt;
+&lt;p&gt;Henry Ford&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Steve Jobs used this quote to highlight why giving the
+customer what they want doesn't work. This doesn't mean you
+shouldn't speak to customers, but you should figure out not
+what they want but what they want to do. In the Henry Ford
+example, they want a faster horse, but their underlying intention is to get
+from A to B at speed.&lt;/p&gt;
+&lt;p&gt;The user will tell you want they want but it is our job to
+find out what they need.&lt;/p&gt;
+&lt;p&gt;Another easy habbit to fall into is being quick to provide answers without the full picture. Your first solution is often never the best and you might find that the customer might have already tried it. Instead of providing the answer, our first step should be to question why they want the answer in the first place.&lt;/p&gt;
+&lt;h3&gt;Trying&lt;/h3&gt;
+&lt;p&gt;Figuring out how to address a customers need is hard work and I've found people tend to be alergic to hard work; often coming up with reason why their market is build differently or how something so common as product market fit doesnt apply to them. The failure of startups is a tale as old as time and the "I'm not like everyone else" is probably the reason people fall prey to common pitfalls.&lt;/p&gt;
+&lt;p&gt;There is nothing that should be more exciting than a hard problem, hard problems will make most people give up. This makes solving it all the more enjoyable.&lt;/p&gt;
+&lt;!--
+### Timing
+
+The most commonly requested features are ones that are causing the customer pain at the moment. Having the solution maybe time sensitive as amazon and doordash have found - you make more money from quicker delivery. We need to take care of our customers while we are at the top mind as a month fr
+
+there are many elements that make up PMF, we all know people want things, but as azn and door dash has discovered more people want things asap instead of in time for christmas
+--&gt;
+
+&lt;div class="footnote"&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id="fn:2"&gt;
+&lt;p&gt;this also indicates that you need an appropriate incentive structure that encourage certain behaviour.&amp;#160;&lt;a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id="fn:1"&gt;
+&lt;p&gt;&lt;a href="https://www.youtube.com/watch?v=RdBsF_JTbLM"&gt;YouTube&lt;/a&gt;&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 2 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</content><category term="software"/><category term="software"/><category term="programming"/></entry><entry><title>Random</title><link href="https://s3bw.github.io/writes/random.html" rel="alternate"/><published>2026-09-01T10:00:00+01:00</published><updated>2026-09-01T10:00:00+01:00</updated><author><name>S Williams-Wynn</name></author><id>tag:s3bw.github.io,2026-09-01:/writes/random.html</id><summary type="html">&lt;p&gt;Humans and computers are really bad at
 being random. An article recently published by
 the FT examined how people behaved under seemingly random situations
 and how efficient computers are at predicting our decisions

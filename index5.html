@@ -54,6 +54,209 @@
 
         <div class="fullbody">
             <div class="datebody">
+                <h2 class="date">Mon 11 August 2025</h2>
+            </div>
+            <div class="blogbodytop"></div>
+            <div class="blogbody">
+                <div class="titlebody">
+                    <h3 class="title">
+                        <font style="vertical-align: inherit;">The Bleeding Edge</font>
+                    </h3>
+                </div>
+
+
+                <div class="main">
+                    <p>A tech stack is more often inherited than it is chosen. On
+the rare occasion someone gets the chance to decide which tech
+the company gets to use for the next decade. I've seen this go
+well and I've seen this go belly up.</p>
+<p>If you're in the right club, you know the answer; <a href="https://boringtechnology.club/">stick
+with boring.</a></p>
+<h3>The Postgres Paradox</h3>
+<p>When thinking about how long a technology will last I often
+use the current age of the software to determine how much
+longer it will be around. So if it's 2 years old, it might
+be around 2 more years. Postgres dates back 35 years, so
+it will probably be around for 35 more years.<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup></p>
+<p>We can view this in terms of experienced employees; we are
+more likely to find someone with 20 years of Postgres
+experience than we are to find someone with 20 years in
+a tech that's only existed for 2 years.</p>
+<p>Taking the age of the tech into consideration allows us to
+earmark the hiring pool and the likelihood that fixes or
+workarounds exist for problems we might run into. Diving
+into newer tech increases the chance we are the first
+to come across certain problems.</p>
+<p>The bleeding edge might appear shiny and new but we aren't
+here to ship blog posts we are here to ship features and
+delight customers.</p>
+<p>These avoidable issues are hard to solve because of two
+reasons:</p>
+<ol>
+<li>They're novel, we're the first to run into them.</li>
+<li>The people that have faced this issue are expensive,
+because not many of them exist.</li>
+</ol>
+<h3>Make a Difference</h3>
+<p>Starting a business is a risk, picking fancy new tech is a
+risk. These risks add up. Where you decide to take the
+risk depends on where you are trying to drive innovation.</p>
+<p>In 2015, London, two <a href="https://en.wikipedia.org/wiki/Neobank">neobanks</a>
+were founded; this is the tech they are built on and the tech's
+age at the time. Revolut is built on Postgres (25yo) and Java (19yo),
+the other is built on Cassandra (7yo) and Golang (6yo).
+The former has 50million customers, the later has 10million.</p>
+<p>Risks are allowed to be taken, but we should limit the
+number of unknowns and not make things harder than they need
+to be. If we pick our entire stack on the principle of shiny
+and new we are going to be fighting our tech more often that
+we are solving customer use-cases.</p>
+<p>Get excited about delighting users, not the fancy tech.</p>
+<h3>Don't be First, Be Fast</h3>
+<blockquote>
+<p>Early market leaders have much greater long-term success
+and enter an average of 13 years after pioneers.</p>
+<p>Golder and Tellis (1993)</p>
+</blockquote>
+<p>People make the assumption that if they're not using the
+latest technology they're not staying competitive, when they
+are instead just becoming a case-study for the industry.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup></p>
+<p>The study by Golder and Tellis tells us that first movers
+have a failure rate that is 6 times higher than fast
+followers.</p>
+<p>If the tech stack mattered, you'd see it in advertising,
+but you don't, because the customer doesn't care. Your tech
+stack doesn't determine your product market fit<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup></p>
+<p>Your investors might care (🤷).</p>
+<p>If I had to choose between customers and investors I'd
+pick customers.<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup></p>
+<h3>The Right Tool for The Job</h3>
+<p>Ask a graduate what tool or language they would use for
+their next project and they'll give you a political answer:
+<em>"I would pick the best tool for the job"</em>. Here's a list of
+<a href="https://en.wikipedia.org/wiki/List_of_programming_languages">programming
+languages</a>.
+There are 50 that start with the letter A. Let me know when
+you've found the one that's best suited for the job.</p>
+<p>Perhaps we should define what <em>"best for the job"</em>, means. If
+we are in a team of 12 engineers that are maintaining 2
+Postgres databases; introducing a MySQL database on the
+basis that it addresses a specific use-case better than
+postgres is not a good idea.</p>
+<p>If we hire a DB expert in the future are we going
+to ensure they're versed in both Postgres and MySQL? It's
+niche but we could find them at a price.</p>
+<p>We
+don't have to hire this DB expert, our team has built up
+experience with Postgres, now they'll need to familiarise
+themselves with the maintenance process of a new db.
+Just bumping your database version is now slightly
+tricker and you're monitoring news and bug fixes for both
+releases.</p>
+<p>We could define <em>"best for the job"</em> as perhaps
+the one we are most familiar with, and this is often the
+best choice. If you can skip learning a new language or
+learning the framework step, you're going to get to market
+faster than others. Don't let learning the tech be the
+procrastination for learning the market.</p>
+<p>In a startup we are testing our market assumptions, this is the
+largest risk to the company, we shouldn't slow down the
+speed we get to market. It's better to know we are wrong
+sooner rather than later.</p>
+<h3>Getting Experience</h3>
+<p>Engineers at startups might use the job as an opportunity to
+focus on CV driven develop instead of focusing on the needs
+of the business.</p>
+<p>I've seen a graduate write every new project in a new
+programming language.</p>
+<blockquote>
+<p>Anyone know Elixir? We're trying to fix a bug in
+production and the developer that wrote this is no longer
+at the company.</p>
+<p>From a slack thread.</p>
+</blockquote>
+<p>Starting every new project in a new language isn't a fast
+way to learn how to deliver. It's a fast-way to get 3 months
+of experience 5 times. Learn how to deal with a language's
+pain points and how to solve issues with a specific
+framework is what makes you valuable. If you're looking to
+stretch yourself, then use the same language and framework
+for larger projects.</p>
+<p>If you've only got 3 months of experience in a language and
+framework you're probably not that hard to replace.</p>
+<blockquote>
+<p>The new thing won’t be better, you just aren’t aware of
+all of the ways it will be terrible yet</p>
+<p><a href="https://boringtechnology.club/#84">Slide 84</a></p>
+</blockquote>
+<h3>Propaganda</h3>
+<p>Propaganda doesn't just occur in war or between competing
+states, corporate propaganda is a well established strategy
+available to large technical institutions.</p>
+<p>Let's say
+you are working on an internal framework that holds up your
+billion dollar social media platform, you wish to hire more
+engineers to maintain and build the project. Training new
+hires on this framework is time consuming, wouldn't it be
+great if the engineers we hired were already familiar with
+the framework?</p>
+<p>They can also hire developer advocates, these are the
+influencers of the software engineering world, corporate
+mercenaric missonaries that are very good at making the
+work they're doing exciting.</p>
+<p>Ignore the hype, your job is to keep things simple.</p>
+<h3>Bleeding Edge</h3>
+<p>One reason you might wish to be in the bleeding edge of tech
+is to gain the expertise and then build around some of the
+fundamentals you've learnt. Perhaps your customers are
+others trying to enter the market, this is perhaps a
+safety-net for the risk you take, but the market can also
+flatten out and you're left holding a bag of air.</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>This is known as the <a href="https://en.wikipedia.org/wiki/Lindy_effect">Lindy Effect</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p>Your competitors will thank you for your sacrifice.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://www.sqlite.ai/">Unless your tech stack is your product</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p>A blog post on capital allocation and the VC world
+  might happen in the future.&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+                </div>
+                <div class="posted">
+                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:05 | </font>
+                    <a href="the-bleeding-edge.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
+                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
+                    <a href="#" class="subscribe-link show-subscribe-form">
+                        Subscribe
+                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
+                        </svg></font>
+                    </a>
+                    <div class="article-subscribe-form inline-subscribe-form">
+                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
+                            <input type="text" id="subscribeName" placeholder="Name" required>
+                            <input type="email" id="subscribeEmail" placeholder="Email" required>
+                            <button type="submit" class="mailinglist">
+                                submit
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="fullbody">
+            <div class="datebody">
                 <h2 class="date">Mon 04 August 2025</h2>
             </div>
             <div class="blogbodytop"></div>
@@ -636,201 +839,6 @@ in the future.</p>
             </div>
         </div>
 
-
-        <div class="fullbody">
-            <div class="datebody">
-                <h2 class="date">Mon 07 July 2025</h2>
-            </div>
-            <div class="blogbodytop"></div>
-            <div class="blogbody">
-                <div class="titlebody">
-                    <h3 class="title">
-                        <font style="vertical-align: inherit;">Database Indexes</font>
-                    </h3>
-                </div>
-
-
-                <div class="main">
-                    <p>Often the most crucial part of a system is the database.
-Databases manage and handle the storage of our business
-data, an inefficient database can impact the overall
-performance of our system. There are, however, a few
-ways we can improve database performance, one such way
-is defining appropriate indexes.</p>
-<p>This article describes indexes in Postgres and some of the
-lesser known indexes it uses, such as GIN and BRIN indexes.</p>
-<h3>Why do we use indexes.</h3>
-<p>We use indexes in postgres to optimise how we scan the data
-we have stored in the database. Similar to how binary search
-can optimise how quickly we find things in a dictionary (see
-my post on <a href="/reframe-binary-search.html">binary search</a>).</p>
-<p>We can use an index to inform the
-database on how to structure data in a way that allows us
-to find what we are looking for effectively i.e. fewer
-operations, fewer i/o and fewer comparisons leading to lower
-CPU usage and better performance.</p>
-<h3>What is an index.</h3>
-<p>An index is a data structure which allows us to minimise the
-number of instructions performed by the database
-in order to lookup table rows or improve the speed at which
-a result is sorted.</p>
-<p>In the case of sorting if there's an
-index on a column that you require results to be
-<em>ordered by</em>, the query can scan the index to return the
-results in sorted order, if there is no index on the column
-the data must first be fetched and then sorted in a separate
-step.</p>
-<h3>Indexes aren't always good</h3>
-<p>Over doing the number of indexes on a table can lead to
-lower write performance as every update or insert into the
-table requires updating the index. Indexes also require
-disk space, so having unnecessary indexes will contribute to
-the rate at which your disk usage grows.</p>
-<h3>B-Tree</h3>
-<p>The default index type Postgres uses is a B-Tree. This
-data structure is similar to a binary tree except
-instead of having a node with only two pointers a node can
-contain many pointer. The number of pointers is determined
-by Postgres's default block size, which is 8kb. A single
-node will store as many sorted keys as it can until it
-reaches this size limit. Postgres refers to these nodes as
-pages.</p>
-<p>Having a smaller index keys can improve the performance of
-your index as you'll be able to store more keys within the
-page limit. Resulting in fewer i/o instructions as fewer
-pages are required to be read from disk.</p>
-<p><a href="https://www.postgresql.org/docs/current/btree.html#BTREE-STRUCTURE">In postgres</a>
-leaf nodes will point to the physical
-location of the row on disk and the intermediary nodes
-(or <em>internal pages</em>) will point to the nodes on
-the next level down the tree.</p>
-<p>There's a neat animation that can help visualise
-b-trees: <a href="https://btree.app/">https://btree.app/</a></p>
-<h3>Partial Indexes</h3>
-<p>We can optimise the indexes we create by understanding
-usage patterns and having some intuition about the
-system and the business. One such optimisation is the
-use of partial indexes, these are handy when you have
-a large table but only a subset of the data is used most
-frequently.</p>
-<p>As an example, we can imagine an online order system,
-it's quite likely that once an order is fulfilled
-the status transitions to "complete" and this order isn't
-likely to be accessed as frequently as the orders that are
-still in progress. We can partition our index so that it
-contains only unfulfilled orders which will be a
-significantly smaller portion of our overall orders.</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_uncomplete_orders_customer</span><span class="w"> </span><span class="k">ON</span>
-<span class="n">orders</span><span class="p">(</span><span class="n">customer_id</span><span class="p">)</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s1">&#39;complete&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<p>We also have to include this <em>WHERE</em> filter in our queries
-if we wish to make use of this index.</p>
-<h3>Covering Index</h3>
-<p>A covering index allows us to add columns to the index's
-leaf nodes and thus avoids the lookup and reading of the
-entire the table row from disk. Essentially everything that
-the query needs is available on the index, reducing the number
-of operations required to complete the query.</p>
-<p>As an example if we typically request a user's first name
-and last name with an email we can write an index on the
-email that includes the first and last name.</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_user_email_include</span>
-<span class="k">ON</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="p">(</span><span class="n">email</span><span class="p">)</span><span class="w"> </span><span class="n">INCLUDE</span><span class="w"> </span><span class="p">(</span><span class="n">firstname</span><span class="p">,</span><span class="w"> </span><span class="n">lastname</span><span class="p">);</span>
-</code></pre></div>
-
-<p>We have to bare in mind that we should only include columns
-which change as frequently or less frequently than the key
-we are indexes otherwise we are duplicating data and
-increasing the write overhead. This isn't an issue for
-columns that rarely change.</p>
-<p><a href="https://www.postgresql.org/docs/current/sql-createindex.html">More on covering
-indexes</a>
-see "INCLUDE".</p>
-<h3><a href="https://www.postgresql.org/docs/current/gin.html">Gin Index</a></h3>
-<p>GIN stands for Generalised Inverted Index, similar to the
-inverted index that Lucene is built on, the same Lucene that
-Elasticsearch is built on. The slight difference is that
-this inverted index is generalised so it expects items
-that are indexed to be composed of multiple values the same
-way a sentence is composed of multiple words, with the goal
-to <a href="http://www.sai.msu.su/~megera/wiki/Gin">support full-text
-search</a>.</p>
-<p>An index entry is created for each element in the composite
-column and the entry points to a list of matching locations.
-So as an example a row that has a column with the value
-"Here's is a blog post" will create an index entry for
-each word in the value, (e.g. "blog") and then each entry
-will point to the rows that contain "blog" inside the
-composite column.<sup id="fnref:2"><a class="footnote-ref" href="#fn:2">1</a></sup></p>
-<div class="highlight"><pre><span></span><code><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">blogposts</span>
-<span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">search_vector</span><span class="w"> </span><span class="n">tsvector</span><span class="p">;</span>
-
-<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_blogposts_search</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">blogposts</span>
-<span class="k">USING</span><span class="w"> </span><span class="n">GIN</span><span class="w"> </span><span class="p">(</span><span class="n">search_vector</span><span class="p">);</span>
-</code></pre></div>
-
-<p>GIN indexes aren't limited to just text, they are
-generalised so they can be used with any composite type,
-JSONB for example.</p>
-<h3><a href="https://www.postgresql.org/docs/current/brin.html">BRIN Index</a></h3>
-<p>BRIN stands for Block Range Index. These are indexes that
-specialise in handling very large tables in which certain
-columns have some natural correlation to their physical
-storage location. Essentially if each row in the table can
-be grouped in some manner to the blocks on disk then we have
-a potential use-case for the BRIN Index.</p>
-<p>GPS tracking points and log tables are good examples of data
-with this natural correlation, if you have a table that is
-small or data is updated or inserted out of chronological
-order then they won't form a good fit for BRIN indexes.</p>
-<p>Instead of storing pointers to entry locations in the B-Tree
-leaf nodes, BRIN indexes store summary information for the
-ranges that the blocks on disk are ordered. This allows for a
-smaller overhead compared to the default B-Tree which stores
-all entries and their corresponding locations.</p>
-<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_transactions_created_at_brin</span>
-<span class="k">ON</span><span class="w"> </span><span class="n">transactions</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">BRIN</span><span class="w"> </span><span class="p">(</span><span class="n">created_at</span><span class="p">);</span>
-</code></pre></div>
-
-<p>This can be used to optimise queries that rely on fetching
-rows between certain ranges.</p>
-<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">orders</span><span class="w"> </span><span class="k">WHERE</span>
-<span class="n">created_at</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">&#39;2024-01-01&#39;</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">&#39;2024-12-31&#39;</span><span class="p">;</span>
-</code></pre></div>
-
-<div class="footnote">
-<hr />
-<ol>
-<li id="fn:2">
-<p>I'm describing a reverse index.&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 1 in the text">&#8617;</a></p>
-</li>
-</ol>
-</div>
-                </div>
-                <div class="posted">
-                    <font style="vertical-align: inherit;">S Williams-Wynn at 12:32 | </font>
-                    <a href="database-indexes.html#comments" data-client-id="client_fBaxnE6w" class="cometlink">
-                        <font style="vertical-align: inherit;">Comments(<span class="cometcount"></span>)</font></a> |
-                    <a href="#" class="subscribe-link show-subscribe-form">
-                        Subscribe
-                        <font style="vertical-align: inherit;"><svg class="mail-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 13.5l-8.5-5.5h17L12 13.5zm0 1.5l8.5-5.5v10.5H3V9l9 6z"/>
-                        </svg></font>
-                    </a>
-                    <div class="article-subscribe-form inline-subscribe-form">
-                        <form onsubmit="cometSubscribe(event, clientId='client_fBaxnE6w')">
-                            <input type="text" id="subscribeName" placeholder="Name" required>
-                            <input type="email" id="subscribeEmail" placeholder="Email" required>
-                            <button type="submit" class="mailinglist">
-                                submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     <div class="pagination">
             <a href="https://s3bw.github.io/writes/index6.html" class="next-page">⬅ Older</a>
             <a href="https://s3bw.github.io/writes/index4.html" class="previous-page">Newer ⮕</a>
@@ -959,6 +967,11 @@ document.addEventListener('DOMContentLoaded', function() {
                   <div class="sidetitle">Previous</div>
                 </div>
                 <div class="side">
+                    <div class="sidebody category-parent">
+                      <a href="https://s3bw.github.io/writes/solve-the-right-problem.html">
+                        <span>Solve the Right Problem</span>
+                      </a>
+                    </div>
                     <div class="sidebody category-parent">
                       <a href="https://s3bw.github.io/writes/random.html">
                         <span>Random</span>
